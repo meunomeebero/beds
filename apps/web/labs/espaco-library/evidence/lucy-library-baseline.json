@@ -1,0 +1,111 @@
+{
+  "baseline": "espaco-ui-0.1.1.tgz",
+  "files": [
+    {
+      "path": "src/overlays.tsx",
+      "matches": true,
+      "sha256": "dd24ea8a58b36593ae0f05b4c615682a0c75a76f0c22a0cee85bae379d883ddb"
+    },
+    {
+      "path": "src/technical.tsx",
+      "matches": true,
+      "sha256": "b44bc8403fbf908becbb8a64590ed985fbe8a2ac5db4f329e76c08dc24bbde7f"
+    },
+    {
+      "path": "src/reset.css",
+      "matches": true,
+      "sha256": "e477072503effee9735a08641fa80bc88bf62305b092bf6282e0806c90ecae7d"
+    },
+    {
+      "path": "src/technical.css",
+      "matches": true,
+      "sha256": "a12f81111a8f16c51b2de4799e5f14188c0a3569363509234bee5bb160e69fef"
+    },
+    {
+      "path": "src/tokens.css",
+      "matches": true,
+      "sha256": "b712fc23ea8acd7f240759a7ebf3821c873ca6f72477057146d69e9d7f47e0eb"
+    },
+    {
+      "path": "src/source-icons.tsx",
+      "matches": true,
+      "sha256": "4b0de121030c739c1666122da46c37833a6da03d261a4d3804bddc3220d222cd"
+    },
+    {
+      "path": "src/overlays.css",
+      "matches": true,
+      "sha256": "14e0c675fbbba57a7962f9b48c4bd25ed39bc27f4efbc18d6b322474f501921f"
+    },
+    {
+      "path": "src/controls.css",
+      "matches": true,
+      "sha256": "bf6782b3ad05fa798443b98d3ed17f09daabad9f1c0b9a8dccdeb2ca6e69abcb"
+    },
+    {
+      "path": "src/patterns.tsx",
+      "matches": true,
+      "sha256": "a5cb062f26ec217046db473ad9c121ebc950cb852d04996d0c606845691665f7"
+    },
+    {
+      "path": "src/tokens.ts",
+      "matches": true,
+      "sha256": "0cc3da67b5d06b06af7016c1d2a5163188c7469d07ed0a43ce5807659c744cd8"
+    },
+    {
+      "path": "src/foundation.tsx",
+      "matches": true,
+      "sha256": "620d3fca6d58b56a5c877a4b7ce808e8c6aea74246b1ac221d3ea3e1e372e24b"
+    },
+    {
+      "path": "src/chat.css",
+      "matches": true,
+      "sha256": "8d773cc827b8fe4709c1de90748be075d3408f36fecdd6af87ae0cf9b93143e5"
+    },
+    {
+      "path": "src/feedback.css",
+      "matches": true,
+      "sha256": "51347afbfde059efb79805c030c9a4e1697f9853f8a26606cbf54dfcb8e3bdd7"
+    },
+    {
+      "path": "src/layout.tsx",
+      "matches": true,
+      "sha256": "d290d18c6669db46bb58fcce4d3a03cc9fe9394d5330b2c44eae2e964850214b"
+    },
+    {
+      "path": "src/layout.css",
+      "matches": true,
+      "sha256": "922902d2cf2af56bba2f1110b69d1004de51af7e5cdd41d2a79aa58792746523"
+    },
+    {
+      "path": "src/index.ts",
+      "matches": true,
+      "sha256": "3edc7624682c0c85811e2d7877055abe9434f4de10d4db79eb82b2ab3c485016"
+    },
+    {
+      "path": "src/chat.tsx",
+      "matches": true,
+      "sha256": "3b2e4b33682fb3befcad9bff82d4c0d8078c66fcaf94d236dc5d77de51c2ee98"
+    },
+    {
+      "path": "src/feedback.tsx",
+      "matches": true,
+      "sha256": "261d6c31637cc7aee93c75d6d79bdf6c8ab9b762dab2373fd12e10f5863e1135"
+    },
+    {
+      "path": "src/patterns.css",
+      "matches": true,
+      "sha256": "c4213519c896097798c699eef141c0df83fcc46a09faf99eacc75e5e9b460984"
+    },
+    {
+      "path": "src/controls.tsx",
+      "matches": true,
+      "sha256": "df0f142008b1f1df53b2e84c9c7396002fa35d6d00c5de516fe0c03dc6b930b1"
+    },
+    {
+      "path": "src/foundation.css",
+      "matches": true,
+      "sha256": "ac53b7618a944ec04ce480217a4df9ddd8df452eb76ef85c4f445b063c75cdee"
+    }
+  ],
+  "all_identical": true
+}

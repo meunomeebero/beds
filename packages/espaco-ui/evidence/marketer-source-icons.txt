@@ -1,0 +1,17 @@
+/** Rendered navigation geometry observed in Marketer on 2026-09-12. */
+export function SourceIcon({ name, purpose }: { name: 'Home' | 'BarChart3' | 'Plug'; purpose: string }) {
+  const props = { className: `es-icon es-icon--${purpose}`, 'aria-hidden': true as const, focusable: 'false' as const };
+  if (name === 'Home') return <svg {...props} viewBox="0 0 14 14" fill="none"><g stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4.86111 8.36111H2.91667C2.48711 8.36111 2.13889 8.70933 2.13889 9.13889V11.0833C2.13889 11.5129 2.48711 11.8611 2.91667 11.8611H4.86111C5.29067 11.8611 5.63889 11.5129 5.63889 11.0833V9.13889C5.63889 8.70933 5.29067 8.36111 4.86111 8.36111Z"/>
+    <path d="M11.0833 8.36111H9.13889C8.70933 8.36111 8.36111 8.70933 8.36111 9.13889V11.0833C8.36111 11.5129 8.70933 11.8611 9.13889 11.8611H11.0833C11.5129 11.8611 11.8611 11.5129 11.8611 11.0833V9.13889C11.8611 8.70933 11.5129 8.36111 11.0833 8.36111Z"/>
+    <path d="M12.0359 3.33886L10.661 1.96393C10.3572 1.66019 9.86477 1.66019 9.56103 1.96393L8.1861 3.33886C7.88235 3.6426 7.88235 4.13506 8.1861 4.4388L9.56103 5.81373C9.86477 6.11747 10.3572 6.11747 10.661 5.81373L12.0359 4.4388C12.3396 4.13506 12.3396 3.6426 12.0359 3.33886Z"/>
+    <path d="M4.86111 2.13889H2.91667C2.48711 2.13889 2.13889 2.48711 2.13889 2.91667V4.86111C2.13889 5.29067 2.48711 5.63889 2.91667 5.63889H4.86111C5.29067 5.63889 5.63889 5.29067 5.63889 4.86111V2.91667C5.63889 2.48711 5.29067 2.13889 4.86111 2.13889Z"/>
+  </g></svg>;
+  if (name === 'BarChart3') return <svg {...props} viewBox="0 0 14 14" fill="none"><g transform="translate(1.2 1.589)" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M1.32778 5.99444H4.05V9.88333H1.32778C0.898522 9.88333 0.55 9.53481 0.55 9.10556V6.77222C0.55 6.34297 0.898522 5.99444 1.32778 5.99444Z"/>
+    <path d="M7.55 3.27222H10.2722C10.7015 3.27222 11.05 3.62074 11.05 4.05V9.10556C11.05 9.53481 10.7015 9.88333 10.2722 9.88333H7.55V3.27222Z"/>
+    <path d="M4.82778 0.55H6.77222C7.20148 0.55 7.55 0.898522 7.55 1.32778V9.88333H4.05V1.32778C4.05 0.898522 4.39852 0.55 4.82778 0.55Z"/>
+  </g></svg>;
+  return <svg {...props} viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2.75" y="2.75" width="4.5" height="4.5" rx="1"/><rect x="10.75" y="10.75" width="4.5" height="4.5" rx="1"/><circle cx="5" cy="13" r="2.5"/><path d="M13 2.75v5m-2.5-2.5h5"/></svg>;
+}
+

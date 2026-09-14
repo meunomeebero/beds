@@ -1,0 +1,7 @@
+.es-root .es-code-field{display:grid;gap:8px;min-width:0}
+.es-root .es-code-label{font-size:13px;line-height:16px;font-weight:500}
+.es-root .es-code-snippet{display:flex;align-items:stretch;min-width:0;min-height:42px;overflow:hidden;border:1px solid var(--es-border-subtle);border-radius:12px;background:var(--es-raised)}
+.es-root .es-code-snippet>code{display:block;min-width:0;flex:1;padding:10px 12px;overflow-x:auto;white-space:pre;font:400 11px/20px var(--es-mono);letter-spacing:normal}
+.es-root .es-code-snippet>button{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:none;min-height:40px;padding:0 12px;border:0;border-left:1px solid var(--es-border-subtle);background:var(--es-transparent);color:var(--es-text);font:500 14px/16px var(--es-font)}
+.es-root .es-code-field>p{font-size:12px;line-height:18px;color:var(--es-error)}
+@media(hover:hover) and (pointer:fine){.es-root .es-code-snippet>button:hover{background:var(--es-hover)}}

@@ -1,0 +1,14 @@
+node_modules/
+**/dist/
+packages/espaco-ui/docs/
+.cache/
+artifacts/
+test-results/
+playwright-report/
+**/evidence/results.json
+**/evidence/test-results/
+*.tsbuildinfo
+*.tgz
+.env
+.env.*
+.DS_Store

@@ -1,0 +1,128 @@
+import { forwardRef, useEffect, useId, useRef, type ForwardedRef, type InputHTMLAttributes, type KeyboardEvent, type ReactNode } from 'react';
+import { Icon, type IconName } from './foundation';
+import './controls.css';
+
+type ButtonProps = {
+  label: string; onClick?: () => void; type?: 'button' | 'submit' | 'reset';
+  variant?: 'primary' | 'secondary' | 'ghost'; compact?: boolean; icon?: IconName;
+  purpose?: 'default' | 'welcome' | 'connection'; disabled?: boolean; busy?: boolean; 'aria-describedby'?: string;
+};
+
+export function Button({ label, onClick, type = 'button', variant = 'secondary', compact = false, purpose = 'default', icon, disabled, busy, 'aria-describedby': describedBy }: ButtonProps) {
+  return <button className="es-button" data-variant={variant} data-purpose={purpose} data-compact={purpose === 'default' && compact || undefined} type={type} onClick={onClick} disabled={disabled || busy} aria-busy={busy || undefined} aria-describedby={describedBy}>
+    {(busy || icon) && <Icon name={busy ? 'Loader2' : icon!} purpose="action" />}<span>{label}</span>
+  </button>;
+}
+
+export function IconButton({ label, icon, onClick, disabled, 'aria-describedby': describedBy }: {
+  label: string; icon: IconName; onClick: () => void; disabled?: boolean; 'aria-describedby'?: string;
+}) {
+  return <button type="button" className="es-icon-button" aria-label={label} aria-describedby={describedBy} onClick={onClick} disabled={disabled}><Icon name={icon} purpose="action" /></button>;
+}
+
+/** Controlled compact toggle with a native pressed state and persistent accessible name. */
+export function IconToggleButton({ label, icon, pressed, onPressedChange, disabled, 'aria-describedby': describedBy }: {
+  label: string; icon: IconName; pressed: boolean; onPressedChange: (pressed: boolean) => void; disabled?: boolean; 'aria-describedby'?: string;
+}) {
+  return <button type="button" className="es-icon-toggle-button" aria-label={label} aria-pressed={pressed} aria-describedby={describedBy} onClick={() => onPressedChange(!pressed)} disabled={disabled}><Icon name={icon} purpose="action" /></button>;
+}
+
+type FieldProps = {
+  label: string; value: string; onChange: (value: string) => void; description?: string;
+  error?: string; placeholder?: string; disabled?: boolean; readOnly?: boolean;
+  name?: string; autoComplete?: string; inputMode?: InputHTMLAttributes<HTMLInputElement>['inputMode']; spellCheck?: boolean; focusOnError?: boolean;
+};
+
+type TextFieldProps = FieldProps & { purpose?: 'settings' | 'connection'; type?: 'text' | 'email' | 'url' | 'tel' | 'password' };
+
+function setForwardedRef<T>(ref: ForwardedRef<T>, node: T | null) {
+  if (typeof ref === 'function') {
+    ref(node);
+    return;
+  }
+  if (ref) ref.current = node;
+}
+
+function useErrorFocus<T extends HTMLElement>(error?: string, focusOnError?: boolean) {
+  const ref = useRef<T>(null);
+  useEffect(() => {
+    if (error && focusOnError) ref.current?.focus();
+  }, [error, focusOnError]);
+  return ref;
+}
+
+function useFieldIds(description?: string, error?: string) {
+  const id = useId();
+  const describedBy = [description && `${id}-description`, error && `${id}-error`].filter(Boolean).join(' ') || undefined;
+  return { id, describedBy };
+}
+
+function FieldNotes({ id, description, error }: { id: string; description?: string; error?: string }) {
+  return <>{description && <p id={`${id}-description`} className="es-field-description">{description}</p>}{error && <p id={`${id}-error`} className="es-field-error" role="alert"><Icon name="AlertCircle" purpose="small" />{error}</p>}</>;
+}
+
+export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function TextField({ label, value, onChange, description, error, placeholder, disabled, readOnly, name, autoComplete, inputMode, spellCheck, focusOnError, purpose = 'settings', type = 'text' }, forwardedRef) {
+  const { id, describedBy } = useFieldIds(description, error);
+  const inputRef = useErrorFocus<HTMLInputElement>(error, focusOnError);
+  return <div className="es-field"><label htmlFor={id}>{label}</label><input ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} type={type} name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} className="es-text-input" data-purpose={purpose} value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} /><FieldNotes id={id} description={description} error={error} /></div>;
+});
+TextField.displayName = 'TextField';
+
+export const TextAreaField = forwardRef<HTMLTextAreaElement, FieldProps>(function TextAreaField({ label, value, onChange, description, error, placeholder, disabled, readOnly, name, autoComplete, inputMode, spellCheck, focusOnError }, forwardedRef) {
+  const { id, describedBy } = useFieldIds(description, error);
+  const inputRef = useErrorFocus<HTMLTextAreaElement>(error, focusOnError);
+  return <div className="es-field"><label htmlFor={id}>{label}</label><textarea ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} className="es-text-area" value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} /><FieldNotes id={id} description={description} error={error} /></div>;
+});
+TextAreaField.displayName = 'TextAreaField';
+
+export const SearchField = forwardRef<HTMLInputElement, {
+  label: string; value: string; onChange: (value: string) => void; placeholder?: string; disabled?: boolean;
+  name?: string; autoComplete?: string; inputMode?: InputHTMLAttributes<HTMLInputElement>['inputMode']; spellCheck?: boolean;
+}>(function SearchField({ label, value, onChange, placeholder, disabled, name, autoComplete, inputMode, spellCheck }, forwardedRef) {
+  const id = useId();
+  return <div className="es-search-field"><label htmlFor={id}><Icon name="Search" purpose="action" /><span className="es-visually-hidden">{label}</span></label><input ref={forwardedRef} id={id} type="search" name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} /></div>;
+});
+SearchField.displayName = 'SearchField';
+
+type ToggleProps = { label: string; checked: boolean; onChange: (checked: boolean) => void; description?: string; disabled?: boolean };
+
+export function Checkbox({ label, checked, onChange, description, disabled }: ToggleProps) {
+  const id = useId();
+  return <label className="es-checkbox" data-disabled={disabled || undefined}><input type="checkbox" checked={checked} onChange={event => onChange(event.target.checked)} disabled={disabled} aria-describedby={description ? id : undefined} /><span className="es-checkbox-box" aria-hidden="true">{checked && <Icon name="Check" purpose="small" />}</span><span className="es-toggle-copy"><span>{label}</span>{description && <small id={id}>{description}</small>}</span></label>;
+}
+
+export function Switch({ label, checked, onChange, description, disabled }: ToggleProps) {
+  const id = useId();
+  return <label className="es-switch" data-disabled={disabled || undefined}><span className="es-toggle-copy"><span>{label}</span>{description && <small id={id}>{description}</small>}</span><input type="checkbox" role="switch" checked={checked} onChange={event => onChange(event.target.checked)} disabled={disabled} aria-describedby={description ? id : undefined} /><span className="es-switch-track" aria-hidden="true"><span /></span></label>;
+}
+
+type Choice = { id: string; label: string; disabled?: boolean };
+
+export function SegmentedControl({ label, value, options, onChange, variant = 'pill' }: {
+  label: string; value: string; options: Choice[]; onChange: (value: string) => void; variant?: 'pill' | 'joined';
+}) {
+  const name = useId();
+  return <div className="es-segmented-control" data-variant={variant} role="radiogroup" aria-label={label}>{options.map(option => <label key={option.id} className="es-segmented-choice"><input type="radio" name={name} value={option.id} checked={value === option.id} disabled={option.disabled} onChange={() => onChange(option.id)} /><span>{option.label}</span></label>)}</div>;
+}
+
+export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
+  label: string; value: string; items: (Choice & { content: ReactNode })[]; onChange: (value: string) => void; variant?: 'activity' | 'connection';
+}) {
+  const id = useId();
+  const list = useRef<HTMLDivElement>(null);
+  const selected = items.find(item => item.id === value && !item.disabled) ?? items.find(item => !item.disabled);
+  const navigate = (event: KeyboardEvent<HTMLButtonElement>, current: string) => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    const enabled = items.filter(item => !item.disabled);
+    const index = enabled.findIndex(item => item.id === current);
+    const nextIndex = event.key === 'Home' ? 0 : event.key === 'End' ? enabled.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + enabled.length) % enabled.length;
+    const next = enabled[nextIndex];
+    if (!next) return;
+    onChange(next.id);
+    list.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[items.indexOf(next)]?.focus();
+  };
+  const connectionListStyle = variant === 'connection' ? { gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` } : undefined;
+  const tabList = <div ref={list} className="es-tabs-list" role="tablist" aria-label={label} style={connectionListStyle}>{items.map((item, index) => <button key={item.id} id={`${id}-tab-${index}`} type="button" role="tab" aria-controls={`${id}-panel-${index}`} aria-selected={selected?.id === item.id} tabIndex={selected?.id === item.id ? 0 : -1} disabled={item.disabled} onClick={() => onChange(item.id)} onKeyDown={event => navigate(event, item.id)}>{item.label}</button>)}</div>;
+  return <div className="es-tabs" data-variant={variant}>{variant === 'connection' ? <div className="es-tabs-connection-strip">{tabList}</div> : tabList}{items.map((item, index) => <div key={item.id} id={`${id}-panel-${index}`} className="es-tab-panel" role="tabpanel" aria-labelledby={`${id}-tab-${index}`} hidden={selected?.id !== item.id} tabIndex={0}>{item.content}</div>)}</div>;
+}

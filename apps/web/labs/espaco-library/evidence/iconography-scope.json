@@ -1,0 +1,93 @@
+{
+  "baseline": "espaco-ui-0.1.1.tgz",
+  "current_version": "0.1.2",
+  "scope": "User-authorized iconography change only",
+  "source_files": [
+    {
+      "path": "overlays.tsx",
+      "status": "unchanged"
+    },
+    {
+      "path": "technical.tsx",
+      "status": "unchanged"
+    },
+    {
+      "path": "reset.css",
+      "status": "unchanged"
+    },
+    {
+      "path": "technical.css",
+      "status": "unchanged"
+    },
+    {
+      "path": "tokens.css",
+      "status": "unchanged"
+    },
+    {
+      "path": "source-icons.tsx",
+      "status": "removed"
+    },
+    {
+      "path": "overlays.css",
+      "status": "unchanged"
+    },
+    {
+      "path": "controls.css",
+      "status": "unchanged"
+    },
+    {
+      "path": "patterns.tsx",
+      "status": "unchanged"
+    },
+    {
+      "path": "tokens.ts",
+      "status": "unchanged"
+    },
+    {
+      "path": "foundation.tsx",
+      "status": "changed"
+    },
+    {
+      "path": "chat.css",
+      "status": "unchanged"
+    },
+    {
+      "path": "feedback.css",
+      "status": "unchanged"
+    },
+    {
+      "path": "layout.tsx",
+      "status": "unchanged"
+    },
+    {
+      "path": "layout.css",
+      "status": "unchanged"
+    },
+    {
+      "path": "index.ts",
+      "status": "unchanged"
+    },
+    {
+      "path": "chat.tsx",
+      "status": "unchanged"
+    },
+    {
+      "path": "feedback.tsx",
+      "status": "unchanged"
+    },
+    {
+      "path": "patterns.css",
+      "status": "unchanged"
+    },
+    {
+      "path": "controls.tsx",
+      "status": "unchanged"
+    },
+    {
+      "path": "foundation.css",
+      "status": "unchanged"
+    }
+  ],
+  "all_css_and_tokens_unchanged": true,
+  "historical_glyphs_preserved": true
+}

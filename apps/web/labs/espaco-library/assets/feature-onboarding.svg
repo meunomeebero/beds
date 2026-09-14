@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+  <defs>
+    <linearGradient id="canvas" x2="1" y2="1"><stop stop-color="#e9efe8"/><stop offset="1" stop-color="#abcbdc"/></linearGradient>
+    <linearGradient id="ribbon" x2="1" y2="1"><stop stop-color="#85abbf"/><stop offset="1" stop-color="#d3e3ec"/></linearGradient>
+    <filter id="lift" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dy="12" stdDeviation="12" flood-color="#315669" flood-opacity=".12"/></filter>
+  </defs>
+  <!-- Original local illustration; no reference artwork or account data. -->
+  <path fill="url(#canvas)" d="M0 0h720v480H0z"/>
+  <path fill="url(#ribbon)" d="M-50 320C140 80 370 380 770 60v250C490 520 180 270-50 550Z"/>
+  <path fill="none" stroke="#f5f6ec" stroke-opacity=".65" stroke-width="2" d="M-20 348C170 110 420 420 740 102M-30 374C170 142 420 450 745 130"/>
+  <g filter="url(#lift)">
+    <rect x="92" y="76" width="536" height="440" rx="24" fill="#fbfcfc"/>
+    <path d="M116 76h488a24 24 0 0 1 24 24v40H92v-40a24 24 0 0 1 24-24" fill="#f1f4f4"/>
+    <g fill="#ffa133"><rect x="118" y="98" width="22" height="5" rx="2.5"/><rect x="118" y="107" width="22" height="5" rx="2.5"/><rect x="118" y="116" width="22" height="5" rx="2.5"/></g>
+    <g font-family="Arial,sans-serif" fill="#323c42">
+      <text x="154" y="116" font-size="19" font-weight="600">Seu próximo passo</text>
+      <text x="122" y="182" font-size="18" font-weight="600">Lucy</text>
+      <text x="122" y="213" font-size="18">Vamos começar pela sua história?</text>
+      <rect x="250" y="243" width="348" height="70" rx="19" fill="#303b42"/>
+      <text x="274" y="285" font-size="18" fill="#ffffff">Quero encontrar uma nova vaga.</text>
+      <text x="122" y="358" font-size="18" font-weight="600">Lucy</text>
+      <text x="122" y="390" font-size="18">Me conte o que você faz. A gente</text>
+      <text x="122" y="417" font-size="18">organiza o seu perfil a partir daí.</text>
+    </g>
+  </g>
+</svg>

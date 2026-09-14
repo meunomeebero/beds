@@ -1,0 +1,609 @@
+{
+  "source": "https://app.marketer.com/dashboard",
+  "captured": "2026-09-12",
+  "method": "Authenticated Chrome; rendered DOM, CSSOM declarations, getComputedStyle, bounding rectangles. CSS pixels, no private account content retained.",
+  "viewport": {
+    "desktop": {
+      "width": 1728,
+      "height": 852,
+      "devicePixelRatio": 2
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844
+    },
+    "breakpointTests": [
+      768,
+      767
+    ]
+  },
+  "labels": {
+    "M": "Measured rendered state",
+    "D": "Declared CSS token; usage not assumed",
+    "A": "Local controlled implementation or extrapolation",
+    "U": "Unobserved state; no exact source claim"
+  },
+  "colors": {
+    "light": {
+      "background": "#ffffff",
+      "sidebar": "#fbfaf9",
+      "surface": "#ffffff",
+      "subtle": "#edece9",
+      "raised": "#edece9",
+      "hover": "#e6e4e0",
+      "pressed": "#dbd8d2",
+      "foreground": "#37352e",
+      "secondary": "#787775",
+      "placeholder": "#a49e97",
+      "inverse": "#191919",
+      "primary": "#202020",
+      "onPrimary": "#ffffff",
+      "userMessage": "#edece9",
+      "border": "#00000014",
+      "borderSubtle": "#0000000f",
+      "borderStrong": "#0000001f",
+      "switchOff": "rgba(0,0,0,.12)",
+      "switchThumb": "#ffffff",
+      "errorSubtle": "#ffe4e0",
+      "successSubtle": "#caface"
+    },
+    "dark": {
+      "background": "#000000",
+      "sidebar": "#000000",
+      "surface": "#191919",
+      "subtle": "#202020",
+      "raised": "#2a2928",
+      "hover": "#2a2928",
+      "pressed": "#37352e",
+      "foreground": "#dbd8d2",
+      "secondary": "#a49e97",
+      "placeholder": "#504b49",
+      "inverse": "#f6f5f4",
+      "primary": "#ffffff",
+      "onPrimary": "#202020",
+      "userMessage": "#2a2928",
+      "border": "#ffffff14",
+      "borderSubtle": "#ffffff0f",
+      "borderStrong": "#ffffff1f",
+      "field": "rgba(255,255,255,.0364706)",
+      "switchOff": "rgba(255,255,255,.0972549)",
+      "switchThumb": "#dbd8d2",
+      "errorSubtle": "#570808",
+      "successSubtle": "#053818"
+    },
+    "fixed": {
+      "selection": "#0077e6",
+      "success": "#15b042",
+      "warning": "#e87800",
+      "destructive": "#e83535",
+      "destructiveHover": "#9c1010",
+      "destructivePressed": "#780a0a",
+      "onColor": "#ffffff",
+      "onColorSecondary": "#ffffffb8",
+      "workspaceAccent": "#d0f300",
+      "sourcePrimaryBrand": "#60c686",
+      "overlay": "#0000007a"
+    },
+    "declaredNeutrals": {
+      "0": "#ffffff",
+      "50": "#fbfaf9",
+      "100": "#f6f5f4",
+      "200": "#edece9",
+      "300": "#e6e4e0",
+      "400": "#dbd8d2",
+      "500": "#a49e97",
+      "600": "#787775",
+      "700": "#504b49",
+      "800": "#37352e",
+      "850": "#2a2928",
+      "900": "#202020",
+      "950": "#191919",
+      "1000": "#000000"
+    }
+  },
+  "typography": {
+    "font": {
+      "measured": "Inter",
+      "featureSettings": "normal",
+      "opticalSizing": "auto",
+      "variationSettings": "normal",
+      "kerning": "auto",
+      "otherDeclaredNotObserved": [
+        "roobertPro"
+      ],
+      "codeMeasured": "Geist Mono"
+    },
+    "measured": {
+      "dashboardTitle": {
+        "size": 16,
+        "lineHeight": 20,
+        "weight": 500
+      },
+      "chatTitle": {
+        "size": 16,
+        "lineHeight": 24,
+        "weight": 500,
+        "tracking": -0.15
+      },
+      "settingsHeading": {
+        "size": 13,
+        "lineHeight": 20,
+        "weight": 500
+      },
+      "label": {
+        "size": 13,
+        "lineHeight": 16,
+        "weight": 500,
+        "tracking": -0.1
+      },
+      "choice": {
+        "size": 13,
+        "lineHeight": 16,
+        "weight": 450,
+        "tracking": -0.1
+      },
+      "chatInput": {
+        "size": 14,
+        "lineHeight": 22.4,
+        "weight": 400,
+        "tracking": -0.15
+      },
+      "settingsInput": {
+        "size": 13,
+        "lineHeight": 20,
+        "weight": 400
+      },
+      "switchLabel": {
+        "size": 13,
+        "lineHeight": 13,
+        "weight": 500
+      },
+      "switchHelp": {
+        "size": 11,
+        "lineHeight": 16,
+        "weight": 400
+      },
+      "themeChoice": {
+        "size": 12,
+        "lineHeight": 16,
+        "weight": 500
+      },
+      "activityCaption": {
+        "size": 11,
+        "lineHeight": 16,
+        "weight": 500,
+        "tracking": 0.55
+      },
+      "commandInput": {
+        "size": 15,
+        "lineHeight": 24
+      },
+      "welcomeTitle": {
+        "size": 18,
+        "lineHeight": 24,
+        "weight": 500,
+        "tracking": -0.15
+      },
+      "code": {
+        "size": 11,
+        "lineHeight": 20,
+        "weight": 400
+      },
+      "connectionHeading": {
+        "size": 15,
+        "lineHeight": 24,
+        "weight": 500
+      }
+    },
+    "declaredHeadings": [
+      {
+        "size": 28,
+        "lineHeight": 32,
+        "weight": 500,
+        "tracking": -0.2
+      },
+      {
+        "size": 24,
+        "lineHeight": 30,
+        "weight": 500,
+        "tracking": -0.2
+      },
+      {
+        "size": 20,
+        "lineHeight": 28,
+        "weight": 500,
+        "tracking": -0.15
+      },
+      {
+        "size": 18,
+        "lineHeight": 24,
+        "weight": 500,
+        "tracking": -0.15
+      },
+      {
+        "size": 16,
+        "lineHeight": 24,
+        "weight": 500,
+        "tracking": -0.15
+      },
+      {
+        "size": 14,
+        "lineHeight": 20,
+        "weight": 500,
+        "tracking": -0.15
+      }
+    ],
+    "declaredBody": [
+      {
+        "size": 16,
+        "lineHeight": 24,
+        "tracking": -0.15
+      },
+      {
+        "size": 14,
+        "lineHeight": 21,
+        "tracking": -0.1
+      },
+      {
+        "size": 13,
+        "lineHeight": 19.5,
+        "tracking": -0.1
+      },
+      {
+        "size": 12,
+        "lineHeight": 18
+      },
+      {
+        "size": 11,
+        "lineHeight": 16.5
+      }
+    ],
+    "declaredLabels": [
+      {
+        "size": 18,
+        "lineHeight": 24,
+        "tracking": -0.15
+      },
+      {
+        "size": 16,
+        "lineHeight": 20,
+        "tracking": -0.15
+      },
+      {
+        "size": 14,
+        "lineHeight": 16,
+        "tracking": -0.1
+      },
+      {
+        "size": 13,
+        "lineHeight": 16,
+        "tracking": -0.1
+      },
+      {
+        "size": 12,
+        "lineHeight": 16
+      }
+    ]
+  },
+  "measuredGeometry": {
+    "shell": {
+      "sidebar": 260,
+      "rail": 48,
+      "mobileBreakpoint": 768,
+      "mobileDrawer": 260,
+      "mobileGutter": 16
+    },
+    "navigation": {
+      "row": 28,
+      "gap": 2,
+      "horizontalPadding": 8,
+      "icon": 14,
+      "labelGap": 10,
+      "inset": 12,
+      "radius": 8
+    },
+    "workspace": {
+      "height": 28
+    },
+    "composer": {
+      "chatMaxWidth": 640,
+      "homeMaxWidth": 720,
+      "radius": 20,
+      "inputMinimumHeight": 120,
+      "padding": [
+        14,
+        16
+      ],
+      "agentStripHeight": 36,
+      "mobileTotalHeight": 156,
+      "lightInput": "#ffffff",
+      "lightContext": "#fbfaf9",
+      "darkInput": "#191919",
+      "darkContext": "#202020"
+    },
+    "suggestion": {
+      "row": 40,
+      "tile": 24
+    },
+    "recent": {
+      "sectionGap": 48
+    },
+    "account": {
+      "width": 280,
+      "capturedFixtureHeight": 466,
+      "radius": 10,
+      "outerPadding": [
+        8,
+        0
+      ],
+      "groupsGap": 4,
+      "groupPadding": 8,
+      "actionHeight": 28,
+      "actionGap": 2,
+      "actionPadding": 6,
+      "avatar": 28,
+      "borderWidth": 0
+    },
+    "segmentedControl": {
+      "height": 24,
+      "choiceHeight": 22,
+      "padding": 1,
+      "gap": 2
+    },
+    "creditMeter": {
+      "count": 28,
+      "height": 16,
+      "gap": 2,
+      "radius": 2,
+      "measuredWidth": 238
+    },
+    "select": {
+      "popupWidth": 260,
+      "popupRadius": 10,
+      "padding": 8,
+      "row": 28,
+      "rowRadius": 7,
+      "rowPaddingX": 6,
+      "gap": 10
+    },
+    "period": {
+      "popupWidth": 160,
+      "popupRadius": 8,
+      "padding": 4,
+      "row": 32,
+      "rowRadius": 6,
+      "rowPadding": [
+        6,
+        8
+      ]
+    },
+    "command": {
+      "width": 672,
+      "radius": 14,
+      "row": 36,
+      "rowRadius": 10
+    },
+    "field": {
+      "height": 36,
+      "radius": 8,
+      "padding": [
+        4,
+        10
+      ],
+      "disabledOpacity": 0.5
+    },
+    "settingsSelect": {
+      "width": 224,
+      "height": 36,
+      "radius": 8,
+      "padding": [
+        8,
+        8,
+        8,
+        10
+      ],
+      "gap": 6
+    },
+    "button": {
+      "height": 32,
+      "radius": 8,
+      "paddingX": 10,
+      "gap": 4
+    },
+    "tabs": {
+      "height": 30,
+      "tabHeight": 24,
+      "padding": 2,
+      "gap": 2,
+      "radius": 8,
+      "tabRadius": 6
+    },
+    "integration": {
+      "width": 720,
+      "row": 64,
+      "radius": 14,
+      "padding": [
+        8,
+        14
+      ],
+      "gap": 12,
+      "listGap": 8
+    },
+    "settingsGroup": {
+      "radius": 10,
+      "padding": 12,
+      "gap": 16
+    },
+    "switch": {
+      "width": 32,
+      "height": 18.3984375,
+      "thumb": 16,
+      "border": 1,
+      "settingPadding": [
+        10,
+        0
+      ],
+      "settingGap": 16
+    },
+    "welcome": {
+      "width": 480,
+      "radius": 24,
+      "capturedHeight": 370,
+      "artHeight": 200,
+      "contentPadding": 24,
+      "buttonHeight": 40,
+      "buttonRadius": 12,
+      "buttonPaddingX": 14
+    },
+    "code": {
+      "panelHeight": 42,
+      "radius": 12,
+      "borderOpacity": 0.06,
+      "padding": [
+        10,
+        12
+      ],
+      "codeHeight": 40,
+      "copyHeight": 40,
+      "copyPaddingX": 12,
+      "light": "#edece9",
+      "dark": "#2a2928"
+    },
+    "connection": {
+      "fieldHeight": 40,
+      "fieldRadius": 10,
+      "fieldPaddingX": 16,
+      "fieldFont": 14,
+      "buttonHeight": 40,
+      "buttonRadius": 10,
+      "buttonPaddingX": 14,
+      "buttonFont": 14,
+      "tabsHeight": 28,
+      "tabsRadius": 8,
+      "tabsFont": 13,
+      "joinedHeight": 36,
+      "joinedFont": 11,
+      "joinedRadius": 8
+    },
+    "contextSelector": {
+      "height": 28,
+      "radius": 8,
+      "padding": [
+        0,
+        8
+      ],
+      "gap": 6,
+      "background": "transparent",
+      "labelSize": 13,
+      "labelLeading": 16,
+      "labelWeight": 500,
+      "helperSize": 12,
+      "helperLeading": 18,
+      "helperWeight": 450
+    }
+  },
+  "shadows": {
+    "accountLight": {
+      "evidence": "M",
+      "value": "0 0 0 1px rgba(0,0,0,.06),0 20px 25px -5px rgba(0,0,0,.12),0 8px 10px -6px rgba(0,0,0,.16)"
+    },
+    "popupMd": {
+      "evidence": "D",
+      "value": "0 4px 6px -1px #0000001a,0 2px 4px -2px #0000001a"
+    },
+    "xs": {
+      "evidence": "D",
+      "value": "0 1px 2px 0 #0000000d"
+    },
+    "glassLight": {
+      "evidence": "D",
+      "value": "0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.06)"
+    },
+    "glassDark": {
+      "evidence": "D",
+      "value": "0 1px 1px rgba(0,0,0,.12),0 12px 32px rgba(0,0,0,.14)"
+    },
+    "composerLight": {
+      "evidence": "D",
+      "value": "0 8px 32px rgba(0,0,0,.07)"
+    },
+    "composerDark": {
+      "evidence": "D",
+      "value": "0 12px 40px rgba(0,0,0,.55)"
+    },
+    "accountDark": {
+      "evidence": "M",
+      "value": "0 0 0 1px rgba(255,255,255,.06),0 20px 25px -5px rgba(0,0,0,.12),0 8px 10px -6px rgba(0,0,0,.16)"
+    }
+  },
+  "motion": {
+    "evidence": "D",
+    "durationsMs": [
+      150,
+      250,
+      400
+    ],
+    "easeOut": "cubic-bezier(.16,1,.3,1)",
+    "easeOutStrong": "cubic-bezier(.23,1,.32,1)",
+    "easeIn": "cubic-bezier(.7,0,.84,0)",
+    "easeInOut": "cubic-bezier(.4,0,.2,1)",
+    "easeInOutStrong": "cubic-bezier(.77,0,.175,1)",
+    "springSoft": "cubic-bezier(.34,1.56,.64,1)",
+    "measuredTransitions": [
+      "sidebar width 150ms",
+      "switch transform/colors 150ms",
+      "field color/box-shadow 150ms"
+    ],
+    "libraryAdoption": "Immediate state changes in v0.1; source motion catalogued, no animation parity claim."
+  },
+  "coverage": {
+    "inspected": [
+      "dashboard",
+      "existing chat",
+      "account menu",
+      "agent/model choices",
+      "period menu",
+      "context menu",
+      "command palette",
+      "profile settings",
+      "notification settings",
+      "activity",
+      "analytics disconnected",
+      "campaigns disconnected",
+      "creatives disconnected",
+      "integrations list",
+      "briefs empty",
+      "automations empty",
+      "deliverables empty",
+      "welcome modal",
+      "MCP connection settings; code values not retained"
+    ],
+    "notObserved": [
+      "populated analytics charts",
+      "populated data tables",
+      "calendar custom-range calendar surface",
+      "streaming assistant messages",
+      "uploaded attachment states",
+      "live validation failures",
+      "full onboarding journey",
+      "real Safari keyboard/touch",
+      "every billing/plan state"
+    ]
+  },
+  "branding": {
+    "sourceWorkspace": "#d0f300",
+    "curriculol": "#ffa133",
+    "mutableInputs": [
+      "brandColor"
+    ],
+    "fixed": [
+      "all neutral and semantic roles",
+      "font family",
+      "type roles",
+      "component dimensions",
+      "spacing",
+      "radii",
+      "icon registry"
+    ]
+  }
+}

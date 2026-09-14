@@ -1,0 +1,30 @@
+{
+  "name": "beds",
+  "private": true,
+  "type": "module",
+  "workspaces": ["packages/*"],
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "dev": "vite apps/web/labs/espaco-library --config apps/web/labs/espaco-library/vite.config.ts",
+    "build": "npm run build --workspace @espaco/ui",
+    "typecheck": "npm run typecheck --workspace @espaco/ui && tsc -p apps/web/labs/espaco-library/tsconfig.json",
+    "check": "npm run check --workspace @espaco/ui",
+    "check:docs": "npm run check:docs --workspace @espaco/ui",
+    "check:consumer": "node packages/espaco-ui/scripts/check-consumer.mjs packages/espaco-ui/examples/consumer.tsx apps/web/labs/espaco-library/LucyPage.tsx apps/web/labs/espaco-library/McpPage.tsx apps/web/labs/espaco-library/FeatureCardExamples.tsx",
+    "test": "npm run test:guards --workspace @espaco/ui",
+    "test:browser": "playwright test --config apps/web/labs/espaco-library/playwright.config.ts",
+    "check:artifact": "npm run check:artifact --workspace @espaco/ui",
+    "verify": "npm run build && npm run typecheck && npm run check && npm run check:docs && npm run check:consumer && npm test && npm run check:artifact"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.58.2",
+    "@types/node": "24.12.0",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "typescript": "5.9.3",
+    "vite": "8.3.0"
+  }
+}

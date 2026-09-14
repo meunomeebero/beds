@@ -1,0 +1,29 @@
+.es-root .es-radio-group{display:grid;min-width:0;padding:0;margin:0;border:0;gap:8px}
+.es-root .es-radio-group>legend,.es-root .es-file-upload-label{padding:0;color:var(--es-text);font:500 13px/16px var(--es-font);letter-spacing:-.1px}
+.es-root .es-radio-options{display:grid;gap:8px}
+.es-root .es-radio-option{display:flex;position:relative;align-items:center;gap:8px;min-width:0;color:var(--es-text);font:400 13px/16px var(--es-font);cursor:pointer;overflow-wrap:anywhere}
+.es-root .es-radio-option>input{position:absolute;width:1px;height:1px;padding:0;margin:0;opacity:0}
+.es-root .es-radio-indicator{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:16px;height:16px;border:1px solid var(--es-border-strong);border-radius:50%;background:var(--es-surface)}
+.es-root .es-radio-indicator>span{width:6px;height:6px;border-radius:50%;background:transparent}
+.es-root .es-radio-option>input:checked+.es-radio-indicator{border-color:var(--es-info)}
+.es-root .es-radio-option>input:checked+.es-radio-indicator>span{background:var(--es-info)}
+.es-root .es-radio-option>input:focus-visible+.es-radio-indicator{outline:2px solid var(--es-focus);outline-offset:3px}
+.es-root .es-radio-option[data-disabled]{opacity:.5;cursor:default}
+.es-root .es-file-upload{display:grid;min-width:0;gap:8px}
+.es-root .es-file-dropzone{display:grid;justify-items:center;gap:8px;min-width:0;padding:16px;border:1px dashed var(--es-border-strong);border-radius:8px;background:var(--es-field);color:var(--es-secondary);text-align:center}
+.es-root .es-file-dropzone[data-dragging]{border-color:var(--es-focus);background:var(--es-subtle);color:var(--es-text)}
+.es-root .es-file-dropzone[data-disabled]{opacity:.5}
+.es-root .es-file-dropzone>svg{color:var(--es-secondary)}
+.es-root .es-file-dropzone>p{margin:0;color:inherit;font:400 13px/19.5px var(--es-font);overflow-wrap:anywhere}
+.es-root .es-file-upload-browse{min-height:32px;padding:8px 10px;border:0;border-radius:8px;background:var(--es-control);color:var(--es-text);font:500 13px/16px var(--es-font);letter-spacing:-.1px;cursor:pointer}
+.es-root .es-file-upload-browse:disabled{cursor:default}
+.es-root .es-file-upload-browse:not(:disabled):active{background:var(--es-pressed)}
+.es-root .es-file-upload-browse:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
+.es-root .es-file-upload-list{display:grid;gap:4px;padding:0;margin:0;list-style:none}
+.es-root .es-file-upload-list>li{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0;padding:6px 8px;border-radius:6px;background:var(--es-subtle);color:var(--es-text);font:400 12px/18px var(--es-font)}
+.es-root .es-file-upload-list>li>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.es-root .es-file-upload-list button{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:24px;height:24px;padding:0;border:0;border-radius:6px;background:transparent;color:var(--es-secondary);cursor:pointer}
+.es-root .es-file-upload-list button:disabled{cursor:default}
+.es-root .es-file-upload-list button:not(:disabled):active{background:var(--es-pressed);color:var(--es-text)}
+.es-root .es-file-upload-list button:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
+@media(hover:hover) and (pointer:fine){.es-root .es-file-upload-browse:not(:disabled):hover{background:var(--es-hover);color:var(--es-text)}.es-root .es-file-upload-list button:not(:disabled):hover{background:var(--es-hover);color:var(--es-text)}}

@@ -1,0 +1,10 @@
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import '@espaco/ui/styles.css';
+import Catalog from './Catalog';
+import LucyPage from './LucyPage';
+import McpPage from './McpPage';
+const params = new URLSearchParams(location.search);
+const isLucy = params.get('view') === 'lucy' || (params.get('view') === 'home' && params.get('tab') === 'lucy');
+const isMcp = params.get('view') === 'mcp';
+createRoot(document.getElementById('root')!).render(<React.StrictMode>{isMcp ? <McpPage /> : isLucy ? <LucyPage /> : <Catalog />}</React.StrictMode>);

@@ -1,0 +1,5 @@
+html,body,#root{min-height:100%;margin:0}
+main{display:grid;gap:24px;max-width:640px;padding:32px;margin:0 auto}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+section{display:grid;gap:12px}
+@media(max-width:767px){main{padding:16px}header{align-items:flex-start;flex-direction:column}}
