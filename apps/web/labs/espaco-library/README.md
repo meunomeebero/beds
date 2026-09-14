@@ -24,4 +24,4 @@ From `apps/web`:
 npx playwright test --config labs/espaco-library/playwright.config.ts
 ```
 
-Package source:`packages/espaco-ui`. Docs:[personal library](../../../../docs/design/espaco-library/README.md). Package consumer example is audited without custom CSS. This catalog has documentation-only tables/swatches; those display helpers are not the consumer contract.
+Package source:`packages/beds`. Docs:[personal library](../../../../docs/design/espaco-library/README.md). Package consumer example is audited without custom CSS. This catalog has documentation-only tables/swatches; those display helpers are not the consumer contract.

@@ -51,7 +51,7 @@ export function compareArtifactTrees(expectedDirectory, actualDirectory) {
 function prepareRebuild(root) {
   const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'espaco-artifact-'));
   try {
-    const stagedPackage = path.join(temporary, 'packages', 'espaco-ui');
+    const stagedPackage = path.join(temporary, 'packages', 'beds');
     const sourceDocs = path.resolve(root, '../../docs/design/espaco-library');
     const sourceLab = path.resolve(root, '../../apps/web/labs/espaco-library');
     fs.mkdirSync(path.dirname(stagedPackage), { recursive:true });
@@ -99,17 +99,19 @@ export function validatePackedLayout(packageDirectory, requiredPaths) {
 
 /** Imports a package from a fresh consumer node_modules directory; no source alias is present. */
 export function smokePackedConsumer(packageDirectory, { moduleRoot = null } = {}) {
+  const manifest = JSON.parse(fs.readFileSync(path.join(packageDirectory, 'package.json'), 'utf8'));
+  if (manifest.name !== 'beds') throw new Error(`Expected package name beds; received ${manifest.name}.`);
   const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'espaco-consumer-'));
   try {
     const consumerModules = path.join(temporary, 'node_modules');
-    fs.mkdirSync(path.join(consumerModules, '@espaco'), { recursive:true });
-    fs.symlinkSync(packageDirectory, path.join(consumerModules, '@espaco', 'ui'));
+    fs.mkdirSync(consumerModules, { recursive:true });
+    fs.symlinkSync(packageDirectory, path.join(consumerModules, 'beds'));
     if (moduleRoot) fs.symlinkSync(moduleRoot, path.join(packageDirectory, 'node_modules'));
     const consumer = path.join(temporary, 'consumer.mjs');
     fs.writeFileSync(consumer, [
-      "const resolved = import.meta.resolve('@espaco/ui');",
+      "const resolved = import.meta.resolve('beds');",
       "if (!resolved.includes('/dist/index.js') || resolved.includes('/src/')) throw new Error(`Consumer resolved an invalid library entry: ${resolved}`);",
-      "const library = await import('@espaco/ui');",
+      "const library = await import('beds');",
       "for (const name of ['DesignSystemProvider', 'Text', 'PageContentHeader', 'DataTable', 'Pagination', 'FilterSelect', 'HelpLabel', 'Carousel', 'FeatureCard']) if (typeof library[name] !== 'function') throw new Error(`Missing public package export: ${name}`);",
       "console.log(resolved);",
     ].join('\n'));

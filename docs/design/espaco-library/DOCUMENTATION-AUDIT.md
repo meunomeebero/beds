@@ -6,7 +6,7 @@ Date: 2026-09-14. Scope: canonical portable DS docs, package rules/mirror, catal
 
 | Finding | Consolidation |
 |---|---|
-| Two systems called current | Root maps route new work to portable `@espaco/ui`; every legacy prototype document identifies its historical scope. |
+| Two systems called current | Root maps route new work to the portable package (`@espaco/ui` at this audit; renamed `beds` in RC15); every legacy prototype document identifies its historical scope. |
 | Parent mono/palette/skill bundle leaked into DS | Explicit package/catalog/documentation exception; product defaults remain unchanged outside that scope. |
 | Repeated sidebar/account geometry and version counts drifted | Agent instructions, entrypoints and examples link to owners. Package metadata owns version; Components/Validation record inventory. |
 | Historical source palette, account r10 and 260/48px shell mixed with current rules | Original tables moved to Reference measurements; current Foundations retain approved geometry and accessible text roles. |

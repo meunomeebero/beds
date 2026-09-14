@@ -2,7 +2,7 @@
 
 Visual decisions: [Foundations](FOUNDATIONS.md). Executed checks: [Validation](VALIDATION.md). Historical prototypes do not supply current defaults.
 
-Public entry: `packages/espaco-ui/src/index.ts`. Exact TypeScript declarations are the API authority. Import only from `@espaco/ui`; no internal subpath, arbitrary className/style or raw element replacement. Named variants select fixed contexts. States: [STATES.md](STATES.md); dimensions/type: [FOUNDATIONS.md](FOUNDATIONS.md).
+Public entry: `packages/beds/src/index.ts`. Exact TypeScript declarations are the API authority. Import only from `beds`; no internal subpath, arbitrary className/style or raw element replacement. Named variants select fixed contexts. States: [STATES.md](STATES.md); dimensions/type: [FOUNDATIONS.md](FOUNDATIONS.md).
 
 Current inventory:70 public components;89 tokens. Additional exports: `useDesignSystem`, `brands`, `IconName`, `Theme`, `TextVariant`, `DataTableColumn`, `DataTableRow`, `DataTableState`, `FeatureCardProps` and read-only `typography/geometry/neutrals/themes` metadata; these are not extra visual components. A source-backed component can contain locally engineered A keyboard/recovery behavior. Feedback/populated-data patterns with no matching visible source state remain A/U.
 
@@ -17,7 +17,7 @@ Current inventory:70 public components;89 tokens. Additional exports: `useDesign
 |`BrandMark` |Optional accessible `label=Brand` |User-owned three18×4px bars,3px gaps,18×18 footprint; provider brand fill; A identity |
 |`ThemeToggle` |Optional `label/lightLabel/darkLabel` |Reads actual provider theme; invokes provider callback; disabled when callback absent; real theme control, unlike legacy fixture |
 
-Icon registry additions: `House`, `MessageCircle`, `ChartColumn`, `UserRound`, `Briefcase`, `Coins`, `ScanText`, `Bookmark`, `CalendarDays`, `ChevronsUpDown`, `Play`, `Pause`, `ArrowLeft`. Existing names remain accepted. Former `SourceIcon` paths are [historical text evidence](../../../packages/espaco-ui/evidence/marketer-source-icons.txt), not runtime components. Callers cannot provide SVG paths, stroke, color or pixel size. Registry entries do not create configurable styling.
+Icon registry additions: `House`, `MessageCircle`, `ChartColumn`, `UserRound`, `Briefcase`, `Coins`, `ScanText`, `Bookmark`, `CalendarDays`, `ChevronsUpDown`, `Play`, `Pause`, `ArrowLeft`. Existing names remain accepted. Former `SourceIcon` paths are [historical text evidence](../../../packages/beds/evidence/marketer-source-icons.txt), not runtime components. Callers cannot provide SVG paths, stroke, color or pixel size. Registry entries do not create configurable styling.
 
 ## Layout and navigation — 18
 

@@ -1,10 +1,10 @@
-@import '../../../../packages/espaco-ui/src/tokens.css';
-@import '../../../../packages/espaco-ui/src/foundation.css';
-@import '../../../../packages/espaco-ui/src/controls.css';
-@import '../../../../packages/espaco-ui/src/overlays.css';
-@import '../../../../packages/espaco-ui/src/layout.css';
-@import '../../../../packages/espaco-ui/src/patterns.css';
-@import '../../../../packages/espaco-ui/src/feedback.css';
-@import '../../../../packages/espaco-ui/src/chat.css';
-@import '../../../../packages/espaco-ui/src/technical.css';
+@import '../../../../packages/beds/src/tokens.css';
+@import '../../../../packages/beds/src/foundation.css';
+@import '../../../../packages/beds/src/controls.css';
+@import '../../../../packages/beds/src/overlays.css';
+@import '../../../../packages/beds/src/layout.css';
+@import '../../../../packages/beds/src/patterns.css';
+@import '../../../../packages/beds/src/feedback.css';
+@import '../../../../packages/beds/src/chat.css';
+@import '../../../../packages/beds/src/technical.css';
 html,body,#root{margin:0;min-height:100%;}

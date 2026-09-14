@@ -66,7 +66,7 @@ export function checkConsumerPaths(inputs) {
   for (let index = 0; index < queue.length; index++) {
     const file = queue[index];
     files++;
-    if (STYLE.test(file)) { report(file, 'CONSUMER_CSS', 'Consumer stylesheets are forbidden; put reusable visual rules inside @espaco/ui.'); continue; }
+    if (STYLE.test(file)) { report(file, 'CONSUMER_CSS', 'Consumer stylesheets are forbidden; put reusable visual rules inside beds.'); continue; }
     const source = ts.createSourceFile(file, fs.readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true, /x$/i.test(file) ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
     for (const error of source.parseDiagnostics) report(file, 'PARSE_ERROR', ts.flattenDiagnosticMessageText(error.messageText, ' '));
     const imports = new Map();
@@ -74,10 +74,11 @@ export function checkConsumerPaths(inputs) {
     const localComponents = new Set();
     const issue = (node, code, message) => report(file, code, message, source, node);
     const registerImport = (specifier, node) => {
-      if (specifier === '@espaco/ui/styles.css' || specifier === '@espaco/ui/reset.css') return;
-      if (STYLE.test(specifier.split('?')[0])) issue(node, 'STYLE_IMPORT', 'Only the fixed @espaco/ui styles.css and reset.css exports may provide consumer CSS.');
-      if (STYLE_MODULE.test(specifier)) issue(node, 'VISUAL_DEPENDENCY', `Import visual primitives and icons from @espaco/ui, not ${specifier}.`);
-      if (specifier.startsWith('@espaco/ui/')) issue(node, 'PRIVATE_LIBRARY_IMPORT', 'Use the public @espaco/ui entry or fixed styles.css/reset.css exports.');
+      if (specifier === '@espaco/ui' || specifier.startsWith('@espaco/ui/')) issue(node, 'LEGACY_PACKAGE_IMPORT', 'Import from beds; the previous package name is not an alias.');
+      if (specifier === 'beds/styles.css' || specifier === 'beds/reset.css') return;
+      if (STYLE.test(specifier.split('?')[0])) issue(node, 'STYLE_IMPORT', 'Only the fixed beds styles.css and reset.css exports may provide consumer CSS.');
+      if (STYLE_MODULE.test(specifier)) issue(node, 'VISUAL_DEPENDENCY', `Import visual primitives and icons from beds, not ${specifier}.`);
+      if (specifier.startsWith('beds/')) issue(node, 'PRIVATE_LIBRARY_IMPORT', 'Use the public beds entry or fixed styles.css/reset.css exports.');
       if (specifier.startsWith('.')) {
         const resolved = resolveLocal(file, specifier);
         if (!resolved) issue(node, 'UNRESOLVED_LOCAL_IMPORT', `Cannot audit local dependency ${specifier}.`);
@@ -118,7 +119,7 @@ export function checkConsumerPaths(inputs) {
         if (base?.exported === '*' || (base?.module === 'react' && base.exported === 'default')) return { ...base, exported: node.name.text };
       }
     };
-    const isProvider = node => { const info = importOf(node); return info?.module === '@espaco/ui' && info.exported === 'DesignSystemProvider'; };
+    const isProvider = node => { const info = importOf(node); return info?.module === 'beds' && info.exported === 'DesignSystemProvider'; };
     const validBrand = (node, visited = new Set()) => {
       node = unwrap(node);
       if (!node) return false;
@@ -126,7 +127,7 @@ export function checkConsumerPaths(inputs) {
       if (ts.isIdentifier(node) && constants.has(node.text) && !visited.has(node.text)) return validBrand(constants.get(node.text), new Set([...visited, node.text]));
       if (ts.isPropertyAccessExpression(node)) {
         const info = importOf(node.expression);
-        if (info?.module === '@espaco/ui' && info.exported === 'brands' && ['reference', 'curriculol'].includes(node.name.text)) return true;
+        if (info?.module === 'beds' && info.exported === 'brands' && ['reference', 'curriculol'].includes(node.name.text)) return true;
         const base = unwrap(ts.isIdentifier(node.expression) ? constants.get(node.expression.text) : node.expression);
         if (base && ts.isObjectLiteralExpression(base)) {
           const property = base.properties.find(item => ts.isPropertyAssignment(item) && item.name.getText(source).replace(/^['"]|['"]$/g, '') === node.name.text);
@@ -139,12 +140,12 @@ export function checkConsumerPaths(inputs) {
       const tag = node.tagName;
       const text = tag.getText(source);
       const info = importOf(tag);
-      if (/^[a-z]/.test(text) || text.includes('-')) issue(tag, 'NATIVE_VISUAL_ELEMENT', `Render ${text} through a public @espaco/ui component.`);
-      else if (!(info?.module === '@espaco/ui' || (info?.module === 'react' && ['Fragment', 'StrictMode', 'Suspense', 'Profiler'].includes(info.exported)) || info?.local || (ts.isIdentifier(tag) && localComponents.has(tag.text)))) issue(tag, 'UNVERIFIED_COMPONENT', `Cannot establish ${text} as a library component or audited local composition.`);
+      if (/^[a-z]/.test(text) || text.includes('-')) issue(tag, 'NATIVE_VISUAL_ELEMENT', `Render ${text} through a public beds component.`);
+      else if (!(info?.module === 'beds' || (info?.module === 'react' && ['Fragment', 'StrictMode', 'Suspense', 'Profiler'].includes(info.exported)) || info?.local || (ts.isIdentifier(tag) && localComponents.has(tag.text)))) issue(tag, 'UNVERIFIED_COMPONENT', `Cannot establish ${text} as a library component or audited local composition.`);
       for (const attribute of node.attributes.properties) {
         if (ts.isJsxSpreadAttribute(attribute)) { issue(attribute, 'JSX_SPREAD', 'Use explicit props; spreads can hide visual escape hatches.'); continue; }
         const name = attribute.name.getText(source);
-        const allowedValues = namedSemanticValues(info?.module === '@espaco/ui' ? info.exported : undefined, name);
+        const allowedValues = namedSemanticValues(info?.module === 'beds' ? info.exported : undefined, name);
         if (allowedValues) {
           const initializer = attribute.initializer && (ts.isJsxExpression(attribute.initializer) ? attribute.initializer.expression : attribute.initializer);
           const value = staticString(initializer);
@@ -155,7 +156,7 @@ export function checkConsumerPaths(inputs) {
         }
         if (name === 'brandColor') {
           const value = attribute.initializer && (ts.isJsxExpression(attribute.initializer) ? attribute.initializer.expression : attribute.initializer);
-          if (!isProvider(tag) || !validBrand(value)) issue(attribute, 'BRAND_CONTRACT', 'brandColor is provider-only: #RRGGBB literal, same-file const preset, or brands.reference/curriculol from @espaco/ui.');
+          if (!isProvider(tag) || !validBrand(value)) issue(attribute, 'BRAND_CONTRACT', 'brandColor is provider-only: #RRGGBB literal, same-file const preset, or brands.reference/curriculol from beds.');
         }
       }
     };
@@ -194,7 +195,7 @@ export function checkConsumerPaths(inputs) {
 if (process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(process.argv[1]) === fs.realpathSync(fileURLToPath(import.meta.url))) {
   const inputs = process.argv.slice(2);
   if (inputs.includes('--help')) {
-    console.log('Usage: node check-consumer.mjs <consumer-file-or-directory> [...]\nScans explicit UI roots and local imports. Only @espaco/ui supplies visual elements/styles.');
+    console.log('Usage: node check-consumer.mjs <consumer-file-or-directory> [...]\nScans explicit UI roots and local imports. Only beds supplies visual elements/styles.');
   } else {
     try {
       const result = checkConsumerPaths(inputs);

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, FeatureCard, Notice, PageHeader, ResponsiveGrid, Select, Stack, Switch, Text } from '@espaco/ui';
+import { Button, FeatureCard, Notice, PageHeader, ResponsiveGrid, Select, Stack, Switch, Text } from 'beds';
 
 const artwork = new URL('./assets/feature-onboarding.svg?no-inline', import.meta.url).href;
 

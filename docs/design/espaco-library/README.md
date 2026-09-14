@@ -1,6 +1,6 @@
 # Espaço — portable SaaS interface library
 
-Canonical library: `@espaco/ui`. React 19; two fixed themes; one brand color. Independent of Curriculol business rules. This map is the entrypoint, not another geometry specification.
+Canonical library: `beds`. React 19; two fixed themes; one brand color. Independent of Curriculol business rules. This map is the entrypoint, not another geometry specification.
 
 ## Read only the relevant path
 
@@ -26,7 +26,7 @@ Canonical library: `@espaco/ui`. React 19; two fixed themes; one brand color. In
 | Verification | Validation records a specific snapshot and scope; never inherited approval |
 | Historical evidence | Provenance / Original measurements / legacy prototype; not current instructions |
 
-Repository authors edit `docs/design/espaco-library/*.md`. Build generates the portable `packages/espaco-ui/docs/*.md` mirror; never edit both independently. Standalone consumers read the shipped mirror. Package `AGENTS.md` and README route here rather than repeat measurements.
+Repository authors edit `docs/design/espaco-library/*.md`. Build generates the portable `packages/beds/docs/*.md` mirror; never edit both independently. Standalone consumers read the shipped mirror. Package `AGENTS.md` and README route here rather than repeat measurements.
 
 The old `apps/web/src/design-system/espaco` prototype, terminal product typography and D5 screen contracts are separate systems. Do not merge their visual defaults into this package. A code/doc disagreement is drift to investigate against the approved decision, not permission to declare either side correct automatically.
 

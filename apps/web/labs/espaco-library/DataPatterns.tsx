@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActivityPanel, Avatar, Button, Carousel, CollectionCard, DataTable, FilterSelect, HelpLabel, HorizontalRail, IconToggleButton, Inline, Pagination, ResponsiveGrid, ScrollableList, DesignSystemProvider, Stack, Surface, Text, type DataTableState, type Theme } from '@espaco/ui';
+import { ActivityPanel, Avatar, Button, Carousel, CollectionCard, DataTable, FilterSelect, HelpLabel, HorizontalRail, IconToggleButton, Inline, Pagination, ResponsiveGrid, ScrollableList, DesignSystemProvider, Stack, Surface, Text, type DataTableState, type Theme } from 'beds';
 
 const columns = [
   { id: 'name', label: 'Projeto' },

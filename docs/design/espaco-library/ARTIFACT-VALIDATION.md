@@ -1,6 +1,6 @@
 # Espaço library — packaged artifact validation
 
-Use this gate before handing off or publishing `@espaco/ui`. A development catalog that aliases package source is not package-portability evidence.
+Use this gate before handing off or publishing `beds`. A development catalog that aliases package source is not package-portability evidence.
 
 ```sh
 npm run build
@@ -8,12 +8,13 @@ npm run check:docs
 npm run check:artifact
 ```
 
-Run these commands from `packages/espaco-ui`. `check:docs` scans canonical Markdown, package docs, README/AGENTS and relative targets from the filesystem, including untracked files; it also checks canonical index coverage. It does not validate remote URLs, anchor semantics or visual correctness. The artifact gate also checks links inside the extracted package, where repository-only targets cannot hide.
+Run these commands from `packages/beds`. `check:docs` scans canonical Markdown, package docs, README/AGENTS and relative targets from the filesystem, including untracked files; it also checks canonical index coverage. It does not validate remote URLs, anchor semantics or visual correctness. The artifact gate also checks links inside the extracted package, where repository-only targets cannot hide.
 
-The artifact gate rebuilds a temporary copy and compares generated `dist/` and package docs byte-for-byte with the checked artifact. Only after parity passes does it pack the package, extract it and import `@espaco/ui` from a fresh consumer directory. That consumer must resolve `dist/index.js`, never `/src/`.
+The artifact gate rebuilds a temporary copy and compares generated `dist/` and package docs byte-for-byte with the checked artifact. Only after parity passes does it pack the package, extract it and import `beds` from a fresh consumer directory. That consumer must resolve `dist/index.js`, never `/src/`.
 
 | Area | Required result |
 |---|---|
+| Identity | Actual manifest name is `beds`; no alias hiding the previous `@espaco/ui` name. |
 | API | Packed `dist/index.js` and declarations exist and expose the current public components. |
 | CSS | Packed `styles.css` and `reset.css` exactly match an isolated build. |
 | Docs | Every canonical library document is regenerated under package `docs/`. |

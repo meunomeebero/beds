@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { DesignSystemProvider, brands, Stack, PageHeader, TextField, Button, Notice, ThemeToggle, type Theme } from '@espaco/ui';
-import '@espaco/ui/styles.css';
-import '@espaco/ui/reset.css';
+import { DesignSystemProvider, brands, Stack, PageHeader, TextField, Button, Notice, ThemeToggle, type Theme } from 'beds';
+import 'beds/styles.css';
+import 'beds/reset.css';
 
 export function PersonalSaaS() {
   const [theme, setTheme] = useState<Theme>('dark');

@@ -6,7 +6,7 @@ Authority: latest user clarification, 2026-09-12. Reuse only the legacy sidebar 
 |---|---|
 | Preview | `http://127.0.0.1:5283/?view=lucy`; alias `?view=home&tab=lucy` |
 | Consumer | [LucyPage.tsx](../../../apps/web/labs/espaco-library/LucyPage.tsx) |
-| Library | Current local `@espaco/ui` source; package metadata owns version, Components owns inventory. Original example checkpoints are in Validation. |
+| Library | Current local `beds` source; package metadata owns version, Components owns inventory. Original example checkpoints are in Validation. |
 | Visual authority | Existing [foundations](FOUNDATIONS.md): Inter, fixed themes, full-bleed shell, 264/62px sidebar, 768px breakpoint, 640px chat |
 | Customization | Curriculol's existing orange preset `#ffa133`; controlled light/dark theme |
 | Forbidden | Page CSS; new pixel/font/spacing overrides; legacy frame; workspace-specific variants added to imitate the old screen |

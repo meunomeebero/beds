@@ -12,7 +12,7 @@ const order = ['tokens.css','foundation.css','controls.css','form-fields.css','o
 test('package build fails closed when canonical documentation references a missing asset',()=>{
  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'espaco-build-test-'));
  try {
-  const fixturePackage = path.join(directory, 'packages', 'espaco-ui');
+  const fixturePackage = path.join(directory, 'packages', 'beds');
   const fixtureDocs = path.join(directory, 'docs', 'design', 'espaco-library');
   fs.mkdirSync(path.join(fixturePackage, 'scripts'), { recursive:true });
   fs.mkdirSync(path.join(fixturePackage, 'src'), { recursive:true });

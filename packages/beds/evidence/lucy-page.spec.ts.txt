@@ -1,6 +1,6 @@
 import { expect, test, type Page, type TestInfo } from '@playwright/test';
 
-// Lucy changes composition and labels, preserving @espaco/ui 0.1.1.
+// Lucy changes composition and labels, preserving beds 0.1.1.
 // The legacy page is not a geometry, font or screenshot baseline.
 const themes = ['dark', 'light'] as const;
 type Theme = typeof themes[number];

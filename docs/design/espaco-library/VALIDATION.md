@@ -1,8 +1,23 @@
 # Espaço library — validation record
 
-Date:2026-09-14. Canonical repository:`meunomeebero/beds`. Current candidate `@espaco/ui@0.1.7-rc.14`.
+Date:2026-09-14. Canonical repository:`meunomeebero/beds`. Current candidate `beds@0.1.7-rc.15`.
 
-## Current RC14 — standalone repository extraction
+## Current RC15 — package identity
+
+Actual package/import renamed to `beds`; source folder `packages/beds`.
+No compatibility alias. Component APIs, runtime source, CSS and fonts unchanged.
+`npm run verify`:passed;70 public components,89 tokens,32 Markdown files,
+241 local targets,four consumer roots,27 guard regressions,zero violations,
+fresh artifact parity and unpacked consumer import. Identity guards reject the
+previous package name,including an install alias hiding a legacy manifest.
+Catalog Playwright:106 passed,6 intentional viewport skips,0 failures;
+Chromium desktop/mobile and light/dark. All31 source/font files match RC14
+byte-for-byte;this rename does not change appearance or component behavior.
+Package paths in historical records follow the current layout;old version/name
+claims are retained. New archive hash and source commit belong in release notes.
+No new screen-reader,physical-device,independent visual or aesthetic acceptance.
+
+## Previous RC14 — standalone repository extraction
 
 Runtime source preserved byte-for-byte from the validated RC13 snapshot. Repository setup,
 locked toolchain and distribution metadata added;no component orvisual change.
@@ -132,11 +147,11 @@ Records below describe their named candidates,not current candidate approval. Or
 
 | Gate | Command / evidence | Result |
 |---|---|---|
-| Public API + tokens | `node packages/espaco-ui/scripts/check-library.mjs --tokens src/tokens.css` |61 components;81 declared/provider properties;0 violations |
+| Public API + tokens | `node packages/beds/scripts/check-library.mjs --tokens src/tokens.css` |61 components;81 declared/provider properties;0 violations |
 | ResponsiveGrid | `responsive-grid.spec.ts` in the source catalog |4 passed;dark/light;desktop/mobile projects;320/390/768/1440;fixed16px gap,stacking,child Tab order and no horizontal overflow |
-| Consumer sample | `node packages/espaco-ui/scripts/check-consumer.mjs packages/espaco-ui/examples/consumer.tsx` |Pending fresh RC2 rerun |
-| Guard regression | `npm run test:guards` from `packages/espaco-ui` |17 passed; includes consumer escapes,missing documentation assets,artifact parity,packed consumer and visual-baseline gate |
-| Package type/build | `npm run typecheck`; `npm run build` from `packages/espaco-ui` |Historical RC2 result; RC4 rerun recorded below |
+| Consumer sample | `node packages/beds/scripts/check-consumer.mjs packages/beds/examples/consumer.tsx` |Pending fresh RC2 rerun |
+| Guard regression | `npm run test:guards` from `packages/beds` |17 passed; includes consumer escapes,missing documentation assets,artifact parity,packed consumer and visual-baseline gate |
+| Package type/build | `npm run typecheck`; `npm run build` from `packages/beds` |Historical RC2 result; RC4 rerun recorded below |
 | Catalog TypeScript | `tsc -p apps/web/labs/espaco-library/tsconfig.json` |RC2 passed |
 | Integrated browser suite | RC1 historical baseline |72 passed;6 intentional scope skips; not rerun for RC2 |
 | Shell focus + contrast | RC1 historical baseline |18 passed;6 project-scoped skips; not rerun for RC2 |
@@ -145,7 +160,7 @@ Records below describe their named candidates,not current candidate approval. Or
 | Form primitives | RC1 historical baseline |8 passed; not rerun for RC2 |
 | Lucy visual regression | RC1 historical baseline |4 passed; not rerun for RC2 |
 | Production catalog build | `vite build apps/web/labs/espaco-library --config apps/web/labs/espaco-library/vite.config.ts` |RC2 passed; fonts bundled locally |
-| Packed consumer |`npm run check:artifact` from `packages/espaco-ui`; local tarball extracted outside repository; Node ESM/SSR render; font/doc paths; both guards from extracted package |RC2 passed;61 components;brand validation;0 violations;the handoff records the immutable archive SHA |
+| Packed consumer |`npm run check:artifact` from `packages/beds`; local tarball extracted outside repository; Node ESM/SSR render; font/doc paths; both guards from extracted package |RC2 passed;61 components;brand validation;0 violations;the handoff records the immutable archive SHA |
 | Documentation links | Repository-wide link gate |Not rerun for RC2; RC4 rerun recorded below |
 
 ## RC4 source candidate — B2/B3/B4 only
@@ -202,10 +217,10 @@ All screenshots use synthetic library content, not source account data.
 
 | View | Desktop | Mobile |
 |---|---|---|
-| Orange-brand chat,dark |[Screenshot](../../../packages/espaco-ui/evidence/library-dark-desktop.png) |[Screenshot](../../../packages/espaco-ui/evidence/library-dark-mobile.png) |
-| Orange-brand chat,light |[Screenshot](../../../packages/espaco-ui/evidence/library-light-desktop.png) |[Screenshot](../../../packages/espaco-ui/evidence/library-light-mobile.png) |
-| Account,dark |[Screenshot](../../../packages/espaco-ui/evidence/account-dark-desktop.png) |[Screenshot](../../../packages/espaco-ui/evidence/account-dark-mobile.png) |
-| Account,light |[Screenshot](../../../packages/espaco-ui/evidence/account-light-desktop.png) |[Screenshot](../../../packages/espaco-ui/evidence/account-light-mobile.png) |
+| Orange-brand chat,dark |[Screenshot](../../../packages/beds/evidence/library-dark-desktop.png) |[Screenshot](../../../packages/beds/evidence/library-dark-mobile.png) |
+| Orange-brand chat,light |[Screenshot](../../../packages/beds/evidence/library-light-desktop.png) |[Screenshot](../../../packages/beds/evidence/library-light-mobile.png) |
+| Account,dark |[Screenshot](../../../packages/beds/evidence/account-dark-desktop.png) |[Screenshot](../../../packages/beds/evidence/account-dark-mobile.png) |
+| Account,light |[Screenshot](../../../packages/beds/evidence/account-light-desktop.png) |[Screenshot](../../../packages/beds/evidence/account-light-mobile.png) |
 
 Reviewed refreshed dark desktop and light mobile form captures, plus the MCP desktop/mobile captures. Integrated suite refreshed desktop/mobile chat,account,welcome and component catalog evidence. Retained full catalog captures and JSON test report: `apps/web/labs/espaco-library/evidence/`. Numeric gates verify the exercised constraints; human aesthetic approval remains separate.
 
@@ -245,7 +260,7 @@ Latest explicit user request: use the legacy Lucy icon family throughout the DS.
 | Visual inspection | Current dark Lucy page inspected in browser; matching source glyph choices, existing layout and colors |
 | Dead code | Not green: existing consumer sample entry plus2 backend dependencies and7 backend exports reported; no archived glyph runtime left in source |
 
-The previous full-source identity assertion applies to the earlier composition exercise only. The current, explicitly authorized delta is recorded above. Historical Marketer glyph data remains available as [text evidence](../../../packages/espaco-ui/evidence/marketer-source-icons.txt). No production integration or publication performed.
+The previous full-source identity assertion applies to the earlier composition exercise only. The current, explicitly authorized delta is recorded above. Historical Marketer glyph data remains available as [text evidence](../../../packages/beds/evidence/marketer-source-icons.txt). No production integration or publication performed.
 
 ## Account-menu finish — v0.1.3
 
@@ -281,8 +296,8 @@ The original MCP composition record below is historical. The current source-meas
 
 | Gate | Result |
 |---|---|
-| Consumer contract | `node packages/espaco-ui/scripts/check-consumer.mjs apps/web/labs/espaco-library/McpPage.tsx` → 1 file, 0 violations |
-| Library contract | `node scripts/check-library.mjs --tokens src/tokens.css` from `packages/espaco-ui` → 55 public components, 81 tokens, 0 violations |
+| Consumer contract | `node packages/beds/scripts/check-consumer.mjs apps/web/labs/espaco-library/McpPage.tsx` → 1 file, 0 violations |
+| Library contract | `node scripts/check-library.mjs --tokens src/tokens.css` from `packages/beds` → 55 public components, 81 tokens, 0 violations |
 | Catalog TypeScript | `node node_modules/typescript/bin/tsc -p apps/web/labs/espaco-library/tsconfig.json` → passed |
 | Focused MCP browser flow | `mcp-page.spec.ts` → 4 passed; desktop/mobile, dark/light, client tabs, policy, invalid/valid callback, credential receipt and no external XHR/fetch |
 | Integrated browser suite | `npx playwright test --config labs/espaco-library/playwright.config.ts --reporter=dot` from `apps/web` → 60 passed, 2 existing duplicate-viewport skips, 27.5s |
@@ -299,8 +314,8 @@ The MCP consumer removes its extra breadcrumb header, fragmented approval prose 
 | Gate | Result |
 |---|---|
 | Catalog TypeScript | `node node_modules/typescript/bin/tsc -p apps/web/labs/espaco-library/tsconfig.json` → passed |
-| Consumer contract | `node packages/espaco-ui/scripts/check-consumer.mjs apps/web/labs/espaco-library/McpPage.tsx` →1 file,0 violations |
-| Library contract | `node packages/espaco-ui/scripts/check-library.mjs --root packages/espaco-ui --tokens src/tokens.css` →56 public components,81 tokens,0 violations |
+| Consumer contract | `node packages/beds/scripts/check-consumer.mjs apps/web/labs/espaco-library/McpPage.tsx` →1 file,0 violations |
+| Library contract | `node packages/beds/scripts/check-library.mjs --root packages/beds --tokens src/tokens.css` →56 public components,81 tokens,0 violations |
 | Focused browser flow | `mcp-page.spec.ts` →4 passed;desktop/mobile,dark/light,source16px inset,policy/client/callback controls and no external XHR/fetch |
 | Integrated browser suite | `npx playwright test --config labs/espaco-library/playwright.config.ts --reporter=dot` from `apps/web` →60 passed,2 existing duplicate-viewport skips |
 | Documentation links | `bun run check:docs-links` →162 files,0 broken links |

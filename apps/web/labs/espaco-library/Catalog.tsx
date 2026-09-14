@@ -6,7 +6,7 @@ import {
   ResponsiveGrid, SidebarFooter, SidebarHeader, SidebarSection, Skeleton, Stack, StatusDot, SuggestionRow, Surface, Switch, Tabs, Text, TextAreaField,
   TextField, ThemeToggle, Tooltip, WorkspaceTrigger, brands, geometry, neutrals, themes, typography,
   type IconName, type TextVariant, type Theme,
-} from '@espaco/ui';
+} from 'beds';
 import './catalog.css';
 import FeatureCardExamples from './FeatureCardExamples';
 

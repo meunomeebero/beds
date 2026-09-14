@@ -19,7 +19,7 @@ if (hasSourceDocs) {
  for (const name of await readdir(sourceDocs)) {
   if (!name.endsWith('.md')) continue;
   let body = (await readFile(sourceDocs + name,'utf8'))
-   .replaceAll('../../../packages/espaco-ui/', '../')
+   .replaceAll('../../../packages/beds/', '../')
    .replaceAll('../espaco-system/MARKETER-REFERENCE.md', 'PROVENANCE.md');
   // Keep linked application examples/evidence readable in the standalone package.
   const labPrefix = '../../../apps/web/labs/espaco-library/';

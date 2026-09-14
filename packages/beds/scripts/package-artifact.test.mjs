@@ -34,7 +34,12 @@ test('packed-layout check requires API, CSS and documentation files',()=>withDir
 test('consumer smoke resolves the extracted public dist entry, never source',()=>withDirectory(directory=>{
  const packageDirectory = path.join(directory, 'package');
  fs.mkdirSync(path.join(packageDirectory, 'dist'), { recursive:true });
- fs.writeFileSync(path.join(packageDirectory, 'package.json'), JSON.stringify({ name:'@espaco/ui', type:'module', exports:{ '.':'./dist/index.js' } }));
+ fs.writeFileSync(path.join(packageDirectory, 'package.json'), JSON.stringify({ name:'beds', type:'module', exports:{ '.':'./dist/index.js' } }));
  fs.writeFileSync(path.join(packageDirectory, 'dist', 'index.js'), 'export function DesignSystemProvider(){} export function Text(){} export function PageContentHeader(){} export function DataTable(){} export function Pagination(){} export function RadioGroup(){} export function FileUploadField(){} export function FilterSelect(){} export function HelpLabel(){} export function Carousel(){} export function FeatureCard(){}');
  smokePackedConsumer(packageDirectory);
+}));
+
+test('consumer smoke rejects a legacy manifest disguised by an install alias',()=>withDirectory(directory=>{
+ fs.writeFileSync(path.join(directory, 'package.json'), JSON.stringify({name:'@espaco/ui'}));
+ assert.throws(()=>smokePackedConsumer(directory), /Expected package name beds/);
 }));

@@ -4,7 +4,7 @@ import {
   ChatLayout, ChatMessage, ContentHeader, DesignSystemProvider, Dialog, NavItem,
   RecentItem, SearchField, Select, SidebarFooter, SidebarHeader, SidebarSection,
   Stack, SuggestionRow, Text, WorkspaceTrigger, brands, type IconName, type Theme,
-} from '@espaco/ui';
+} from 'beds';
 
 const prompts = [
   { title: 'Adaptar meu currículo a uma vaga', icon: 'Briefcase' },

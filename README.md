@@ -1,8 +1,8 @@
 # BEDS — Bero's Design System
 
 Portable React19 SaaS UI. Two fixed themes, one brand color, constrained public
-components and versioned design contracts. Package name remains **@espaco/ui**;
-repository name is BEDS. No Curriculol runtime, API, database or business logic.
+components and versioned design contracts. Package and import name: **beds**.
+No Curriculol runtime, API, database or business logic.
 
 ## Develop
 
@@ -27,12 +27,12 @@ a mutable branch. The package contains built ESM, declarations, CSS, fonts,
 contracts and consumer checks. No lifecycle scripts required.
 
 ```sh
-bun add @espaco/ui@https://github.com/meunomeebero/beds/releases/download/v0.1.7-rc.14/espaco-ui-0.1.7-rc.14.tgz
+bun add beds@https://github.com/meunomeebero/beds/releases/download/v0.1.7-rc.15/beds-0.1.7-rc.15.tgz
 ```
 
 ```tsx
-import { DesignSystemProvider, brands, Button } from '@espaco/ui';
-import '@espaco/ui/styles.css';
+import { DesignSystemProvider, brands, Button } from 'beds';
+import 'beds/styles.css';
 
 <DesignSystemProvider theme="dark" brandColor={brands.curriculol}>
   <Button label="Continuar" onClick={continueFlow} />
@@ -40,7 +40,7 @@ import '@espaco/ui/styles.css';
 ```
 
 Use the host application's actual theme and callbacks. Do not import
-`@espaco/ui/reset.css` into an existing app implicitly: it resets html/body.
+`beds/reset.css` into an existing app implicitly: it resets html/body.
 Wrap only explicitly migrated screens; never enclose legacy UI to simulate migration.
 [Bun tarball installation](https://bun.sh/guides/install/add-tarball).
 

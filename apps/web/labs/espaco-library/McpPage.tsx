@@ -5,7 +5,7 @@ import {
   PageContentHeader, SectionHeader, SegmentedControl, SidebarFooter, SidebarHeader,
   SidebarSection, Stack, Surface, Tabs, Text, TextField, WorkspaceTrigger,
   brands, type IconName, type Theme,
-} from '@espaco/ui';
+} from 'beds';
 
 const accountActions = [
   { id: 'settings', label: 'Configurações', icon: 'Settings2' },

@@ -4,13 +4,13 @@ Use when: checking how the portable library composes an authenticated MCP setup 
 Do not use when: registering a real OAuth application, creating credentials or authorizing a client.
 Read next: [consumer contract](CONSUMER-CONTRACT.md) → [validation](VALIDATION.md). Product integration requires the consuming application's own current MCP/OAuth contract, outside this portable package.
 
-The screen is a local composition. It borrows its information architecture from the inspected MCP reference, while the visuals are owned only by `@espaco/ui`.
+The screen is a local composition. It borrows its information architecture from the inspected MCP reference, while the visuals are owned only by `beds`.
 
 | Boundary | Contract |
 |---|---|
 | Preview | `http://127.0.0.1:5283/?view=mcp` |
 | Consumer | [McpPage.tsx](../../../apps/web/labs/espaco-library/McpPage.tsx) |
-| Library | Current local `@espaco/ui` source; version and inventory are not pinned by this example. |
+| Library | Current local `beds` source; version and inventory are not pinned by this example. |
 | Theme / brand | Controlled light or dark + Curriculol orange preset `#ffa133` |
 | Content authority | Synthetic Curriculol-oriented setup fixture; not a portable OAuth, pricing or permission contract. |
 | Visual authority | Current [foundations](FOUNDATIONS.md), [components](COMPONENTS.md), [consumer contract](CONSUMER-CONTRACT.md) and live MCP geometry measurements |

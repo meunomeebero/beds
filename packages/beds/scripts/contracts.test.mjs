@@ -14,33 +14,36 @@ const withFixture = (body, run) => {
   return run(dir);
  } finally { rmSync(dir,{recursive:true,force:true}); }
 };
+test('rejects legacy package imports even without rendering a component',()=>withFixture({
+ 'App.tsx':"import {Text} from '@espaco/ui'; import '@espaco/ui/styles.css'; export {Text};"
+},dir=>assert.equal(checkConsumerPaths([dir]).issues.filter(issue=>issue.code==='LEGACY_PACKAGE_IMPORT').length,2)));
 test('accepts constrained composition, one brand, reset and transitive local components',()=>withFixture({
- 'App.tsx':"import {DesignSystemProvider, brands} from '@espaco/ui'; import '@espaco/ui/styles.css'; import '@espaco/ui/reset.css'; import {Content} from './Content'; export const App=()=> <DesignSystemProvider theme='dark' brandColor={brands.curriculol}><Content/></DesignSystemProvider>",
- 'Content.tsx':"import {Stack,Text} from '@espaco/ui'; export const Content=()=> <Stack gap='tight'><Text>user#code</Text></Stack>"
+ 'App.tsx':"import {DesignSystemProvider, brands} from 'beds'; import 'beds/styles.css'; import 'beds/reset.css'; import {Content} from './Content'; export const App=()=> <DesignSystemProvider theme='dark' brandColor={brands.curriculol}><Content/></DesignSystemProvider>",
+ 'Content.tsx':"import {Stack,Text} from 'beds'; export const Content=()=> <Stack gap='tight'><Text>user#code</Text></Stack>"
 },dir=>{const result=checkConsumerPaths([dir]);assert.equal(result.issues.length,0,JSON.stringify(result.issues));assert.equal(result.files,2);}));
 test('rejects a native visual escape through a transitive component',()=>withFixture({
  'App.tsx':"import {Content} from './Content'; export const App=()=> <Content/>",
  'Content.tsx':"export const Content=()=> <div className='custom' style={{padding:48,color:'#ff0000'}}>Escape</div>"
 },dir=>{const result=checkConsumerPaths([dir]);assert.ok(result.issues.length>=3);}));
 test('feature card accepts content and callbacks without permitting visual overrides',()=>withFixture({
- 'good.tsx':"import {FeatureCard} from '@espaco/ui'; export const Good=()=> <FeatureCard image={{src:'/onboarding.svg',alt:'Example'}} title='Start here' description='Your next step' primaryAction={{label:'Continue',onClick:()=>{}}} secondaryAction={{label:'Learn more',onClick:()=>{}}}/>",
- 'bad.tsx':"import {FeatureCard} from '@espaco/ui'; export const Bad=()=> <FeatureCard style={{borderRadius:4}} image={{src:'/image.svg',alt:''}} title='Example' description='Example' primaryAction={{label:'Continue',onClick:()=>{}}}/>"
+ 'good.tsx':"import {FeatureCard} from 'beds'; export const Good=()=> <FeatureCard image={{src:'/onboarding.svg',alt:'Example'}} title='Start here' description='Your next step' primaryAction={{label:'Continue',onClick:()=>{}}} secondaryAction={{label:'Learn more',onClick:()=>{}}}/>",
+ 'bad.tsx':"import {FeatureCard} from 'beds'; export const Bad=()=> <FeatureCard style={{borderRadius:4}} image={{src:'/image.svg',alt:''}} title='Example' description='Example' primaryAction={{label:'Continue',onClick:()=>{}}}/>"
 },dir=>{
  assert.equal(checkConsumerPaths([path.join(dir,'good.tsx')]).issues.length,0);
  assert.ok(checkConsumerPaths([path.join(dir,'bad.tsx')]).issues.length>0);
 }));
 test('rejects CSS imports, arbitrary icons, spread props and invalid brand',()=>withFixture({
- 'App.tsx':"import {Text,DesignSystemProvider} from '@espaco/ui'; import {Sun} from 'lucide-react'; import './custom.css'; const props={style:{color:'red'}}; export const App=()=> <DesignSystemProvider theme='dark' brandColor='#fff'><Text {...props}/><Sun/></DesignSystemProvider>",
+ 'App.tsx':"import {Text,DesignSystemProvider} from 'beds'; import {Sun} from 'lucide-react'; import './custom.css'; const props={style:{color:'red'}}; export const App=()=> <DesignSystemProvider theme='dark' brandColor='#fff'><Text {...props}/><Sun/></DesignSystemProvider>",
  'custom.css':".custom{font-family:serif}"
 },dir=>{const result=checkConsumerPaths([dir]);assert.ok(result.issues.length>=4);}));
 test('rejects typography, spacing, color and icon overrides with named violations',()=>withFixture({
- 'App.tsx':"import {Icon,Text} from '@espaco/ui'; import {House} from 'lucide-react'; const localStyle={fontFamily:'serif',color:'#ff0000'}; export const App=()=> <><Text fontStyle='italic' padding={24} color='#ff0000'>Blocked</Text><Icon name='Home' size={24} strokeWidth={2}/><House/></>"
+ 'App.tsx':"import {Icon,Text} from 'beds'; import {House} from 'lucide-react'; const localStyle={fontFamily:'serif',color:'#ff0000'}; export const App=()=> <><Text fontStyle='italic' padding={24} color='#ff0000'>Blocked</Text><Icon name='Home' size={24} strokeWidth={2}/><House/></>"
 },dir=>{
  const codes=new Set(checkConsumerPaths([dir]).issues.map(issue=>issue.code));
  for(const code of ['FONT_OVERRIDE','SPACING_OVERRIDE','COLOR_OVERRIDE','ICON_OVERRIDE','VISUAL_DEPENDENCY','STYLE_LITERAL']) assert.ok(codes.has(code),`Expected ${code}; got ${[...codes]}`);
 }));
 test('allows only declared semantic spacing variants',()=>withFixture({
- 'App.tsx':"import {Stack,Text} from '@espaco/ui'; const semanticGap='section'; export const Good=()=> <Stack gap={semanticGap}><Text>Good</Text></Stack>; export const Bad=()=> <Stack gap='48px'><Text>Bad</Text></Stack>"
+ 'App.tsx':"import {Stack,Text} from 'beds'; const semanticGap='section'; export const Good=()=> <Stack gap={semanticGap}><Text>Good</Text></Stack>; export const Bad=()=> <Stack gap='48px'><Text>Bad</Text></Stack>"
 },dir=>{
  const issues=checkConsumerPaths([dir]).issues;
  assert.equal(issues.filter(issue=>issue.code==='SEMANTIC_VARIANT_CONTRACT').length,1,JSON.stringify(issues));

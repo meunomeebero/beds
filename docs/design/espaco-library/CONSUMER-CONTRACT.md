@@ -8,7 +8,7 @@ Current visuals come from [Foundations](FOUNDATIONS.md), not the old prototype o
 
 | Input | Contract |
 |---|---|
-| Provider |`DesignSystemProvider`, imported from `@espaco/ui` |
+| Provider |`DesignSystemProvider`, imported from `beds` |
 | Theme |Required `light` or `dark`; caller state; optional `onThemeChange` callback drives real theme selection |
 | Brand |Optional `brandColor`; exactly one six-digit `#RRGGBB`; default `brands.reference`; Curriculol `brands.curriculol` =`#ffa133` |
 | Brand foreground |Internally selected fixed black/white for contrast; no caller `onBrand` color |
@@ -18,13 +18,13 @@ Current visuals come from [Foundations](FOUNDATIONS.md), not the old prototype o
 | Feature image |`FeatureCard.image` accepts owned/licensed image URL,required alt and optional fallback label;artwork is content,not an arbitrary visual JSX slot;caller owns URL authorization/privacy |
 | File data |Caller-controlled `File[]`, accepted formats and validation; `FileUploadField` exposes local selection, drop and removal only, with no native `name` or `FormData` participation |
 | Icons |Library `IconName`/`Icon`; fixed purpose maps; no external icon import or raw SVG |
-| Stylesheet |Public `@espaco/ui/styles.css` plus fixed `@espaco/ui/reset.css` for full-page documents; no app-specific stylesheet in audited UI roots |
+| Stylesheet |Public `beds/styles.css` plus fixed `beds/reset.css` for full-page documents; no app-specific stylesheet in audited UI roots |
 
 ```tsx
 import { useState } from 'react';
-import { DesignSystemProvider, ThemeToggle, Text, brands } from '@espaco/ui';
-import '@espaco/ui/styles.css';
-import '@espaco/ui/reset.css';
+import { DesignSystemProvider, ThemeToggle, Text, brands } from 'beds';
+import 'beds/styles.css';
+import 'beds/reset.css';
 
 export function Example() {
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
@@ -48,8 +48,8 @@ Theme switching changes fixed semantic theme roles. Brand switching changes only
 From repository root:
 
 ```sh
-node packages/espaco-ui/scripts/check-library.mjs --tokens src/tokens.css
-node packages/espaco-ui/scripts/check-consumer.mjs path/to/consumer-ui
+node packages/beds/scripts/check-library.mjs --tokens src/tokens.css
+node packages/beds/scripts/check-consumer.mjs path/to/consumer-ui
 ```
 
 | Gate | Checks | Failure behavior |
@@ -73,7 +73,7 @@ The provider's internal validated brand-style write and read-only package token 
 |---|---|
 | Configuration |Commit explicit UI roots in each consuming project's CI; run on every change, not only changed files |
 | Local composition |Relative component imports audited transitively; unresolved alias/external JSX implementation not assumed safe |
-| Entry wrappers |Use nonvisual React composition; actual renderable leaf components come from `@espaco/ui` |
+| Entry wrappers |Use nonvisual React composition; actual renderable leaf components come from `beds` |
 | Assets |Do not import source product font/artwork bundles;library owns licensed fonts/audited glyphs;owned/licensed product images may enter documented image props,without custom CSS or raw SVG JSX |
 | Exceptions |No consumer allowlist switch; missing component → library specification/API/catalog/test first |
 | Failure |Fix the primitive/composition; do not bypass with CSS, casts or an unaudited directory |
@@ -87,7 +87,7 @@ Guard fixtures must include a valid library composition plus invalid native elem
 
 | Step | Output |
 |---|---|
-|1. Add package |Use `@espaco/ui` workspace/package dependency; preserve React19 peer boundary and Inter/OFL assets |
+|1. Add package |Use `beds` workspace/package dependency; preserve React19 peer boundary and Inter/OFL assets |
 |2. Choose one brand |Store provider preset; choose controlled initial theme; no copied local token stylesheet |
 |3. Compose |Shell, headers, forms, chat and overlays from public primitives; app owns data and route wiring |
 |4. Specify gaps |Missing visual pattern → documented library addition; no temporary native styled wrapper |

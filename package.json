@@ -1,19 +1,19 @@
 {
-  "name": "beds",
+  "name": "beds-workspace",
   "private": true,
   "type": "module",
   "workspaces": ["packages/*"],
   "engines": { "node": ">=22" },
   "scripts": {
     "dev": "vite apps/web/labs/espaco-library --config apps/web/labs/espaco-library/vite.config.ts",
-    "build": "npm run build --workspace @espaco/ui",
-    "typecheck": "npm run typecheck --workspace @espaco/ui && tsc -p apps/web/labs/espaco-library/tsconfig.json",
-    "check": "npm run check --workspace @espaco/ui",
-    "check:docs": "npm run check:docs --workspace @espaco/ui",
-    "check:consumer": "node packages/espaco-ui/scripts/check-consumer.mjs packages/espaco-ui/examples/consumer.tsx apps/web/labs/espaco-library/LucyPage.tsx apps/web/labs/espaco-library/McpPage.tsx apps/web/labs/espaco-library/FeatureCardExamples.tsx",
-    "test": "npm run test:guards --workspace @espaco/ui",
+    "build": "npm run build --workspace beds",
+    "typecheck": "npm run typecheck --workspace beds && tsc -p apps/web/labs/espaco-library/tsconfig.json",
+    "check": "npm run check --workspace beds",
+    "check:docs": "npm run check:docs --workspace beds",
+    "check:consumer": "node packages/beds/scripts/check-consumer.mjs packages/beds/examples/consumer.tsx apps/web/labs/espaco-library/LucyPage.tsx apps/web/labs/espaco-library/McpPage.tsx apps/web/labs/espaco-library/FeatureCardExamples.tsx",
+    "test": "npm run test:guards --workspace beds",
     "test:browser": "playwright test --config apps/web/labs/espaco-library/playwright.config.ts",
-    "check:artifact": "npm run check:artifact --workspace @espaco/ui",
+    "check:artifact": "npm run check:artifact --workspace beds",
     "verify": "npm run build && npm run typecheck && npm run check && npm run check:docs && npm run check:consumer && npm test && npm run check:artifact"
   },
   "devDependencies": {

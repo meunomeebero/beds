@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import '@espaco/ui/styles.css';
+import 'beds/styles.css';
 import Catalog from './Catalog';
 import LucyPage from './LucyPage';
 import McpPage from './McpPage';

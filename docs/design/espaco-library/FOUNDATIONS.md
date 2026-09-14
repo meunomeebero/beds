@@ -1,6 +1,6 @@
 # Espaço library — fixed foundations
 
-Current rules only. Historical values: [Original measurements](REFERENCE-MEASUREMENTS.md); source labels: [Provenance](PROVENANCE.md). Canonical runtime values: `packages/espaco-ui/src/tokens.css`; consumer override rules: [contract](CONSUMER-CONTRACT.md). Evidence labels: M measured, D declared, A local adaptation, U unobserved.
+Current rules only. Historical values: [Original measurements](REFERENCE-MEASUREMENTS.md); source labels: [Provenance](PROVENANCE.md). Canonical runtime values: `packages/beds/src/tokens.css`; consumer override rules: [contract](CONSUMER-CONTRACT.md). Evidence labels: M measured, D declared, A local adaptation, U unobserved.
 
 ## Current user-approved authority
 
@@ -184,7 +184,7 @@ Consumer imports remain restricted to library `IconName`/`Icon`; no arbitrary SV
 |All registered names |Lucide 24×24 glyphs/1.5 stroke; explicit Lucy adoption A, not a claim of exact Marketer path identity |
 |Added registry names |`House`, `MessageCircle`, `ChartColumn`, `UserRound`, `Briefcase`, `Coins`, `ScanText`; same fixed contract |
 |`Home`, `BarChart3`, `Plug` |Remain accepted; now render their Lucide glyphs through the same registry |
-|Former `SourceIcon` map |Removed from runtime; extracted TSX text retained only in [historical icon evidence](../../../packages/espaco-ui/evidence/marketer-source-icons.txt); not a public component |
+|Former `SourceIcon` map |Removed from runtime; extracted TSX text retained only in [historical icon evidence](../../../packages/beds/evidence/marketer-source-icons.txt); not a public component |
 
 The original registry extension itself added no public component or color token. Its inventory was a historical checkpoint; current inventory is recorded in [Components](COMPONENTS.md).
 
@@ -194,7 +194,7 @@ Source durations150/250/400ms and ease-out `cubic-bezier(.16,1,.3,1)` are D; sid
 
 ## Complete canonical token register
 
-Current adopted snapshot of `packages/espaco-ui/src/tokens.css`,2026-09-14:87 distinct CSS custom properties plus2 provider runtime properties,89 total. Shared declarations provide defaults;theme assignments override them. Sidebar/dark values follow the latest user-approved Lucy adoption above. Light values retain the existing palette;new aliases preserve its established role values. Raw [Marketer source evidence](../../../packages/espaco-ui/evidence/marketer-reference.json) remains unchanged and is not a claim that these A adoption values were measured there. Never override these properties in consuming apps.
+Current adopted snapshot of `packages/beds/src/tokens.css`,2026-09-14:87 distinct CSS custom properties plus2 provider runtime properties,89 total. Shared declarations provide defaults;theme assignments override them. Sidebar/dark values follow the latest user-approved Lucy adoption above. Light values retain the existing palette;new aliases preserve its established role values. Raw [Marketer source evidence](../../../packages/beds/evidence/marketer-reference.json) remains unchanged and is not a claim that these A adoption values were measured there. Never override these properties in consuming apps.
 
 ### Shared defaults — 45
 

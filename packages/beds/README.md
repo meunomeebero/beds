@@ -1,4 +1,4 @@
-# @espaco/ui
+# beds
 
 A constrained personal SaaS UI library. React 19. Two fixed themes; one configurable brand color.
 
@@ -7,9 +7,9 @@ A constrained personal SaaS UI library. React 19. Two fixed themes; one configur
 Install an explicitly selected local/package candidate. Read its version from package metadata and evidence from [Validation](docs/VALIDATION.md); source aliases are not package-portability evidence.
 
 ```tsx
-import { DesignSystemProvider, brands, Text } from '@espaco/ui';
-import '@espaco/ui/styles.css';
-import '@espaco/ui/reset.css';
+import { DesignSystemProvider, brands, Text } from 'beds';
+import 'beds/styles.css';
+import 'beds/reset.css';
 
 <DesignSystemProvider theme="dark" brandColor={brands.curriculol}>
   <Text>Personal SaaS</Text>
@@ -29,7 +29,7 @@ import '@espaco/ui/reset.css';
 The package includes source, declarations, fonts/licenses, portable documentation, evidence and audit scripts. Better review skills are authoring tools installed separately; [Interface quality](docs/INTERFACE-QUALITY.md) pins their source. No automatic background auditor or skill installation is implied.
 
 ```sh
-node node_modules/@espaco/ui/scripts/check-consumer.mjs src/ui
+node node_modules/beds/scripts/check-consumer.mjs src/ui
 ```
 
 Pass every relevant UI root. The check follows local imports; a passing partial directory says nothing about excluded UI or host CSS.

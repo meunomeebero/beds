@@ -18,15 +18,15 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@espaco/ui": [
-        "../../../../packages/espaco-ui/src/index.ts"
+      "beds": [
+        "../../../../packages/beds/src/index.ts"
       ]
     }
   },
   "include": [
     "*.tsx",
     "*.ts",
-    "../../../../packages/espaco-ui/src/**/*"
+    "../../../../packages/beds/src/**/*"
   ]
 }
 

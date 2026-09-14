@@ -1,10 +1,10 @@
 {
-  "name": "@espaco/ui",
-  "version": "0.1.7-rc.14",
+  "name": "beds",
+  "version": "0.1.7-rc.15",
   "repository": {
     "type": "git",
     "url": "https://github.com/meunomeebero/beds.git",
-    "directory": "packages/espaco-ui"
+    "directory": "packages/beds"
   },
   "description": "A constrained personal SaaS interface library. Measured geometry, two themes, one brand color.",
   "type": "module",

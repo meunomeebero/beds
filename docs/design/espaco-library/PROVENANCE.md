@@ -38,12 +38,12 @@ User-supplied Marketer Activity/Analytics screenshots and the Home comparison:tr
 | Responsive |390×844; breakpoint comparison768/767px; expanded260px/collapsed48px sidebar |
 | Method | Rendered DOM, computed style, bounds, declared CSS variables/rules, screenshots, opening/dismissing controls |
 | Privacy | No retained private names, email, chat IDs/messages, balances, credentials or request payloads |
-| Font origin | Official [Inter download](https://rsms.me/inter/download) / rsms Inter4.1; normal+italic variable WOFF2; `packages/espaco-ui/fonts/OFL.txt` |
-| Code font origin |Official vercel/geist-font commit`10dc7658f13c38a474cde201bb09a4617267545b`; Geist Mono Regular400; [Geist OFL](../../../packages/espaco-ui/fonts/Geist-OFL.txt) |
+| Font origin | Official [Inter download](https://rsms.me/inter/download) / rsms Inter4.1; normal+italic variable WOFF2; `packages/beds/fonts/OFL.txt` |
+| Code font origin |Official vercel/geist-font commit`10dc7658f13c38a474cde201bb09a4617267545b`; Geist Mono Regular400; [Geist OFL](../../../packages/beds/fonts/Geist-OFL.txt) |
 | Earlier evidence | [Reference measurements](REFERENCE-MEASUREMENTS.md) and the portable JSON record below preserve the source observations; the original product prototype is not bundled. Legacy local Lucy supplies only the explicitly adopted sidebar/dark and iconography subsets |
-| Portable source record | [marketer-reference.json](../../../packages/espaco-ui/evidence/marketer-reference.json); retained source evidence and precision/coverage context |
-| Historical icon paths | [marketer-source-icons.txt](../../../packages/espaco-ui/evidence/marketer-source-icons.txt); former extracted `SourceIcon` TSX retained as text evidence, excluded from runtime |
-| Package boundary | Independent `@espaco/ui`; old DS and production remain separate |
+| Portable source record | [marketer-reference.json](../../../packages/beds/evidence/marketer-reference.json); retained source evidence and precision/coverage context |
+| Historical icon paths | [marketer-source-icons.txt](../../../packages/beds/evidence/marketer-source-icons.txt); former extracted `SourceIcon` TSX retained as text evidence, excluded from runtime |
+| Package boundary | Independent `beds` (called `@espaco/ui` before RC15); old DS and production remain separate |
 
 | Label | Meaning | Adoption rule |
 |---|---|---|

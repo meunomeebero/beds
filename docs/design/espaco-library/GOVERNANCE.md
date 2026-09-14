@@ -44,7 +44,7 @@ Record exact scope, commands, totals, skips, evidence and limitations. An upstre
 
 ## Documentation ownership
 
-- Canonical Markdown: `docs/design/espaco-library/`; generated mirror: `packages/espaco-ui/docs/`.
+- Canonical Markdown: `docs/design/espaco-library/`; generated mirror: `packages/beds/docs/`.
 - Keep current rules in their owner document. Indices, examples and agent instructions link there instead of copying geometry, inventory counts or candidate versions.
 - New canonical document → row in this library map and repository README. Build exports it; `check:docs` checks links/indexing without relying on Git tracking.
 - Source evidence and old validation runs remain historical. Do not rewrite an old result to describe a new snapshot or delete evidence to obtain a pass.
@@ -53,7 +53,7 @@ Record exact scope, commands, totals, skips, evidence and limitations. An upstre
 
 ## Visual baseline gate
 
-`node packages/espaco-ui/scripts/check-visual-baseline.mjs approved-baseline.json reviewer-audit.json`
+`node packages/beds/scripts/check-visual-baseline.mjs approved-baseline.json reviewer-audit.json`
 
 Read-only. Baseline: ID, versioned source, M/D/A origin, explicit approval/date, viewport/theme/state and metrics. Audit: same context/ID, independent reviewer, capture and every metric. The gate rejects mismatches and never rewrites a baseline.
 
