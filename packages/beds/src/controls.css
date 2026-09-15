@@ -3,6 +3,7 @@
 .es-root .es-button[data-variant="primary"]{background:var(--es-primary);color:var(--es-on-primary)}
 .es-root .es-button[data-variant="ghost"]{background:transparent}
 .es-root .es-button[data-compact]{min-height:28px;padding:6px 10px;border-radius:6px}
+.es-root .es-button[data-touch-target]{min-height:44px;min-width:44px;padding:14px 10px}
 .es-root .es-button[data-purpose="welcome"]{min-height:40px;padding:12px 14px;border-radius:12px;gap:6px;font-size:14px}
 .es-root .es-button[data-purpose="connection"]{min-height:40px;padding:12px 14px;border-radius:10px;gap:6px;font-size:14px}
 .es-root .es-icon-button{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:32px;height:32px;padding:0;border:0;border-radius:8px;background:transparent;color:var(--es-secondary);cursor:pointer}

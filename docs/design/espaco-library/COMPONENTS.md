@@ -4,7 +4,7 @@ Visual decisions: [Foundations](FOUNDATIONS.md). Executed checks: [Validation](V
 
 Public entry: `packages/beds/src/index.ts`. Exact TypeScript declarations are the API authority. Import only from `beds`; no internal subpath, arbitrary className/style or raw element replacement. Named variants select fixed contexts. States: [STATES.md](STATES.md); dimensions/type: [FOUNDATIONS.md](FOUNDATIONS.md).
 
-Current inventory:74 public components;90 tokens. Additional exports: `useDesignSystem`, `brands`, `IconName`, `Theme`, `TextVariant`, `DataTableColumn`, `DataTableRow`, `DataTableState`, `FeatureCardProps` and read-only `typography/geometry/neutrals/themes` metadata; these are not extra visual components. A source-backed component can contain locally engineered A keyboard/recovery behavior. Feedback/populated-data patterns with no matching visible source state remain A/U.
+Current inventory:77 public components;90 tokens. Additional exports: `useDesignSystem`, `brands`, `IconName`, `Theme`, `TextVariant`, `DataTableColumn`, `DataTableRow`, `DataTableState`, `FeatureCardProps` and read-only `typography/geometry/neutrals/themes` metadata; these are not extra visual components. A source-backed component can contain locally engineered A keyboard/recovery behavior. Feedback/populated-data patterns with no matching visible source state remain A/U.
 
 ## Foundation — 7
 
@@ -13,14 +13,14 @@ Current inventory:74 public components;90 tokens. Additional exports: `useDesign
 |`DesignSystemProvider` |`children`, required `theme`; optional `brandColor/onThemeChange` |Fixed light/dark roles; single validated brand; no palette/font/style object |
 |`Icon` |`name:IconName`, `purpose=navigation` (`navigation/action/small/feature`) |Lucide 24×24 viewBox/1.5 stroke/round caps and joins/monochrome currentColor; fixed 14/16/12/20px respective purpose sizes; existing sidebar 16px override |
 |`Text` |`children`; `variant=body-small`, `tone=default` |Fixed contextual type; variants page-title/section-title/chat-title/body/body-small/label/caption/overline/option/metric; default/secondary tone only |
-|`Avatar` |`name`, optional `src`; `purpose=account` (`account/workspace/profile`) |Fixed size by identity context; fallback initials; no caller pixel size. Broken image recovers once per URL to the deterministic initials — no retry loop, no network-generated identity; a changed `src` retries from scratch |
+|`Avatar` |`name`, optional `src`; `purpose=account` (`account/workspace/profile`); optional `lazy` |Fixed size by identity context (28px account, 16px workspace, 64px profile r12); fallback initials; no caller pixel size. Broken image recovers once per URL to the deterministic initials — no retry loop, no network-generated identity; a changed `src` retries from scratch. `lazy` defers offscreen loading (`loading=lazy`, async decoding) without layout changes |
 |`TextLink` |`href`; optional `external/ariaLabel` |Text-level native link, shared hover/focus contract, underline from the border token; `external` adds a 12px up-right glyph and safe `rel`; no color/style overrides |
 |`BrandMark` |Optional accessible `label=Brand` |User-owned three18×4px bars,3px gaps,18×18 footprint; provider brand fill; A identity |
 |`ThemeToggle` |Optional `label/lightLabel/darkLabel` |Reads actual provider theme; invokes provider callback; disabled when callback absent; real theme control, unlike legacy fixture |
 
-Icon registry additions: `House`, `MessageCircle`, `ChartColumn`, `UserRound`, `Briefcase`, `Coins`, `ScanText`, `Bookmark`, `CalendarDays`, `ChevronsUpDown`, `Play`, `Pause`, `ArrowLeft`, `ShieldCheck` (privileged/admin rows). Existing names remain accepted. Former `SourceIcon` paths are [historical text evidence](../../../packages/beds/evidence/marketer-source-icons.txt), not runtime components. Callers cannot provide SVG paths, stroke, color or pixel size. Registry entries do not create configurable styling.
+Icon registry additions: `House`, `MessageCircle`, `ChartColumn`, `UserRound`, `Briefcase`, `Coins`, `ScanText`, `Bookmark`, `CalendarDays`, `ChevronsUpDown`, `Play`, `Pause`, `ArrowLeft`, `ShieldCheck` (privileged/admin rows), `XLogo` (official X logotype, monochrome currentColor, sign-in affordance only; trademark of X Corp., used per its sign-in branding rules). Existing names remain accepted. Former `SourceIcon` paths are [historical text evidence](../../../packages/beds/evidence/marketer-source-icons.txt), not runtime components. Callers cannot provide SVG paths, stroke, color or pixel size. Registry entries do not create configurable styling.
 
-## Layout and navigation — 18
+## Layout and navigation — 21
 
 | Component | Required / optional API | Constraint |
 |---|---|---|
@@ -38,6 +38,9 @@ Icon registry additions: `House`, `MessageCircle`, `ChartColumn`, `UserRound`, `
 |`Stack` |`children`; gap tight/default/section |Fixed semantic rhythm, not numeric spacing |
 |`Inline` |`children`; gap tight/default; align start/center/between |Fixed wrapping/action grouping |
 |`ResponsiveGrid` |`children` |Presentational relationship only: two equal columns from768px, one column through767px; fixed16px token gap and `min-width:0` containment. No grid ARIA, state, focus handling or visual props. |
+|`LandingPage` |`children` |Opt-in public landing lane: centered 1180px measure, 24px side insets (16px ≤767px), 48px bottom inset; native `main` region. For public marketing pages; app content keeps AppShell/PageHeader lanes. No style escapes, no state |
+|`PromoHero` |`leading/center/trailing` |Asymmetric promotional hero: center column 500–540px from1024px with 1fr sides and24px gaps; 768–1023px keeps center first with sides in two columns; below768px a single column keeps center-first reading order. Slots are caller compositions; no per-slot widths, state or style props |
+|`RankedList` |`label`, `children`; optional `columns=triple` (`pair/triple`) |Semantic ordered list; each child becomes one `li`. `pair` mirrors ResponsiveGrid (2/1); `triple` adds the desktop tier (3 ≥1024px, 2 from768px, 1 below); fixed16px gap; items keep their own focus/semantics; ordering is caller data |
 |`Divider` |No props |Canonical theme boundary |
 |`Surface` |`children`; role panel/subtle/raised |Panel transparent,r20,p16;subtle/raised intentional inset roles;no arbitrary fill |
 |`CollectionCard` |`avatar/identity/title/metadata/actions`; optional selection |Transparent,r24,p20;260px desktop/240px mobile inner anatomy: identity/selection,metadata,aligned actions;content and controls caller-owned |
@@ -49,7 +52,7 @@ Primary navigation reuses `NavItem` inside `SidebarSection purpose="primary"`:4p
 
 | Component | API | States / constraints |
 |---|---|---|
-|`Button` |`label`; optional onClick/type/variant/compact/purpose/icon/disabled/busy/aria-describedby/aria-expanded/aria-controls |Primary/secondary/ghost; purpose default/welcome/connection; compact applies to default purpose only; native type; busy disables repeated action; disclosure toggles expose the controlled region state |
+|`Button` |`label`; optional onClick/type/variant/compact/purpose/icon/disabled/busy/aria-describedby/aria-expanded/aria-controls; optional `touchTarget` |Primary/secondary/ghost; purpose default/welcome/connection; compact applies to default purpose only; native type; busy disables repeated action; disclosure toggles expose the controlled region state; `touchTarget` is an opt-in 44×44px minimum hit target (14px block padding, min-width 44px) for primary card/surface actions |
 |`IconButton` |`label/icon/onClick`; optional disabled/aria-describedby |Accessible name; fixed action geometry |
 |`IconToggleButton` |`label/icon/pressed/onPressedChange`; optional disabled/aria-describedby |Controlled native `aria-pressed`; persistent accessible name; selected icon fills currentColor; no domain policy |
 |`TextField` |`label/value/onChange`; optional description/error/placeholder/disabled/readOnly/name/autoComplete/inputMode/spellCheck/focusOnError/type; purpose settings/connection |Persistent label; associated helper/error; semantic input mode/type and forwarded ref preserve fixed settings13/20px,36px or connection14/16px,40px geometry |

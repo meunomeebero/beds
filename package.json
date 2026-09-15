@@ -10,7 +10,7 @@
     "typecheck": "npm run typecheck --workspace beds && tsc -p apps/web/labs/espaco-library/tsconfig.json",
     "check": "npm run check --workspace beds",
     "check:docs": "npm run check:docs --workspace beds",
-    "check:consumer": "node packages/beds/scripts/check-consumer.mjs packages/beds/examples/consumer.tsx apps/web/labs/espaco-library/LucyPage.tsx apps/web/labs/espaco-library/McpPage.tsx apps/web/labs/espaco-library/FeatureCardExamples.tsx",
+    "check:consumer": "node packages/beds/scripts/check-consumer.mjs packages/beds/examples/consumer.tsx apps/web/labs/espaco-library/LucyPage.tsx apps/web/labs/espaco-library/McpPage.tsx apps/web/labs/espaco-library/FeatureCardExamples.tsx apps/web/labs/espaco-library/LandingExamples.tsx apps/web/labs/espaco-library/DisclosuresPage.tsx",
     "test": "npm run test:guards --workspace beds",
     "test:browser": "playwright test --config apps/web/labs/espaco-library/playwright.config.ts",
     "check:artifact": "npm run check:artifact --workspace beds",

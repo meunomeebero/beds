@@ -65,3 +65,13 @@ test('pseudo-element selectors do not declare CSS tokens',()=>withFixture({
  assert.equal(result.tokens,3);
  assert.ok(result.issues.some(issue=>issue.code==='UNDECLARED_TOKEN' && issue.message.includes('--active')));
 }));
+test('accepts landing lane, promotional hero and ranked list composition',()=>withFixture({
+ 'App.tsx':"import {DesignSystemProvider,LandingPage,PromoHero,RankedList,Surface,Text,Button} from 'beds'; export const App=()=> <DesignSystemProvider theme='dark'><LandingPage><PromoHero leading={<Text>Leading</Text>} center={<Text>Center</Text>} trailing={<Text>Trailing</Text>}/><RankedList label='Ranking'><Surface/></RankedList><Button label='CTA' touchTarget/></LandingPage></DesignSystemProvider>"
+},dir=>{const result=checkConsumerPaths([dir]);assert.equal(result.issues.length,0,JSON.stringify(result.issues));}));
+test('rejects visual escapes through the landing primitives',()=>withFixture({
+ 'App.tsx':"import {LandingPage,PromoHero,RankedList} from 'beds'; export const App=()=> <LandingPage style={{maxWidth:900}}><PromoHero leading={<div/>} center={<span style={{width:900}}/>} trailing={<div/>}/><RankedList label='X' columns={'pair' as const}/></LandingPage>"
+},dir=>{
+ const codes=checkConsumerPaths([dir]).issues.map(issue=>issue.code);
+ assert.ok(codes.includes('NATIVE_VISUAL_ELEMENT'),JSON.stringify(codes));
+ assert.ok(codes.some(code=>['SPACING_OVERRIDE','VISUAL_PROP'].includes(code)),JSON.stringify(codes));
+}));

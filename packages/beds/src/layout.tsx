@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useId, useRef, useState, type ComponentProps, type ReactNode } from 'react';
+import { Children, createContext, useContext, useEffect, useId, useRef, useState, type ComponentProps, type ReactNode } from 'react';
 import { Icon, Text } from './foundation';
 import { HelpLabel } from './overlays';
 import './layout.css';
@@ -138,6 +138,42 @@ export function Inline({ children, gap = 'default', align = 'center' }: { childr
 export function ResponsiveGrid({ children }: { children: ReactNode }) { return <div className="es-responsive-grid">{children}</div>; }
 export function Divider() { return <hr className="es-divider" />; }
 export function Surface({ children, role = 'panel' }: { children: ReactNode; role?: 'panel' | 'subtle' | 'raised' }) { return <div className={`es-surface es-surface--${role}`}>{children}</div>; }
+
+/**
+ * Public landing page lane: opt-in centered content measure (1180px) with
+ * fixed landing insets. For public marketing pages; application content
+ * keeps using AppShell/PageHeader lanes.
+ */
+export function LandingPage({ children }: { children: ReactNode }) {
+  return <main className="es-landing">{children}</main>;
+}
+
+/**
+ * Asymmetric promotional hero for public landing pages: compact side panels
+ * around a dominant center column (500–540px from 1024px). Reading order on
+ * narrow screens keeps the center content first; side panels follow in the
+ * supplied order. Slots are caller-owned compositions, not style escapes.
+ */
+export function PromoHero({ leading, center, trailing }: { leading: ReactNode; center: ReactNode; trailing: ReactNode }) {
+  return <div className="es-promo-hero">
+    <div className="es-promo-hero-leading">{leading}</div>
+    <div className="es-promo-hero-center">{center}</div>
+    <div className="es-promo-hero-trailing">{trailing}</div>
+  </div>;
+}
+
+/**
+ * Semantic ordered list with fixed responsive ranking columns. Each child
+ * becomes one list item; ordering is caller data, position display stays in
+ * the items. `pair` mirrors ResponsiveGrid; `triple` adds the desktop
+ * three-column tier (3 ≥1024px, 2 from 768px, 1 below).
+ */
+export function RankedList({ label, columns = 'triple', children }: { label: string; columns?: 'pair' | 'triple'; children: ReactNode }) {
+  const items = Children.toArray(children);
+  return <ol className={`es-ranked-list es-ranked-list--${columns}`} aria-label={label}>
+    {items.map((item, index) => <li key={index}>{item}</li>)}
+  </ol>;
+}
 
 /** Fixed anatomy for a compact horizontal collection card. Consumer supplies only factual content and controls. */
 export function CollectionCard({ avatar, identity, selection, title, metadata, actions }: {

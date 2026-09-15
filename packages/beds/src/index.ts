@@ -5,7 +5,7 @@ export { Button, IconButton, IconToggleButton, TextField, TextAreaField, SearchF
 export { RadioGroup, FileUploadField } from './form-fields';
 export type { RadioOption, RadioGroupProps, FileUploadFieldProps } from './form-fields';
 export { Select, FilterSelect, HelpLabel, DropdownMenu, Tooltip, Dialog, CommandPalette } from './overlays';
-export { AppShell, SidebarHeader, WorkspaceTrigger, SidebarSection, NavItem, SidebarFooter, ContentHeader, PageContentHeader, Breadcrumbs, PageHeader, SectionHeader, Stack, Inline, ResponsiveGrid, Divider, Surface, CollectionCard, ActivityPanel } from './layout';
+export { AppShell, SidebarHeader, WorkspaceTrigger, SidebarSection, NavItem, SidebarFooter, ContentHeader, PageContentHeader, Breadcrumbs, PageHeader, SectionHeader, Stack, Inline, ResponsiveGrid, LandingPage, PromoHero, RankedList, Divider, Surface, CollectionCard, ActivityPanel } from './layout';
 export { DataTable, HorizontalRail, Carousel, ScrollableList, Pagination, type DataTableColumn, type DataTableRow, type DataTableState } from './data';
 export { DisclosureText, LabelField, DisclosedRecords } from './disclosure';
 export { SettingsRow, SettingsGroup, IntegrationRow, RecentItem, PlanCard, AccountMenu } from './patterns';

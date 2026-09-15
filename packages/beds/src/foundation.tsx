@@ -1,7 +1,17 @@
-import { createContext, useContext, useId, useState, type CSSProperties, type ReactNode } from 'react';
+import { createContext, useContext, useId, useState, type CSSProperties, type ReactNode, type SVGProps } from 'react';
 import { Home, Activity, BarChart3, Plug, Folder, MessageSquare, Plus, Search, PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, Check, X, Settings2, CircleHelp, Sun, Moon, LogOut, MoreHorizontal, ArrowUp, ArrowRight, ArrowUpRight, Paperclip, Command, FileText, CheckCircle2, AlertCircle, Info, Loader2, User, Sparkles, Globe, Bell, Copy, CreditCard, House, MessageCircle, ChartColumn, UserRound, Briefcase, Coins, ScanText, Bookmark, CalendarDays, ChevronsUpDown, Play, Pause, ArrowLeft, ShieldCheck } from 'lucide-react';
 
-const icons = { Home, Activity, BarChart3, Plug, Folder, MessageSquare, Plus, Search, PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, Check, X, Settings2, CircleHelp, Sun, Moon, LogOut, MoreHorizontal, ArrowUp, ArrowRight, ArrowUpRight, Paperclip, Command, FileText, CheckCircle2, AlertCircle, Info, Loader2, User, Sparkles, Globe, Bell, Copy, CreditCard, House, MessageCircle, ChartColumn, UserRound, Briefcase, Coins, ScanText, Bookmark, CalendarDays, ChevronsUpDown, Play, Pause, ArrowLeft, ShieldCheck };
+/**
+ * Official X (formerly Twitter) logotype for the sign-in affordance only.
+ * Monochrome currentColor, fixed glyph sizes via the shared purpose classes;
+ * callers cannot provide paths, stroke, colors or pixel sizes. The X logotype
+ * is a trademark of X Corp., used per its sign-in branding rules.
+ */
+function XLogoGlyph({ className, ...rest }: SVGProps<SVGSVGElement>) {
+  return <svg className={className} viewBox="0 0 24 24" fill="currentColor" stroke="none" {...rest}><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" /></svg>;
+}
+
+const icons = { Home, Activity, BarChart3, Plug, Folder, MessageSquare, Plus, Search, PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, Check, X, Settings2, CircleHelp, Sun, Moon, LogOut, MoreHorizontal, ArrowUp, ArrowRight, ArrowUpRight, Paperclip, Command, FileText, CheckCircle2, AlertCircle, Info, Loader2, User, Sparkles, Globe, Bell, Copy, CreditCard, House, MessageCircle, ChartColumn, UserRound, Briefcase, Coins, ScanText, Bookmark, CalendarDays, ChevronsUpDown, Play, Pause, ArrowLeft, ShieldCheck, XLogo: XLogoGlyph };
 export type IconName = keyof typeof icons;
 export type Theme = 'light' | 'dark';
 export const brands = Object.freeze({ reference: '#d0f300', curriculol: '#ffa133' });
@@ -46,14 +56,14 @@ export function Text({ children, variant = 'body-small', tone = 'default' }: {
  * changed image URL falls back to the initials once per URL; the fallback is
  * never a retry loop and never a network-generated identity.
  */
-export function Avatar({ name, src, purpose = 'account' }: { name: string; src?: string; purpose?: 'account' | 'workspace' | 'profile' }) {
+export function Avatar({ name, src, purpose = 'account', lazy = false }: { name: string; src?: string; purpose?: 'account' | 'workspace' | 'profile'; lazy?: boolean }) {
   const initials = name.trim().split(/\s+/).slice(0, 2).map(word => word[0]).join('').toUpperCase();
   // Error state is keyed to the exact failed URL: a new src retries once,
   // a failed URL never re-requests during the same mount.
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
   const showImage = src !== undefined && src !== failedSrc;
   return <span className={`es-avatar es-avatar--${purpose}`} role="img" aria-label={name}>{showImage
-    ? <img src={src} alt="" onError={() => setFailedSrc(src)} />
+    ? <img src={src} alt="" loading={lazy ? 'lazy' : undefined} decoding={lazy ? 'async' : undefined} onError={() => setFailedSrc(src)} />
     : initials || '?'}</span>;
 }
 
