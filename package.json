@@ -11,7 +11,7 @@
     "check": "npm run check --workspace beds",
     "check:docs": "npm run check:docs --workspace beds",
     "check:consumer": "node packages/beds/scripts/check-consumer.mjs packages/beds/examples/consumer.tsx apps/web/labs/espaco-library/LucyPage.tsx apps/web/labs/espaco-library/McpPage.tsx apps/web/labs/espaco-library/FeatureCardExamples.tsx",
-    "test": "npm run test:guards --workspace beds",
+    "test": "npm run test:guards --workspace beds && node --test packages/beds/scripts/quality-routing.test.mjs",
     "test:browser": "playwright test --config apps/web/labs/espaco-library/playwright.config.ts",
     "check:artifact": "npm run check:artifact --workspace beds",
     "verify": "npm run build && npm run typecheck && npm run check && npm run check:docs && npm run check:consumer && npm test && npm run check:artifact"

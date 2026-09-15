@@ -2,7 +2,7 @@
 
 Use when: building or reviewing an Espaço component or consuming screen.
 Do not use when: backend-only work, unrelated copy, or historical evidence retrieval.
-Read next: [Governance](GOVERNANCE.md), then the relevant domain skill.
+Read next: [Governance](GOVERNANCE.md), then the automatic routing below and all seven skill entrypoints for UI work.
 
 ## Source and installation
 
@@ -25,14 +25,40 @@ Install each `skills/<name>` directory from that exact revision through the agen
 
 Skills are authoring/review tools,not browser dependencies. This npm package carries the protocol and source pin,not an automatic installation or running audit service. On another machine,resolve the local skill location and install explicitly;never hardcode Bero's home/worktree paths into a consumer. Updates require a reviewed source revision,not an unpinned reinstall.
 
-## Routing and cost
+## Automatic routing — mandatory for UI
 
-- Documentation-only maintenance:review the affected instructions and links;no six-domain rendered review unless UI changes.
-- Implementation/narrow review:load the relevant domain(s) only. Do not call this a complete Better review.
-- Before component/screen handoff:review the complete affected surface with `better-interface`,its six owners and relevant references. This complete-review requirement takes precedence over a generic skill-count heuristic;load only relevant references within each owner. Include supported themes,widths and empty/loading/error/recovery states. Excluded surfaces/checks stay explicit.
+Owner decision,2026-09-15: skill use is automatic agent routing,not optional and not dependent on the user spelling a skill name. Applies to components,composition,forms,navigation,responsive fixes,states and UI copy in the BEDS scope. A small visual change is not an exemption.
+
+1. Resolve the screen/flow,live preview,source and exact consumed package. Read the applicable agent entrypoints and contracts; do not audit a different checkout or candidate accidentally.
+2. Before design/code decisions,announce and read `better-interface` plus all six owners in the table above,then their task-relevant references. Apply them in the documented order. Do this even for narrow UI work; keep the inspected surface focused rather than skipping domains.
+3. Map entry → transition → success → re-entry → recovery. Preserve approved BEDS tokens/anatomy;record objective conflicts against their owner,not a consumer workaround.
+4. Before handoff,review the complete affected screen/flow again across all six domains. Include light/dark,desktop/narrow320px,keyboard,200% zoom and available empty/loading/error/recovery states. Missing fixtures,physical devices or assistive-technology checks remain explicitly unverified.
+5. Run affected library,consumer,browser and artifact gates. Inspect the render;read tool output. A passing subset or claimed skill invocation is not review evidence.
+6. Record scope/version,skill paths or installed identifiers,per-domain evidence,ranked findings,commands,not-verified checks and the Governance verdict. A previous review cannot approve a new render.
+
+Read each entrypoint completely;reuse it within the current task rather than reloading it for each tiny edit. Load only relevant supporting references. This explicit seven-skill requirement supersedes generic skill-count minimization,not higher-priority user/system instructions.
+
+- Documentation-only/backend maintenance:review affected instructions and links;no fictional six-domain rendered review unless UI is also in scope.
 - Source-diff review is a different scope:upstream `interface-review` is optional and user-invoked;not installed by this seven-skill replacement. Do not silently invoke it,resolve a different scope,or claim branch/PR coverage from a screen audit.
 - Missing skill:report the missing domain;continue safe in-scope work;do not approve missing coverage or auto-install without authority.
 - Do not load the removed polish skill alongside `better-ui`. Existing product/marketing skills remain contextual,not additional mandatory passes.
+
+### Consumer agent entrypoint
+
+Copy the routing instruction below into the consuming UI directory's `AGENTS.md`,adapting only the installed package location. Importing a package does not make an agent read its nested instructions.
+
+```text
+For every BEDS UI task, automatically load and apply better-interface,
+better-accessibility, better-layout, better-writing, better-typography,
+better-colors and better-ui before design/code decisions and before handoff.
+Do not wait for the user to invoke them. Read the complete skill entrypoints
+and relevant references. Follow the installed beds/AGENTS.md and
+beds/docs/INTERFACE-QUALITY.md; approved BEDS contracts own visuals.
+Report per-domain browser/source evidence, findings and unverified checks.
+Missing skill or required evidence means pending, never approved.
+```
+
+The repository routing regression test checks that author/package/catalog entrypoints keep this instruction and link to the single protocol. It cannot prove an agent read a skill or a screen passed review. No background agent,automatic installation or automatic Git push is implied. Authorized publication must report local vs committed vs pushed vs released state and the consumer's pinned version separately.
 
 ## Espaço boundaries
 

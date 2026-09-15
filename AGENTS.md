@@ -2,6 +2,14 @@
 
 Read [the DS map](docs/design/espaco-library/README.md), then the task-relevant contract.
 
+## Automatic Better skill routing — mandatory
+
+For every BEDS UI task, automatically load and apply `better-interface` and all six owners before design/code decisions: `better-accessibility`, `better-layout`, `better-writing`, `better-typography`, `better-colors`, `better-ui`. Do not wait for the user to name a skill. Read their complete entrypoints and task-relevant references; announcing a skill is not using it. Follow [Interface quality](docs/design/espaco-library/INTERFACE-QUALITY.md) for the workflow, conflicts and required evidence.
+
+Before handoff, review the complete affected screen/flow in all six domains and report findings plus unverified checks. Missing skills/evidence forbid an approval claim. Never equate a static pass with visual approval or guaranteed quality. Documentation-only/backend tasks are not fabricated UI reviews.
+
+## Repository boundaries
+
 - This repository owns the portable design system. `beds` is the actual package/import name; no legacy package alias.
 - Approved Foundations own visuals. Two fixed themes, one brand color, semantic variants only. No consumer CSS/token overrides or duplicate primitives.
 - Canonical docs: `docs/design/espaco-library/`; source: `packages/beds/src/`; generated package docs/dist: build outputs, never hand-edit.

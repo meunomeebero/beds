@@ -26,7 +26,7 @@ import 'beds/reset.css';
 
 [Documentation map](docs/README.md) · [Consumer contract](docs/CONSUMER-CONTRACT.md) · [Governance](docs/GOVERNANCE.md) · [Package rules](AGENTS.md)
 
-The package includes source, declarations, fonts/licenses, portable documentation, evidence and audit scripts. Better review skills are authoring tools installed separately; [Interface quality](docs/INTERFACE-QUALITY.md) pins their source. No automatic background auditor or skill installation is implied.
+The package includes source, declarations, fonts/licenses, portable documentation, evidence and audit scripts. For every BEDS UI task, agents must automatically use `better-interface` and its six owners before design/code decisions and before handoff,without waiting for a user invocation. Better skills are installed separately; [Interface quality](docs/INTERFACE-QUALITY.md) pins their source and supplies the required consumer `AGENTS.md` routing. No automatic background auditor or skill installation is implied.
 
 ```sh
 node node_modules/beds/scripts/check-consumer.mjs src/ui

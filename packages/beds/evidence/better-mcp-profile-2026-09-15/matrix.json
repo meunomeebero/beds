@@ -1,0 +1,2102 @@
+[
+  {
+    "theme": "dark",
+    "width": 1440,
+    "view": "MCP",
+    "pageWidth": 1440,
+    "title": "Prévia isolada — Home RCD",
+    "lang": "pt-BR",
+    "headings": [
+      {
+        "tag": "H1",
+        "text": "MCP do Curriculol",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Conecte seu espaço com aplicativos de IA",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Novo aplicativo",
+        "size": "13px"
+      },
+      {
+        "tag": "H2",
+        "text": "Meu Codex (exemplo)",
+        "size": "13px"
+      }
+    ],
+    "clipped": [],
+    "fields": [
+      {
+        "label": "Nome do aplicativo",
+        "size": "13px",
+        "type": "text",
+        "invalid": null
+      },
+      {
+        "label": "Endereço de retorno (callback)",
+        "size": "13px",
+        "type": "url",
+        "invalid": null
+      }
+    ],
+    "panels": [
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    ],
+    "contrast": [
+      {
+        "foreground": "rgb(148, 148, 148)",
+        "background": [
+          35,
+          35,
+          35
+        ],
+        "contrast": 5.18,
+        "sample": "L",
+        "font": "10px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          25,
+          25,
+          25
+        ],
+        "contrast": 11.17,
+        "sample": "Luísa",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(148, 148, 148)",
+        "background": [
+          25,
+          25,
+          25
+        ],
+        "contrast": 5.8,
+        "sample": "Início",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          42,
+          42,
+          42
+        ],
+        "contrast": 9.12,
+        "sample": "MCP",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(212, 212, 212)",
+        "background": [
+          25,
+          25,
+          25
+        ],
+        "contrast": 11.86,
+        "sample": "MCP do Curriculol",
+        "font": "16px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          39,
+          39,
+          39
+        ],
+        "contrast": 9.49,
+        "sample": "https://api.exemplo.invalid/mcp",
+        "font": "11px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          38,
+          38,
+          38
+        ],
+        "contrast": 9.62,
+        "sample": "Revogar acesso",
+        "font": "13px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          65,
+          65,
+          65
+        ],
+        "contrast": 6.49,
+        "sample": "Consultar seu perfil e baixar currículos",
+        "font": "10px",
+        "weight": "500"
+      }
+    ],
+    "errors": []
+  },
+  {
+    "theme": "dark",
+    "width": 1440,
+    "check": "mcp-tabs-keyboard",
+    "selected": "true",
+    "focus": {
+      "text": "Outros clientes",
+      "outline": "rgb(185, 185, 185) solid 2px"
+    }
+  },
+  {
+    "theme": "dark",
+    "width": 1440,
+    "view": "Perfil",
+    "pageWidth": 1440,
+    "title": "Prévia isolada — Home RCD",
+    "lang": "pt-BR",
+    "headings": [
+      {
+        "tag": "H1",
+        "text": "Luísa Andrade",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Sobre",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Experiências",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Formação",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Certificados",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Habilidades",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Idiomas",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Registros",
+        "size": "13px"
+      }
+    ],
+    "clipped": [],
+    "fields": [],
+    "panels": [
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    ],
+    "contrast": [
+      {
+        "foreground": "rgb(148, 148, 148)",
+        "background": [
+          35,
+          35,
+          35
+        ],
+        "contrast": 5.18,
+        "sample": "L",
+        "font": "10px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          25,
+          25,
+          25
+        ],
+        "contrast": 11.17,
+        "sample": "Luísa",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(148, 148, 148)",
+        "background": [
+          25,
+          25,
+          25
+        ],
+        "contrast": 5.8,
+        "sample": "Início",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          42,
+          42,
+          42
+        ],
+        "contrast": 9.12,
+        "sample": "Perfil",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(212, 212, 212)",
+        "background": [
+          25,
+          25,
+          25
+        ],
+        "contrast": 11.86,
+        "sample": "Luísa Andrade",
+        "font": "16px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(36, 36, 36)",
+        "background": [
+          241,
+          241,
+          241
+        ],
+        "contrast": 13.74,
+        "sample": "Alterar perfil",
+        "font": "13px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          38,
+          38,
+          38
+        ],
+        "contrast": 9.62,
+        "sample": "Ver candidaturas",
+        "font": "13px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          35,
+          35,
+          35
+        ],
+        "contrast": 9.99,
+        "sample": "Discovery com usuários",
+        "font": "12px",
+        "weight": "400"
+      }
+    ],
+    "errors": []
+  },
+  {
+    "theme": "dark",
+    "width": 390,
+    "view": "MCP",
+    "pageWidth": 390,
+    "title": "Prévia isolada — Home RCD",
+    "lang": "pt-BR",
+    "headings": [
+      {
+        "tag": "H1",
+        "text": "MCP do Curriculol",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Conecte seu espaço com aplicativos de IA",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Novo aplicativo",
+        "size": "13px"
+      },
+      {
+        "tag": "H2",
+        "text": "Meu Codex (exemplo)",
+        "size": "13px"
+      }
+    ],
+    "clipped": [],
+    "fields": [
+      {
+        "label": "Nome do aplicativo",
+        "size": "13px",
+        "type": "text",
+        "invalid": null
+      },
+      {
+        "label": "Endereço de retorno (callback)",
+        "size": "13px",
+        "type": "url",
+        "invalid": null
+      }
+    ],
+    "panels": [
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    ],
+    "contrast": [
+      {
+        "foreground": "rgb(148, 148, 148)",
+        "background": [
+          25,
+          25,
+          25
+        ],
+        "contrast": 5.8,
+        "sample": "Navegação",
+        "font": "13px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(212, 212, 212)",
+        "background": [
+          25,
+          25,
+          25
+        ],
+        "contrast": 11.86,
+        "sample": "MCP do Curriculol",
+        "font": "16px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          42,
+          42,
+          42
+        ],
+        "contrast": 9.12,
+        "sample": "Codex",
+        "font": "11px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          39,
+          39,
+          39
+        ],
+        "contrast": 9.44,
+        "sample": "Outros clientes",
+        "font": "11px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          25,
+          25,
+          25
+        ],
+        "contrast": 11.17,
+        "sample": "1. Adicione o servidor MCP remoto ao Codex com o endpoint abaixo.",
+        "font": "13px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          38,
+          38,
+          38
+        ],
+        "contrast": 9.62,
+        "sample": "Revogar acesso",
+        "font": "13px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          65,
+          65,
+          65
+        ],
+        "contrast": 6.49,
+        "sample": "Consultar seu perfil e baixar currículos",
+        "font": "10px",
+        "weight": "500"
+      }
+    ],
+    "errors": []
+  },
+  {
+    "theme": "dark",
+    "width": 390,
+    "check": "mcp-tabs-keyboard",
+    "selected": "true",
+    "focus": {
+      "text": "Outros clientes",
+      "outline": "rgb(185, 185, 185) solid 2px"
+    }
+  },
+  {
+    "theme": "dark",
+    "width": 390,
+    "view": "Perfil",
+    "pageWidth": 390,
+    "title": "Prévia isolada — Home RCD",
+    "lang": "pt-BR",
+    "headings": [
+      {
+        "tag": "H1",
+        "text": "Luísa Andrade",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Sobre",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Experiências",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Formação",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Certificados",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Habilidades",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Idiomas",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Registros",
+        "size": "13px"
+      }
+    ],
+    "clipped": [],
+    "fields": [],
+    "panels": [
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    ],
+    "contrast": [
+      {
+        "foreground": "rgb(148, 148, 148)",
+        "background": [
+          25,
+          25,
+          25
+        ],
+        "contrast": 5.8,
+        "sample": "Navegação",
+        "font": "13px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(148, 148, 148)",
+        "background": [
+          35,
+          35,
+          35
+        ],
+        "contrast": 5.18,
+        "sample": "LA",
+        "font": "20px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(212, 212, 212)",
+        "background": [
+          25,
+          25,
+          25
+        ],
+        "contrast": 11.86,
+        "sample": "Luísa Andrade",
+        "font": "16px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(36, 36, 36)",
+        "background": [
+          241,
+          241,
+          241
+        ],
+        "contrast": 13.74,
+        "sample": "Alterar perfil",
+        "font": "13px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          25,
+          25,
+          25
+        ],
+        "contrast": 11.17,
+        "sample": "Product manager sênior",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          38,
+          38,
+          38
+        ],
+        "contrast": 9.62,
+        "sample": "Ver candidaturas",
+        "font": "13px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          35,
+          35,
+          35
+        ],
+        "contrast": 9.99,
+        "sample": "Discovery com usuários",
+        "font": "12px",
+        "weight": "400"
+      }
+    ],
+    "errors": []
+  },
+  {
+    "theme": "dark",
+    "width": 320,
+    "view": "MCP",
+    "pageWidth": 320,
+    "title": "Prévia isolada — Home RCD",
+    "lang": "pt-BR",
+    "headings": [
+      {
+        "tag": "H1",
+        "text": "MCP do Curriculol",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Conecte seu espaço com aplicativos de IA",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Novo aplicativo",
+        "size": "13px"
+      },
+      {
+        "tag": "H2",
+        "text": "Meu Codex (exemplo)",
+        "size": "13px"
+      }
+    ],
+    "clipped": [],
+    "fields": [
+      {
+        "label": "Nome do aplicativo",
+        "size": "13px",
+        "type": "text",
+        "invalid": null
+      },
+      {
+        "label": "Endereço de retorno (callback)",
+        "size": "13px",
+        "type": "url",
+        "invalid": null
+      }
+    ],
+    "panels": [
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    ],
+    "contrast": [
+      {
+        "foreground": "rgb(148, 148, 148)",
+        "background": [
+          25,
+          25,
+          25
+        ],
+        "contrast": 5.8,
+        "sample": "Navegação",
+        "font": "13px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(212, 212, 212)",
+        "background": [
+          25,
+          25,
+          25
+        ],
+        "contrast": 11.86,
+        "sample": "MCP do Curriculol",
+        "font": "16px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          42,
+          42,
+          42
+        ],
+        "contrast": 9.12,
+        "sample": "Codex",
+        "font": "11px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(148, 148, 148)",
+        "background": [
+          35,
+          35,
+          35
+        ],
+        "contrast": 5.18,
+        "sample": "Outros clientes",
+        "font": "11px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          25,
+          25,
+          25
+        ],
+        "contrast": 11.17,
+        "sample": "1. Adicione o servidor MCP remoto ao Codex com o endpoint abaixo.",
+        "font": "13px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          39,
+          39,
+          39
+        ],
+        "contrast": 9.49,
+        "sample": "https://api.exemplo.invalid/mcp",
+        "font": "11px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          38,
+          38,
+          38
+        ],
+        "contrast": 9.62,
+        "sample": "Revogar acesso",
+        "font": "13px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          65,
+          65,
+          65
+        ],
+        "contrast": 6.49,
+        "sample": "Consultar seu perfil e baixar currículos",
+        "font": "10px",
+        "weight": "500"
+      }
+    ],
+    "errors": []
+  },
+  {
+    "theme": "dark",
+    "width": 320,
+    "check": "mcp-tabs-keyboard",
+    "selected": "true",
+    "focus": {
+      "text": "Outros clientes",
+      "outline": "rgb(185, 185, 185) solid 2px"
+    }
+  },
+  {
+    "theme": "dark",
+    "width": 320,
+    "view": "Perfil",
+    "pageWidth": 320,
+    "title": "Prévia isolada — Home RCD",
+    "lang": "pt-BR",
+    "headings": [
+      {
+        "tag": "H1",
+        "text": "Luísa Andrade",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Sobre",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Experiências",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Formação",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Certificados",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Habilidades",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Idiomas",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Registros",
+        "size": "13px"
+      }
+    ],
+    "clipped": [],
+    "fields": [],
+    "panels": [
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    ],
+    "contrast": [
+      {
+        "foreground": "rgb(148, 148, 148)",
+        "background": [
+          25,
+          25,
+          25
+        ],
+        "contrast": 5.8,
+        "sample": "Navegação",
+        "font": "13px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(148, 148, 148)",
+        "background": [
+          35,
+          35,
+          35
+        ],
+        "contrast": 5.18,
+        "sample": "LA",
+        "font": "20px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(212, 212, 212)",
+        "background": [
+          25,
+          25,
+          25
+        ],
+        "contrast": 11.86,
+        "sample": "Luísa Andrade",
+        "font": "16px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(36, 36, 36)",
+        "background": [
+          241,
+          241,
+          241
+        ],
+        "contrast": 13.74,
+        "sample": "Alterar perfil",
+        "font": "13px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          25,
+          25,
+          25
+        ],
+        "contrast": 11.17,
+        "sample": "Product manager sênior",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          38,
+          38,
+          38
+        ],
+        "contrast": 9.62,
+        "sample": "Ver candidaturas",
+        "font": "13px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(206, 206, 206)",
+        "background": [
+          35,
+          35,
+          35
+        ],
+        "contrast": 9.99,
+        "sample": "Discovery com usuários",
+        "font": "12px",
+        "weight": "400"
+      }
+    ],
+    "errors": []
+  },
+  {
+    "theme": "light",
+    "width": 1440,
+    "view": "MCP",
+    "pageWidth": 1440,
+    "title": "Prévia isolada — Home RCD",
+    "lang": "pt-BR",
+    "headings": [
+      {
+        "tag": "H1",
+        "text": "MCP do Curriculol",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Conecte seu espaço com aplicativos de IA",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Novo aplicativo",
+        "size": "13px"
+      },
+      {
+        "tag": "H2",
+        "text": "Meu Codex (exemplo)",
+        "size": "13px"
+      }
+    ],
+    "clipped": [],
+    "fields": [
+      {
+        "label": "Nome do aplicativo",
+        "size": "13px",
+        "type": "text",
+        "invalid": null
+      },
+      {
+        "label": "Endereço de retorno (callback)",
+        "size": "13px",
+        "type": "url",
+        "invalid": null
+      }
+    ],
+    "panels": [
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    ],
+    "contrast": [
+      {
+        "foreground": "rgb(106, 105, 102)",
+        "background": [
+          237,
+          236,
+          233
+        ],
+        "contrast": 4.65,
+        "sample": "L",
+        "font": "10px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          251,
+          250,
+          249
+        ],
+        "contrast": 11.77,
+        "sample": "Luísa",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(106, 105, 102)",
+        "background": [
+          251,
+          250,
+          249
+        ],
+        "contrast": 5.27,
+        "sample": "Início",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          237,
+          236,
+          233
+        ],
+        "contrast": 10.39,
+        "sample": "MCP",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "contrast": 12.27,
+        "sample": "MCP do Curriculol",
+        "font": "16px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(106, 105, 102)",
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "contrast": 5.49,
+        "sample": "Conecte aplicativos de IA ao seu espaço. Prévia com dados simulados.",
+        "font": "13px",
+        "weight": "400"
+      }
+    ],
+    "errors": []
+  },
+  {
+    "theme": "light",
+    "width": 1440,
+    "check": "mcp-tabs-keyboard",
+    "selected": "true",
+    "focus": {
+      "text": "Outros clientes",
+      "outline": "rgb(0, 119, 230) solid 2px"
+    }
+  },
+  {
+    "theme": "light",
+    "width": 1440,
+    "view": "Perfil",
+    "pageWidth": 1440,
+    "title": "Prévia isolada — Home RCD",
+    "lang": "pt-BR",
+    "headings": [
+      {
+        "tag": "H1",
+        "text": "Luísa Andrade",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Sobre",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Experiências",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Formação",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Certificados",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Habilidades",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Idiomas",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Registros",
+        "size": "13px"
+      }
+    ],
+    "clipped": [],
+    "fields": [],
+    "panels": [
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    ],
+    "contrast": [
+      {
+        "foreground": "rgb(106, 105, 102)",
+        "background": [
+          237,
+          236,
+          233
+        ],
+        "contrast": 4.65,
+        "sample": "L",
+        "font": "10px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          251,
+          250,
+          249
+        ],
+        "contrast": 11.77,
+        "sample": "Luísa",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(106, 105, 102)",
+        "background": [
+          251,
+          250,
+          249
+        ],
+        "contrast": 5.27,
+        "sample": "Início",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          237,
+          236,
+          233
+        ],
+        "contrast": 10.39,
+        "sample": "Perfil",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "contrast": 12.27,
+        "sample": "Luísa Andrade",
+        "font": "16px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(106, 105, 102)",
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "contrast": 5.49,
+        "sample": "Atualizado em 13 de set de 2026",
+        "font": "13px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(255, 255, 255)",
+        "background": [
+          32,
+          32,
+          32
+        ],
+        "contrast": 16.29,
+        "sample": "Alterar perfil",
+        "font": "13px",
+        "weight": "500"
+      }
+    ],
+    "errors": []
+  },
+  {
+    "theme": "light",
+    "width": 390,
+    "view": "MCP",
+    "pageWidth": 390,
+    "title": "Prévia isolada — Home RCD",
+    "lang": "pt-BR",
+    "headings": [
+      {
+        "tag": "H1",
+        "text": "MCP do Curriculol",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Conecte seu espaço com aplicativos de IA",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Novo aplicativo",
+        "size": "13px"
+      },
+      {
+        "tag": "H2",
+        "text": "Meu Codex (exemplo)",
+        "size": "13px"
+      }
+    ],
+    "clipped": [],
+    "fields": [
+      {
+        "label": "Nome do aplicativo",
+        "size": "13px",
+        "type": "text",
+        "invalid": null
+      },
+      {
+        "label": "Endereço de retorno (callback)",
+        "size": "13px",
+        "type": "url",
+        "invalid": null
+      }
+    ],
+    "panels": [
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    ],
+    "contrast": [
+      {
+        "foreground": "rgb(106, 105, 102)",
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "contrast": 5.49,
+        "sample": "Navegação",
+        "font": "13px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "contrast": 12.27,
+        "sample": "MCP do Curriculol",
+        "font": "16px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          230,
+          228,
+          224
+        ],
+        "contrast": 9.67,
+        "sample": "Outros clientes",
+        "font": "11px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          237,
+          236,
+          233
+        ],
+        "contrast": 10.39,
+        "sample": "https://api.exemplo.invalid/mcp",
+        "font": "11px",
+        "weight": "400"
+      }
+    ],
+    "errors": []
+  },
+  {
+    "theme": "light",
+    "width": 390,
+    "check": "mcp-tabs-keyboard",
+    "selected": "true",
+    "focus": {
+      "text": "Outros clientes",
+      "outline": "rgb(0, 119, 230) solid 2px"
+    }
+  },
+  {
+    "theme": "light",
+    "width": 390,
+    "view": "Perfil",
+    "pageWidth": 390,
+    "title": "Prévia isolada — Home RCD",
+    "lang": "pt-BR",
+    "headings": [
+      {
+        "tag": "H1",
+        "text": "Luísa Andrade",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Sobre",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Experiências",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Formação",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Certificados",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Habilidades",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Idiomas",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Registros",
+        "size": "13px"
+      }
+    ],
+    "clipped": [],
+    "fields": [],
+    "panels": [
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    ],
+    "contrast": [
+      {
+        "foreground": "rgb(106, 105, 102)",
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "contrast": 5.49,
+        "sample": "Navegação",
+        "font": "13px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(106, 105, 102)",
+        "background": [
+          237,
+          236,
+          233
+        ],
+        "contrast": 4.65,
+        "sample": "LA",
+        "font": "20px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "contrast": 12.27,
+        "sample": "Luísa Andrade",
+        "font": "16px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(255, 255, 255)",
+        "background": [
+          32,
+          32,
+          32
+        ],
+        "contrast": 16.29,
+        "sample": "Alterar perfil",
+        "font": "13px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          237,
+          236,
+          233
+        ],
+        "contrast": 10.39,
+        "sample": "Ver candidaturas",
+        "font": "13px",
+        "weight": "500"
+      }
+    ],
+    "errors": []
+  },
+  {
+    "theme": "light",
+    "width": 320,
+    "view": "MCP",
+    "pageWidth": 320,
+    "title": "Prévia isolada — Home RCD",
+    "lang": "pt-BR",
+    "headings": [
+      {
+        "tag": "H1",
+        "text": "MCP do Curriculol",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Conecte seu espaço com aplicativos de IA",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Novo aplicativo",
+        "size": "13px"
+      },
+      {
+        "tag": "H2",
+        "text": "Meu Codex (exemplo)",
+        "size": "13px"
+      }
+    ],
+    "clipped": [],
+    "fields": [
+      {
+        "label": "Nome do aplicativo",
+        "size": "13px",
+        "type": "text",
+        "invalid": null
+      },
+      {
+        "label": "Endereço de retorno (callback)",
+        "size": "13px",
+        "type": "url",
+        "invalid": null
+      }
+    ],
+    "panels": [
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    ],
+    "contrast": [
+      {
+        "foreground": "rgb(106, 105, 102)",
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "contrast": 5.49,
+        "sample": "Navegação",
+        "font": "13px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "contrast": 12.27,
+        "sample": "MCP do Curriculol",
+        "font": "16px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(106, 105, 102)",
+        "background": [
+          237,
+          236,
+          233
+        ],
+        "contrast": 4.65,
+        "sample": "Outros clientes",
+        "font": "11px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          237,
+          236,
+          233
+        ],
+        "contrast": 10.39,
+        "sample": "https://api.exemplo.invalid/mcp",
+        "font": "11px",
+        "weight": "400"
+      }
+    ],
+    "errors": []
+  },
+  {
+    "theme": "light",
+    "width": 320,
+    "check": "mcp-tabs-keyboard",
+    "selected": "true",
+    "focus": {
+      "text": "Outros clientes",
+      "outline": "rgb(0, 119, 230) solid 2px"
+    }
+  },
+  {
+    "theme": "light",
+    "width": 320,
+    "view": "Perfil",
+    "pageWidth": 320,
+    "title": "Prévia isolada — Home RCD",
+    "lang": "pt-BR",
+    "headings": [
+      {
+        "tag": "H1",
+        "text": "Luísa Andrade",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Sobre",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Experiências",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Formação",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Certificados",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Habilidades",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Idiomas",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Registros",
+        "size": "13px"
+      }
+    ],
+    "clipped": [],
+    "fields": [],
+    "panels": [
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    ],
+    "contrast": [
+      {
+        "foreground": "rgb(106, 105, 102)",
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "contrast": 5.49,
+        "sample": "Navegação",
+        "font": "13px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(106, 105, 102)",
+        "background": [
+          237,
+          236,
+          233
+        ],
+        "contrast": 4.65,
+        "sample": "LA",
+        "font": "20px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "contrast": 12.27,
+        "sample": "Luísa Andrade",
+        "font": "16px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(255, 255, 255)",
+        "background": [
+          32,
+          32,
+          32
+        ],
+        "contrast": 16.29,
+        "sample": "Alterar perfil",
+        "font": "13px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          237,
+          236,
+          233
+        ],
+        "contrast": 10.39,
+        "sample": "Ver candidaturas",
+        "font": "13px",
+        "weight": "500"
+      }
+    ],
+    "errors": []
+  },
+  {
+    "check": "mcp-invalid-url",
+    "accepted": 1,
+    "notices": [
+      "Prévia localAplicativo registrado apenas nesta prévia. Nenhuma aplicação OAuth foi criada.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "errors": []
+  },
+  {
+    "check": "mcp-revoke-confirmation",
+    "dialogs": 0,
+    "revoked": 1
+  },
+  {
+    "check": "profile-state",
+    "scenario": "profile-empty",
+    "initial": "Seu perfil ainda está vazio\n\nA Lucy monta o perfil com você, em uma conversa. Estado simulado desta prévia.\n\nCriar perfil",
+    "after": "Seu perfil ainda está vazio\n\nA Lucy monta o perfil com você, em uma conversa. Estado simulado desta prévia.\n\nCriar perfil",
+    "h1": 0
+  },
+  {
+    "check": "profile-state",
+    "scenario": "error",
+    "initial": "Não foi possível carregar o perfil neste cenário\n\nEstado simulado: nenhum dado foi alterado.\n\nTentar novamente",
+    "after": "Não foi possível carregar o perfil neste cenário\n\nEstado simulado: nenhum dado foi alterado.\n\nTentar novamente",
+    "h1": 0
+  },
+  {
+    "check": "profile-error-recovery",
+    "edit": 1
+  },
+  {
+    "check": "profile-state",
+    "scenario": "profile-loading",
+    "initial": "Carregando o perfil deste cenário (simulado)",
+    "after": "LA\nLuísa Andrade\n\nAtualizado em 13 de set de 2026\n\nAlterar perfil\nProduct manager sênior\nSão Paulo, SP\nVer LinkedIn\n+55 11 98888-7777\nluisa@exemplo.com\nVer candidaturas\nGerar currí",
+    "h1": 1
+  },
+  {
+    "check": "profile-state",
+    "scenario": "profile-notes-error",
+    "initial": "LA\nLuísa Andrade\n\nAtualizado em 13 de set de 2026\n\nAlterar perfil\nProduct manager sênior\nSão Paulo, SP\nVer LinkedIn\n+55 11 98888-7777\nluisa@exemplo.com\nVer candidaturas\nGerar currículo · 1 crédito\nOtimizações\n3\nCurrículos prontos\n2\nCandidaturas\n7\n3 Em preparo\n2 Enviadas\n2 Aprovadas\nSobre\n\nSou Product Manager com oito anos de experiência em produtos digitais. Trabalho com times de design, engenharia e dados para transformar problemas de usuários em experiências simples. Minha atuação vai da descoberta à evolução do produto, com foco em pesquisa,",
+    "after": "LA\nLuísa Andrade\n\nAtualizado em 13 de set de 2026\n\nAlterar perfil\nProduct manager sênior\nSão Paulo, SP\nVer LinkedIn\n+55 11 98888-7777\nluisa@exemplo.com\nVer candidaturas\nGerar currí",
+    "h1": 1
+  },
+  {
+    "check": "profile-notes-recovery",
+    "alerts": []
+  },
+  {
+    "check": "profile-edit-entry",
+    "url": "http://127.0.0.1:5292/?view=lucy&scenario=profile-ready&theme=dark",
+    "focus": {
+      "tag": "BODY",
+      "text": null,
+      "title": "Prévia isolada — Home RCD"
+    },
+    "buttons": [
+      "LLuísa",
+      "",
+      "",
+      "Início",
+      "Candidaturas",
+      "Buscar vagas",
+      "Fórum",
+      "Perfil",
+      "MCP",
+      "2 créditos",
+      "Revise meu perfilA Lucy aponta o que merece atualização (roteiro fixo da prévia).",
+      "Sugira melhoriasReceba sugestões simuladas para o perfil do cenário.",
+      "",
+      "Concluir e voltar ao perfil",
+      "Fechar sem salvar"
+    ]
+  },
+  {
+    "check": "profile-save-reentry",
+    "url": "http://127.0.0.1:5292/?view=perfil&scenario=profile-ready&theme=dark",
+    "note": 1
+  },
+  {
+    "check": "profile-css-zoom-proxy-not-native",
+    "width": 1440,
+    "pageWidth": 1440,
+    "title": "Prévia isolada — Home RCD",
+    "lang": "pt-BR",
+    "headings": [
+      {
+        "tag": "H1",
+        "text": "Luísa Andrade",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Sobre",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Experiências",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Formação",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Certificados",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Habilidades",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Idiomas",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Registros",
+        "size": "13px"
+      }
+    ],
+    "clipped": [],
+    "fields": [],
+    "panels": [
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    ],
+    "contrast": [
+      {
+        "foreground": "rgb(106, 105, 102)",
+        "background": [
+          237,
+          236,
+          233
+        ],
+        "contrast": 4.65,
+        "sample": "L",
+        "font": "10px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          251,
+          250,
+          249
+        ],
+        "contrast": 11.77,
+        "sample": "Luísa",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(106, 105, 102)",
+        "background": [
+          251,
+          250,
+          249
+        ],
+        "contrast": 5.27,
+        "sample": "Início",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          237,
+          236,
+          233
+        ],
+        "contrast": 10.39,
+        "sample": "Perfil",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "contrast": 12.27,
+        "sample": "Luísa Andrade",
+        "font": "16px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(106, 105, 102)",
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "contrast": 5.49,
+        "sample": "Atualizado em 13 de set de 2026",
+        "font": "13px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(255, 255, 255)",
+        "background": [
+          32,
+          32,
+          32
+        ],
+        "contrast": 16.29,
+        "sample": "Alterar perfil",
+        "font": "13px",
+        "weight": "500"
+      }
+    ]
+  },
+  {
+    "check": "mcp-css-zoom-proxy-not-native",
+    "width": 1440,
+    "pageWidth": 1440,
+    "title": "Prévia isolada — Home RCD",
+    "lang": "pt-BR",
+    "headings": [
+      {
+        "tag": "H1",
+        "text": "MCP do Curriculol",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Conecte seu espaço com aplicativos de IA",
+        "size": "16px"
+      },
+      {
+        "tag": "H2",
+        "text": "Novo aplicativo",
+        "size": "13px"
+      },
+      {
+        "tag": "H2",
+        "text": "Meu Codex (exemplo)",
+        "size": "13px"
+      }
+    ],
+    "clipped": [],
+    "fields": [
+      {
+        "label": "Nome do aplicativo",
+        "size": "13px",
+        "type": "text",
+        "invalid": null
+      },
+      {
+        "label": "Endereço de retorno (callback)",
+        "size": "13px",
+        "type": "url",
+        "invalid": null
+      }
+    ],
+    "panels": [
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "radius": "20px",
+        "padding": "16px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    ],
+    "contrast": [
+      {
+        "foreground": "rgb(106, 105, 102)",
+        "background": [
+          237,
+          236,
+          233
+        ],
+        "contrast": 4.65,
+        "sample": "L",
+        "font": "10px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          251,
+          250,
+          249
+        ],
+        "contrast": 11.77,
+        "sample": "Luísa",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(106, 105, 102)",
+        "background": [
+          251,
+          250,
+          249
+        ],
+        "contrast": 5.27,
+        "sample": "Início",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          237,
+          236,
+          233
+        ],
+        "contrast": 10.39,
+        "sample": "MCP",
+        "font": "14px",
+        "weight": "400"
+      },
+      {
+        "foreground": "rgb(55, 53, 46)",
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "contrast": 12.27,
+        "sample": "MCP do Curriculol",
+        "font": "16px",
+        "weight": "500"
+      },
+      {
+        "foreground": "rgb(106, 105, 102)",
+        "background": [
+          255,
+          255,
+          255
+        ],
+        "contrast": 5.49,
+        "sample": "Conecte aplicativos de IA ao seu espaço. Prévia com dados simulados.",
+        "font": "13px",
+        "weight": "400"
+      }
+    ]
+  }
+]

@@ -1,6 +1,8 @@
 # Espaço library — consumer contract and reuse
 
-Read first: [foundations](FOUNDATIONS.md), [components](COMPONENTS.md). The application owns behavior and content. The library owns rendered visuals. These are repository/build rules, not a claim that browser CSS is physically impossible to override.
+Read first: [foundations](FOUNDATIONS.md), [components](COMPONENTS.md), [Interface quality](INTERFACE-QUALITY.md). The application owns behavior and content. The library owns rendered visuals. These are repository/build rules, not a claim that browser CSS is physically impossible to override.
+
+Every consuming UI scope must include the automatic Better routing from Interface quality in its own `AGENTS.md`. Load `better-interface` and all six owners before design/code decisions and review every domain before handoff,without waiting for a user invocation. Installing `beds` alone does not install skills or activate nested package instructions.
 
 Current visuals come from [Foundations](FOUNDATIONS.md), not the old prototype or its measurements. The API exposes controlled theme and one brand color; no palette/density/geometry overrides.
 

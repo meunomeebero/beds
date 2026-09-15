@@ -1,0 +1,34 @@
+[
+  {
+    "check": "profile-narrow-disclosure",
+    "expanded": 1,
+    "focus": "ler menos"
+  },
+  {
+    "check": "profile-narrow-disclosure-collapse",
+    "collapsed": 2
+  },
+  {
+    "check": "profile-notes-action",
+    "notice": [
+      "Registros incorporados (simulado)A lista pendente foi limpa neste cenário local. Nada saiu desta prévia."
+    ],
+    "empty": 1,
+    "h1": "Luísa Andrade"
+  },
+  {
+    "check": "mobile-drawer-entry",
+    "dialogs": 1,
+    "focus": "LLuísa"
+  },
+  {
+    "check": "mobile-drawer-escape",
+    "navigationVisible": true,
+    "focus": "Navegação"
+  },
+  {
+    "check": "mcp-narrow-credential",
+    "pageWidth": 320,
+    "offscreenText": []
+  }
+]

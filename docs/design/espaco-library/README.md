@@ -9,6 +9,7 @@ Canonical library: `beds`. React 19; two fixed themes; one brand color. Independ
 | Compose an application | [Consumer contract](CONSUMER-CONTRACT.md) → relevant [Components](COMPONENTS.md) / [States](STATES.md) entries |
 | Build or change a primitive | [Foundations](FOUNDATIONS.md) → relevant component/state contract → [Governance](GOVERNANCE.md) |
 | Review UI quality | [Interface quality](INTERFACE-QUALITY.md) → affected contracts → Governance evidence requirements |
+| Inspect current MCP/Profile review | [2026-09-15 audit](REVIEW-MCP-PROFILE-2026-09-15.md): named preview only; findings remain open |
 | Maintain documentation | Governance → [Documentation audit](DOCUMENTATION-AUDIT.md); no UI or full skill-suite pass unless rendering changes |
 | Build or hand off a package | [Artifact validation](ARTIFACT-VALIDATION.md) → [Validation](VALIDATION.md) |
 | Inspect an example | [Lucy](LUCY-COMPOSITION.md), [MCP](MCP-COMPOSITION.md), or [Data patterns](DATA-PATTERNS.md); not a production-flow specification |

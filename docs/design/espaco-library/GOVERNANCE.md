@@ -14,7 +14,7 @@ Scope: the portable library and explicitly identified consumers. Start at the [m
 | New decision | Record rationale, affected components, source/adaptation, states, migration impact and validation. Ask the design owner if resolving the conflict requires a new aesthetic or product choice. |
 | Accessibility | Report objective failures even if a shared rule causes them. Reference fidelity and design approval never waive accessibility findings. |
 
-Generic skills are review aids, not a second token system. [Interface quality](INTERFACE-QUALITY.md) owns the pinned Better routing and known tensions.
+Generic skills are mandatory review inputs for BEDS UI tasks, not a second token system. [Interface quality](INTERFACE-QUALITY.md) owns automatic seven-skill routing, evidence and known tensions. Agents must invoke that workflow without waiting for a user skill request; missing skill/review evidence never becomes an approval.
 
 ## Scope-appropriate verification
 
@@ -22,8 +22,8 @@ Generic skills are review aids, not a second token system. [Interface quality](I
 |---|---|
 | Documentation only | Check approved decisions against source; check all DS links including untracked files; regenerate portable docs; artifact parity if package content changes. No fabricated browser or full Better review. |
 | Guard/build tooling | Focused positive/negative regression fixtures; library and consumer checks; documentation gate; artifact gate when packaging is affected. |
-| Component visuals or interaction | Relevant contracts and Better domains; browser evidence for both themes, desktop/mobile, keyboard, long content and affected entry/re-entry/recovery states. Full affected-surface review uses all six Better owners. |
-| Consumer composition | Strict consumer scan of every declared UI root; rendered composition and state review. A catalog wrapper or passing subset is not a compliant application. |
+| Component visuals or interaction | Automatic Better workflow: all seven entrypoints before decisions and all six domains before handoff; browser evidence for both themes, desktop/mobile, keyboard, long content and affected entry/re-entry/recovery states. |
+| Consumer composition | Same automatic Better workflow; strict consumer scan of every declared UI root; rendered composition and state review. A catalog wrapper or passing subset is not a compliant application. |
 | Visual acceptance | Independent comparison to a versioned approved baseline, then separate design-owner aesthetic decision. Respect a no-delegation instruction; leave independent review pending rather than inventing a reviewer. |
 
 For a visual change: record intended anatomy → implement shared fix → run gates → inspect render → independent comparison → owner decision. Repeat failed stages only as needed; preserve previous evidence as a dated checkpoint.

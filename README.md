@@ -4,6 +4,12 @@ Portable React19 SaaS UI. Two fixed themes, one brand color, constrained public
 components and versioned design contracts. Package and import name: **beds**.
 No Curriculol runtime, API, database or business logic.
 
+UI agents must automatically use the seven Better skills before design/code
+decisions and before handoff; no explicit user invocation needed. Read
+[Interface quality](docs/design/espaco-library/INTERFACE-QUALITY.md) and install
+its routing in each consuming UI scope's `AGENTS.md`. The protocol is mandatory;
+it is not an automatic skill installer or a guarantee of visual approval.
+
 ## Develop
 
 Node22+; npm workspace with a committed lockfile.
@@ -55,6 +61,7 @@ Wrap only explicitly migrated screens; never enclose legacy UI to simulate migra
 | [Consumer contract](docs/design/espaco-library/CONSUMER-CONTRACT.md) | Application composition |
 | [Governance](docs/design/espaco-library/GOVERNANCE.md) | Change and acceptance gates |
 | [Interface quality](docs/design/espaco-library/INTERFACE-QUALITY.md) | Better skill routing |
+| [MCP/Profile review, 2026-09-15](docs/design/espaco-library/REVIEW-MCP-PROFILE-2026-09-15.md) | Six-domain preview audit; unresolved findings, not release approval |
 | [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.md) | Build/pack/import parity |
 | [Validation](docs/design/espaco-library/VALIDATION.md) | Snapshot-specific results |
 | [Documentation audit](docs/design/espaco-library/DOCUMENTATION-AUDIT.md) | Conflict review and limitations |
