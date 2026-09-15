@@ -6,10 +6,12 @@ type ButtonProps = {
   label: string; onClick?: () => void; type?: 'button' | 'submit' | 'reset';
   variant?: 'primary' | 'secondary' | 'ghost'; compact?: boolean; icon?: IconName;
   purpose?: 'default' | 'welcome' | 'connection'; disabled?: boolean; busy?: boolean; 'aria-describedby'?: string;
+  /** Disclosure toggles: expose the expanded state of the controlled region. */
+  'aria-expanded'?: boolean; 'aria-controls'?: string;
 };
 
-export function Button({ label, onClick, type = 'button', variant = 'secondary', compact = false, purpose = 'default', icon, disabled, busy, 'aria-describedby': describedBy }: ButtonProps) {
-  return <button className="es-button" data-variant={variant} data-purpose={purpose} data-compact={purpose === 'default' && compact || undefined} type={type} onClick={onClick} disabled={disabled || busy} aria-busy={busy || undefined} aria-describedby={describedBy}>
+export function Button({ label, onClick, type = 'button', variant = 'secondary', compact = false, purpose = 'default', icon, disabled, busy, 'aria-describedby': describedBy, 'aria-expanded': ariaExpanded, 'aria-controls': ariaControls }: ButtonProps) {
+  return <button className="es-button" data-variant={variant} data-purpose={purpose} data-compact={purpose === 'default' && compact || undefined} type={type} onClick={onClick} disabled={disabled || busy} aria-busy={busy || undefined} aria-describedby={describedBy} aria-expanded={ariaExpanded} aria-controls={ariaControls}>
     {(busy || icon) && <Icon name={busy ? 'Loader2' : icon!} purpose="action" />}<span>{label}</span>
   </button>;
 }

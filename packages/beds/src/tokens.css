@@ -11,6 +11,7 @@
  --es-space-1:2px;--es-space-2:4px;--es-space-3:6px;--es-space-4:8px;--es-space-5:10px;--es-space-6:12px;--es-space-7:14px;--es-space-8:16px;--es-space-9:20px;--es-space-10:24px;--es-space-11:32px;--es-space-12:48px;
  --es-radius-2:2px;--es-radius-6:6px;--es-radius-7:7px;--es-radius-8:8px;--es-radius-10:10px;--es-radius-14:14px;--es-radius-20:20px;--es-radius-full:999px;
  --es-radius-card:24px;--es-radius-panel:20px;
+ --es-disclosure-lines:3;
  --es-image-outline:rgba(0,0,0,.1);
  --es-shadow-popup:0 4px 6px -1px #0000001a,0 2px 4px -2px #0000001a;
  --es-shadow-xs:0 1px 2px #0000000d;

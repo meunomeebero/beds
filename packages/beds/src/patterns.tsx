@@ -43,14 +43,15 @@ function trapAccountTab(event: KeyboardEvent<HTMLDivElement>) {
   if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
 }
 
-export function AccountMenu({ open, onOpenChange, trigger, identity, actions, onAction, workspaces, activeWorkspace, onWorkspaceChange, theme, onThemeChange, allWorkspaces, footer, label = 'Account menu', appearanceLabel = 'Appearance' }: {
+export function AccountMenu({ open, onOpenChange, trigger, identity, actions, onAction, workspaces = [], activeWorkspace, onWorkspaceChange, theme, onThemeChange, allWorkspaces, footer, label = 'Account menu', appearanceLabel = 'Appearance', lightLabel = 'Light', darkLabel = 'Dark' }: {
   open: boolean; onOpenChange: (open: boolean) => void; trigger: ReactNode;
   identity: { name: string; description?: string; avatar?: ReactNode };
   actions: { id: string; label: string; icon: IconName; disabled?: boolean }[];
   onAction: (id: string) => void;
-  workspaces: { id: string; label: string; mark?: ReactNode }[]; activeWorkspace: string; onWorkspaceChange: (id: string) => void;
+  /** Optional workspace switcher: single-space apps omit it entirely. */
+  workspaces?: { id: string; label: string; mark?: ReactNode }[]; activeWorkspace?: string; onWorkspaceChange?: (id: string) => void;
   theme: 'light' | 'dark'; onThemeChange: (theme: 'light' | 'dark') => void;
-  allWorkspaces?: { label: string; onClick: () => void }; footer?: ReactNode; label?: string; appearanceLabel?: string;
+  allWorkspaces?: { label: string; onClick: () => void }; footer?: ReactNode; label?: string; appearanceLabel?: string; lightLabel?: string; darkLabel?: string;
 }) {
   const anchor = useRef<HTMLDivElement>(null);
   const panel = useRef<HTMLDivElement>(null);
@@ -69,11 +70,11 @@ export function AccountMenu({ open, onOpenChange, trigger, identity, actions, on
       <div className="es-account-identity"><span className="es-account-avatar" aria-hidden="true">{identity.avatar ?? identity.name.slice(0, 1)}</span><div><strong>{identity.name}</strong>{identity.description && <p>{identity.description}</p>}</div></div>
       <div className="es-account-group">
         {primaryActions.map(actionButton)}
-        <div className="es-account-appearance"><span><Icon name={theme === 'light' ? 'Sun' : 'Moon'} purpose="navigation" />{appearanceLabel}</span><SegmentedControl label={appearanceLabel} value={theme} options={[{ id: 'light', label: 'Light' }, { id: 'dark', label: 'Dark' }]} onChange={value => onThemeChange(value === 'light' ? 'light' : 'dark')} /></div>
+        <div className="es-account-appearance"><span><Icon name={theme === 'light' ? 'Sun' : 'Moon'} purpose="navigation" />{appearanceLabel}</span><SegmentedControl label={appearanceLabel} value={theme} options={[{ id: 'light', label: lightLabel }, { id: 'dark', label: darkLabel }]} onChange={value => onThemeChange(value === 'light' ? 'light' : 'dark')} /></div>
         {signOutAction && actionButton(signOutAction)}
       </div>
       {(workspaces.length > 0 || allWorkspaces) && <div className="es-account-group es-account-workspaces">
-        {workspaces.map(workspace => <button key={workspace.id} type="button" className="es-account-action" aria-pressed={workspace.id === activeWorkspace} onClick={() => { onOpenChange(false); onWorkspaceChange(workspace.id); }}><span className="es-account-workspace-mark" aria-hidden="true">{workspace.mark ?? workspace.label.slice(0, 1)}</span><span>{workspace.label}</span>{workspace.id === activeWorkspace && <Icon name="Check" purpose="navigation" />}</button>)}
+        {workspaces.map(workspace => <button key={workspace.id} type="button" className="es-account-action" aria-pressed={workspace.id === activeWorkspace} onClick={() => { onOpenChange(false); onWorkspaceChange?.(workspace.id); }}><span className="es-account-workspace-mark" aria-hidden="true">{workspace.mark ?? workspace.label.slice(0, 1)}</span><span>{workspace.label}</span>{workspace.id === activeWorkspace && <Icon name="Check" purpose="navigation" />}</button>)}
         {allWorkspaces && <button type="button" className="es-account-action es-account-action--all-workspaces" onClick={() => { onOpenChange(false); allWorkspaces.onClick(); }}><Icon name="MoreHorizontal" purpose="navigation" /><span>{allWorkspaces.label}</span></button>}
       </div>}
       {footer && <div className="es-account-footer">{footer}</div>}

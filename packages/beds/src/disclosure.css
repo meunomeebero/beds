@@ -1,0 +1,9 @@
+/* Disclosure primitives: measured clamp text + passive label field. */
+.es-root .es-disclosure-text{margin:0;overflow-wrap:anywhere;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:var(--es-disclosure-lines,3);overflow:hidden}
+.es-root .es-disclosure-text--clamped{display:-webkit-box}
+.es-root .es-disclosure-text:not(.es-disclosure-text--clamped){display:block;-webkit-line-clamp:unset;overflow:visible}
+.es-root .es-label-field-list,.es-root .es-label-field-rest-list{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.es-root .es-label-field-item{display:inline-flex;align-items:center;min-height:22px;padding:0 8px;border-radius:6px;background:var(--es-subtle);color:var(--es-text);font-size:12px;line-height:16px}
+.es-root .es-label-field-rest{flex-basis:100%;padding:0}
+.es-root .es-label-field-rest[inert]{display:none}
+.es-root .es-label-field>.es-button{margin-top:6px}

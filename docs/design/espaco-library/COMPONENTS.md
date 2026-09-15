@@ -4,30 +4,31 @@ Visual decisions: [Foundations](FOUNDATIONS.md). Executed checks: [Validation](V
 
 Public entry: `packages/beds/src/index.ts`. Exact TypeScript declarations are the API authority. Import only from `beds`; no internal subpath, arbitrary className/style or raw element replacement. Named variants select fixed contexts. States: [STATES.md](STATES.md); dimensions/type: [FOUNDATIONS.md](FOUNDATIONS.md).
 
-Current inventory:70 public components;89 tokens. Additional exports: `useDesignSystem`, `brands`, `IconName`, `Theme`, `TextVariant`, `DataTableColumn`, `DataTableRow`, `DataTableState`, `FeatureCardProps` and read-only `typography/geometry/neutrals/themes` metadata; these are not extra visual components. A source-backed component can contain locally engineered A keyboard/recovery behavior. Feedback/populated-data patterns with no matching visible source state remain A/U.
+Current inventory:74 public components;90 tokens. Additional exports: `useDesignSystem`, `brands`, `IconName`, `Theme`, `TextVariant`, `DataTableColumn`, `DataTableRow`, `DataTableState`, `FeatureCardProps` and read-only `typography/geometry/neutrals/themes` metadata; these are not extra visual components. A source-backed component can contain locally engineered A keyboard/recovery behavior. Feedback/populated-data patterns with no matching visible source state remain A/U.
 
-## Foundation — 6
+## Foundation — 7
 
 | Component | Contract | Evidence / constraint |
 |---|---|---|
 |`DesignSystemProvider` |`children`, required `theme`; optional `brandColor/onThemeChange` |Fixed light/dark roles; single validated brand; no palette/font/style object |
 |`Icon` |`name:IconName`, `purpose=navigation` (`navigation/action/small/feature`) |Lucide 24×24 viewBox/1.5 stroke/round caps and joins/monochrome currentColor; fixed 14/16/12/20px respective purpose sizes; existing sidebar 16px override |
 |`Text` |`children`; `variant=body-small`, `tone=default` |Fixed contextual type; variants page-title/section-title/chat-title/body/body-small/label/caption/overline/option/metric; default/secondary tone only |
-|`Avatar` |`name`, optional `src`; `purpose=account` (`account/workspace`) |Fixed size by identity context; fallback initials; no caller pixel size |
+|`Avatar` |`name`, optional `src`; `purpose=account` (`account/workspace/profile`) |Fixed size by identity context; fallback initials; no caller pixel size. Broken image recovers once per URL to the deterministic initials — no retry loop, no network-generated identity; a changed `src` retries from scratch |
+|`TextLink` |`href`; optional `external/ariaLabel` |Text-level native link, shared hover/focus contract, underline from the border token; `external` adds a 12px up-right glyph and safe `rel`; no color/style overrides |
 |`BrandMark` |Optional accessible `label=Brand` |User-owned three18×4px bars,3px gaps,18×18 footprint; provider brand fill; A identity |
 |`ThemeToggle` |Optional `label/lightLabel/darkLabel` |Reads actual provider theme; invokes provider callback; disabled when callback absent; real theme control, unlike legacy fixture |
 
-Icon registry additions: `House`, `MessageCircle`, `ChartColumn`, `UserRound`, `Briefcase`, `Coins`, `ScanText`, `Bookmark`, `CalendarDays`, `ChevronsUpDown`, `Play`, `Pause`, `ArrowLeft`. Existing names remain accepted. Former `SourceIcon` paths are [historical text evidence](../../../packages/beds/evidence/marketer-source-icons.txt), not runtime components. Callers cannot provide SVG paths, stroke, color or pixel size. Registry entries do not create configurable styling.
+Icon registry additions: `House`, `MessageCircle`, `ChartColumn`, `UserRound`, `Briefcase`, `Coins`, `ScanText`, `Bookmark`, `CalendarDays`, `ChevronsUpDown`, `Play`, `Pause`, `ArrowLeft`, `ShieldCheck` (privileged/admin rows). Existing names remain accepted. Former `SourceIcon` paths are [historical text evidence](../../../packages/beds/evidence/marketer-source-icons.txt), not runtime components. Callers cannot provide SVG paths, stroke, color or pixel size. Registry entries do not create configurable styling.
 
 ## Layout and navigation — 18
 
 | Component | Required / optional API | Constraint |
 |---|---|---|
-|`AppShell` |`sidebar/children/collapsed/onCollapsedChange/mobileOpen/onMobileOpenChange`; optional `header/contentWidth/navigationLabel` |264px sidebar/62px rail;768 breakpoint; contentWidth chat/home/dashboard/full maps640/720/880/fluid;fixed16px page-top inset after header/mobile bar; mobile drawer traps focus and restores its opener after inert is removed; state controlled |
-|`SidebarHeader` |`children`; optional search `{label,onClick}` |42px minimum header;40px identity +32px search/collapse controls; shell context owns behavior |
-|`WorkspaceTrigger` |`name/onClick`; optional `mark/expanded` |40px profile control;17px mark/14px text; arbitrary data/artwork only through other library components in audited consumer |
+|`AppShell` |`sidebar/children/collapsed/onCollapsedChange/mobileOpen/onMobileOpenChange`; optional `header/contentWidth/navigationLabel/closeNavigationLabel` |264px sidebar/62px rail;768 breakpoint; contentWidth chat/home/dashboard/full maps640/720/880/fluid;fixed16px page-top inset after header/mobile bar; mobile drawer traps focus and restores its opener after inert is removed; state controlled; drawer/backdrop labels accept translated copy |
+|`SidebarHeader` |`children`; optional search `{label,onClick}`, `closeLabel/expandLabel/collapseLabel` |42px minimum header;40px identity +32px search/collapse controls; shell context owns behavior; collapse/search controls accept translated labels |
+|`WorkspaceTrigger` |`name/onClick`; optional `mark/expanded/menuLabel` |40px profile control;17px mark/14px text; arbitrary data/artwork only through other library components in audited consumer; menu accessible name accepts translated copy |
 |`SidebarSection` |`children`; optional `label`; purpose primary/default/history |Default17px top;12/18px label/8px bottom gap;history15px top;primary horizontal40px controls/31px selected pill; unique heading relationship |
-|`NavItem` |`label/icon`; either `href` or `onClick`; optional `active/badge` |Primary active glyph filled currentColor with sidebar-color stroke;inactive outlined;no caller styling prop. Native link/button;31px row,14/19.6px regular text,gap11px,r6,padding8px; accessible current state; icon registry |
+|`NavItem` |`label/icon`; either `href` or `onClick`; optional `active/badge/locked` |Primary active glyph filled currentColor with sidebar-color stroke;inactive outlined;no caller styling prop. Native link/button;31px row,14/19.6px regular text,gap11px,r6,padding8px; accessible current state; icon registry. `locked` carries the truthful reason: the row stays visible and non-interactive (`disabled`, muted), keeps its accessible name and exposes the reason through `title` and the label — never a no-op handler |
 |`SidebarFooter` |`children` |Anchored footer region; no plan policy |
 |`ContentHeader` |`children`; optional `actions` |Compact header/location region; fixed slots |
 |`PageContentHeader` |`title`; optional `description/leading/actions` |Measured page-identity header:784px maximum,48px top/32px side/16px bottom desktop inset;16px/16px/12px mobile inset; fixed title/action arrangement |
@@ -48,7 +49,7 @@ Primary navigation reuses `NavItem` inside `SidebarSection purpose="primary"`:4p
 
 | Component | API | States / constraints |
 |---|---|---|
-|`Button` |`label`; optional onClick/type/variant/compact/purpose/icon/disabled/busy/aria-describedby |Primary/secondary/ghost; purpose default/welcome/connection; compact applies to default purpose only; native type; busy disables repeated action |
+|`Button` |`label`; optional onClick/type/variant/compact/purpose/icon/disabled/busy/aria-describedby/aria-expanded/aria-controls |Primary/secondary/ghost; purpose default/welcome/connection; compact applies to default purpose only; native type; busy disables repeated action; disclosure toggles expose the controlled region state |
 |`IconButton` |`label/icon/onClick`; optional disabled/aria-describedby |Accessible name; fixed action geometry |
 |`IconToggleButton` |`label/icon/pressed/onPressedChange`; optional disabled/aria-describedby |Controlled native `aria-pressed`; persistent accessible name; selected icon fills currentColor; no domain policy |
 |`TextField` |`label/value/onChange`; optional description/error/placeholder/disabled/readOnly/name/autoComplete/inputMode/spellCheck/focusOnError/type; purpose settings/connection |Persistent label; associated helper/error; semantic input mode/type and forwarded ref preserve fixed settings13/20px,36px or connection14/16px,40px geometry |
@@ -86,7 +87,7 @@ Overlay placement is internally anchored/clamped/flipped, never consumer coordin
 |`IntegrationRow` |`name/mark/action`; optional description/status |Transparent14px shell;measured64px row anatomy;action label/onClick/disabled?/busy?;no request |
 |`RecentItem` |`title`; href or onClick; optional description/icon/meta |Quiet linked/action row; populated anatomy A where source only empty state observed; pressed state uses `--es-text` over `--es-pressed` rather than secondary text |
 |`PlanCard` |`title/action`; optional usage/note |Transparent panel,r20,p16;usage label/value/max;fixed segmented meter;no billing policy;not the approved compact Home sidebar footer |
-|`AccountMenu` |Controlled open/onOpenChange; trigger/identity/actions/onAction/workspaces/activeWorkspace/onWorkspaceChange/theme/onThemeChange; optional allWorkspaces/footer/labels |Identity name/description?/avatar?; action id/label/icon/disabled?; workspace id/label/mark?;280px source menu |
+|`AccountMenu` |Controlled open/onOpenChange; trigger/identity/actions/onAction/workspaces/activeWorkspace/onWorkspaceChange/theme/onThemeChange; optional allWorkspaces/footer/labels incl. `lightLabel/darkLabel` |Identity name/description?/avatar?; action id/label/icon/disabled?; workspace id/label/mark?;280px source menu; theme option labels default Light/Dark and accept translated copy |
 
 Unlike the old prototype, portable AccountMenu exposes workspace and theme callbacks. Workspace/action selection closes and invokes the supplied callback. Caller feeds selected theme back into the provider; account UI and application theme must share state. Footer accepts a library composition such as PlanCard; no account-specific source content embedded.
 
@@ -142,5 +143,15 @@ Copy begins only on a user click. Caller may inject an asynchronous copy callbac
 Use for onboarding entry,feature discovery or a contextual next step. Not a carousel,modal,tour or onboarding state machine. Native named article;H2 title and associated description;native buttons remain `type="button"`. Caller owns navigation,dismissal,progress,requests and error recovery. No custom visual props,arbitrary children or automatic action.
 
 Provide an owned/licensed image,prefer3:2 crop with no essential embedded instructions;`object-fit:cover` is fixed. `alt` is required;empty only for decorative imagery. Loading preserves space without blocking actions. Failed/empty source keeps the media frame and accessible fallback;new `src` resets loading,including cached images. `busy` disables only the corresponding action;caller supplies its current label. Long copy grows naturally;actions wrap,40px minimum desktop/44px mobile. Complete geometry: [Foundations](FOUNDATIONS.md).
+
+## Measured disclosure — 3
+
+| Component | API | Constraints |
+|---|---|---|
+|`DisclosureText` |`children:string`; optional `lines=3` (`2/3/6`); required `moreLabel/lessLabel` |Measured line clamp with a ghost compact toggle that exists only when the clamped layout really overflows, re-measured after fonts settle and on resize; full text stays in the DOM; collapse keeps the toggle available |
+|`LabelField` |`labels:readonly string[]`; optional `initialRows=3`; required `moreLabel(hidden)/lessLabel` |Passive wrap of inert labels disclosed by measured wrap rows; labels beyond the row budget collapse behind a real-count toggle; labels are never buttons; re-measured after fonts/resize/list change |
+|`DisclosedRecords` |`records`, `visibleCount`, `moreLabel(hidden)/lessLabel`, `render(visible)` |Count-based record disclosure: older records leave the document while collapsed (no hidden tab stops), real remaining count in the toggle; caller renders each slice |
+
+These primitives own measurement and disclosure semantics only; they never fetch or style consumer content. `DisclosureText`/`LabelField` keep full content present for assistive reading of the clamped state; `DisclosedRecords` removes collapsed records from the document by design. Both toggles expose `aria-expanded`/`aria-controls` through the shared `Button`.
 
 Catalog:Library → **Card de apresentação** (`?view=feature-card`). [Controlled example](../../../apps/web/labs/espaco-library/FeatureCardExamples.tsx);local synthetic content,no real onboarding request.
