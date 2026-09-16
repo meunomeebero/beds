@@ -1,8 +1,193 @@
 # Espaço library — validation record
 
-Date:2026-09-14. Canonical repository:`meunomeebero/beds`. Current candidate `beds@0.1.7-rc.15`.
+Canonical repository:`meunomeebero/beds`. Current release candidate:
+`beds@0.1.7-rc.16`,2026-09-15. Publication identity/hash belong to the immutable
+GitHub prerelease;this record describes source validation,not deployment.
 
-## Current RC15 — package identity
+## RC16 — consolidated Better review
+
+[Six-domain review](REVIEW-CONSOLIDATION-2026-09-15.md) and separate
+[Emil motion opportunities](MOTION-OPPORTUNITIES-2026-09-15.md).
+Shared fixes:control/error contrast,collapsed-header overlap,keyboard bypass,
+multiline labels/filenames,persistent actionable toasts and reliable timeout
+re-entry. Settings error copy no longer repeats adjacent help.
+
+| Gate | Executed result |
+|---|---|
+| Complete catalog browser run |284 passed,6 intentional viewport-contract skips,0 failed;290 cases,2 workers,2.8min |
+| Added quality regressions |10 passed within the complete run;light/dark control and error contrast,skip-link focus,collapsed-header click,toast clocks/queue/recovery |
+| Clean install/build/typecheck |Passed;`npm ci --ignore-scripts` reported0 vulnerabilities |
+| Library/consumer contracts |113 public components,92 tokens;28 consumer roots/31 files;0 violations |
+| Documentation |76 Markdown files,715 local targets,0 violations;untracked canonical files included |
+| Guard/routing tests |27 contract/artifact/docs guards +4 automatic Better-routing tests passed |
+| Packed artifact |Fresh build/parity and independent extracted-consumer smoke passed;release hash recorded outside archive |
+| Render review |Settings light desktop/dark mobile,controls,error and preferences inspected;linked screenshots in review;not approved pixel baselines |
+| Motion |4 prioritized proposals;no new animation or dependency implemented |
+
+Browser command:`PLAYWRIGHT_BASE_URL=http://127.0.0.1:5296 npm run test:browser -- --reporter=line`.
+Chromium desktop/mobile emulation;named320px/RTL/CSS200% zoom/reduced-motion and
+forced-color checks remain in component suites. Skips are desktop-only
+breakpoint loops or mobile-only touch/drawer contracts,not hidden failures.
+Baseline272 passed/2 failed exposed the collapsed-header defect. A new toast
+regression exposed stale hover after the final toast closed;fixed and retained.
+
+Independent review,owner aesthetic acceptance,native screen-reader speech,
+physical devices,Safari/Firefox and actual browser zoom remain PENDING.
+MCP/Profile product-host findings remain separately tracked;no production
+deployment or blanket accessibility approval. Earlier sections below are
+historical checkpoints;their local versions/counts are not the RC16 release.
+
+## Landing benefits — September15 adaptation
+
+[Contract/review](BENEFITS.md):`BenefitsSection`,`BenefitIllustration` and isolated
+`?view=benefits`. Five benefit cards,one native onboarding CTA,original static
+miniatures;no real landing or API integration. Better six-domain author review
+completed. `npm run verify` passed:113 components/90 tokens,28 consumer roots/31
+files,zero violations;27 guard+4 routing tests;artifact parity/consumer smoke.
+
+`PLAYWRIGHT_BASE_URL=http://127.0.0.1:5296 npm run test:browser -- benefits.spec.ts
+landing-footer.spec.ts --reporter=line` →12 passed. Light/dark,1440/768/390/320px,
+catalog entry and keyboard CTA/Back,theme change,long/empty/omitted-art content,
+forced colors,reduced motion,CSS200% zoom/RTL,unique SVG IDs,computed functional
+text contrast≥4.5:1. Initial mobile opener-label assertion corrected to observed
+UI;final run passed. Screenshots reviewed;not approved pixel baselines.
+
+Independent/aesthetic acceptance PENDING;screen-reader speech,physical devices,
+Safari/Firefox and actual browser zoom unverified. No publish,version bump,
+Curriculol consumer update or product mutation. Previous settings findings stay
+open and are not covered by this new section's scoped result.
+
+## Settings top navigation — September15 adaptation
+
+[Contract/review](SETTINGS.md): opt-in settings tabs + borderless SettingsGroup;
+`?view=settings`;retained four playground areas,9 notification choices and local
+form/confirmation behavior. Existing MCP/activity/default panels unchanged.
+`npm run verify` passed:111 components/90 tokens,27 consumer roots/30 files,
+zero static violations;27 guard+4 routing tests;artifact parity/consumer smoke.
+Initial artifact check raced a temporary Playwright directory;sequential run
+passed. No checker workaround.
+
+`PLAYWRIGHT_BASE_URL=http://127.0.0.1:5296 npm run test:browser --
+settings-page.spec.ts settings-form.spec.ts mcp-page.spec.ts --reporter=line`
+→16 passed after final hover correction. Light/dark,1440/768/390/320px,
+keyboard/RTL,Enter/error recovery,draft retention,discard,theme/locale/toggles,
+9 notifications,confirmation cancel/Escape/simulation,loading/error recovery,
+long text,normal text contrast,forced colors,reduced motion,CSS200% zoom proxy.
+Screenshots inspected;not pixel baselines. No mutating requests observed.
+
+Better review identified inherited shared control-boundary/off-switch contrast
+and error-text contrast gaps;exact pairs/proposed follow-up in the contract.
+BLOCK for production accessibility acceptance;independent/aesthetic review
+PENDING. Physical devices,screen-reader speech,Safari/Firefox and actual browser
+zoom unverified. No product integration,push,publication or version change.
+
+## Landing footer — September15 source addition
+
+[Contract/review](LANDING-FOOTER.md): public LandingFooter, native grouped links,
+one optional closing CTA, decorative oversized brand and token-based warm glow.
+`npm run verify` passed:111 components/90 tokens,26 consumer roots/28 files,
+zero violations;27 guard +4 routing tests;packed artifact/fresh consumer smoke.
+Canonical docs indexed and regenerated; exact link totals belong to each run.
+
+Browser:6 focused footer checks passed after final visuals, plus12 existing
+onboarding/blog checks after catalog host-height correction. Both themes,
+desktop/mobile1440/768/390/320,keyboard,44px targets,native destination/Back,
+long/minimal props,contrast≥4.5 at rest/pressed,RTL,CSS200% zoom proxy,forced
+colors,reduced motion. Self-review covers all six Better domains; no actionable
+findings in the inspected footer. Physical devices,screen-reader speech,
+Safari/Firefox and actual browser zoom remain unverified.
+
+No real landing integration,FAQ,signup requests,publication or consumer upgrade.
+Version retained. Independent review and owner aesthetic approval PENDING.
+
+## Application kanban — September15 source addition
+
+[Contract/review](KANBAN.md): ApplicationBoard + opt-in compact ApplicationCard;
+status columns, derived counts, controlled menu moves and shared Drawer details.
+`npm run verify` passed:110 components/90 tokens,66 Markdown files/581 local
+targets,25 consumer roots/27 files,zero violations;27 guard +4 routing tests;
+packed-artifact parity and fresh consumer smoke passed. Version retained;local
+source addition,not a published release or consumer update.
+
+Browser: `PLAYWRIGHT_BASE_URL=http://127.0.0.1:5296 npm run test:browser --
+kanban.spec.ts application-card.spec.ts --reporter=line` →12 passed;then8 kanban
+checks passed with added text contrast≥4.5 and forced-colors focus assertions.
+Desktop/mobile Chromium,both themes,1440/768/390/320px,long titles,controlled
+move/back,counts,focus retention,Drawer/Escape,read-only,empty,move rejection,
+unavailable scores,RTL,CSS200% zoom proxy and reduced motion. Initial document
+overflow regression fixed by containing absolute hidden count labels in the
+scroll viewport;no hidden assertion removal. Final accessible-name polish
+disambiguates identical titles with company;same focused suite rerun:12 passed.
+
+Better self-review:Approve within inspected component scope;no unresolved HIGH
+finding. Independent review and owner aesthetic approval remain PENDING.
+No drag/drop,reorder,real sending/persistence,commit,push or app integration.
+
+## Empty-folder flies — September15 source addition
+
+[Contract/review](EMPTY-STATE.md): additive `illustration="empty-folder"` on
+EmptyStateCard;original SVG/three flies,visible pause,resume from current
+playhead,offscreen/visibility guards,static reduced motion. No public component,
+token or dependency added. `npm run verify` passed:109 components/90 tokens,
+64 Markdown files/549 local targets,24 consumer roots/26 files,zero violations;
+27 guard +4 routing tests;packed-artifact smoke/parity passed.
+Browser:14 focused checks(6 folder +8 previous image regressions),then6 folder
+checks rerun after replacing initial color-mix with existing token-layered
+artwork pattern. Both themes,desktop/mobile,320px,long text,keyboard,pause,
+re-entry,offscreen,synthetic hidden-document,reduced motion,forced colors and
+CSS200% zoom/RTL proxy. Full runtime/multi-browser/frame-time profiling not
+performed. Independent review and aesthetic approval pending;local only,no
+release,consumer upgrade or product integration.
+
+## Blog posts — September15 source addition
+
+[Contract/review](BLOG-POST.md): thumbnail-led native article cards,optional
+metadata/topics,full-text recovery and image fallback. `npm run verify` passed:
+109 components,90 tokens;zero library/docs/consumer/artifact violations;
+27 guard +4 routing tests. Browser:6 blog checks +10 shared FeatureCard/media
+regressions passed;final narrow-metadata polish reruns6 blog checks. Both themes,
+desktop/mobile,320px,keyboard,history,new tab,contrast,error/recovery,RTL,forced
+colors and CSS200% zoom proxy. Self-review passed;independent review/owner
+aesthetic decision pending. No release,consumer upgrade or blog integration.
+
+## Payment confirmation — September15 source addition
+
+[Contract/review](PAYMENT-CONFIRMATION.md). Confirmed-payment printer presentation,
+one-shot paper reveal,separate invoice states. `npm run verify` passed:
+107 components,90 tokens,zero library/docs/consumer/artifact violations;
+27 guard +4 routing tests. Focused `payment-confirmation.spec.ts`:6 passed,
+desktop/mobile,light/dark,keyboard/re-entry,immediate action,invoice recovery,
+motion interruption/reduced motion,long content,320px,RTL,forced colors and
+200% CSS zoom proxy. Evidence and limitations in contract. Independent review
+and owner aesthetic approval pending. No real billing/issuance,release,push or
+consumer update;historical consolidation counts below remain unchanged.
+
+## Current local.24 — consolidation
+
+[Review](CONSOLIDATION-2026-09-15.md): six Better domains,scope and unresolved
+host/aesthetic boundaries. No new source aesthetic or product migration.
+
+| Gate | Executed result |
+|---|---|
+| Build/typecheck/library | Passed;104 public components,90 tokens,0 violations |
+| Docs | Passed;filesystem-scoped canonical and packed links/index checks |
+| Consumers |20 catalog/package roots,21 transitive files,0 violations;previous four-root blind spot closed |
+| Regression guards |27 contract/artifact/docs guards +4 quality-routing checks passed |
+| Browser |216 passed,6 intentional viewport-contract skips,0 failed;Chromium desktop/mobile;light/dark suites and named320px/zoom/RTL/recovery checks |
+| Changed suites |34 passed;MCP typography/copy/focus,disclosure shell,Lucy glyph/message semantics |
+| Artifact |Fresh build/pack/unpacked-consumer smoke passed;final archive checksum recorded by consumer |
+| Render inspection |Fresh MCP dark desktop/light mobile;Lucy guided desktop and attached-input mobile;forum light cards;retained hierarchy and containment |
+
+Initial full run exposed stale Lucy assertions and mid-run changed disclosure
+fixtures;those failures were investigated,not skipped. Final rerun above used
+the finished source. Six skips are desktop-only breakpoint loops or mobile-only
+touch/drawer contracts,not failed tests hidden with conditional skips.
+
+Technical scope passes. Independent/aesthetic approval,physical-device/native
+screen-reader audit,consumer production-flow acceptance remain PENDING.
+Old release sections below are historical,not the installed current version.
+
+## Historical RC15 — package identity
 
 Actual package/import renamed to `beds`; source folder `packages/beds`.
 No compatibility alias. Component APIs, runtime source, CSS and fonts unchanged.

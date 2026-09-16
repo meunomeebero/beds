@@ -1,6 +1,6 @@
 import { cloneElement, useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactElement, type ReactNode, type RefObject } from 'react';
-import { Icon, type IconName } from './foundation';
-import { IconButton } from './controls';
+import { Avatar, Icon, type IconName } from './foundation';
+import { Button, IconButton } from './controls';
 import './overlays.css';
 
 /** Internal positioning/focus primitive. Public components expose no geometry override. */
@@ -269,6 +269,69 @@ export function Dialog({ open, onOpenChange, title, description, children, actio
   return <dialog ref={dialog} className="es-dialog" data-variant={variant} aria-labelledby={`${id}-title`} aria-describedby={description ? `${id}-description` : undefined} onKeyDown={containModalTab} onCancel={event => { event.preventDefault(); onOpenChange(false); }} onClick={event => { if (outsideDialog(event)) onOpenChange(false); }}>{variant === 'welcome' && artwork && <div className="es-dialog-artwork">{artwork}</div>}<div className="es-dialog-header"><div><h2 id={`${id}-title`}>{title}</h2>{description && <p id={`${id}-description`}>{description}</p>}</div><IconButton label="Fechar" icon="X" onClick={() => onOpenChange(false)} /></div>{children && <div className="es-dialog-body">{children}</div>}{actions && <div className="es-dialog-actions">{actions}</div>}</dialog>;
 }
 
+/** Modal detail panel. Content, requests and any unsaved-change decision belong to the caller. */
+export function Drawer({ open, onOpenChange, title, description, children, actions, headerActions,
+  closeLabel = 'Fechar detalhes', contentLabel = 'Conteúdo dos detalhes',
+}: {
+  open: boolean; onOpenChange: (open: boolean) => void; title: string;
+  description?: string; children: ReactNode; actions?: ReactNode; headerActions?: ReactNode;
+  closeLabel?: string; contentLabel?: string;
+}) {
+  const id = useId();
+  const dialog = useRef<HTMLDialogElement>(null);
+  const body = useRef<HTMLDivElement>(null);
+  const startedOutside = useRef(false);
+  const [overflow, setOverflow] = useState(false);
+  useModal(open, dialog);
+  useLayoutEffect(() => {
+    if (!open) return;
+    body.current?.scrollTo(0, 0);
+    dialog.current?.querySelector<HTMLButtonElement>('.es-drawer-close button')?.focus({ preventScroll: true });
+  }, [open]);
+  useLayoutEffect(() => {
+    const element = body.current;
+    if (!open || !element) return;
+    const measure = () => setOverflow(element.scrollHeight > element.clientHeight + 1);
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    if (element.firstElementChild) observer.observe(element.firstElementChild);
+    measure();
+    // A recovery action may unmount the focused control. Keep focus in this
+    // modal without stealing it from a nested dialog or an anchored popup.
+    if (element.ownerDocument.activeElement === element.ownerDocument.body) {
+      dialog.current?.querySelector<HTMLButtonElement>('.es-drawer-close button')?.focus({ preventScroll: true });
+    }
+    return () => observer.disconnect();
+  }, [open, children]);
+  return <dialog ref={dialog} className="es-drawer" aria-labelledby={`${id}-title`}
+    aria-describedby={description ? `${id}-description` : undefined}
+    onKeyDown={event => {
+      if ((event.target as HTMLElement).closest('dialog') === event.currentTarget) containModalTab(event);
+    }}
+    onCancel={event => {
+      if (event.target !== event.currentTarget) return;
+      event.preventDefault(); onOpenChange(false);
+    }}
+    onPointerDown={event => { startedOutside.current = outsideDialog(event); }}
+    onClick={event => { if (startedOutside.current && outsideDialog(event)) onOpenChange(false); }}>
+    <header className="es-drawer-header">
+      <div className="es-drawer-heading"><h2 id={`${id}-title`}>{title}</h2>{description && <p id={`${id}-description`}>{description}</p>}</div>
+      <div className="es-drawer-close"><IconButton label={closeLabel} icon="X" onClick={() => onOpenChange(false)} /></div>
+      {headerActions && <div className="es-drawer-header-actions">{headerActions}</div>}
+    </header>
+    <div ref={body} className="es-drawer-body" role="region" aria-label={contentLabel} tabIndex={overflow ? 0 : undefined}>
+      <div className="es-drawer-content">{children}</div>
+    </div>
+    {actions && <footer className="es-drawer-actions">{actions}</footer>}
+  </dialog>;
+}
+
+/** Named content section inside Drawer; fixed rhythm, no nested card surface. */
+export function DrawerSection({ title, children }: { title: string; children: ReactNode }) {
+  const id = useId();
+  return <section className="es-drawer-section" aria-labelledby={id}><h3 id={id}>{title}</h3><div>{children}</div></section>;
+}
+
 export function CommandPalette({ open, onOpenChange, label, query, onQueryChange, items, onSelect, emptyLabel = 'Nenhum resultado' }: {
   open: boolean; onOpenChange: (open: boolean) => void; label: string; query: string; onQueryChange: (query: string) => void; items: Option[]; onSelect: (id: string) => void; emptyLabel?: string;
 }) {
@@ -288,5 +351,119 @@ export function CommandPalette({ open, onOpenChange, label, query, onQueryChange
     }} /><IconButton label="Fechar busca" icon="X" onClick={() => onOpenChange(false)} /></div>
     <div id={`${id}-list`} className="es-command-list" role="listbox" aria-label={label}>{filtered.map((item, index) => <div key={item.id} id={`${id}-option-${index}`} className="es-command-option" role="option" aria-selected={active?.id === item.id} aria-disabled={item.disabled || undefined} data-active={active?.id === item.id} onPointerMove={() => { if (!item.disabled) setActiveId(item.id); }} onMouseDown={event => event.preventDefault()} onClick={() => choose(item)}>{item.icon && <Icon name={item.icon} purpose="navigation" />}<span className="es-option-copy"><span>{item.label}</span>{item.description && <small>{item.description}</small>}</span></div>)}</div>
     {filtered.length === 0 && <p className="es-command-empty" role="status">{emptyLabel}</p>}
+  </dialog>;
+}
+
+export type SearchResult = Option & {
+  categoryId?: string;
+  keywords?: string;
+  identity?: { name: string; src?: string };
+};
+
+type SearchState = { kind: 'loading'; label: string } | {
+  kind: 'error'; title: string; description: string;
+  retry: { label: string; onClick: () => void };
+};
+
+const normalizeSearch = (value: string) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase();
+
+/** Rich discovery overlay. Callers own data, recency, requests and navigation. */
+export function SearchDialog({ open, onOpenChange, title = 'Buscar', placeholder = 'Digite para buscar…',
+  query, onQueryChange, items, onSelect, categories, resultsLabel = 'Resultados', state,
+  filterMode = 'local', labels,
+}: {
+  open: boolean; onOpenChange: (open: boolean) => void; title?: string; placeholder?: string;
+  query: string; onQueryChange: (query: string) => void; items: SearchResult[]; onSelect: (id: string) => void;
+  categories?: { label: string; value: string; options: Option[]; onChange: (id: string) => void };
+  resultsLabel?: string; state?: SearchState; filterMode?: 'local' | 'manual';
+  labels?: { close?: string; clear?: string; empty?: string; emptyHint?: string; navigate?: string; open?: string; count?: (count: number) => string };
+}) {
+  const id = useId();
+  const dialog = useRef<HTMLDialogElement>(null);
+  const input = useRef<HTMLInputElement>(null);
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const terms = normalizeSearch(query).trim().split(/\s+/).filter(Boolean);
+  const matches = filterMode === 'manual' ? items : items.filter(item => {
+    const categoryMatches = !categories?.value || item.categoryId === categories.value;
+    const haystack = normalizeSearch(`${item.label} ${item.description ?? ''} ${item.keywords ?? ''}`);
+    return categoryMatches && terms.every(term => haystack.includes(term));
+  });
+  const results = state ? [] : matches;
+  const active = results.find(item => item.id === activeId && !item.disabled) ?? results.find(item => !item.disabled);
+  const count = labels?.count?.(results.length) ?? `${results.length} ${results.length === 1 ? 'resultado' : 'resultados'}`;
+  useModal(open, dialog);
+  useLayoutEffect(() => {
+    if (open) { setActiveId(null); input.current?.focus({ preventScroll: true }); }
+  }, [open]);
+  useLayoutEffect(() => {
+    if (open) dialog.current?.querySelector('[data-active="true"]')?.scrollIntoView({ block: 'nearest' });
+  }, [open, active?.id]);
+  const choose = (item: SearchResult) => {
+    if (item.disabled || state) return;
+    onOpenChange(false);
+    onSelect(item.id);
+  };
+  const clear = () => {
+    setActiveId(null);
+    onQueryChange('');
+    categories?.onChange('');
+    input.current?.focus();
+  };
+  return <dialog ref={dialog} className="es-search-dialog" aria-labelledby={`${id}-title`}
+    onKeyDown={containModalTab} onCancel={event => { event.preventDefault(); onOpenChange(false); }}
+    onClick={event => { if (outsideDialog(event)) onOpenChange(false); }}>
+    <div className="es-search-dialog-header">
+      <label id={`${id}-title`} htmlFor={`${id}-input`}>{title}</label>
+      <IconButton label={labels?.close ?? 'Fechar busca'} icon="X" onClick={() => onOpenChange(false)} />
+    </div>
+    <div className="es-search-dialog-field">
+      <Icon name="Search" purpose="feature" />
+      <input ref={input} id={`${id}-input`} type="text" name="search" autoComplete="off" spellCheck={false}
+        role="combobox" aria-expanded={open} aria-autocomplete="list" aria-controls={`${id}-results`}
+        aria-activedescendant={active ? `${id}-result-${results.indexOf(active)}` : undefined}
+        aria-describedby={`${id}-keyboard`} placeholder={placeholder} value={query}
+        onChange={event => { setActiveId(null); onQueryChange(event.target.value); }}
+        onKeyDown={event => {
+          if (event.nativeEvent.isComposing || event.metaKey || event.ctrlKey || event.altKey) return;
+          if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+            event.preventDefault(); setActiveId(nextOption(results, active?.id, event.key));
+          } else if (event.key === 'Enter') {
+            event.preventDefault(); if (active) choose(active);
+          }
+        }} />
+    </div>
+    {categories && <div className="es-search-categories" role="group" aria-label={categories.label}>
+      {categories.options.map(category => <button key={category.id} type="button" disabled={category.disabled}
+        aria-pressed={categories.value === category.id} onClick={() => { setActiveId(null); categories.onChange(category.id); }}>
+        {category.icon && <Icon name={category.icon} purpose="action" />}<span>{category.label}</span>
+      </button>)}
+    </div>}
+    <div className="es-search-results-heading"><span>{resultsLabel}</span>
+      <span role="status" aria-atomic="true">{open ? state?.kind === 'loading' ? state.label : state?.kind === 'error' ? state.title : count : ''}</span>
+    </div>
+    <div className="es-search-results" id={`${id}-results`} role="listbox" aria-label={resultsLabel} aria-busy={state?.kind === 'loading' || undefined}>
+      {results.map((item, index) => <div key={item.id} id={`${id}-result-${index}`} className="es-search-result"
+        role="option" aria-selected={item.id === active?.id} aria-disabled={item.disabled || undefined}
+        data-active={item.id === active?.id}
+        onPointerMove={event => { if (event.pointerType === 'mouse' && !item.disabled) setActiveId(item.id); }}
+        onMouseDown={event => event.preventDefault()} onClick={() => choose(item)}>
+        <span className="es-search-result-mark" aria-hidden="true">{item.identity
+          ? <Avatar name={item.identity.name} src={item.identity.src} purpose="workspace" />
+          : <Icon name={item.icon ?? 'FileText'} purpose="feature" />}</span>
+        <span className="es-search-result-copy"><span>{item.label}</span>{item.description && <small>{item.description}</small>}</span>
+        {!item.disabled && <span className="es-search-result-open" aria-hidden="true"><Icon name="ArrowUpRight" purpose="action" /></span>}
+      </div>)}
+    </div>
+    {state?.kind === 'loading' && <div className="es-search-message" aria-hidden="true"><Icon name="Search" purpose="feature" /><p>{state.label}</p></div>}
+    {state?.kind === 'error' && <div className="es-search-message"><Icon name="AlertCircle" purpose="feature" /><p>{state.description}</p><Button label={state.retry.label} onClick={() => { input.current?.focus(); state.retry.onClick(); }} /></div>}
+    {!state && results.length === 0 && <div className="es-search-message"><Icon name="Search" purpose="feature" />
+      <p>{labels?.empty ?? 'Nenhum resultado encontrado'}</p><small>{labels?.emptyHint ?? 'Tente outro termo ou remova os filtros.'}</small>
+      {(query || categories?.value) && <Button label={labels?.clear ?? 'Limpar busca'} onClick={clear} />}
+    </div>}
+    <div id={`${id}-keyboard`} className="es-search-footer">
+      <span><kbd>↑ ↓</kbd>{labels?.navigate ?? 'Navegar'}</span>
+      <span><kbd>Enter</kbd>{labels?.open ?? 'Abrir'}</span>
+      <span><kbd>Esc</kbd>{labels?.close ?? 'Fechar busca'}</span>
+    </div>
   </dialog>;
 }

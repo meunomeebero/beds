@@ -6,10 +6,12 @@ type ButtonProps = {
   label: string; onClick?: () => void; type?: 'button' | 'submit' | 'reset';
   variant?: 'primary' | 'secondary' | 'ghost'; compact?: boolean; icon?: IconName;
   purpose?: 'default' | 'welcome' | 'connection'; disabled?: boolean; busy?: boolean; 'aria-describedby'?: string;
+  /** Disclosure toggles: expose the expanded state of the controlled region. */
+  'aria-expanded'?: boolean; 'aria-controls'?: string;
 };
 
-export function Button({ label, onClick, type = 'button', variant = 'secondary', compact = false, purpose = 'default', icon, disabled, busy, 'aria-describedby': describedBy }: ButtonProps) {
-  return <button className="es-button" data-variant={variant} data-purpose={purpose} data-compact={purpose === 'default' && compact || undefined} type={type} onClick={onClick} disabled={disabled || busy} aria-busy={busy || undefined} aria-describedby={describedBy}>
+export function Button({ label, onClick, type = 'button', variant = 'secondary', compact = false, purpose = 'default', icon, disabled, busy, 'aria-describedby': describedBy, 'aria-expanded': ariaExpanded, 'aria-controls': ariaControls }: ButtonProps) {
+  return <button className="es-button" data-variant={variant} data-purpose={purpose} data-compact={purpose === 'default' && compact || undefined} type={type} onClick={onClick} disabled={disabled || busy} aria-busy={busy || undefined} aria-describedby={describedBy} aria-expanded={ariaExpanded} aria-controls={ariaControls}>
     {(busy || icon) && <Icon name={busy ? 'Loader2' : icon!} purpose="action" />}<span>{label}</span>
   </button>;
 }
@@ -93,7 +95,7 @@ export function Checkbox({ label, checked, onChange, description, disabled }: To
 
 export function Switch({ label, checked, onChange, description, disabled }: ToggleProps) {
   const id = useId();
-  return <label className="es-switch" data-disabled={disabled || undefined}><span className="es-toggle-copy"><span>{label}</span>{description && <small id={id}>{description}</small>}</span><input type="checkbox" role="switch" checked={checked} onChange={event => onChange(event.target.checked)} disabled={disabled} aria-describedby={description ? id : undefined} /><span className="es-switch-track" aria-hidden="true"><span /></span></label>;
+  return <label className="es-switch" data-disabled={disabled || undefined}><span className="es-toggle-copy"><span id={`${id}-label`}>{label}</span>{description && <small id={id}>{description}</small>}</span><input type="checkbox" role="switch" checked={checked} onChange={event => onChange(event.target.checked)} disabled={disabled} aria-labelledby={`${id}-label`} aria-describedby={description ? id : undefined} /><span className="es-switch-track" aria-hidden="true"><span /></span></label>;
 }
 
 type Choice = { id: string; label: string; disabled?: boolean };
@@ -106,7 +108,7 @@ export function SegmentedControl({ label, value, options, onChange, variant = 'p
 }
 
 export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
-  label: string; value: string; items: (Choice & { content: ReactNode })[]; onChange: (value: string) => void; variant?: 'activity' | 'connection';
+  label: string; value: string; items: (Choice & { content: ReactNode })[]; onChange: (value: string) => void; variant?: 'activity' | 'connection' | 'settings';
 }) {
   const id = useId();
   const list = useRef<HTMLDivElement>(null);
@@ -116,13 +118,15 @@ export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
     event.preventDefault();
     const enabled = items.filter(item => !item.disabled);
     const index = enabled.findIndex(item => item.id === current);
-    const nextIndex = event.key === 'Home' ? 0 : event.key === 'End' ? enabled.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + enabled.length) % enabled.length;
+    const rtl = variant === 'settings' && list.current && getComputedStyle(list.current).direction === 'rtl';
+    const direction = (event.key === 'ArrowRight' ? 1 : -1) * (rtl ? -1 : 1);
+    const nextIndex = event.key === 'Home' ? 0 : event.key === 'End' ? enabled.length - 1 : (index + direction + enabled.length) % enabled.length;
     const next = enabled[nextIndex];
     if (!next) return;
     onChange(next.id);
     list.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[items.indexOf(next)]?.focus();
   };
   const connectionListStyle = variant === 'connection' ? { gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` } : undefined;
-  const tabList = <div ref={list} className="es-tabs-list" role="tablist" aria-label={label} style={connectionListStyle}>{items.map((item, index) => <button key={item.id} id={`${id}-tab-${index}`} type="button" role="tab" aria-controls={`${id}-panel-${index}`} aria-selected={selected?.id === item.id} tabIndex={selected?.id === item.id ? 0 : -1} disabled={item.disabled} onClick={() => onChange(item.id)} onKeyDown={event => navigate(event, item.id)}>{item.label}</button>)}</div>;
+  const tabList = <div ref={list} className="es-tabs-list" role="tablist" aria-label={label} style={connectionListStyle}>{items.map((item, index) => <button key={item.id} id={`${id}-tab-${index}`} type="button" role="tab" aria-controls={`${id}-panel-${index}`} aria-selected={selected?.id === item.id} tabIndex={selected?.id === item.id ? 0 : -1} disabled={item.disabled} onClick={() => onChange(item.id)} onKeyDown={event => navigate(event, item.id)}>{variant === 'settings' ? <span className="es-settings-tab-label">{item.label}</span> : item.label}</button>)}</div>;
   return <div className="es-tabs" data-variant={variant}>{variant === 'connection' ? <div className="es-tabs-connection-strip">{tabList}</div> : tabList}{items.map((item, index) => <div key={item.id} id={`${id}-panel-${index}`} className="es-tab-panel" role="tabpanel" aria-labelledby={`${id}-tab-${index}`} hidden={selected?.id !== item.id} tabIndex={0}>{item.content}</div>)}</div>;
 }

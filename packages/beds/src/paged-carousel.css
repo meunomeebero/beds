@@ -1,0 +1,13 @@
+.es-root .es-paged-carousel{position:relative;min-width:0}
+.es-root .es-paged-carousel:focus-visible{outline:2px solid var(--es-focus);outline-offset:4px}
+.es-root .es-paged-carousel-viewport{overflow:hidden;border-radius:var(--es-radius-panel)}
+.es-root .es-paged-carousel-track{display:flex;touch-action:pan-y pinch-zoom}
+.es-root .es-paged-carousel-slide{flex:0 0 100%;min-width:0;padding-inline-end:16px}
+.es-root .es-paged-carousel-controls{display:flex;justify-content:flex-end;gap:6px;margin-top:12px}
+.es-root .es-paged-carousel-control{display:inline-grid;width:40px;height:40px;padding:0;place-items:center;border:1px solid var(--es-border-subtle);border-radius:999px;background:transparent;color:var(--es-secondary);cursor:pointer;transition:color 140ms ease,border-color 140ms ease,background-color 140ms ease,transform 120ms cubic-bezier(.23,1,.32,1)}
+.es-root .es-paged-carousel-control:not(:disabled):active{transform:scale(.97)}
+.es-root .es-paged-carousel-control:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
+.es-root .es-paged-carousel-control:disabled{cursor:not-allowed;opacity:.36}
+@media(hover:hover) and (pointer:fine){.es-root .es-paged-carousel-control:not(:disabled):hover{border-color:var(--es-border-strong);background:var(--es-hover);color:var(--es-text)}}
+@media(max-width:767px){.es-root .es-paged-carousel-control{width:44px;height:44px}}
+@media(prefers-reduced-motion:reduce){.es-root .es-paged-carousel-control{transition:color 140ms ease,border-color 140ms ease,background-color 140ms ease}.es-root .es-paged-carousel-control:not(:disabled):active{transform:none}}

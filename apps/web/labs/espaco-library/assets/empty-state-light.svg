@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="336" viewBox="0 0 720 336">
+  <!-- Original BEDS catalog artwork: quiet landscape and an empty document tray. -->
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#edf0e5"/><stop offset="1" stop-color="#c4d8df"/></linearGradient>
+    <linearGradient id="ridge" x2="0" y2="1"><stop stop-color="#9cbacb"/><stop offset="1" stop-color="#728fa6"/></linearGradient>
+    <filter id="shadow" x="-25%" y="-25%" width="150%" height="160%"><feDropShadow dy="8" stdDeviation="12" flood-color="#2b4553" flood-opacity=".13"/></filter>
+  </defs>
+  <path fill="url(#sky)" d="M0 0h720v336H0z"/>
+  <circle cx="532" cy="80" r="66" fill="#fbf7e8" opacity=".55"/>
+  <path d="M0 214 95 175 150 183 257 87 346 170 426 142 531 190 644 77 720 103V336H0Z" fill="#bbcdd5"/>
+  <path d="m140 197 117-110 89 83-67-41-22-22-22 39Z" fill="#e6ece6" opacity=".8"/>
+  <path d="M0 262 137 216 216 238 322 192 438 237 525 172 621 161 720 118V336H0Z" fill="url(#ridge)"/>
+  <path d="M0 301c136-45 209-12 292 7s191 14 252-22 105-36 176-25v75H0Z" fill="#7f9a9d"/>
+  <path d="M0 321c108-10 151-31 239-21s156 42 281 17 144-9 200-6v25H0Z" fill="#66838c"/>
+  <g filter="url(#shadow)">
+    <rect x="180" y="51" width="360" height="320" rx="22" fill="#fff"/>
+    <rect x="210" y="80" width="114" height="10" rx="5" fill="#7b8587" opacity=".6"/>
+    <g fill="#eff1f1">
+      <circle cx="222" cy="132" r="12"/><rect x="249" y="127" width="151" height="10" rx="5"/>
+      <circle cx="222" cy="182" r="12"/><rect x="249" y="177" width="183" height="10" rx="5"/>
+      <circle cx="222" cy="232" r="12"/><rect x="249" y="227" width="165" height="10" rx="5"/>
+      <circle cx="222" cy="282" r="12"/><rect x="249" y="277" width="125" height="10" rx="5"/>
+    </g>
+    <g fill="none" stroke="#9badaa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m483 132 4 4 8-9m-12 55 4 4 8-9m-12 55 4 4 8-9m-12 55 4 4 8-9"/>
+    </g>
+  </g>
+</svg>

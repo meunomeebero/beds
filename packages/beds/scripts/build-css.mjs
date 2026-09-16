@@ -1,7 +1,7 @@
 import { readFile, writeFile, mkdir, readdir, copyFile, access } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../', import.meta.url));
-const order = ['tokens.css','foundation.css','controls.css','form-fields.css','overlays.css','layout.css','patterns.css','data.css','feedback.css','chat.css','technical.css','feature-card.css'];
+const order = ['tokens.css','foundation.css','controls.css','form-fields.css','decisions.css','overlays.css','layout.css','patterns.css','disclosure.css','data.css','feedback.css','chat.css','technical.css','feature-card.css','empty-state-card.css','pricing.css','records.css','input-otp.css','paged-carousel.css','toast.css','application-card.css','application-board.css','onboarding.css','account-credits.css','forum-topic.css','date-item.css','payment-confirmation.css','blog-post.css','landing-footer.css','benefits.css'];
 await mkdir(root + 'dist', { recursive:true });
 await writeFile(root + 'dist/styles.css', (await Promise.all(order.map(name => readFile(root + 'src/' + name,'utf8')))).join('\n'));
 await copyFile(root + 'src/reset.css', root + 'dist/reset.css');

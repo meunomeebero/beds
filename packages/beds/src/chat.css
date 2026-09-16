@@ -8,22 +8,103 @@
 .es-root .es-composer textarea{display:block;width:100%;min-height:50px;padding:0;margin:0;border:0;resize:none;outline:none;background:var(--es-transparent);color:var(--es-input-text);font-family:var(--es-font);font-size:14px;line-height:22.4px;font-weight:400;letter-spacing:-.15px}
 .es-root .es-composer textarea::placeholder{color:var(--es-placeholder)}.es-root .es-composer textarea:focus-visible{outline:0}
 .es-root .es-composer form:focus-within{border-color:var(--es-composer-focus)}
-.es-root .es-composer[data-invalid] form{border-color:var(--es-error)}
+.es-root .es-composer[data-invalid] form{border-color:var(--es-error-text)}
 .es-root .es-composer-toolbar,.es-root .es-composer-toolbar>div{display:flex;align-items:center;gap:8px;min-width:0}
 .es-root .es-composer-toolbar{justify-content:space-between;margin-top:8px}.es-root .es-composer-toolbar>div:last-child{margin-left:auto}
 .es-root .es-composer-toolbar button{font-family:var(--es-font)}
 .es-root .es-composer-attach,.es-root .es-composer-send{display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex:none;padding:0;border:0;border-radius:50%;background:var(--es-transparent);color:var(--es-secondary)}
 .es-root .es-composer-send{background:var(--es-send);color:var(--es-on-send)}.es-root .es-composer-send:disabled{background:var(--es-subtle);color:var(--es-placeholder)}
-.es-root .es-composer-error{margin:0;padding:8px 16px;font-size:12px;line-height:18px;color:var(--es-error)}
+.es-root .es-composer-error{margin:0;padding:8px 16px;font-size:12px;line-height:18px;color:var(--es-error-text)}
+/* Attachment context belongs to the composer, not to the editable text. */
+.es-root .es-composer[data-has-attachments]{padding:4px;border:1px solid var(--es-border);border-radius:24px;container:composer / inline-size}
+.es-root .es-composer-attachments{display:flex;flex-wrap:wrap;gap:8px;min-inline-size:0;list-style:none;margin:0;padding:4px 4px 8px}
+.es-root .es-composer-attachment{display:flex;align-items:center;gap:8px;min-inline-size:0;max-inline-size:min(100%,280px);min-block-size:36px;padding:2px 4px 2px 10px;border:1px solid var(--es-border);border-radius:16px;background:var(--es-composer-surface);box-shadow:var(--es-shadow-xs);color:var(--es-text)}
+.es-root .es-composer-attachment bdi{min-inline-size:0;font-size:13px;line-height:20px;font-weight:500;overflow-wrap:anywhere}
+.es-root .es-composer-file-icon{display:grid;place-items:center;flex:none;color:var(--es-secondary)}
+.es-root .es-composer-attachment button{display:grid;place-items:center;flex:none;inline-size:28px;block-size:28px;padding:0;border:0;border-radius:10px;background:var(--es-transparent);color:var(--es-text);cursor:pointer}
+.es-root .es-composer-attachment button:disabled{opacity:.5;cursor:default}
+.es-root .es-composer-attachment button:focus-visible,.es-root .es-composer-attach:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
+.es-root .es-composer-attachment button:not(:disabled):active{background:var(--es-pressed)}
+@media(hover:hover){.es-root .es-composer-attachment button:not(:disabled):hover{background:var(--es-hover)}}
 .es-root .es-suggestion{display:flex;align-items:center;gap:12px;width:100%;min-height:40px;padding:8px 10px;border:0;border-radius:8px;background:var(--es-transparent);color:var(--es-text);text-align:left;font-family:var(--es-font);cursor:pointer}
 .es-root .es-suggestion>span{display:flex;align-items:center;justify-content:center;width:24px;height:24px;flex:none;border:1px solid var(--es-border-subtle);border-radius:7px;background:var(--es-subtle);color:var(--es-secondary)}
 .es-root .es-suggestion>strong{font-size:13px;line-height:16px;font-weight:500;white-space:nowrap}.es-root .es-suggestion>small{font-size:12px;line-height:18px;font-weight:400;color:var(--es-secondary)}
-.es-root .es-chat-message{max-width:100%;font-size:14px;line-height:22.4px;letter-spacing:-.15px;overflow-wrap:anywhere}
-.es-root .es-chat-message[data-role=user]{max-width:85%;margin-left:auto;padding:10px 14px;border-radius:14px;background:var(--es-message-user)}
-.es-root .es-chat-message>small{font-size:11px;line-height:16px;color:var(--es-secondary)}.es-root .es-chat-message-error{font-size:12px;line-height:18px;color:var(--es-error)}
+.es-root .es-conversation{display:flex;min-width:0;flex-direction:column;gap:8px}
+.es-root .es-conversation-bubble{display:flex;width:fit-content;max-width:80%;min-width:0;flex-direction:column;align-items:flex-start;gap:4px;color:var(--es-text);font-size:14px;line-height:22.4px;letter-spacing:-.15px;overflow-wrap:anywhere}
+.es-root .es-conversation-bubble[data-role=user]{align-self:flex-end;align-items:flex-end}
+.es-root .es-conversation-content{width:fit-content;max-width:100%;min-width:0;padding:8px 14px;border:1px solid var(--es-border-subtle);border-radius:18px 18px 18px 8px;background:var(--es-transparent);text-wrap:pretty}
+.es-root .es-conversation-bubble[data-role=user] .es-conversation-content{border-color:var(--es-transparent);border-radius:18px 18px 8px 18px;background:var(--es-message-user)}
+.es-root .es-conversation-meta{display:flex;max-width:100%;align-items:center;gap:8px;padding-inline:10px;color:var(--es-secondary);font-size:11px;line-height:16px}
+.es-root .es-conversation-bubble[data-role=user] .es-conversation-meta{justify-content:flex-end}
+.es-root .es-conversation-meta time{white-space:nowrap;font-variant-numeric:tabular-nums}
+.es-root .es-conversation-reactions{display:flex;min-height:24px;align-items:center;gap:4px;padding:2px 6px;border:1px solid var(--es-border-subtle);border-radius:999px;background:var(--es-raised)}
+.es-root .es-chat-message{display:flex;max-width:100%;flex-direction:column;gap:4px}
+.es-root .es-chat-message .es-conversation-bubble[data-role=user]{align-self:flex-end}
+.es-root .es-chat-message>small{font-size:11px;line-height:16px;color:var(--es-secondary)}.es-root .es-chat-message-error{font-size:12px;line-height:18px;color:var(--es-error-text)}
 .es-root .es-chat-message-error button{margin-left:8px;padding:2px 6px;border:0;border-radius:6px;background:var(--es-subtle);color:var(--es-text)}
 @media(hover:hover){.es-root .es-suggestion:hover,.es-root .es-composer-attach:not(:disabled):hover{background:var(--es-subtle)}}
 @media(max-width:767px){.es-root .es-chat-layout{padding-top:56px}.es-root .es-suggestion{flex-wrap:wrap;column-gap:10px;row-gap:2px}.es-root .es-suggestion>small{flex-basis:100%;padding-left:34px}.es-root .es-composer-toolbar{gap:4px}.es-root .es-composer-toolbar>div{gap:4px}}
+@media(max-width:767px){.es-root .es-conversation-bubble{max-width:88%}}
 
-
-
+/* Guided conversation: open assistant prose, quiet choices and one next step. */
+.es-root .es-chat-thread{display:flex;flex-direction:column;gap:64px;min-inline-size:0;min-block-size:min(780px,calc(100svh - 104px));padding-block:32px 8px}
+.es-root .es-chat-transcript{display:flex;flex-direction:column;gap:32px;min-inline-size:0}
+.es-root .es-chat-next{display:grid;gap:16px;min-inline-size:0;margin-block-start:auto}
+.es-root .es-chat-notice{margin:0;text-align:center;color:var(--es-secondary);font-size:12px;line-height:18px;text-wrap:pretty}
+.es-root .es-chat-author{display:flex;align-items:center;gap:10px;margin-block-end:12px;min-inline-size:0;color:var(--es-text);font-size:14px;line-height:21px}
+.es-root .es-chat-author strong{font-weight:500;overflow-wrap:anywhere}
+.es-root .es-chat-author>span{display:flex;flex:none}
+.es-root .es-chat-author .es-brand-mark{inline-size:16px;block-size:16px}
+.es-root .es-chat-message[data-purpose=thread][data-role=assistant] .es-conversation-bubble{max-inline-size:100%;inline-size:100%}
+.es-root .es-chat-message[data-purpose=thread][data-role=assistant] .es-conversation-content{border:0;border-radius:0;padding:0;inline-size:100%;font-size:14px;line-height:23px}
+.es-root .es-chat-message[data-purpose=thread] .es-conversation-content{white-space:pre-wrap}
+.es-root .es-chat-next .es-file-upload-list>li>span{white-space:normal;overflow:visible;overflow-wrap:anywhere}
+.es-root .es-chat-options{min-inline-size:0;border:1px solid var(--es-border);border-radius:20px;background:var(--es-composer-context)}
+.es-root .es-chat-options h2{margin:0;padding:12px 16px;font-size:13px;line-height:20px;font-weight:500;overflow-wrap:anywhere}
+.es-root .es-chat-options ul{list-style:none;margin:0;padding:8px;border-radius:20px;background:var(--es-bg)}
+.es-root .es-chat-options li+li{margin-block-start:4px}
+.es-root .es-chat-options button{display:grid;grid-template-columns:32px minmax(0,1fr) 12px;align-items:center;gap:12px;inline-size:100%;min-block-size:68px;padding:12px;border:0;border-radius:12px;background:var(--es-transparent);color:var(--es-text);font-family:var(--es-font);text-align:start;cursor:pointer}
+.es-root .es-chat-option-icon{display:grid;place-items:center;inline-size:32px;block-size:32px;border:1px solid var(--es-border);border-radius:8px;color:var(--es-secondary)}
+.es-root .es-chat-option-copy{display:grid;gap:3px;min-inline-size:0;overflow-wrap:anywhere}
+.es-root .es-chat-option-copy strong{font-size:14px;line-height:21px;font-weight:500}
+.es-root .es-chat-option-copy>span{font-size:13px;line-height:20px;color:var(--es-secondary)}
+.es-root .es-chat-options button:disabled{cursor:default;opacity:.55}
+.es-root .es-chat-options button:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
+.es-root .es-chat-options button:not(:disabled):active{background:var(--es-pressed)}
+.es-root .es-chat-options button:not(:disabled):active .es-chat-option-copy>span{color:var(--es-text)}
+.es-root .es-chat-options[dir=rtl] button>.es-icon:last-child,[dir=rtl] .es-chat-options button>.es-icon:last-child{transform:rotate(180deg)}
+@media(hover:hover){
+  .es-root .es-chat-options button:not(:disabled):hover{background:var(--es-hover)}
+  .es-root .es-chat-options button:not(:disabled):hover .es-chat-option-copy>span{color:var(--es-text)}
+}
+.es-root .es-composer[data-purpose=guided] form{border-color:var(--es-border-strong);gap:12px}
+.es-root .es-composer[data-purpose=guided] label{font-size:13px;line-height:20px;color:var(--es-secondary);overflow-wrap:anywhere}
+.es-root .es-composer[data-purpose=guided] .es-composer-toolbar{flex-wrap:wrap}
+.es-root .es-composer[data-purpose=guided] .es-composer-toolbar>div{flex-shrink:0}
+.es-root .es-composer[data-purpose=guided] .es-composer-toolbar>div:last-child{margin-left:0;margin-inline-start:auto}
+.es-root .es-composer[data-purpose=guided] textarea{min-block-size:84px;max-block-size:280px;resize:vertical}
+.es-root .es-composer[data-purpose=guided] form:has(:focus-visible){outline:2px solid var(--es-focus);outline-offset:3px}
+.es-root .es-composer[data-purpose=guided] .es-composer-error{color:var(--es-text);font-size:13px;line-height:20px}
+.es-root .es-composer[data-purpose=guided] .es-composer-send{inline-size:36px;block-size:36px;cursor:pointer}
+.es-root .es-composer[data-purpose=guided] .es-composer-attach{inline-size:36px;block-size:36px;border:1px solid var(--es-border);border-radius:12px;color:var(--es-text);cursor:pointer}
+.es-root .es-composer[data-purpose=guided] .es-composer-send:focus-visible{outline:2px solid var(--es-focus);outline-offset:3px}
+@container composer (max-width:240px){
+  .es-root .es-composer-attachment{display:grid;grid-template-columns:minmax(0,1fr) auto;inline-size:100%}
+  .es-root .es-composer-attachment bdi{grid-column:1 / -1;grid-row:2}
+  .es-root .es-composer-attachment button{grid-column:2;grid-row:1}
+  .es-root .es-composer-attachment .es-composer-file-icon{justify-self:start}
+  .es-root .es-composer[data-purpose=guided] form{padding:12px}
+}
+@media(max-width:767px){
+  .es-root .es-chat-thread{min-block-size:calc(100svh - 168px);padding-block:24px 8px;gap:40px}
+  .es-root .es-chat-options button{gap:10px;padding:12px 8px}
+  .es-root .es-composer[data-purpose=guided] textarea{font-size:16px;line-height:24px}
+  .es-root .es-composer[data-purpose=guided] .es-composer-send,.es-root .es-composer[data-purpose=guided] .es-composer-attach{inline-size:44px;block-size:44px}
+  .es-root .es-composer-attachment button{inline-size:44px;block-size:44px}
+  .es-root .es-chat-next .es-button,.es-root .es-chat-next .es-file-upload-browse{min-block-size:44px}
+  .es-root .es-chat-next .es-file-upload-list button{inline-size:44px;block-size:44px}
+}
+@media(forced-colors:active){
+  .es-root .es-composer-attachment button:focus-visible,.es-root .es-composer-attach:focus-visible{outline-color:Highlight}
+  .es-root .es-chat-options button:focus-visible,.es-root .es-composer[data-purpose=guided] form:has(:focus-visible),.es-root .es-composer[data-purpose=guided] .es-composer-send:focus-visible{outline-color:Highlight}
+}

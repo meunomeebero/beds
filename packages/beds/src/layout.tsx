@@ -5,6 +5,7 @@ import './layout.css';
 
 type IconName = ComponentProps<typeof Icon>['name'];
 type NavigationAction = { href: string; onClick?: never } | { href?: never; onClick: () => void };
+type LockedNavigation = { href?: never; onClick?: never };
 type ShellContextValue = { collapsed: boolean; onCollapsedChange: (collapsed: boolean) => void; mobile: boolean; mobileOpen: boolean; onMobileOpenChange: (open: boolean) => void };
 const ShellContext = createContext<ShellContextValue | null>(null);
 
@@ -18,8 +19,8 @@ function trapTab(event: React.KeyboardEvent<HTMLElement>) {
   if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
 }
 
-export function AppShell({ sidebar, header, children, collapsed, onCollapsedChange, mobileOpen, onMobileOpenChange, contentWidth = 'home', navigationLabel = 'Navigation' }: {
-  sidebar: ReactNode; header?: ReactNode; children: ReactNode; collapsed: boolean; onCollapsedChange: (collapsed: boolean) => void; mobileOpen: boolean; onMobileOpenChange: (open: boolean) => void; contentWidth?: 'chat' | 'home' | 'dashboard' | 'full'; navigationLabel?: string;
+export function AppShell({ sidebar, header, children, collapsed, onCollapsedChange, mobileOpen, onMobileOpenChange, contentWidth = 'home', navigationLabel = 'Navigation', closeNavigationLabel, skipToContentLabel = 'Ir para o conteúdo' }: {
+  sidebar: ReactNode; header?: ReactNode; children: ReactNode; collapsed: boolean; onCollapsedChange: (collapsed: boolean) => void; mobileOpen: boolean; onMobileOpenChange: (open: boolean) => void; contentWidth?: 'chat' | 'home' | 'dashboard' | 'full'; navigationLabel?: string; closeNavigationLabel?: string; skipToContentLabel?: string;
 }) {
   const [mobile, setMobile] = useState(false);
   const sidebarRef = useRef<HTMLElement>(null);
@@ -27,6 +28,8 @@ export function AppShell({ sidebar, header, children, collapsed, onCollapsedChan
   const returnFocusTarget = useRef<HTMLElement | null>(null);
   const returnFocusFrame = useRef<number | null>(null);
   const sidebarId = useId();
+  const contentId = useId();
+  const contentRef = useRef<HTMLElement>(null);
   useEffect(() => {
     const query = window.matchMedia('(max-width: 767px)');
     const update = () => setMobile(query.matches);
@@ -57,13 +60,14 @@ export function AppShell({ sidebar, header, children, collapsed, onCollapsedChan
 
   return <ShellContext.Provider value={{ collapsed, onCollapsedChange, mobile, mobileOpen, onMobileOpenChange }}>
     <div className={`es-app-shell${collapsed ? ' es-app-shell--collapsed' : ''}${drawerOpen ? ' es-app-shell--drawer-open' : ''}`}>
-      {drawerOpen && <button className="es-sidebar-backdrop" aria-label={`Close ${navigationLabel.toLowerCase()}`} tabIndex={-1} onClick={() => onMobileOpenChange(false)} />}
+      <a className="es-skip-link" href={`#${contentId}`} inert={drawerOpen} onClick={event => { event.preventDefault(); contentRef.current?.focus(); }}>{skipToContentLabel}</a>
+      {drawerOpen && <button className="es-sidebar-backdrop" aria-label={closeNavigationLabel ?? `Close ${navigationLabel.toLowerCase()}`} tabIndex={-1} onClick={() => onMobileOpenChange(false)} />}
       <aside id={sidebarId} ref={sidebarRef} className="es-sidebar" aria-label={navigationLabel} role={drawerOpen ? 'dialog' : undefined} aria-modal={drawerOpen || undefined} onKeyDown={event => {
         if (!drawerOpen) return;
         if (event.key === 'Escape') { event.stopPropagation(); onMobileOpenChange(false); }
         trapTab(event);
       }}>{sidebar}</aside>
-      <main className="es-app-main" inert={drawerOpen}>
+      <main id={contentId} ref={contentRef} tabIndex={-1} className="es-app-main" inert={drawerOpen}>
         <div className="es-mobile-bar"><button ref={openRef} type="button" aria-controls={sidebarId} aria-expanded={drawerOpen} onClick={() => { returnFocusTarget.current = openRef.current; onMobileOpenChange(true); }}><Icon name="PanelLeftOpen" purpose="action" /><span>{navigationLabel}</span></button></div>
         {header}
         <div className="es-page-outer"><div className={`es-page es-page--${contentWidth}`}>{children}</div></div>
@@ -72,19 +76,19 @@ export function AppShell({ sidebar, header, children, collapsed, onCollapsedChan
   </ShellContext.Provider>;
 }
 
-export function SidebarHeader({ children, search }: { children: ReactNode; search?: { label: string; onClick: () => void } }) {
+export function SidebarHeader({ children, search, closeLabel, expandLabel, collapseLabel }: { children: ReactNode; search?: { label: string; onClick: () => void }; closeLabel?: string; expandLabel?: string; collapseLabel?: string }) {
   const shell = useContext(ShellContext);
   return <div className="es-sidebar-header">
     <div className="es-sidebar-identity">{children}</div>
     <div className="es-sidebar-header-actions">
       {search && <button type="button" className="es-header-action es-header-search" aria-label={search.label} onClick={search.onClick}><Icon name="Search" purpose="action" /></button>}
-      {shell && <button type="button" className="es-header-action" aria-label={shell.mobile ? 'Close navigation' : shell.collapsed ? 'Expand sidebar' : 'Collapse sidebar'} onClick={() => shell.mobile ? shell.onMobileOpenChange(false) : shell.onCollapsedChange(!shell.collapsed)}><Icon name={shell.mobile ? 'X' : shell.collapsed ? 'PanelLeftOpen' : 'PanelLeftClose'} purpose="action" /></button>}
+      {shell && <button type="button" className="es-header-action" aria-label={shell.mobile ? closeLabel ?? 'Close navigation' : shell.collapsed ? expandLabel ?? 'Expand sidebar' : collapseLabel ?? 'Collapse sidebar'} onClick={() => shell.mobile ? shell.onMobileOpenChange(false) : shell.onCollapsedChange(!shell.collapsed)}><Icon name={shell.mobile ? 'X' : shell.collapsed ? 'PanelLeftOpen' : 'PanelLeftClose'} purpose="action" /></button>}
     </div>
   </div>;
 }
 
-export function WorkspaceTrigger({ name, mark, onClick, expanded = false }: { name: string; mark?: ReactNode; onClick: () => void; expanded?: boolean }) {
-  return <button type="button" className="es-workspace-trigger" aria-label={`${name} workspace menu`} aria-haspopup="dialog" aria-expanded={expanded} onClick={onClick} title={name}>
+export function WorkspaceTrigger({ name, mark, onClick, expanded = false, menuLabel }: { name: string; mark?: ReactNode; onClick: () => void; expanded?: boolean; menuLabel?: string }) {
+  return <button type="button" className="es-workspace-trigger" aria-label={menuLabel ?? `${name} workspace menu`} aria-haspopup="dialog" aria-expanded={expanded} onClick={onClick} title={name}>
     {mark && <span className="es-workspace-mark">{mark}</span>}<span className="es-workspace-name">{name}</span><Icon name="ChevronDown" purpose="small" />
   </button>;
 }
@@ -94,10 +98,17 @@ export function SidebarSection({ label, children, purpose = 'default' }: { label
   return <section className={`es-sidebar-section es-sidebar-section--${purpose}`} aria-labelledby={label ? id : undefined}>{label && <h2 id={id}>{label}</h2>}<div className="es-sidebar-items">{children}</div></section>;
 }
 
-export function NavItem({ label, icon, active = false, badge, href, onClick }: { label: string; icon: IconName; active?: boolean; badge?: string } & NavigationAction) {
+/**
+ * One navigation destination. `locked` carries the truthful reason the row
+ * cannot be used: the row stays visible and non-interactive (never a no-op
+ * handler), keeps its accessible name and exposes the reason to pointer
+ * (title) and assistive technology (label).
+ */
+export function NavItem({ label, icon, active = false, badge, locked, href, onClick }: { label: string; icon: IconName; active?: boolean; badge?: string; locked?: string } & (NavigationAction | LockedNavigation)) {
   const content = <><Icon name={icon} purpose="navigation" /><span className="es-nav-label">{label}</span>{badge && <span className="es-nav-badge">{badge}</span>}</>;
   const shell = useContext(ShellContext);
-  const common = { className: `es-nav-item${active ? ' es-nav-item--active' : ''}`, title: shell?.collapsed ? label : undefined, 'aria-label': label, 'aria-current': active ? 'page' as const : undefined };
+  const common = { className: `es-nav-item${active ? ' es-nav-item--active' : ''}${locked ? ' es-nav-item--locked' : ''}`, title: locked ?? (shell?.collapsed ? label : undefined), 'aria-label': locked ? `${label}. ${locked}` : label, 'aria-current': active ? 'page' as const : undefined };
+  if (locked) return <button {...common} type="button" disabled title={common.title}>{content}</button>;
   if (href !== undefined) return <a {...common} href={href}>{content}</a>;
   return <button {...common} type="button" onClick={onClick}>{content}</button>;
 }

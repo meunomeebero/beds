@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { copyMessages } from './copy-messages';
 import {
   AccountMenu, AppShell, Avatar, Button, CodeSnippet,
   DataList, DesignSystemProvider, EmptyState, Icon, Inline, NavItem, Notice,
@@ -60,33 +61,33 @@ export default function McpPage() {
       id: 'claude', label: 'Claude', content: <Stack>
         <Text>1. Cole o endpoint remoto no terminal.</Text>
         <Text>2. Autorize o acesso na janela que o Claude abrir.</Text>
-        <CodeSnippet label="Adicionar servidor" value="https://api.curricu.lol/mcp" />
+        <CodeSnippet label="Adicionar servidor" value="https://api.curricu.lol/mcp" messages={copyMessages} />
         <Text tone="secondary">O Curriculol estará disponível nas sessões do Claude dentro dos escopos autorizados.</Text>
       </Stack>,
     },
     {
       id: 'chatgpt', label: 'ChatGPT', content: <Stack>
         <Text>Adicione o endpoint remoto ao conector MCP e conclua o consentimento no navegador.</Text>
-        <CodeSnippet label="Endpoint MCP" value="https://api.curricu.lol/mcp" />
+        <CodeSnippet label="Endpoint MCP" value="https://api.curricu.lol/mcp" messages={copyMessages} />
       </Stack>,
     },
     {
       id: 'codex', label: 'Codex', content: <Stack>
         <Text>Copie o comando e conclua o consentimento na janela que o Codex abrir.</Text>
-        <CodeSnippet label="Conectar no Codex" value={codexSetup} />
+        <CodeSnippet label="Conectar no Codex" value={codexSetup} messages={copyMessages} />
         <Text tone="secondary">O Curriculol estará disponível nas sessões do Codex dentro dos escopos autorizados.</Text>
       </Stack>,
     },
     {
       id: 'cursor', label: 'Cursor', content: <Stack>
         <Text>Registre o endpoint remoto no Cursor e prossiga com o consentimento no navegador.</Text>
-        <CodeSnippet label="Endpoint MCP" value="https://api.curricu.lol/mcp" />
+        <CodeSnippet label="Endpoint MCP" value="https://api.curricu.lol/mcp" messages={copyMessages} />
       </Stack>,
     },
     {
       id: 'other', label: 'Outros', content: <Stack>
         <Text>Use um cliente compatível com Streamable HTTP MCP e OAuth 2.1 com PKCE.</Text>
-        <CodeSnippet label="Endpoint MCP" value="https://api.curricu.lol/mcp" />
+        <CodeSnippet label="Endpoint MCP" value="https://api.curricu.lol/mcp" messages={copyMessages} />
       </Stack>,
     },
   ];

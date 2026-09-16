@@ -1,8 +1,9 @@
 import { useId, type ReactNode } from 'react';
 import { Icon, type IconName } from './foundation';
+import { MeterSegments, meterFraction as fraction } from './meter-segments';
 type Tone = 'neutral' | 'success' | 'warning' | 'error' | 'info';
-export function Badge({ label, tone = 'neutral' }: { label: string; tone?: Tone }) {
-  return <span className="es-badge" data-tone={tone}>{label}</span>;
+export function Badge({ label, tone = 'neutral', purpose = 'tag' }: { label: string; tone?: Tone; purpose?: 'tag' | 'status' }) {
+  return <span className="es-badge" data-tone={tone} data-purpose={purpose}>{purpose === 'status' ? <span>{label}</span> : label}</span>;
 }
 export function StatusDot({ label, status }: { label: string; status: 'success' | 'warning' | 'error' | 'neutral' }) {
   return <span className="es-status-dot" data-status={status} role="img" aria-label={label} />;
@@ -20,17 +21,13 @@ export function Skeleton({ purpose = 'line' }: { purpose?: 'line' | 'avatar' | '
 export function LoadingIndicator({ label }: { label: string }) {
   return <span className="es-loading" role="status"><Icon name="Loader2" purpose="action" /><span>{label}</span></span>;
 }
-function fraction(value: number | null, max: number) {
-  if (value === null || !Number.isFinite(value) || !Number.isFinite(max) || max <= 0) return null;
-  return Math.min(max, Math.max(0, value)) / max;
-}
 export function ProgressBar({ label, value, max = 100, tone = 'neutral' }: { label: string; value: number | null; max?: number; tone?: 'neutral' | 'brand' }) {
   const ratio = fraction(value, max);
   return <div className="es-progress" data-tone={tone}>{ratio === null ? <span className="es-progress-unavailable" role="status">{label} — unavailable</span> : <><div className="es-meter-label"><span>{label}</span><span>{Math.round(ratio * max)} / {max}</span></div><progress aria-label={label} max={max} value={ratio * max} /></>}</div>;
 }
 export function SegmentedMeter({ label, value, max = 100, tone = 'neutral' }: { label: string; value: number | null; max?: number; tone?: 'neutral' | 'brand' | 'success' }) {
   const ratio = fraction(value, max);
-  return <div className="es-segmented-meter" data-tone={tone}><div className="es-meter-label"><span>{label}</span><span>{ratio === null ? '—' : Math.round(ratio * max)}</span></div><div className="es-segmented-bars" role={ratio === null ? 'img' : 'meter'} aria-label={ratio === null ? label + ': unavailable' : label} aria-valuemin={ratio === null ? undefined : 0} aria-valuemax={ratio === null ? undefined : max} aria-valuenow={ratio === null ? undefined : ratio * max}>{Array.from({ length: 28 }, (_,index) => <span key={index} data-filled={ratio !== null && index < Math.round(ratio * 28) ? '' : undefined} />)}</div></div>;
+  return <div className="es-segmented-meter" data-tone={tone}><div className="es-meter-label"><span>{label}</span><span>{ratio === null ? '—' : Math.round(ratio * max)}</span></div><MeterSegments label={label} value={value} max={max} tone={tone} /></div>;
 }
 export function Metric({ label, value, description }: { label: string; value: string; description?: string }) {
   return <div className="es-metric"><span>{label}</span><strong>{value}</strong>{description && <small>{description}</small>}</div>;
@@ -39,4 +36,3 @@ export function DataList({ label, children }: { label: string; children: ReactNo
   const id = useId();
   return <section className="es-data-list" aria-labelledby={id}><h2 id={id}>{label}</h2><div>{children}</div></section>;
 }
-

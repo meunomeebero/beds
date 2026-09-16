@@ -3,14 +3,26 @@
 .es-root .es-radio-options{display:grid;gap:8px}
 .es-root .es-radio-option{display:flex;position:relative;align-items:center;gap:8px;min-width:0;color:var(--es-text);font:400 13px/16px var(--es-font);cursor:pointer;overflow-wrap:anywhere}
 .es-root .es-radio-option>input{position:absolute;width:1px;height:1px;padding:0;margin:0;opacity:0}
-.es-root .es-radio-indicator{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:16px;height:16px;border:1px solid var(--es-border-strong);border-radius:50%;background:var(--es-surface)}
+.es-root .es-radio-indicator{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:16px;height:16px;border:1px solid var(--es-control-border);border-radius:50%;background:var(--es-surface)}
 .es-root .es-radio-indicator>span{width:6px;height:6px;border-radius:50%;background:transparent}
 .es-root .es-radio-option>input:checked+.es-radio-indicator{border-color:var(--es-info)}
 .es-root .es-radio-option>input:checked+.es-radio-indicator>span{background:var(--es-info)}
 .es-root .es-radio-option>input:focus-visible+.es-radio-indicator{outline:2px solid var(--es-focus);outline-offset:3px}
 .es-root .es-radio-option[data-disabled]{opacity:.5;cursor:default}
+.es-root .es-question-form .es-radio-group[data-purpose=question] > legend{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.es-root .es-radio-group[data-purpose=question] > .es-radio-options{gap:0;border:1px solid var(--es-border);border-radius:var(--es-radius-8)}
+.es-root .es-radio-group[data-purpose=question] .es-radio-option{min-height:52px;padding:12px;gap:12px;font:400 14px/21px var(--es-font)}
+.es-root .es-radio-group[data-purpose=question] .es-radio-option + .es-radio-option{border-top:1px solid var(--es-border-subtle)}
+.es-root .es-radio-group[data-purpose=question] .es-radio-option:first-child{border-start-start-radius:inherit;border-start-end-radius:inherit}
+.es-root .es-radio-group[data-purpose=question] .es-radio-option:last-child{border-end-start-radius:inherit;border-end-end-radius:inherit}
+.es-root .es-radio-number{display:inline-flex;align-items:center;justify-content:center;flex:none;width:24px;height:24px;border-radius:var(--es-radius-6);background:var(--es-subtle);color:var(--es-secondary);font:400 13px/20px var(--es-font);font-variant-numeric:tabular-nums}
+.es-root .es-radio-group[data-purpose=question] .es-radio-option:has(input:checked){background:var(--es-selected)}
+.es-root .es-radio-group[data-purpose=question] input:checked + .es-radio-number{background:var(--es-primary);color:var(--es-on-primary)}
+.es-root .es-radio-group[data-purpose=question] .es-radio-option:has(input:focus-visible){outline:2px solid var(--es-focus);outline-offset:2px;z-index:1}
+@media(hover:hover) and (pointer:fine){.es-root .es-radio-group[data-purpose=question] .es-radio-option:not([data-disabled]):not(:has(input:checked)):hover{background:var(--es-hover)}}
+@media(forced-colors:active){.es-root .es-radio-group[data-purpose=question] input:checked + .es-radio-number{outline:1px solid Highlight}}
 .es-root .es-file-upload{display:grid;min-width:0;gap:8px}
-.es-root .es-file-dropzone{display:grid;justify-items:center;gap:8px;min-width:0;padding:16px;border:1px dashed var(--es-border-strong);border-radius:8px;background:var(--es-field);color:var(--es-secondary);text-align:center}
+.es-root .es-file-dropzone{display:grid;justify-items:center;gap:8px;min-width:0;padding:16px;border:1px dashed var(--es-control-border);border-radius:8px;background:var(--es-field);color:var(--es-secondary);text-align:center}
 .es-root .es-file-dropzone[data-dragging]{border-color:var(--es-focus);background:var(--es-subtle);color:var(--es-text)}
 .es-root .es-file-dropzone[data-disabled]{opacity:.5}
 .es-root .es-file-dropzone>svg{color:var(--es-secondary)}
@@ -21,9 +33,51 @@
 .es-root .es-file-upload-browse:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
 .es-root .es-file-upload-list{display:grid;gap:4px;padding:0;margin:0;list-style:none}
 .es-root .es-file-upload-list>li{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0;padding:6px 8px;border-radius:6px;background:var(--es-subtle);color:var(--es-text);font:400 12px/18px var(--es-font)}
-.es-root .es-file-upload-list>li>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.es-root .es-file-upload-list>li>span{min-width:0;overflow-wrap:anywhere}
 .es-root .es-file-upload-list button{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:24px;height:24px;padding:0;border:0;border-radius:6px;background:transparent;color:var(--es-secondary);cursor:pointer}
 .es-root .es-file-upload-list button:disabled{cursor:default}
 .es-root .es-file-upload-list button:not(:disabled):active{background:var(--es-pressed);color:var(--es-text)}
 .es-root .es-file-upload-list button:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
 @media(hover:hover) and (pointer:fine){.es-root .es-file-upload-browse:not(:disabled):hover{background:var(--es-hover);color:var(--es-text)}.es-root .es-file-upload-list button:not(:disabled):hover{background:var(--es-hover);color:var(--es-text)}}
+.es-root .es-file-upload-status{margin:0;color:var(--es-secondary);font:400 13px/20px var(--es-font);overflow-wrap:anywhere}
+.es-root .es-file-upload-status:empty{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+
+/* A document-led alternative to the compact field. All file state stays shared. */
+.es-root .es-file-upload[data-purpose=document]{gap:16px}
+.es-root .es-file-upload[data-purpose=document] .es-file-dropzone{align-content:center;min-height:460px;padding:40px 24px;gap:12px;border:1px solid var(--es-border);border-radius:var(--es-radius-card);background:var(--es-transparent);color:var(--es-secondary)}
+.es-root .es-file-upload[data-purpose=document] .es-file-dropzone[data-dragging]{border:2px dashed var(--es-focus);padding:39px 23px;background:var(--es-hover)}
+.es-root .es-file-upload[data-purpose=document] .es-file-dropzone>h2{margin:0;max-width:28ch;color:var(--es-heading);font:500 22px/30px var(--es-font);letter-spacing:-.25px;text-wrap:balance;overflow-wrap:anywhere}
+.es-root .es-file-upload[data-purpose=document] .es-file-dropzone>p{max-width:42ch;font:400 14px/22px var(--es-font);text-wrap:pretty}
+.es-root .es-file-upload[data-purpose=document] .es-file-upload-browse{margin-block-start:12px;min-height:40px;max-width:100%;padding:10px 18px;border-radius:var(--es-radius-full);background:var(--es-control);font:500 14px/20px var(--es-font);overflow-wrap:anywhere}
+.es-root .es-file-upload[data-purpose=document] .es-file-dropzone>.es-file-formats{font:400 12px/18px var(--es-font)}
+.es-root .es-file-upload[data-purpose=document] .es-file-upload-list{gap:8px}
+.es-root .es-file-upload[data-purpose=document] .es-file-upload-list>li{padding:8px 12px;gap:12px;border:1px solid var(--es-border);border-radius:var(--es-radius-14);background:var(--es-transparent);font:400 14px/21px var(--es-font)}
+.es-root .es-file-upload[data-purpose=document] .es-file-upload-list>li>span{flex:1;overflow:visible;text-overflow:clip;white-space:normal;overflow-wrap:anywhere}
+.es-root .es-file-upload[data-purpose=document] .es-file-upload-list>li>svg{flex:none;color:var(--es-secondary)}
+.es-root .es-file-upload[data-purpose=document] .es-file-upload-list button{width:40px;height:40px}
+.es-root .es-document-stack{position:relative;width:192px;height:188px;margin-block-end:16px;pointer-events:none;user-select:none}
+.es-root .es-document-sheet{position:absolute;inset-block-start:16px;inset-inline-start:38px;width:116px;height:152px;border:1px solid var(--es-image-outline);border-radius:18px;background:var(--es-surface);box-shadow:var(--es-shadow-popup)}
+.es-root .es-document-sheet--back{transform:translate(-23px,7px) rotate(-14deg);background:var(--es-subtle)}
+.es-root .es-document-sheet--middle{transform:translate(-3px,-2px) rotate(-4deg)}
+.es-root .es-document-sheet--front{display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;padding:16px;transform:translate(19px,-5px) rotate(10deg);color:var(--es-text)}
+.es-root .es-document-sheet--front::before{position:absolute;inset:0;border-radius:inherit;pointer-events:none;content:"";background:linear-gradient(150deg,var(--es-brand),var(--es-transparent) 85%);opacity:.28}
+.es-root .es-document-sheet--front>*{position:relative}
+.es-root .es-document-lines{display:grid;gap:7px;width:100%}
+.es-root .es-document-lines>i{display:block;height:4px;width:100%;border-radius:var(--es-radius-full);background:var(--es-text);opacity:.15}
+.es-root .es-document-lines>i:nth-child(2){width:80%}
+.es-root .es-document-lines>i:nth-child(3){width:54%}
+.es-root .es-document-format{padding:3px 7px;border-radius:var(--es-radius-full);background:var(--es-surface);font:500 10px/16px var(--es-font);white-space:nowrap}
+@media(hover:hover) and (pointer:fine){.es-root .es-file-upload[data-purpose=document] .es-file-upload-browse:not(:disabled):hover{background:var(--es-hover)}}
+.es-root .es-file-upload[data-purpose=document] .es-file-upload-browse:not(:disabled):active{background:var(--es-pressed)}
+@media(max-width:767px){
+  .es-root .es-file-upload[data-purpose=document] .es-file-dropzone{min-height:420px;padding:32px 16px}
+  .es-root .es-file-upload[data-purpose=document] .es-file-dropzone[data-dragging]{padding:31px 15px}
+  .es-root .es-file-upload[data-purpose=document] .es-file-dropzone>h2{font-size:20px;line-height:28px}
+  .es-root .es-file-upload[data-purpose=document] .es-file-upload-browse{min-height:44px}
+  .es-root .es-file-upload[data-purpose=document] .es-file-upload-list button{width:44px;height:44px}
+}
+@media(forced-colors:active){
+  .es-root .es-document-sheet{border-color:CanvasText;box-shadow:none}
+  .es-root .es-file-upload[data-purpose=document] .es-file-dropzone{border-color:CanvasText}
+  .es-root .es-file-upload[data-purpose=document] .es-file-dropzone[data-dragging]{border-color:Highlight}
+}

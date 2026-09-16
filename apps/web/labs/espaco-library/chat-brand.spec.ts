@@ -48,9 +48,9 @@ for (const theme of ['light','dark'] as const) {
   await input.press('End');await input.press('Shift+Enter');await input.press('a');
   await expect(input).toHaveValue('Research competitors’ ads\na');
   await input.dispatchEvent('keydown',{key:'Enter',code:'Enter',isComposing:true});
-  await expect(page.getByRole('article',{name:'Your message'})).toHaveCount(0);
+  await expect(page.getByRole('article',{name:'Sua mensagem'})).toHaveCount(0);
   await input.press('Enter');
-  await expect(page.getByRole('article',{name:'Your message'})).toHaveCount(1);
+  await expect(page.getByRole('article',{name:'Sua mensagem'})).toHaveCount(1);
   await expect(input).toHaveValue('');await expect(send).toBeDisabled();
  });
  test(`missing meter values and copying recover in ${theme}`,async({page,context})=>{

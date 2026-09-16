@@ -1,7 +1,7 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { createElement, type ComponentType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { BarChart3, Briefcase, ChartColumn, ChevronRight, Coins, Home, House, MessageCircle, Plug, Plus, Sparkles, UserRound, type LucideProps } from 'lucide-react';
+import { BarChart3, Briefcase, ChartColumn, ChevronRight, Coins, FileText, Globe, Home, House, MessageCircle, Plug, Plus, Sparkles, UserRound, type LucideProps } from 'lucide-react';
 
 type Glyph = ComponentType<LucideProps>;
 
@@ -34,12 +34,13 @@ async function openSidebar(page: Page, label: string) {
 for (const theme of ['dark', 'light'] as const) {
   test(`Lucide iconography is shared by Lucy and catalog in ${theme}`, async ({ page }) => {
     await page.goto(`/?view=lucy&theme=${theme}`);
-    await expect(page.getByRole('heading', { name: /Como posso ajudar você\?/ })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Como você prefere começar?' })).toBeVisible();
     await page.evaluate(() => document.fonts.ready);
 
-    const suggestions = page.locator('.es-suggestion');
-    for (const [index, glyph] of [Briefcase, ChartColumn, UserRound].entries()) {
-      await expectGlyph(suggestions.nth(index).locator('svg'), glyph, 14);
+    const choices = page.locator('.es-chat-option-icon');
+    await expect(choices).toHaveCount(3);
+    for (const [index, glyph] of [Globe, MessageCircle, FileText].entries()) {
+      await expectGlyph(choices.nth(index).locator('svg'), glyph, 16);
     }
     await openSidebar(page, 'Navegação');
     const sidebar = page.locator('.es-sidebar');

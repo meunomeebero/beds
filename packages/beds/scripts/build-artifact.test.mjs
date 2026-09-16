@@ -7,7 +7,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const script = fileURLToPath(new URL('./build-css.mjs', import.meta.url));
-const order = ['tokens.css','foundation.css','controls.css','form-fields.css','overlays.css','layout.css','patterns.css','data.css','feedback.css','chat.css','technical.css','feature-card.css'];
+const order = ['tokens.css','foundation.css','controls.css','form-fields.css','decisions.css','overlays.css','layout.css','patterns.css','disclosure.css','data.css','feedback.css','chat.css','technical.css','feature-card.css','empty-state-card.css','pricing.css','records.css','input-otp.css','paged-carousel.css','toast.css','application-card.css','application-board.css','onboarding.css','account-credits.css','forum-topic.css','date-item.css','payment-confirmation.css','blog-post.css','landing-footer.css','benefits.css'];
 
 test('package build fails closed when canonical documentation references a missing asset',()=>{
  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'espaco-build-test-'));

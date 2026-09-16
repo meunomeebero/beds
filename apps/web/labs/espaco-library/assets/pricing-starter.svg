@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="180" viewBox="0 0 720 180">
+  <!-- Original decorative vector study: woven dawn. No text or product information. -->
+  <defs>
+    <linearGradient id="sky" x2="1" y2="1"><stop stop-color="#83bfc8"/><stop offset="1" stop-color="#d6e7d1"/></linearGradient>
+    <linearGradient id="petal" x2="0.2" y2="1"><stop stop-color="#fff0cf"/><stop offset=".6" stop-color="#ffd59f"/><stop offset="1" stop-color="#df9893"/></linearGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="8"/></filter>
+    <pattern id="weave" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0 0h5M0 0v5" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width=".8"/><path d="M2 0v5" stroke="#264e66" stroke-opacity=".08" stroke-width=".6"/></pattern>
+  </defs>
+  <path fill="url(#sky)" d="M0 0h720v180H0z"/>
+  <g fill="url(#petal)" filter="url(#soft)">
+    <ellipse cx="395" cy="148" rx="46" ry="120"/>
+    <ellipse cx="295" cy="185" rx="42" ry="113" transform="rotate(-43 295 185)"/>
+    <ellipse cx="496" cy="183" rx="44" ry="116" transform="rotate(43 496 183)"/>
+    <ellipse cx="210" cy="210" rx="94" ry="42" transform="rotate(15 210 210)"/>
+    <ellipse cx="575" cy="211" rx="100" ry="45" transform="rotate(-15 575 211)"/>
+    <ellipse cx="398" cy="201" rx="86" ry="64" fill="#ffd786"/>
+  </g>
+  <path fill="url(#weave)" d="M0 0h720v180H0z"/>
+</svg>

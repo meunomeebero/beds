@@ -9,9 +9,13 @@ import {
 } from 'beds';
 import './catalog.css';
 import FeatureCardExamples from './FeatureCardExamples';
+import EmptyStateExamples from './EmptyStateExamples';
+import DecisionExamples from './DecisionExamples';
+import PricingExamples from './PricingExamples';
+import RecordExamples from './RecordExamples';
 
-type View = 'chat' | 'components' | 'tokens' | 'feature-card';
-const views: { id: View; label: string; icon: IconName }[] = [{ id: 'chat', label: 'Chat', icon: 'MessageSquare' }, { id: 'components', label: 'Componentes', icon: 'Plug' }, { id: 'tokens', label: 'Tokens', icon: 'Settings2' }, { id: 'feature-card', label: 'Card de apresentação', icon: 'FileText' }];
+type View = 'chat' | 'components' | 'tokens' | 'feature-card' | 'empty-state' | 'decisions' | 'pricing' | 'records';
+const views: { id: View; label: string; icon: IconName }[] = [{ id: 'chat', label: 'Chat', icon: 'MessageSquare' }, { id: 'components', label: 'Componentes', icon: 'Plug' }, { id: 'tokens', label: 'Tokens', icon: 'Settings2' }, { id: 'feature-card', label: 'Card de apresentação', icon: 'FileText' }, { id: 'empty-state', label: 'Estado vazio', icon: 'Inbox' }, { id: 'decisions', label: 'Perguntas e aprovações', icon: 'ShieldCheck' }, { id: 'pricing', label: 'Precificação', icon: 'CreditCard' }, { id: 'records', label: 'Dados e opções', icon: 'Folder' }];
 const accountActions: { id: string; label: string; icon: IconName }[] = [{ id: 'settings', label: 'Account settings', icon: 'Settings2' }, { id: 'integrations', label: 'Integrations', icon: 'Plug' }, { id: 'support', label: 'Support', icon: 'CircleHelp' }, { id: 'sign-out', label: 'Sign Out', icon: 'LogOut' }];
 const textExamples: { variant: TextVariant; label: string }[] = [
   { variant: 'page-title', label: 'Page title · 16 / 20' }, { variant: 'section-title', label: 'Section title · 13 / 20' },
@@ -131,7 +135,7 @@ function TokensView({ theme }: { theme: Theme }) {
 export default function Catalog() {
   const initial = new URLSearchParams(window.location.search);
   const initialView = initial.get('view');
-  const [view, setView] = useState<View>(initialView === 'components' || initialView === 'tokens' || initialView === 'feature-card' ? initialView : 'chat');
+  const [view, setView] = useState<View>(initialView === 'components' || initialView === 'tokens' || initialView === 'feature-card' || initialView === 'empty-state' || initialView === 'decisions' || initialView === 'pricing' || initialView === 'records' ? initialView : 'chat');
   const [theme, setTheme] = useState<Theme>(initial.get('theme') === 'light' ? 'light' : 'dark');
   const [brand, setBrand] = useState<'reference' | 'curriculol'>(initial.get('brand') === 'curriculol' ? 'curriculol' : 'reference');
   const [collapsed, setCollapsed] = useState(false);
@@ -153,11 +157,33 @@ export default function Catalog() {
   }
 
   return <DesignSystemProvider theme={theme} brandColor={brands[brand]} onThemeChange={setTheme}>
-    <AppShell collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} contentWidth={view === 'chat' ? 'chat' : view === 'feature-card' ? 'dashboard' : 'full'}
+    <AppShell collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} contentWidth={view === 'chat' || view === 'decisions' ? 'chat' : view === 'empty-state' || view === 'pricing' || view === 'records' ? 'home' : view === 'feature-card' ? 'dashboard' : 'full'}
       sidebar={<>
         <SidebarHeader search={{ label: 'Buscar no catálogo', onClick: () => setNavigationSearchOpen(true) }}><AccountMenu open={accountOpen} onOpenChange={setAccountOpen} trigger={<WorkspaceTrigger name={workspace === 'workspace' ? 'Workspace' : 'Example studio'} mark={<Avatar name={workspace === 'workspace' ? 'Workspace' : 'Example studio'} purpose="workspace" />} expanded={accountOpen} onClick={() => setAccountOpen(!accountOpen)} />} identity={{ name: 'Alex Morgan', description: 'Local example', avatar: <Avatar name="Alex Morgan" /> }} actions={accountActions} onAction={id => setStatus(`Ação demonstrativa: ${accountActions.find(action => action.id === id)?.label}.`)} workspaces={[{ id: 'workspace', label: 'Workspace', mark: <Avatar name="Workspace" purpose="workspace" /> }, { id: 'studio', label: 'Example studio', mark: <Avatar name="Example studio" purpose="workspace" /> }]} activeWorkspace={workspace} onWorkspaceChange={setWorkspace} theme={theme} onThemeChange={setTheme} allWorkspaces={{ label: 'All workspaces', onClick: () => setStatus('Os dois workspaces deste catálogo são exemplos locais.') }} footer={<PlanCard title="Example plan" usage={{ label: 'Sample units', value: 18, max: 28 }} action={{ label: 'View example', onClick: () => { setAccountOpen(false); setStatus('Plano demonstrativo: nenhuma assinatura ou compra será realizada.'); } }} />} /></SidebarHeader>
         <SidebarSection purpose="primary">{views.filter(item => item.id === 'chat' || item.id === 'components').map(item => <NavItem key={item.id} label={item.label} icon={item.icon} active={view === item.id} onClick={() => navigate(item.id)} />)}</SidebarSection>
-        <SidebarSection label="Biblioteca"><NavItem label="Tokens" icon="Settings2" active={view === 'tokens'} onClick={() => navigate('tokens')} /><NavItem label="Fundação e controles" icon="Folder" onClick={() => navigate('components')} /><NavItem label="Card de apresentação" icon="FileText" active={view === 'feature-card'} onClick={() => navigate('feature-card')} /><NavItem label="Medidas da referência" icon="BarChart3" onClick={() => navigate('tokens')} /><NavItem label="Página da Lucy" icon="MessageSquare" href="?view=lucy" /><NavItem label="Página MCP" icon="Plug" href="?view=mcp" /></SidebarSection>
+        <SidebarSection label="Biblioteca">
+          <NavItem label="Tokens" icon="Settings2" active={view === 'tokens'} onClick={() => navigate('tokens')} />
+          <NavItem label="Fundação e controles" icon="Folder" onClick={() => navigate('components')} />
+          <NavItem label="Card de apresentação" icon="FileText" active={view === 'feature-card'} onClick={() => navigate('feature-card')} />
+          <NavItem label="Estado vazio" icon="Inbox" active={view === 'empty-state'} onClick={() => navigate('empty-state')} />
+          <NavItem label="Perguntas e aprovações" icon="ShieldCheck" active={view === 'decisions'} onClick={() => navigate('decisions')} />
+          <NavItem label="Precificação" icon="CreditCard" active={view === 'pricing'} onClick={() => navigate('pricing')} />
+          <NavItem label="Dados e opções" icon="Folder" active={view === 'records'} onClick={() => navigate('records')} />
+          <NavItem label="Onboarding" icon="UserRound" href={`?view=onboarding&theme=${theme}`} />
+          <NavItem label="Upload de currículo" icon="FileText" href={`?view=upload&theme=${theme}`} />
+          <NavItem label="Itens com data" icon="CalendarDays" href={`?view=date-item&theme=${theme}`} />
+          <NavItem label="Posts do blog" icon="FileText" href={`?view=blog-post&theme=${theme}`} />
+          <NavItem label="Rodapé da landing" icon="Globe" href={`?view=landing-footer&theme=${theme}`} />
+          <NavItem label="Vantagens da landing" icon="Sparkles" href={`?view=benefits&theme=${theme}`} />
+          <NavItem label="Configurações" icon="Settings2" href={`?view=settings&theme=${theme}`} />
+          <NavItem label="Quadro de vagas" icon="Briefcase" href={`?view=kanban&theme=${theme}`} />
+          <NavItem label="Pagamento confirmado" icon="CreditCard" href={`?view=payment-confirmation&theme=${theme}`} />
+          <NavItem label="Créditos no menu" icon="Coins" href={`?view=account-credits&theme=${theme}`} />
+          <NavItem label="Cards do fórum" icon="MessageCircle" href={`?view=forum&theme=${theme}`} />
+          <NavItem label="Medidas da referência" icon="BarChart3" onClick={() => navigate('tokens')} />
+          <NavItem label="Página da Lucy" icon="MessageSquare" href="?view=lucy" />
+          <NavItem label="Página MCP" icon="Plug" href="?view=mcp" />
+        </SidebarSection>
         <SidebarFooter><NavItem label="Sobre esta demonstração" icon="CircleHelp" onClick={() => setStatus('Biblioteca portátil extraída da referência. Todos os dados desta prévia são sintéticos.')} /></SidebarFooter>
       </>}
       header={<ContentHeader actions={<Inline gap="tight"><ThemeToggle /><Select label="Cor da marca" value={brand} options={[{ id: 'reference', label: 'Referência' }, { id: 'curriculol', label: 'Curriculol' }]} onChange={value => setBrand(value === 'curriculol' ? 'curriculol' : 'reference')} /></Inline>}><Breadcrumbs items={[{ id: 'catalog', label: view === 'chat' ? 'Chat' : 'Biblioteca', href: '?view=chat' }, { id: 'view', label: view === 'chat' ? 'Getting started' : views.find(item => item.id === view)!.label }]} /></ContentHeader>}>
@@ -169,6 +195,10 @@ export default function Catalog() {
         {view === 'components' && <ComponentsView announce={setStatus} />}
         {view === 'tokens' && <TokensView theme={theme} />}
         {view === 'feature-card' && <FeatureCardExamples />}
+        {view === 'empty-state' && <EmptyStateExamples />}
+        {view === 'decisions' && <DecisionExamples />}
+        {view === 'pricing' && <PricingExamples />}
+        {view === 'records' && <RecordExamples />}
       </Stack>
     </AppShell>
     <CommandPalette open={navigationSearchOpen} onOpenChange={setNavigationSearchOpen} label="Buscar no catálogo" query={navigationQuery} onQueryChange={setNavigationQuery} items={views.map(item => ({ id: item.id, label: item.label, icon: item.icon }))} onSelect={id => navigate(id as View)} emptyLabel="Nenhuma seção encontrada." />

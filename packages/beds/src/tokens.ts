@@ -1,6 +1,6 @@
 /** Read-only contract data. Components own the values; consumers do not override tokens. */
 export const typography = Object.freeze({
-  sidebarProfile: { size: 14, line: 21, weight: 400, tracking: -.1, evidence: 'A' },
+  sidebarProfile: { size: 14, line: 21, weight: 400, tracking: -.15, evidence: 'A' },
   sidebarItem: { size: 14, line: 19.6, weight: 400, tracking: -.1, evidence: 'A' },
   sidebarSection: { size: 12, line: 18, weight: 400, tracking: -.1, evidence: 'A' },
   pageTitle: { size: 16, line: 20, weight: 500, tracking: -.15, evidence: 'M' },
@@ -34,6 +34,6 @@ export const neutrals = Object.freeze({
   850: '#2a2928', 900: '#202020', 950: '#191919', 1000: '#000000',
 });
 export const themes = Object.freeze({
-  light: { bg: '#ffffff', sidebar: '#fbfaf9', surface: '#ffffff', subtle: '#edece9', raised: '#edece9', hover: '#e6e4e0', pressed: '#dbd8d2', text: '#37352e', secondary: '#6a6966', placeholder: '#6a6966', inverse: '#191919', border: '#00000014', borderSubtle: '#0000000f', borderStrong: '#0000001f', primary: '#202020', onPrimary: '#ffffff' },
-  dark: { bg: '#191919', sidebar: '#191919', surface: '#202020', subtle: '#232323', raised: '#272727', hover: '#ffffff05', pressed: '#ffffff0c', text: '#cecece', secondary: '#949494', placeholder: '#949494', inverse: '#f1f1f1', border: '#ffffff0c', borderSubtle: '#ffffff06', borderStrong: '#ffffff13', primary: '#f1f1f1', onPrimary: '#242424' },
+  light: { bg: '#ffffff', sidebar: '#fbfaf9', surface: '#ffffff', subtle: '#edece9', raised: '#edece9', hover: '#e6e4e0', pressed: '#dbd8d2', text: '#37352e', secondary: '#6a6966', placeholder: '#6a6966', inverse: '#191919', border: '#00000014', borderSubtle: '#0000000f', borderStrong: '#0000001f', controlBorder: '#787775', errorText: '#c52a2a', primary: '#202020', onPrimary: '#ffffff' },
+  dark: { bg: '#191919', sidebar: '#191919', surface: '#202020', subtle: '#232323', raised: '#272727', hover: '#ffffff05', pressed: '#ffffff0c', text: '#cecece', secondary: '#949494', placeholder: '#949494', inverse: '#f1f1f1', border: '#ffffff0c', borderSubtle: '#ffffff06', borderStrong: '#ffffff13', controlBorder: '#858585', errorText: '#ff7b7b', primary: '#f1f1f1', onPrimary: '#242424' },
 });

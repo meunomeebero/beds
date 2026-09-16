@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="180" viewBox="0 0 720 180">
+  <!-- Original decorative vector study: woven bloom. No reference artwork embedded. -->
+  <defs>
+    <linearGradient id="sky" x2="1" y2="1"><stop stop-color="#8facd8"/><stop offset="1" stop-color="#bfdbe4"/></linearGradient>
+    <radialGradient id="bloom"><stop stop-color="#ffbd45"/><stop offset=".4" stop-color="#f8aa51"/><stop offset=".7" stop-color="#efb0bc"/><stop offset="1" stop-color="#f0c6d2"/></radialGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="10"/></filter>
+    <pattern id="weave" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0 0h5M0 0v5" fill="none" stroke="#fff" stroke-opacity=".14" stroke-width=".8"/><path d="M2 0v5" stroke="#283f65" stroke-opacity=".1" stroke-width=".6"/></pattern>
+  </defs>
+  <path fill="url(#sky)" d="M0 0h720v180H0z"/>
+  <g fill="url(#bloom)" filter="url(#soft)">
+    <path d="M181 207c-10-40 37-60 29-93 9-41 55-14 76-51 35-27 54 10 83-8 39-13 43 17 72 13 34-9 44 18 59 31 43-3 52 20 60 46 39 6 39 35 41 62Z"/>
+    <ellipse cx="379" cy="183" rx="82" ry="103" fill="#ffb349" fill-opacity=".65"/>
+  </g>
+  <path fill="url(#weave)" d="M0 0h720v180H0z"/>
+</svg>

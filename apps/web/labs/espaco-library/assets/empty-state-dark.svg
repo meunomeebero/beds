@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="336" viewBox="0 0 720 336">
+  <!-- Original BEDS catalog artwork; dark companion, not an inverted image. -->
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#303b40"/><stop offset="1" stop-color="#354c59"/></linearGradient>
+    <linearGradient id="ridge" x2="0" y2="1"><stop stop-color="#415e70"/><stop offset="1" stop-color="#2e4655"/></linearGradient>
+    <filter id="shadow" x="-25%" y="-25%" width="150%" height="160%"><feDropShadow dy="8" stdDeviation="12" flood-color="#0a1013" flood-opacity=".3"/></filter>
+  </defs>
+  <path fill="url(#sky)" d="M0 0h720v336H0z"/>
+  <circle cx="532" cy="80" r="66" fill="#b9c9c5" opacity=".1"/>
+  <path d="M0 214 95 175 150 183 257 87 346 170 426 142 531 190 644 77 720 103V336H0Z" fill="#46616c"/>
+  <path d="m140 197 117-110 89 83-67-41-22-22-22 39Z" fill="#7e979a" opacity=".4"/>
+  <path d="M0 262 137 216 216 238 322 192 438 237 525 172 621 161 720 118V336H0Z" fill="url(#ridge)"/>
+  <path d="M0 301c136-45 209-12 292 7s191 14 252-22 105-36 176-25v75H0Z" fill="#2d474b"/>
+  <path d="M0 321c108-10 151-31 239-21s156 42 281 17 144-9 200-6v25H0Z" fill="#253b42"/>
+  <g filter="url(#shadow)">
+    <rect x="180" y="51" width="360" height="320" rx="22" fill="#232829" stroke="#ffffff" stroke-opacity=".08"/>
+    <rect x="210" y="80" width="114" height="10" rx="5" fill="#a4b3b3" opacity=".6"/>
+    <g fill="#343b3c">
+      <circle cx="222" cy="132" r="12"/><rect x="249" y="127" width="151" height="10" rx="5"/>
+      <circle cx="222" cy="182" r="12"/><rect x="249" y="177" width="183" height="10" rx="5"/>
+      <circle cx="222" cy="232" r="12"/><rect x="249" y="227" width="165" height="10" rx="5"/>
+      <circle cx="222" cy="282" r="12"/><rect x="249" y="277" width="125" height="10" rx="5"/>
+    </g>
+    <g fill="none" stroke="#899e98" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m483 132 4 4 8-9m-12 55 4 4 8-9m-12 55 4 4 8-9m-12 55 4 4 8-9"/>
+    </g>
+  </g>
+</svg>

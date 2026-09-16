@@ -22,6 +22,31 @@ npm run dev
 
 Catalog: `http://127.0.0.1:5283/?view=components&theme=dark`.
 Use `?view=lucy`, `?view=mcp`, `?view=feature-card` or `?view=tokens`.
+Settings form example: `?view=settings-form` (native Enter submission,
+caller validation/focus, light/dark; no account request).
+Global search example: `?view=search` (currículos/vagas fixtures, categories,
+keyboard, recovery; no real search service).
+Drawer example: `?view=drawer` (vacancy details, local save, nested dialog and
+recovery; no product integration).
+Document upload: `?view=upload` (illustrated PDF/DOCX selection; also available
+through Lucy → Importar currículo; no reading or upload).
+Date item: `?view=date-item` (mini calendar, optional status/details; no scheduling).
+Kanban: `?view=kanban` (compact job cards, status columns, keyboard/touch menu
+movement and contextual details; synthetic only, no drag/drop or persistence).
+Blog cards: `?view=blog-post` (thumbnail, author, excerpt, topics and native
+article round trip; fictional content, no CMS integration).
+Landing footer: `?view=landing-footer` (closing message, navigation, decorative
+wordmark and native CTA; local preview links, no landing integration).
+Payment confirmation: `?view=payment-confirmation` (animated receipt, invoice
+pending/error/recovery; synthetic only, no charge or fiscal issuance).
+Illustrated empty state: `?view=empty-state` (all-clear, first use, optional
+action and image recovery; original light/dark artwork; no product request).
+Folder/flies variant: `?view=empty-state&preview=folder&brand=curriculol`
+(no jobs/applications;visible pause,static reduced motion;no product integration).
+Questions and approvals: `?view=decisions` (numbered single choice, explicit
+confirmation, allow/skip/deny, recovery; simulated results only).
+Pricing comparison: `?view=pricing` (illustrated plans, price/terms, benefits,
+aligned actions and recovery; fictional offers, no billing integration).
 For browser checks, install Chromium through Playwright, start the catalog and
 run `npm run test:browser`. Alternative port: `npm run dev -- --port 5294`;
 set `PLAYWRIGHT_BASE_URL=http://127.0.0.1:5294` for matching tests.
@@ -33,8 +58,14 @@ a mutable branch. The package contains built ESM, declarations, CSS, fonts,
 contracts and consumer checks. No lifecycle scripts required.
 
 ```sh
-bun add beds@https://github.com/meunomeebero/beds/releases/download/v0.1.7-rc.15/beds-0.1.7-rc.15.tgz
+bun add beds@https://github.com/meunomeebero/beds/releases/download/v0.1.7-rc.16/beds-0.1.7-rc.16.tgz --ignore-scripts
 ```
+
+Equivalent npm install:
+`npm install https://github.com/meunomeebero/beds/releases/download/v0.1.7-rc.16/beds-0.1.7-rc.16.tgz --ignore-scripts`.
+RC16 is a prerelease,not production or aesthetic acceptance. Release notes own
+source SHA and archive hash. Earlier local.24/RC15 checkpoints stay historical.
+Keep the exact URL and lockfile together;never install a mutable source branch.
 
 ```tsx
 import { DesignSystemProvider, brands, Button } from 'beds';
@@ -54,9 +85,30 @@ Wrap only explicitly migrated screens; never enclose legacy UI to simulate migra
 
 | Contract | Owner |
 |---|---|
+| [Consolidated Better review](docs/design/espaco-library/REVIEW-CONSOLIDATION-2026-09-15.md) | Six-domain findings,shared corrections and limits |
+| [Motion opportunities](docs/design/espaco-library/MOTION-OPPORTUNITIES-2026-09-15.md) | Emil advisory;four proposals,not implemented |
+| [September15 consolidation](docs/design/espaco-library/CONSOLIDATION-2026-09-15.md) | Historical local.24 checkpoint |
 | [Library map](docs/design/espaco-library/README.md) | Routing and boundaries |
 | [Foundations](docs/design/espaco-library/FOUNDATIONS.md) | Approved visual values |
 | [Components](docs/design/espaco-library/COMPONENTS.md) | Public component anatomy |
+| [Document upload](docs/design/espaco-library/DOCUMENT-UPLOAD.md) | Illustrated drop field, controlled selection and recovery |
+| [Date item](docs/design/espaco-library/DATE-ITEM.md) | Mini calendar, dated rows and optional native destinations |
+| [Blog posts](docs/design/espaco-library/BLOG-POST.md) | Compact editorial cards, native article links and thumbnail recovery |
+| [Landing footer](docs/design/espaco-library/LANDING-FOOTER.md) | Oversized brand, compact navigation and native closing CTA |
+| [Landing benefits](docs/design/espaco-library/BENEFITS.md) | Responsive bento, original feature illustrations and one profile CTA; `?view=benefits` |
+| [Settings](docs/design/espaco-library/SETTINGS.md) | Top tabs, borderless groups and local account preferences preview |
+| [Payment confirmation](docs/design/espaco-library/PAYMENT-CONFIRMATION.md) | Printer-style receipt, separate invoice status and controlled actions |
+| [Application card](docs/design/espaco-library/APPLICATION-CARD.md) | Personal notes, document folio, scores and controlled next steps |
+| [Application kanban](docs/design/espaco-library/KANBAN.md) | Compact card purpose, status lanes and controlled accessible moves |
+| [Search dialog](docs/design/espaco-library/SEARCH-DIALOG.md) | Categorized global search, result selection and controlled recovery |
+| [Drawer](docs/design/espaco-library/DRAWER.md) | Contextual details, scrollable sections and modal focus recovery |
+| [Illustrated empty state](docs/design/espaco-library/EMPTY-STATE.md) | Message-first empty card, optional next step and image recovery |
+| [Questions and approvals](docs/design/espaco-library/DECISIONS.md) | Decision cards, operational badges and explicit allow/skip actions |
+| [Pricing comparison](docs/design/espaco-library/PRICING.md) | Image-led pricing cards, literal billing terms and controlled actions |
+| [Record presentation](docs/design/espaco-library/RECORDS.md) | Compact metadata and item-level options;catalog `?view=records` |
+| [Onboarding](docs/design/espaco-library/ONBOARDING.md) | Standalone form and decorative live preview;catalog `?view=onboarding` |
+| [Account credits](docs/design/espaco-library/ACCOUNT-CREDITS.md) | Balance,segmented meter and action in existing user menu;catalog `?view=account-credits` |
+| [Forum topics](docs/design/espaco-library/FORUM-TOPICS.md) | Avatar cards,conversation metadata and accessible detail;catalog `?view=forum` |
 | [States](docs/design/espaco-library/STATES.md) | Interaction and accessibility |
 | [Consumer contract](docs/design/espaco-library/CONSUMER-CONTRACT.md) | Application composition |
 | [Governance](docs/design/espaco-library/GOVERNANCE.md) | Change and acceptance gates |
@@ -66,7 +118,7 @@ Wrap only explicitly migrated screens; never enclose legacy UI to simulate migra
 | [Validation](docs/design/espaco-library/VALIDATION.md) | Snapshot-specific results |
 | [Documentation audit](docs/design/espaco-library/DOCUMENTATION-AUDIT.md) | Conflict review and limitations |
 | [Data patterns](docs/design/espaco-library/DATA-PATTERNS.md) | Reusable data surfaces |
-| [Lucy composition](docs/design/espaco-library/LUCY-COMPOSITION.md) | Synthetic chat/sidebar example |
+| [Lucy composition](docs/design/espaco-library/LUCY-COMPOSITION.md) | Guided chat;LinkedIn,experience and résumé choices;local-only preview |
 | [MCP composition](docs/design/espaco-library/MCP-COMPOSITION.md) | Synthetic integration example |
 | [Provenance](docs/design/espaco-library/PROVENANCE.md) | Source vs adaptation |
 | [Reference measurements](docs/design/espaco-library/REFERENCE-MEASUREMENTS.md) | Historical evidence, not current overrides |

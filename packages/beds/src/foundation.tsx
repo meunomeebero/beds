@@ -1,7 +1,8 @@
-import { createContext, useContext, useId, type CSSProperties, type ReactNode } from 'react';
-import { Home, Activity, BarChart3, Plug, Folder, MessageSquare, Plus, Search, PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, Check, X, Settings2, CircleHelp, Sun, Moon, LogOut, MoreHorizontal, ArrowUp, ArrowRight, Paperclip, Command, FileText, CheckCircle2, AlertCircle, Info, Loader2, User, Sparkles, Globe, Bell, Copy, CreditCard, House, MessageCircle, ChartColumn, UserRound, Briefcase, Coins, ScanText, Bookmark, CalendarDays, ChevronsUpDown, Play, Pause, ArrowLeft } from 'lucide-react';
+import { createContext, useContext, useId, useState, type CSSProperties, type ReactNode } from 'react';
+import { Inbox } from 'lucide-react';
+import { Home, Activity, BarChart3, Plug, Folder, MessageSquare, Plus, Search, PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, Check, X, Settings2, CircleHelp, Sun, Moon, LogOut, MoreHorizontal, ArrowUp, ArrowRight, ArrowUpRight, Paperclip, Command, FileText, CheckCircle2, AlertCircle, Info, Loader2, User, Sparkles, Globe, Bell, Copy, CreditCard, House, MessageCircle, ChartColumn, UserRound, Briefcase, Coins, ScanText, Bookmark, CalendarDays, ChevronsUpDown, Play, Pause, ArrowLeft, ShieldCheck, Image, Table2 } from 'lucide-react';
 
-const icons = { Home, Activity, BarChart3, Plug, Folder, MessageSquare, Plus, Search, PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, Check, X, Settings2, CircleHelp, Sun, Moon, LogOut, MoreHorizontal, ArrowUp, ArrowRight, Paperclip, Command, FileText, CheckCircle2, AlertCircle, Info, Loader2, User, Sparkles, Globe, Bell, Copy, CreditCard, House, MessageCircle, ChartColumn, UserRound, Briefcase, Coins, ScanText, Bookmark, CalendarDays, ChevronsUpDown, Play, Pause, ArrowLeft };
+const icons = { Home, Activity, BarChart3, Plug, Folder, MessageSquare, Plus, Search, PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, Check, X, Settings2, CircleHelp, Sun, Moon, LogOut, MoreHorizontal, ArrowUp, ArrowRight, ArrowUpRight, Paperclip, Command, FileText, CheckCircle2, AlertCircle, Info, Loader2, User, Sparkles, Globe, Bell, Copy, CreditCard, House, MessageCircle, ChartColumn, UserRound, Briefcase, Coins, ScanText, Bookmark, CalendarDays, ChevronsUpDown, Play, Pause, ArrowLeft, ShieldCheck, Inbox, Image, Table2 };
 export type IconName = keyof typeof icons;
 export type Theme = 'light' | 'dark';
 export const brands = Object.freeze({ reference: '#d0f300', curriculol: '#ffa133' });
@@ -41,9 +42,27 @@ export function Text({ children, variant = 'body-small', tone = 'default' }: {
   return <Tag className={`es-text es-text--${variant} es-text--${tone}`}>{children}</Tag>;
 }
 
-export function Avatar({ name, src, purpose = 'account' }: { name: string; src?: string; purpose?: 'account' | 'workspace' }) {
+/**
+ * Identity image with a deterministic account-linked fallback. A broken or
+ * changed image URL falls back to the initials once per URL; the fallback is
+ * never a retry loop and never a network-generated identity.
+ */
+export function Avatar({ name, src, purpose = 'account' }: { name: string; src?: string; purpose?: 'account' | 'workspace' | 'profile' | 'forum' }) {
   const initials = name.trim().split(/\s+/).slice(0, 2).map(word => word[0]).join('').toUpperCase();
-  return <span className={`es-avatar es-avatar--${purpose}`} role="img" aria-label={name}>{src ? <img src={src} alt="" /> : initials || '?'}</span>;
+  // Error state is keyed to the exact failed URL: a new src retries once,
+  // a failed URL never re-requests during the same mount.
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const showImage = src !== undefined && src !== failedSrc;
+  return <span className={`es-avatar es-avatar--${purpose}`} role="img" aria-label={name}>{showImage
+    ? <img src={src} alt="" onError={() => setFailedSrc(src)} />
+    : initials || '?'}</span>;
+}
+
+/** Text-level link with the shared hover/focus contract. External links open a new context safely. */
+export function TextLink({ href, children, external = false, ariaLabel }: { href: string; children: ReactNode; external?: boolean; ariaLabel?: string }) {
+  return <a className="es-text-link" href={href} aria-label={ariaLabel} {...external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}>
+    {children}{external && <Icon name="ArrowUpRight" purpose="small" />}
+  </a>;
 }
 
 /** User-owned three-bar identity, independent from reference-company artwork. */

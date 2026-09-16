@@ -30,6 +30,8 @@ test('MCP composition keeps the DS shell and its measured connection anatomy in 
     await expect(root).toHaveAttribute('data-theme', theme);
     await expect(shell).toHaveCSS('background-color', theme === 'dark' ? 'rgb(25, 25, 25)' : 'rgb(255, 255, 255)');
     await expect(page.locator('.es-page')).toHaveCSS('max-width', '720px');
+    await expect(page.getByRole('heading', { name: 'MCP do Curriculol', exact: true })).toHaveCSS('font-size', '15px');
+    await expect(page.getByRole('heading', { name: 'MCP do Curriculol', exact: true })).toHaveCSS('line-height', '24px');
     await expect(page.locator('.es-page-outer')).toHaveCSS('padding-top', '16px');
     await expect(page.getByRole('radio', { name: 'Pedir aprovação', exact: true })).toBeChecked();
     await expect(page.getByRole('tab', { name: 'Claude', exact: true })).toHaveAttribute('aria-selected', 'true');
@@ -79,4 +81,26 @@ test('MCP client, approval and redirect URL controls are local and require no ne
   await page.getByRole('button', { name: 'Simular criação de credenciais', exact: true }).click();
   await expect(page.locator('.es-notice')).toContainText('Nenhuma credencial foi criada');
   expect(externalRequests).toEqual([]);
+});
+
+test('Portuguese copy feedback recovers without clipped keyboard focus', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await ready(page, 'light');
+  const copy = page.getByRole('button', { name: /^Copiar / }).first();
+  await copy.focus();
+  await expect(copy).toHaveCSS('outline-offset', '-3px');
+  const live = page.locator('.es-code-field').first().getByRole('status');
+  await expect(live).toHaveCount(1);
+  await page.evaluate(() => {
+    Object.defineProperty(navigator.clipboard, 'writeText', { configurable: true, value: async () => { throw new Error('Synthetic clipboard failure'); } });
+  });
+  await copy.click();
+  await expect(page.getByRole('alert')).toContainText('copie manualmente');
+  await page.evaluate(() => {
+    Object.defineProperty(navigator.clipboard, 'writeText', { configurable: true, value: async () => {} });
+  });
+  await copy.click();
+  await expect(copy).toContainText('Copiado');
+  await expect(live).toContainText('Copiado para a área de transferência');
+  await expect(page.getByRole('alert')).toHaveCount(0);
 });

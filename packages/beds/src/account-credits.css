@@ -1,0 +1,18 @@
+.es-account-credits { min-width: 0; display: flex; flex-direction: column; gap: var(--es-space-8); padding: var(--es-space-6); border: 1px solid var(--es-border); border-radius: var(--es-radius-8); background: var(--es-transparent); }
+.es-account-credits h2 { display: flex; align-items: flex-start; gap: var(--es-space-4); margin: 0; color: var(--es-text); font-size: 13px; line-height: 1.5; font-weight: 500; }
+.es-account-credits h2 .es-icon { flex-shrink: 0; margin-block-start: 2px; color: var(--es-secondary); }
+.es-account-credits h2 span { overflow-wrap: anywhere; min-width: 0; }
+.es-account-credits-balance { min-width: 0; }
+.es-account-credits-balance .es-segmented-bars,.es-account-credits-status:not(:empty) { margin-block-start: var(--es-space-4); }
+.es-account-credits-label { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--es-space-2) var(--es-space-4); color: var(--es-secondary); font-size: 13px; line-height: 1.5; }
+.es-account-credits-label > * { min-width: 0; overflow-wrap: anywhere; }
+.es-account-credits-label bdi { color: var(--es-text); font-variant-numeric: tabular-nums; }
+.es-account-credits-status,.es-account-credits-note { margin: 0; color: var(--es-secondary); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.es-account-credits-status[role="alert"]:not(:empty) { color: var(--es-text); border-inline-start: 2px solid var(--es-badge-error-marker); padding-inline-start: var(--es-space-4); }
+.es-root .es-account-credits > .es-button { width: 100%; min-height: 36px; border-radius: var(--es-radius-6); font-size: 13px; line-height: 1.5; }
+@media (max-width: 767px), (pointer: coarse) {
+  .es-root .es-account-credits > .es-button { min-height: 44px; }
+}
+@media (forced-colors: active) {
+  .es-account-credits { border-color: CanvasText; }
+}

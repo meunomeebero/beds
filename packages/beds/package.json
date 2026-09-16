@@ -1,6 +1,6 @@
 {
   "name": "beds",
-  "version": "0.1.7-rc.15",
+  "version": "0.1.7-rc.16",
   "repository": {
     "type": "git",
     "url": "https://github.com/meunomeebero/beds.git",
@@ -38,6 +38,8 @@
     "typescript": ">=5.9 <7"
   },
   "dependencies": {
+    "embla-carousel-react": "^8.6.0",
+    "input-otp": "^1.4.2",
     "lucide-react": "^1.24.0"
   },
   "scripts": {

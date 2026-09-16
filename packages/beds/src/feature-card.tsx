@@ -1,5 +1,6 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useId } from 'react';
 import { Button } from './controls';
+import { CardMedia } from './card-media';
 import './feature-card.css';
 
 type FeatureCardAction = {
@@ -17,28 +18,11 @@ export type FeatureCardProps = {
   secondaryAction?: FeatureCardAction;
 };
 
-function FeatureCardMedia({ src, alt, fallbackLabel }: FeatureCardProps['image']) {
-  const image = useRef<HTMLImageElement>(null);
-  const [state, setState] = useState<'loading' | 'ready' | 'unavailable'>(src.trim() ? 'loading' : 'unavailable');
-
-  useEffect(() => {
-    // A cached image can finish before React attaches its load handler.
-    if (image.current?.complete) setState(image.current.naturalWidth ? 'ready' : 'unavailable');
-  }, []);
-
-  const unavailable = state === 'unavailable';
-  return <div className="es-feature-card-media" data-state={state} aria-busy={state === 'loading' || undefined}>
-    {unavailable
-      ? <div className="es-feature-card-fallback" role={alt ? 'img' : undefined} aria-label={alt || undefined} aria-hidden={!alt || undefined}>{alt && (fallbackLabel ?? alt)}</div>
-      : <img ref={image} src={src} alt={alt} width={720} height={480} loading="lazy" decoding="async" onLoad={() => setState('ready')} onError={() => setState('unavailable')} />}
-  </div>;
-}
-
 /** Image-led introduction. Content/actions stay controlled; no onboarding or overlay behavior. */
 export function FeatureCard({ image, title, description, primaryAction, secondaryAction }: FeatureCardProps) {
   const id = useId();
   return <article className="es-feature-card" aria-labelledby={`${id}-title`} aria-describedby={`${id}-description`}>
-    <FeatureCardMedia key={image.src} src={image.src} alt={image.alt} fallbackLabel={image.fallbackLabel} />
+    <CardMedia key={image.src} src={image.src} alt={image.alt} fallbackLabel={image.fallbackLabel} />
     <div className="es-feature-card-content">
       <div className="es-feature-card-copy">
         <h2 id={`${id}-title`}>{title}</h2>

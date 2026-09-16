@@ -24,6 +24,9 @@ Current verification totals belong to [Validation](VALIDATION.md). The gate chec
 
 ## Open implementation reconciliation
 
+Historical snapshot below. Both discrepancies resolved in local.24;
+[September15 consolidation](CONSOLIDATION-2026-09-15.md) records current evidence.
+
 | Finding | Evidence | Next step; not executed here |
 |---|---|---|
 | MCP heading typography | Source contract records 15/24px; shared `.es-page-content-header h1` in `layout.css` executes 16/20px. | Verify the intended component context against the approved reference; focused light/dark responsive typography regression before a shared fix. Not a reason for consumer CSS. |

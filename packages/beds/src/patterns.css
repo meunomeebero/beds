@@ -7,6 +7,11 @@
 .es-root .es-settings-group>header h2{margin:0;color:var(--es-text);font:500 13px/20px var(--es-font)}
 .es-root .es-settings-group>header p{margin:6px 0 0;color:var(--es-secondary);font:400 13px/20px var(--es-font)}
 .es-root .es-settings-group-content{display:flex;flex-direction:column;gap:16px}
+.es-root .es-settings-group[data-variant="section"]{padding:0;border:0;border-radius:0}
+.es-root .es-settings-group[data-variant="section"]>header{margin-bottom:var(--es-space-10)}
+.es-root .es-settings-group[data-variant="section"]>header h2{font:500 16px/24px var(--es-font);text-wrap:balance}
+.es-root .es-settings-group[data-variant="section"]>header p{max-inline-size:65ch;text-wrap:pretty;overflow-wrap:anywhere}
+.es-root .es-settings-group[data-variant="section"] .es-settings-group-content{gap:var(--es-space-10)}
 .es-root .es-integration-row{display:flex;align-items:center;gap:12px;min-height:64px;padding:8px 14px;border:1px solid var(--es-border);border-radius:14px;background:var(--es-transparent);min-width:0}
 .es-root .es-integration-mark{display:flex;align-items:center;justify-content:center;width:32px;height:32px;flex-shrink:0;overflow:hidden}
 .es-root .es-integration-copy{flex:1;min-width:0}

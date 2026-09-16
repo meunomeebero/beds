@@ -1,0 +1,18 @@
+.es-date-item-list{display:grid;gap:var(--es-space-2);list-style:none;margin:0;padding:0;min-inline-size:0}
+.es-date-item-list>li{min-inline-size:0}
+.es-root .es-date-item{display:flex;align-items:center;gap:var(--es-space-8);box-sizing:border-box;inline-size:100%;min-inline-size:0;min-block-size:76px;padding:var(--es-space-6);border:0;border-radius:var(--es-radius-panel);background:var(--es-transparent);color:var(--es-text);font:inherit;text-align:start;text-decoration:none}
+.es-root :is(button,a).es-date-item{cursor:pointer}
+.es-date-item-calendar{display:block;flex:0 0 48px;box-sizing:border-box;inline-size:48px;padding:var(--es-space-2);border-radius:12px;background:var(--es-surface);box-shadow:0 0 0 1px var(--es-border),var(--es-shadow-xs);text-align:center}
+.es-date-item-sheet{display:flex;flex-direction:column;border-radius:var(--es-radius-8);overflow:hidden;box-shadow:0 0 0 1px var(--es-border)}
+.es-date-item-month{padding-inline:var(--es-space-1);background:var(--es-subtle);color:var(--es-secondary);font-size:11px;font-weight:500;line-height:1.45;letter-spacing:.4px;text-transform:uppercase;overflow-wrap:anywhere}
+.es-date-item-day{font-size:20px;font-weight:500;line-height:1.2;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.es-date-item-content{flex:1;min-inline-size:0;display:grid;gap:var(--es-space-2)}
+.es-date-item-heading{display:flex;flex-wrap:wrap;align-items:center;column-gap:var(--es-space-6);row-gap:var(--es-space-2);min-inline-size:0}
+.es-date-item-title{font-size:16px;line-height:1.5;font-weight:500;overflow-wrap:anywhere;text-wrap:pretty}
+.es-date-item-status{min-inline-size:0;max-inline-size:100%}
+.es-date-item-description{font-size:13px;line-height:1.54;color:var(--es-secondary);overflow-wrap:anywhere;text-wrap:pretty}
+@media(hover:hover){.es-root :is(button,a).es-date-item:hover{background:var(--es-hover)}.es-root :is(button,a).es-date-item:hover :is(.es-date-item-description,.es-badge){color:var(--es-text)}}
+.es-root :is(button,a).es-date-item:active{background:var(--es-pressed)}
+.es-root :is(button,a).es-date-item:active :is(.es-date-item-description,.es-badge){color:var(--es-text)}
+@media(max-width:767px){.es-root .es-date-item{gap:var(--es-space-6);padding-inline:var(--es-space-4);border-radius:var(--es-radius-14)}}
+@media(forced-colors:active){.es-date-item-calendar,.es-date-item-sheet{outline:1px solid CanvasText}.es-root :is(button,a).es-date-item:focus-visible{outline:2px solid Highlight;outline-offset:2px}}

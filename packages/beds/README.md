@@ -6,10 +6,14 @@ A constrained personal SaaS UI library. React 19. Two fixed themes; one configur
 
 Install an explicitly selected local/package candidate. Read its version from package metadata and evidence from [Validation](docs/VALIDATION.md); source aliases are not package-portability evidence.
 
+Exact RC16 prerelease archive:
+`bun add beds@https://github.com/meunomeebero/beds/releases/download/v0.1.7-rc.16/beds-0.1.7-rc.16.tgz --ignore-scripts` or
+`npm install https://github.com/meunomeebero/beds/releases/download/v0.1.7-rc.16/beds-0.1.7-rc.16.tgz --ignore-scripts`.
+These install a GitHub prerelease,not an npm registry release or production approval.
+
 ```tsx
 import { DesignSystemProvider, brands, Text } from 'beds';
 import 'beds/styles.css';
-import 'beds/reset.css';
 
 <DesignSystemProvider theme="dark" brandColor={brands.curriculol}>
   <Text>Personal SaaS</Text>
@@ -18,6 +22,7 @@ import 'beds/reset.css';
 
 - Theme is controlled. Brand accepts one six-digit hex value; foreground is derived internally.
 - `styles.css` owns component styling and licensed fonts; `reset.css` is the fixed full-page reset.
+- Import `reset.css` only in an isolated full-page preview;not implicitly into an existing application.
 - No consumer className, style, arbitrary geometry, font, color or token override.
 - Callers own content, data, routing, persistence and recovery. No AI, billing, account or router dependency.
 - React/ReactDOM are peers. TypeScript 5.9+ supports declarations and checks. Native Dialog/Popover required; tested engine scope is recorded, not presumed universal.

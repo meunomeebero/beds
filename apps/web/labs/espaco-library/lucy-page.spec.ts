@@ -1,159 +1,175 @@
 import { expect, test, type Page, type TestInfo } from '@playwright/test';
+import { mkdir } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
 
-// Lucy changes composition and labels, preserving beds 0.1.1.
-// The legacy page is not a geometry, font or screenshot baseline.
-const themes = ['dark', 'light'] as const;
-type Theme = typeof themes[number];
-const title = /Como posso ajudar você\?/;
-const prompts = ['Adaptar meu currículo a uma vaga', 'Entender minha análise ATS', 'Revisar meu resumo profissional'];
-
-async function ready(page: Page, theme: Theme, alias = false) {
-  await page.goto(alias ? `/?view=home&tab=lucy&theme=${theme}` : `/?view=lucy&theme=${theme}`);
-  await expect(page.getByRole('heading', { name: title, exact: true })).toBeVisible();
+const choices = ['Importar dados do LinkedIn', 'Descrever experiências', 'Importar currículo'];
+const evidence = fileURLToPath(new URL('./evidence/lucy-guided/', import.meta.url));
+async function capture(page: Page, info: TestInfo, name: string) {
+  await mkdir(evidence, { recursive: true });
+  await page.screenshot({ path: evidence + info.project.name + '-' + name + '.png', fullPage: true, animations: 'disabled' });
+}
+async function ready(page: Page, theme = 'dark', extra = '') {
+  await page.goto('/?view=lucy&theme=' + theme + extra);
+  await expect(page.getByRole('heading', { name: 'Conversa com Lucy', exact: true })).toHaveCount(1);
   await page.evaluate(() => document.fonts.ready);
 }
-async function openNavigation(page: Page) {
+async function noOverflow(page: Page) {
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+}
+
+test('catalog entry; three native options; both themes and measured contrast', async ({ page }, info) => {
+  await page.goto('/?view=components');
+  const nav = page.getByRole('button', { name: 'Navigation', exact: true });
+  if (await nav.isVisible()) await nav.click();
+  await page.getByRole('link', { name: 'Página da Lucy', exact: true }).click();
+  await expect(page.locator('.es-chat-options')).toBeVisible();
+  for (const theme of ['dark', 'light']) {
+    await ready(page, theme);
+    const buttons = page.locator('.es-chat-options button');
+    await expect(buttons).toHaveCount(3);
+    for (const [index, label] of choices.entries()) {
+      await expect(buttons.nth(index)).toHaveAccessibleName(label);
+      expect((await buttons.nth(index).boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    }
+    await expect(page.getByRole('textbox')).toHaveCount(0);
+    await expect(page.locator('input[type=file]')).toHaveCount(0);
+    await expect(page.locator('.es-chat-message[data-role=user]')).toHaveCount(0);
+    await expect(page.locator('.es-chat-message[data-role=assistant] .es-conversation-content')).toHaveCSS('border-width', '0px');
+    await buttons.first().focus(); await expect(buttons.first()).toHaveCSS('outline-width', '2px');
+    await capture(page, info, theme);
+    const ratios = await page.locator('.es-chat-option-copy>span').evaluateAll(elements => {
+      const rgb = (text: string) => text.match(/[\d.]+/g)!.map(Number);
+      const luminance = (color: number[]) => color.slice(0, 3).map(c => c / 255).map(c => c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4).reduce((sum, c, i) => sum + c * [.2126, .7152, .0722][i], 0);
+      return elements.map(element => {
+        const fg = luminance(rgb(getComputedStyle(element).color));
+        const bg = luminance(rgb(getComputedStyle(element.closest('ul')!).backgroundColor));
+        return (Math.max(fg, bg) + .05) / (Math.min(fg, bg) + .05);
+      });
+    });
+    expect(Math.min(...ratios)).toBeGreaterThanOrEqual(4.5);
+    await noOverflow(page);
+  }
+});
+
+test('keyboard, validation, draft re-entry, local reply and explicit reset', async ({ page }, info) => {
+  const requests: string[] = [];
+  page.on('request', request => { if (['fetch', 'xhr'].includes(request.resourceType())) requests.push(request.url()); });
+  await ready(page);
+  await page.getByRole('button', { name: choices[1], exact: true }).focus();
+  await page.keyboard.press('Space');
+  const input = page.getByRole('textbox', { name: 'Suas experiências' });
+  await expect(input).toBeFocused();
+  await page.getByRole('button', { name: 'Enviar mensagem' }).click();
+  await expect(input).toHaveAttribute('aria-invalid', 'true'); await expect(input).toBeFocused();
+  await input.fill('Trabalhei com atendimento por três anos.');
+  await input.press('Shift+Enter'); await input.press('A');
+  const draft = await input.inputValue(); expect(draft).toContain('\nA');
+  await page.getByRole('button', { name: 'Escolher outra opção' }).click();
+  await expect(page.getByRole('button', { name: choices[0], exact: true })).toBeFocused();
+  await page.getByRole('button', { name: choices[1], exact: true }).click();
+  await expect(input).toHaveValue(draft);
+  await input.press('Enter'); await expect(input).toHaveValue('');
+  await expect(page.locator('.es-chat-message[data-role=user]').last()).toHaveText(draft);
+  await expect(page.locator('.es-chat-message[data-role=assistant]').last()).toContainText('Para completar seu relato');
+  await capture(page, info, 'conversation');
+  await input.fill('Rascunho preservado.');
+  await page.getByRole('button', { name: 'Nova conversa', exact: true }).click();
+  await page.getByRole('button', { name: 'Manter conversa' }).click();
+  await expect(input).toHaveValue('Rascunho preservado.');
+  await page.getByRole('button', { name: 'Nova conversa', exact: true }).click();
+  await page.getByRole('button', { name: 'Começar nova prévia', exact: true }).click();
+  await expect(page.locator('.es-chat-options button')).toHaveCount(3);
+  await expect(page.locator('.es-chat-message')).toHaveCount(1);
+  expect(requests).toEqual([]);
+});
+
+test('progressive file selection: invalid, remove, draft persistence and preview', async ({ page }, info) => {
+  await ready(page, 'light');
+  for (const [choice, label, browseLabel, emptyError, typeError] of [
+    [choices[0], 'PDF do LinkedIn', 'Selecionar PDF', 'Selecione um PDF', 'não esteja vazio'],
+    [choices[2], 'Importar currículo', 'Selecionar currículo', 'Selecione um currículo em PDF ou DOCX', 'Use um arquivo PDF ou Word (.docx)'],
+  ]) {
+    await page.getByRole('button', { name: choice, exact: true }).click();
+    await expect(page.getByRole('button', { name: browseLabel, exact: true })).toBeFocused();
+    await page.getByRole('button', { name: 'Continuar prévia' }).click();
+    await expect(page.getByRole('alert')).toContainText(emptyError);
+    const input = page.locator('input[type=file]');
+    await expect(input).toHaveAccessibleName(label);
+    await input.setInputFiles({ name: 'arquivo.txt', mimeType: 'text/plain', buffer: Buffer.from('invalid') });
+    await expect(page.getByRole('alert')).toContainText(typeError);
+    await input.setInputFiles({ name: 'experiencias.pdf', mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.7 demo only') });
+    await expect(page.getByRole('alert')).toHaveCount(0);
+    await page.getByRole('button', { name: 'Remover arquivo: experiencias.pdf' }).click();
+    await expect(page.locator('.es-file-upload-list')).toHaveCount(0);
+    await input.setInputFiles({ name: 'experiencias.pdf', mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.7 demo only') });
+    await capture(page, info, choice === choices[0] ? 'linkedin' : 'resume');
+    await page.getByRole('button', { name: 'Escolher outra opção' }).click();
+    await page.getByRole('button', { name: choice, exact: true }).click();
+    await expect(page.locator('.es-file-upload-list')).toContainText('experiencias.pdf');
+    await page.getByRole('button', { name: 'Continuar prévia' }).click();
+    await expect(page.locator('.es-chat-message[data-role=assistant]').last()).toContainText('sem leitura ou envio');
+    await expect(page.locator('.es-chat-options')).toHaveCount(0);
+    await page.getByRole('button', { name: 'Escolher outra opção' }).click();
+  }
+});
+
+test('320px, zoom, RTL, loading interruption and retry', async ({ page }, info) => {
+  for (const theme of ['light', 'dark']) {
+    await ready(page, theme);
+    for (const width of [1440, 820, 600, 390, 320]) {
+      await page.setViewportSize({ width, height: 900 }); await noOverflow(page);
+      for (const row of await page.locator('.es-chat-options button').all()) {
+        const box = (await row.boundingBox())!;
+        expect(box.x).toBeGreaterThanOrEqual(0); expect(box.x + box.width).toBeLessThanOrEqual(width + 1);
+      }
+    }
+    await capture(page, info, theme + '-320');
+    await page.evaluate(() => document.documentElement.dir = 'rtl');
+    const row = page.locator('.es-chat-options button').first();
+    expect((await row.locator('.es-chat-option-icon').boundingBox())!.x).toBeGreaterThan((await row.locator('.es-chat-option-copy').boundingBox())!.x);
+    await noOverflow(page);
+    await page.evaluate(() => { document.documentElement.dir = 'ltr'; document.documentElement.style.zoom = '2'; });
+    await page.setViewportSize({ width: 800, height: 1000 }); await noOverflow(page);
+    await page.getByRole('button', { name: choices[1], exact: true }).click();
+    await page.getByRole('textbox', { name: 'Suas experiências' }).fill('Experiência profissional '.repeat(60));
+    await noOverflow(page);
+  }
+  await ready(page, 'dark', '&preview=loading');
+  await expect(page.getByRole('textbox')).toBeDisabled();
+  await page.getByRole('button', { name: 'Interromper prévia' }).click();
+  await expect(page.getByRole('textbox')).toBeEnabled();
+  await ready(page, 'dark', '&preview=error');
+  await page.getByRole('button', { name: choices[1], exact: true }).click();
+  await page.getByRole('textbox').fill('Texto preservado');
+  await page.getByRole('button', { name: 'Enviar mensagem' }).click();
+  await expect(page.getByRole('alert')).toContainText('Falha simulada');
+  await expect(page.getByRole('textbox')).toHaveValue('Texto preservado');
+  await page.getByRole('button', { name: 'Enviar mensagem' }).click();
+  await expect(page.getByRole('alert')).toHaveCount(0);
+  await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
+  await page.getByRole('textbox').focus();
+  await expect(page.locator('.es-composer form')).toHaveCSS('outline-width', '2px');
+});
+
+test('account theme, escape and sidebar collapse remain usable', async ({ page }, info) => {
+  await ready(page);
   const opener = page.getByRole('button', { name: 'Navegação', exact: true });
   if (await opener.isVisible()) await opener.click();
-}
-async function capture(page: Page, info: TestInfo, name: string) {
-  const path = info.outputPath(`${name}-${info.project.name}.png`);
-  await page.screenshot({ path, animations: 'disabled', caret: 'hide' });
-  await info.attach(`${name}-${info.project.name}`, { path, contentType: 'image/png' });
-}
-
-test('Lucy composes Portuguese content with the existing DS in both themes', async ({ page }, info) => {
-  await page.goto('/?view=components');
-  await expect(page.getByRole('heading', { name: 'Componentes', exact: true })).toBeVisible();
-  const catalogNavigation = page.getByRole('button', { name: 'Navigation', exact: true });
-  if (await catalogNavigation.isVisible()) await catalogNavigation.click();
-  await page.getByRole('link', { name: 'Página da Lucy', exact: true }).click();
-  await expect(page).toHaveURL(/\?view=lucy$/);
-  await expect(page.getByRole('heading', { name: title, exact: true })).toBeVisible();
-  for (const theme of themes) {
-    await ready(page, theme);
-    const root = page.locator('.es-root');
-    const shell = page.locator('.es-app-shell');
-    const composer = page.locator('.es-composer');
-    const heading = page.getByRole('heading', { name: title, exact: true });
-    await expect(root).toHaveAttribute('data-theme', theme);
-    await expect(shell).toHaveCSS('background-color', theme === 'dark' ? 'rgb(25, 25, 25)' : 'rgb(255, 255, 255)');
-    await expect(shell).toHaveCSS('border-radius', '0px');
-    await expect(root).toHaveCSS('font-family', /Espaco Inter/);
-    await expect(page.locator('[data-variant="workspace"], .es-shell-presentation--workspace, .ds-root')).toHaveCount(0);
-    const shellBounds = await shell.boundingBox();
-    expect(shellBounds!.x).toBe(0); expect(shellBounds!.y).toBe(0);
-    expect(shellBounds!.width).toBe(page.viewportSize()!.width);
-    await expect(page.locator('.es-chat-layout')).toHaveCSS('max-width', '640px');
-    await expect(heading).toHaveCSS('font-size', '16px');
-    await expect(heading).toHaveCSS('line-height', '24px');
-    await expect(heading).toHaveCSS('font-weight', '500');
-    await expect(heading).toHaveCSS('color', theme === 'dark' ? 'rgb(212, 212, 212)' : 'rgb(55, 53, 46)');
-    await expect(composer).toHaveCSS('border-radius', '20px');
-    await expect(composer.locator('form')).toHaveCSS('min-height', '120px');
-    await expect(composer.locator('form')).toHaveCSS('background-color', theme === 'dark' ? 'rgb(25, 25, 25)' : 'rgb(255, 255, 255)');
-    await expect(composer.locator('textarea')).toHaveCSS('font-size', '14px');
-    await expect(composer.locator('textarea')).toHaveCSS('line-height', '22.4px');
-    const composerBounds = await composer.boundingBox();
-    expect(composerBounds!.width).toBe(info.project.name === 'mobile' ? 358 : 640);
-    await expect(page.getByRole('textbox', { name: 'Mensagem', exact: true })).toHaveAttribute('placeholder', 'Converse com a Lucy sobre seu próximo passo…');
-    await expect(page.locator('.es-suggestion')).toHaveText(prompts);
-    await expect(page.getByRole('button', { name: 'Nova conversa', exact: true })).toBeVisible();
-    const mark = heading.locator('.es-brand-mark');
-    await expect(mark.locator('rect').first()).toHaveCSS('fill', 'rgb(255, 161, 51)');
-    await expect(mark.locator('rect')).toHaveCount(3);
-    const bars = await mark.locator('rect').evaluateAll(elements => elements.map(element => ({ width: element.getAttribute('width'), height: element.getAttribute('height'), y: element.getAttribute('y') ?? '0' })));
-    expect(bars).toEqual([{ width: '18', height: '4', y: '0' }, { width: '18', height: '4', y: '7' }, { width: '18', height: '4', y: '14' }]);
-    await capture(page, info, `lucy-${theme}`);
-
-    await openNavigation(page);
-    const sidebar = page.locator('.es-sidebar');
+  const sidebar = page.locator('.es-sidebar');
+  const trigger = sidebar.getByRole('button', { name: 'Marina Costa workspace menu', exact: true });
+  await trigger.click();
+  const menu = page.locator('.es-account-menu');
+  await expect(menu).toHaveCSS('width', '280px'); await expect(menu).toHaveCSS('border-radius', '12px');
+  await menu.getByRole('radio', { name: 'Light', exact: true }).check();
+  await expect(page.locator('.es-root')).toHaveAttribute('data-theme', 'light');
+  await page.keyboard.press('Escape'); await expect(trigger).toBeFocused();
+  if (info.project.name === 'mobile') {
+    await page.keyboard.press('Escape'); await expect(opener).toBeFocused();
+  } else {
+    await sidebar.getByRole('button', { name: 'Collapse sidebar' }).click();
+    await expect(sidebar).toHaveCSS('width', '62px');
+    await sidebar.getByRole('button', { name: 'Expand sidebar' }).click();
     await expect(sidebar).toHaveCSS('width', '264px');
-    await expect(sidebar).toHaveCSS('background-color', theme === 'dark' ? 'rgb(25, 25, 25)' : 'rgb(251, 250, 249)');
-    await expect(sidebar.getByRole('button', { name: 'Marina Costa workspace menu', exact: true })).toBeVisible();
-    const primary = sidebar.locator('.es-sidebar-section--primary');
-    await expect(primary.getByRole('button')).toHaveText(['Início', 'Lucy']);
-    await expect(primary.getByRole('button', { name: 'Lucy', exact: true })).toHaveAttribute('aria-current', 'page');
-    await expect(primary.getByRole('button', { name: 'Lucy', exact: true }).locator('svg')).toHaveCSS('fill', theme === 'dark' ? 'rgb(206, 206, 206)' : 'rgb(55, 53, 46)');
-    await expect(primary.getByRole('button', { name: 'Início', exact: true }).locator('svg')).toHaveCSS('fill', 'none');
-    expect(await primary.getByRole('button', { name: 'Lucy', exact: true }).evaluate(element => getComputedStyle(element, '::before').height)).toBe('31px');
-    for (const copy of ['Seu espaço', 'Currículos', 'Análises', 'LinkedIn', 'Oportunidades', 'Buscar vagas', 'Candidaturas', 'Conversas', 'Próximo passo na carreira']) {
-      await expect(sidebar.getByText(copy, { exact: true })).toBeVisible();
-    }
-    const item = sidebar.getByRole('button', { name: 'Currículos', exact: true });
-    await expect(item).toHaveCSS('min-height', '31px');
-    await expect(item).toHaveCSS('font-size', '14px');
-    await expect(item).toHaveCSS('font-weight', '400');
-    const credits = sidebar.locator('.es-sidebar-footer').getByRole('button', { name: '8 créditos', exact: true });
-    await expect(credits).toBeVisible();
-    const creditBounds = await credits.boundingBox(); const sidebarBounds = await sidebar.boundingBox();
-    expect(sidebarBounds!.y + sidebarBounds!.height - creditBounds!.y - creditBounds!.height).toBeLessThanOrEqual(13);
-    expect(creditBounds!.y).toBeGreaterThan(sidebarBounds!.y + sidebarBounds!.height * 0.8);
-    if (info.project.name === 'mobile') await capture(page, info, `lucy-navigation-${theme}`);
-    expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
   }
-});
-
-test('Lucy suggestions, context and local replies use existing controls', async ({ page }) => {
-  const externalRequests: string[] = [];
-  page.on('request', request => {
-    if (['fetch', 'xhr'].includes(request.resourceType()) && !request.url().startsWith('http://127.0.0.1:5283/')) externalRequests.push(request.url());
-  });
-  for (const theme of themes) {
-    await ready(page, theme);
-    const input = page.getByRole('textbox', { name: 'Mensagem', exact: true });
-    const send = page.getByRole('button', { name: 'Send message', exact: true });
-    await expect(send).toBeDisabled();
-    await page.getByRole('button', { name: prompts[0], exact: true }).click();
-    await expect(input).toHaveValue(prompts[0]); await expect(send).toBeEnabled();
-    const context = page.getByRole('button', { name: /^Contexto:/ });
-    for (const option of ['Meu currículo', 'Vaga de interesse', 'Nenhum contexto']) {
-      await context.click();
-      await page.getByRole('option', { name: option, exact: true }).click();
-      await expect(context).toContainText(option);
-    }
-    await send.click();
-    await expect(page.locator('.es-chat-message[data-role="user"]')).toHaveText(prompts[0]);
-    await expect(page.locator('.es-chat-message[data-role="assistant"]')).toContainText('Resposta de demonstração. Nenhuma IA foi chamada.');
-    await expect(input).toBeVisible(); await expect(input).toHaveValue(''); await expect(send).toBeDisabled();
-    await page.getByRole('button', { name: 'Nova conversa', exact: true }).click();
-    await expect(page.locator('.es-chat-message')).toHaveCount(0);
-    await expect(input).toHaveValue('');
-    await expect(page.getByRole('heading', { name: title, exact: true })).toBeVisible();
-  }
-  expect(externalRequests).toEqual([]);
-});
-
-test('Lucy account, collapse and drawer preserve existing DS behavior in both themes', async ({ page }, info) => {
-  for (const theme of themes) {
-    await ready(page, theme, true); await openNavigation(page);
-    const sidebar = page.locator('.es-sidebar');
-    const trigger = sidebar.getByRole('button', { name: 'Marina Costa workspace menu', exact: true });
-    await trigger.click();
-    const menu = page.locator('.es-account-menu');
-    await expect(menu).toBeVisible();
-    await expect(menu).toHaveCSS('width', '280px'); await expect(menu).toHaveCSS('border-radius', '12px');
-    await expect(menu.locator('.es-account-action').first()).toHaveCSS('height', info.project.name === 'mobile' ? '44px' : '30px');
-    await expect(menu.locator('.es-account-identity')).toHaveCSS('height', '48px');
-    await expect(menu.locator('.es-account-identity strong')).toHaveCSS('font-weight', '400');
-    await expect(menu.getByRole('radio', { name: theme === 'dark' ? 'Dark' : 'Light', exact: true })).toBeChecked();
-    await capture(page, info, `lucy-account-${theme}`);
-    await menu.getByRole('radio', { name: theme === 'dark' ? 'Light' : 'Dark', exact: true }).check();
-    await expect(page.locator('.es-root')).toHaveAttribute('data-theme', theme === 'dark' ? 'light' : 'dark');
-    await expect(menu).toBeVisible(); await page.keyboard.press('Escape');
-    await expect(menu).not.toBeVisible(); await expect(trigger).toBeFocused();
-    if (info.project.name === 'mobile') {
-      await expect(page.locator('.es-app-main')).toHaveAttribute('inert', '');
-      await page.keyboard.press('Escape'); await expect(sidebar).not.toBeVisible();
-      await expect(page.getByRole('button', { name: 'Navegação', exact: true })).toBeFocused();
-      await openNavigation(page); await sidebar.getByRole('button', { name: 'Lucy', exact: true }).click();
-      await expect(sidebar).not.toBeVisible(); await expect(page.locator('.es-app-main')).not.toHaveAttribute('inert');
-    } else {
-      await sidebar.getByRole('button', { name: 'Collapse sidebar', exact: true }).click();
-      await expect(sidebar).toHaveCSS('width', '62px');
-      await sidebar.getByRole('button', { name: 'Expand sidebar', exact: true }).click();
-      await expect(sidebar).toHaveCSS('width', '264px');
-    }
-    await expect(page.getByRole('heading', { name: title, exact: true })).toBeVisible();
-  }
+  await expect(page.locator('.es-chat-options')).toBeVisible();
 });

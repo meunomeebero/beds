@@ -24,3 +24,12 @@ RC14 remains immutable under its original name. Upgrade consumers by replacing
 the dependency and imports, not by adding an alias. Public components, CSS classes,
 tokens and fonts are unchanged. Historical document/catalog directory names remain
 stable; package paths in canonical docs follow the current repository layout.
+
+RC16 consolidates the catalog additions since RC15:113 public components and92
+tokens. New shared control-boundary/error-text roles intentionally strengthen
+functional contrast without changing decorative card borders. Toast errors,
+warnings and actions now persist until dismissed;informational notices have a
+5s minimum. AppShell adds a default Portuguese keyboard bypass label,overridable
+through `skipToContentLabel`. Existing consumer product behavior remains owned
+by each host. See the current validation record and six-domain consolidation
+review before adoption;motion proposals are not implemented or approved.
