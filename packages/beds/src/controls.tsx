@@ -25,10 +25,10 @@ const BUTTON_VARIANT: Record<NonNullable<ButtonProps['variant']>, string> = {
  *  `box-border` + `h-*` (exact height, not min-height) — matches the legacy CSS where the visible button height was 40px regardless of text content.
  *  Pointer-coarse (mobile) bumps the default size to 44px while keeping welcome/connection at 40px per FOUNDATIONS. */
 const BUTTON_SIZE: Record<'compact' | 'default' | 'welcome' | 'connection', string> = {
-  compact: 'h-7 rounded-md px-2.5 gap-1',
-  default: 'h-8 rounded-lg px-2.5 gap-1 pointer-coarse:h-11',
-  welcome: 'h-10 rounded-[12px] px-3.5 gap-1.5', // arbitrary radius: BEDS welcome has r=12px (no token match)
-  connection: 'h-10 rounded-xl px-4 gap-1.5',
+  compact: 'min-h-7 rounded-md px-2.5 gap-1',
+  default: 'min-h-8 min-w-0 rounded-lg px-2.5 gap-1 pointer-coarse:min-h-11',
+  welcome: 'min-h-[40px] rounded-[12px] px-3.5 gap-1.5 pointer-coarse:min-h-11', // arbitrary radius: BEDS welcome has r=12px (no token match); grows to 44px on coarse pointer
+  connection: 'min-h-[40px] rounded-xl px-4 gap-1.5', // connection keeps 40px on touch (FOUNDATIONS)
 };
 
 export function Button({ label, onClick, type = 'button', variant = 'secondary', compact = false, purpose = 'default', icon, disabled, busy, 'aria-describedby': describedBy, 'aria-expanded': ariaExpanded, 'aria-controls': ariaControls }: ButtonProps) {
@@ -50,7 +50,7 @@ export function Button({ label, onClick, type = 'button', variant = 'secondary',
     whileHover={reduce || !canHover || disabled || busy ? undefined : { scale: 1.01 }}
     transition={{ duration: 0.12, ease: EASE_OUT }}
     className={cn(
-      'box-border inline-flex items-center justify-center max-w-full text-sm font-medium tracking-normal',
+      'es-button box-border inline-flex items-center justify-center max-w-full text-sm font-medium tracking-normal',
       'border-0 transition-colors cursor-pointer disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed',
       'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
       BUTTON_VARIANT[variant],
@@ -75,12 +75,12 @@ export function IconButton({ label, icon, onClick, disabled, 'aria-describedby':
     whileTap={reduce || disabled ? undefined : { scale: 0.97 }}
     transition={{ duration: 0.12, ease: EASE_OUT }}
     className={cn(
-      'box-border inline-flex items-center justify-center shrink-0 border-0',
-      'h-8 w-8 rounded-lg bg-transparent text-muted-foreground cursor-pointer',
+      'es-icon-button box-border inline-flex items-center justify-center shrink-0 border-0',
+      'min-h-8 min-w-8 rounded-lg bg-transparent text-muted-foreground cursor-pointer',
       'transition-colors hover:text-foreground hover:bg-accent',
       'disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed',
       'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-      'pointer-coarse:h-11 pointer-coarse:w-11',
+      'pointer-coarse:min-h-11 pointer-coarse:min-w-11',
     )}
   ><Icon name={icon} purpose="action" /></motion.button>;
 }
@@ -100,13 +100,13 @@ export function IconToggleButton({ label, icon, pressed, onPressedChange, disabl
     whileTap={reduce || disabled ? undefined : { scale: 0.97 }}
     transition={{ duration: 0.12, ease: EASE_OUT }}
     className={cn(
-      'box-border inline-flex items-center justify-center shrink-0 border-0',
-      'h-8 w-8 rounded-lg bg-transparent text-muted-foreground cursor-pointer',
+      'es-icon-toggle-button box-border inline-flex items-center justify-center shrink-0 border-0',
+      'min-h-8 min-w-8 rounded-lg bg-transparent text-muted-foreground cursor-pointer',
       'transition-colors hover:text-foreground hover:bg-accent',
       'aria-pressed:bg-accent aria-pressed:text-foreground aria-pressed:[&_svg]:fill-current',
       'disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed',
       'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-      'pointer-coarse:h-11 pointer-coarse:w-11',
+      'pointer-coarse:min-h-11 pointer-coarse:min-w-11',
     )}
   ><Icon name={icon} purpose="action" /></motion.button>;
 }
@@ -226,9 +226,9 @@ const TOGGLE_WRAPPER = 'box-border inline-flex items-center gap-2 min-h-8 cursor
 export function Checkbox({ label, checked, onChange, description, disabled }: ToggleProps) {
   const id = useId();
   const reduce = useReducedMotion();
-  return <label data-disabled={disabled || undefined} className={cn(TOGGLE_WRAPPER)}>
+  return <label data-disabled={disabled || undefined} className={cn('es-checkbox', TOGGLE_WRAPPER)}>
     <input type="checkbox" className="peer absolute w-px h-px p-0 m-0 opacity-0" checked={checked} onChange={event => onChange(event.target.checked)} disabled={disabled} aria-describedby={description ? id : undefined} />
-    <span aria-hidden className={cn('peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-ring relative inline-flex shrink-0 items-center justify-center h-4 w-4 rounded-md border', 'border-input bg-surface text-bg', checked && 'border-foreground bg-foreground text-background')}>
+    <span aria-hidden className={cn('es-checkbox-box peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-ring relative inline-flex shrink-0 items-center justify-center h-4 w-4 rounded-md border', 'border-input bg-surface text-bg', checked && 'border-foreground bg-foreground text-background')}>
       <AnimatePresence initial={false}>
         {checked ? <motion.span
           key="check"
@@ -247,7 +247,7 @@ export function Checkbox({ label, checked, onChange, description, disabled }: To
 export function Switch({ label, checked, onChange, description, disabled }: ToggleProps) {
   const id = useId();
   const reduce = useReducedMotion();
-  return <label data-disabled={disabled || undefined} className={cn(TOGGLE_WRAPPER, 'justify-between gap-4 py-2.5')}>
+  return <label data-disabled={disabled || undefined} className={cn('es-switch', TOGGLE_WRAPPER, 'justify-between gap-4 py-2.5')}>
     <span className={cn(TOGGLE_LABEL, 'font-medium')}><span id={`${id}-label`}>{label}</span>{description && <small id={id} className={cn(TOGGLE_DESCRIPTION, 'text-xs leading-4')}>{description}</small>}</span>
     <input type="checkbox" role="switch" className="peer absolute w-px h-px p-0 m-0 opacity-0" checked={checked} onChange={event => onChange(event.target.checked)} disabled={disabled} aria-labelledby={`${id}-label`} aria-describedby={description ? id : undefined} />
     <span aria-hidden className={cn('peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-ring relative inline-flex shrink-0 items-center w-8 h-[18.4px] px-0 rounded-full border', 'border-input bg-switch-off', checked && 'border-info bg-info')}>
