@@ -149,24 +149,25 @@ for (const theme of ['light', 'dark'] as const) {
     });
 
     test('Finite source variants preserve contextual geometry and welcome behavior', async ({ page }, testInfo) => {
+      const touch = testInfo.project.name === 'mobile'; // coarse-pointer targets grow to 44px by contract (FOUNDATIONS objective fixes)
       const pill = page.getByRole('radiogroup', { name: 'Densidade demonstrativa' });
       const joined = page.getByRole('radiogroup', { name: 'Política do exemplo' });
       expect((await pill.boundingBox())!.height).toBe(24);
-      expect((await joined.boundingBox())!.height).toBe(36);
+      expect((await joined.boundingBox())!.height).toBe(36); // joined segmented selector keeps contextual density on touch
       await joined.getByRole('radio', { name: 'Confirmar', exact: true }).focus();
       await page.keyboard.press('Space');
       await expect(joined.getByRole('radio', { name: 'Confirmar', exact: true })).toBeChecked();
-      expect((await page.getByRole('tablist', { name: 'Seções do exemplo' }).boundingBox())!.height).toBe(30);
+      expect((await page.getByRole('tablist', { name: 'Seções do exemplo' }).boundingBox())!.height).toBe(touch ? 50 : 30);
       const connection = page.getByRole('tablist', { name: 'Clientes do exemplo' });
-      expect((await connection.boundingBox())!.height).toBe(36);
+      expect((await connection.boundingBox())!.height).toBe(36); // connection strip keeps contextual density on touch
       await connection.getByRole('tab', { name: 'Web', exact: true }).click();
       await expect(page.getByRole('tabpanel', { name: 'Web', exact: true })).toBeVisible();
       const field = page.getByRole('textbox', { name: 'Endereço do exemplo', exact: true });
-      expect((await field.boundingBox())!.height).toBe(40);
+      expect((await field.boundingBox())!.height).toBe(40); // connection variant keeps its contextual 40px; 16px touch font still applies
       await expect(field).toHaveCSS('border-radius', '10px');
-      await expect(field).toHaveCSS('font-size', '14px');
+      await expect(field).toHaveCSS('font-size', touch ? '16px' : '14px');
       const connect = page.getByRole('button', { name: 'Conectar exemplo', exact: true });
-      expect((await connect.boundingBox())!.height).toBe(40);
+      expect((await connect.boundingBox())!.height).toBe(40); // connection variant keeps its contextual 40px
       await expect(connect).toHaveCSS('border-radius', '10px');
       const trigger = page.getByRole('button', { name: 'Abrir boas-vindas', exact: true });
       await trigger.click();
@@ -177,7 +178,7 @@ for (const theme of ['light', 'dark'] as const) {
       await expect(welcome.getByRole('heading', { name: 'Boas-vindas ao exemplo', exact: true })).toHaveCSS('font-size', '18px');
       expect((await welcome.locator('.es-dialog-artwork').boundingBox())!.height).toBe(200);
       const action = welcome.getByRole('button', { name: 'Conhecer o exemplo', exact: true });
-      expect((await action.boundingBox())!.height).toBe(40);
+      expect((await action.boundingBox())!.height).toBe(40); // welcome variant keeps its contextual 40px
       await expect(action).toHaveCSS('border-radius', '12px');
       await page.screenshot({ path: testInfo.outputPath(`welcome-${theme}.png`), fullPage: false });
       await action.click();

@@ -24,8 +24,18 @@ import BlogPostPage from './BlogPostPage';
 import KanbanPage from './KanbanPage';
 import LandingFooterPage from './LandingFooterPage';
 import BenefitsPage from './BenefitsPage';
+import LandingPage from './LandingPage';
+import ProcessingPage from './ProcessingPage';
+import ResultsPage from './ResultsPage';
+import CheckoutPage from './CheckoutPage';
 const params = new URLSearchParams(location.search);
 const pages: Record<string, React.ComponentType> = {
+  checkout: CheckoutPage,
+  'analysis-result': () => <ResultsPage mode="analysis" />,
+  'optimization-result': () => <ResultsPage mode="optimization" />,
+  'analysis-loading': ProcessingPage,
+  'optimization-loading': ProcessingPage,
+  landing: LandingPage,
   benefits: BenefitsPage,
   'landing-footer': LandingFooterPage,
   kanban: KanbanPage,

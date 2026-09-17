@@ -17,7 +17,7 @@ test('status badges stay quiet, readable and contained; compact tags remain unch
       expect(await label.evaluate(el => getComputedStyle(el, '::before').width)).toBe('6px');
       expect(await label.evaluate(el => (el as HTMLElement).tabIndex)).toBe(-1);
     }
-    await expect(page.getByText('Novo', { exact: true })).toHaveCSS('font-size', '10px');
+    await expect(page.getByText('Novo', { exact: true })).toHaveCSS('font-size', '12px');
     const ready = page.getByRole('article').first();
     const [status, selection] = await Promise.all([ready.locator('.es-badge').boundingBox(), ready.getByRole('checkbox').boundingBox()]);
     expect(status!.x + status!.width).toBeLessThanOrEqual(selection!.x);

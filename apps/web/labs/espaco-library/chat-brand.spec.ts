@@ -71,8 +71,8 @@ for (const theme of ['light','dark'] as const) {
   await expect(page.getByRole('alert').filter({hasText:'Copy failed.'})).toHaveCount(0);
   await expect(page.locator('.es-code-snippet')).toHaveCSS('height','42px');
   await expect(page.locator('.es-code-snippet')).toHaveCSS('border-radius','12px');
-  await expect(page.locator('.es-code-snippet>code')).toHaveCSS('font-size','11px');
-  expect(await page.evaluate(()=>document.fonts.check('11px "Espaco Geist Mono"'))).toBe(true);
+  await expect(page.locator('.es-code-snippet>code')).toHaveCSS('font-size','12px');
+  expect(await page.evaluate(()=>document.fonts.check('12px "Espaco Geist Mono"'))).toBe(true);
   expect(await page.evaluate(()=>navigator.clipboard.readText())).toBe('https://example.com/api');
   await page.getByRole('textbox',{name:'Endereço do exemplo',exact:true}).fill('https://example.com/next');
   await expect(copy).toHaveText('Copy');

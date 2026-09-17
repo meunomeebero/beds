@@ -174,6 +174,12 @@ export default function Catalog() {
           <NavItem label="Itens com data" icon="CalendarDays" href={`?view=date-item&theme=${theme}`} />
           <NavItem label="Posts do blog" icon="FileText" href={`?view=blog-post&theme=${theme}`} />
           <NavItem label="Rodapé da landing" icon="Globe" href={`?view=landing-footer&theme=${theme}`} />
+          <NavItem label="Landing do Curriculol" icon="Globe" href={`?view=landing&theme=${theme}`} />
+          <NavItem label="Análise em andamento" icon="ScanText" href={`?view=analysis-loading&theme=${theme}`} />
+          <NavItem label="Otimização em andamento" icon="FileText" href={`?view=optimization-loading&theme=${theme}`} />
+          <NavItem label="Resultado da análise" icon="BarChart3" href={`?view=analysis-result&theme=${theme}`} />
+          <NavItem label="Checkout" icon="CreditCard" href={`?view=checkout&theme=${theme}`} />
+          <NavItem label="Resultado da otimização" icon="FileText" href={`?view=optimization-result&theme=${theme}`} />
           <NavItem label="Vantagens da landing" icon="Sparkles" href={`?view=benefits&theme=${theme}`} />
           <NavItem label="Configurações" icon="Settings2" href={`?view=settings&theme=${theme}`} />
           <NavItem label="Quadro de vagas" icon="Briefcase" href={`?view=kanban&theme=${theme}`} />
