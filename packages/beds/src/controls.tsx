@@ -263,12 +263,39 @@ export function Switch({ label, checked, onChange, description, disabled }: Togg
 
 type Choice = { id: string; label: string; disabled?: boolean };
 
+/** Pill: 22px span (24px container incl. padding) · 13px label · joined: 36px row · label maintained as radiogroup with Arrow nav. */
+const SEGMENTED_PILL = 'box-border inline-flex items-stretch shrink-0 gap-0.5 max-w-full p-px rounded-full bg-subtle';
+const SEGMENTED_JOINED = 'box-border inline-flex items-stretch shrink-0 gap-0 max-w-full h-9 rounded-lg bg-transparent shadow-[inset_0_0_0_1px_var(--es-border)]';
+const SEGMENTED_CHOICE = 'relative min-w-0 flex-none cursor-pointer';
+const SEGMENTED_SPAN_PILL = 'flex items-center justify-center min-h-[22px] px-2 rounded-full text-secondary text-xs leading-4 tracking-normal font-medium whitespace-nowrap transition-colors';
+const SEGMENTED_SPAN_JOINED = 'flex items-center justify-center h-9 rounded-none bg-sidebar text-xs leading-4 tracking-normal font-medium whitespace-nowrap first:rounded-l-lg last:rounded-r-lg';
+const SEGMENTED_SPAN_CHECKED = 'text-foreground bg-surface shadow-[0_1px_2px_var(--es-border)]';
+
 export function SegmentedControl({ label, value, options, onChange, variant = 'pill' }: {
   label: string; value: string; options: Choice[]; onChange: (value: string) => void; variant?: 'pill' | 'joined';
 }) {
   const name = useId();
-  return <div className="es-segmented-control" data-variant={variant} role="radiogroup" aria-label={label}>{options.map(option => <label key={option.id} className="es-segmented-choice"><input type="radio" name={name} value={option.id} checked={value === option.id} disabled={option.disabled} onChange={() => onChange(option.id)} /><span>{option.label}</span></label>)}</div>;
+  const navigate = (event: KeyboardEvent<HTMLInputElement>, current: string) => {
+    const allowed = variant === 'pill' ? ['ArrowLeft', 'ArrowRight'] : ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'];
+    if (!allowed.includes(event.key)) return;
+    event.preventDefault();
+    const enabled = options.filter(option => !option.disabled);
+    if (!enabled.length) return;
+    const index = enabled.findIndex(option => option.id === current);
+    const nextIndex = event.key === 'Home' ? 0 : event.key === 'End' ? enabled.length - 1 : ((index + (event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 1) + enabled.length) % enabled.length);
+    const next = enabled[nextIndex];
+    if (!next) return;
+    onChange(next.id);
+  };
+  const listCls = variant === 'joined' ? SEGMENTED_JOINED : SEGMENTED_PILL;
+  const spanCls = variant === 'joined' ? SEGMENTED_SPAN_JOINED : SEGMENTED_SPAN_PILL;
+  return <div className={cn('es-segmented-control', listCls)} data-variant={variant} role="radiogroup" aria-label={label}>{options.map(option => <label key={option.id} className={SEGMENTED_CHOICE}><input type="radio" name={name} value={option.id} checked={value === option.id} disabled={option.disabled} onChange={() => onChange(option.id)} onKeyDown={event => navigate(event, option.id)} className="absolute w-px h-px p-0 m-0 opacity-0 peer" /><span className={cn(spanCls, value === option.id && SEGMENTED_SPAN_CHECKED)}>{option.label}</span></label>)}</div>;
 }
+
+const TABS_LIST_ACTIVITY = 'inline-flex items-center gap-0.5 max-w-full min-h-[30px] p-0.5 border border-border-subtle rounded-lg bg-subtle pointer-coarse:min-h-11';
+const TABS_TAB_ACTIVITY = 'flex-1 min-w-0 min-h-6 px-2 border-0 rounded-md bg-transparent text-secondary text-xs leading-4 font-medium whitespace-nowrap cursor-pointer pointer-coarse:min-h-11';
+const TABS_TAB_CONNECTION = 'min-h-7 px-2 border border-transparent rounded-lg text-sm leading-4';
+const TABS_TAB_SELECTED = 'bg-surface text-foreground shadow-[0_1px_2px_var(--es-border)]';
 
 export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
   label: string; value: string; items: (Choice & { content: ReactNode })[]; onChange: (value: string) => void; variant?: 'activity' | 'connection' | 'settings';
@@ -289,7 +316,7 @@ export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
     onChange(next.id);
     list.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[items.indexOf(next)]?.focus();
   };
-  const connectionListStyle = variant === 'connection' ? { gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` } : undefined;
-  const tabList = <div ref={list} className="es-tabs-list" role="tablist" aria-label={label} style={connectionListStyle}>{items.map((item, index) => <button key={item.id} id={`${id}-tab-${index}`} type="button" role="tab" aria-controls={`${id}-panel-${index}`} aria-selected={selected?.id === item.id} tabIndex={selected?.id === item.id ? 0 : -1} disabled={item.disabled} onClick={() => onChange(item.id)} onKeyDown={event => navigate(event, item.id)}>{variant === 'settings' ? <span className="es-settings-tab-label">{item.label}</span> : item.label}</button>)}</div>;
-  return <div className="es-tabs" data-variant={variant}>{variant === 'connection' ? <div className="es-tabs-connection-strip">{tabList}</div> : tabList}{items.map((item, index) => <div key={item.id} id={`${id}-panel-${index}`} className="es-tab-panel" role="tabpanel" aria-labelledby={`${id}-tab-${index}`} hidden={selected?.id !== item.id} tabIndex={0}>{item.content}</div>)}</div>;
+  const connectionListStyle = variant === 'connection' ? { gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))`, minWidth: '560px' } : undefined;
+  const tabList = <div ref={list} className={cn(variant === 'connection' && 'grid items-center gap-0 w-full min-h-9 p-1 border-0 rounded-xl bg-subtle', variant === 'activity' && TABS_LIST_ACTIVITY, variant === 'settings' && 'es-tabs-list flex items-stretch gap-2 w-full min-w-0 px-2 pt-2 border-0 border-b border-border rounded-none bg-transparent overflow-x-auto overscroll-x-contain')} role="tablist" aria-label={label} style={connectionListStyle}>{items.map((item, index) => <button key={item.id} id={`${id}-tab-${index}`} type="button" role="tab" aria-controls={`${id}-panel-${index}`} aria-selected={selected?.id === item.id} tabIndex={selected?.id === item.id ? 0 : -1} disabled={item.disabled} onClick={() => onChange(item.id)} onKeyDown={event => navigate(event, item.id)} className={cn(variant === 'connection' && TABS_TAB_CONNECTION, variant === 'activity' && TABS_TAB_ACTIVITY, variant === 'settings' && 'es-settings-tab relative flex-none min-h-12 px-0 pb-4 pt-0.5 rounded-md bg-transparent shadow-none text-sm leading-5 font-normal', selected?.id === item.id && (variant !== 'settings') && TABS_TAB_SELECTED)}>{variant === 'settings' ? <span className="es-settings-tab-label block px-2.5 py-2 rounded-md">{item.label}</span> : item.label}</button>)}</div>;
+  return <div className={cn('es-tabs min-w-0')} data-variant={variant}>{variant === 'connection' ? <div className="contain-inline-size w-full max-w-full min-w-0 overflow-x-auto p-2 border-b border-border-subtle">{tabList}</div> : tabList}{items.map((item, index) => <div key={item.id} id={`${id}-panel-${index}`} className={cn(variant === 'connection' ? 'm-0 px-8 pb-8 border-0 min-w-0' : 'mt-4 min-w-0', variant !== 'connection' && 'es-tab-panel')} role="tabpanel" aria-labelledby={`${id}-tab-${index}`} hidden={selected?.id !== item.id} tabIndex={0}>{item.content}</div>)}</div>;
 }

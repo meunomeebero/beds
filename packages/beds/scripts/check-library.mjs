@@ -27,7 +27,7 @@ const NAMED_SEMANTIC_VISUAL_PROPS = new Map([
 /** Motion contract: interaction motion is expressed with motion/react, not CSS. Stylesheets still carrying
  *  CSS transitions/keyframes are listed here until their component migrates; the list only shrinks. */
 const CSS_MOTION_ALLOWLIST = new Set([
-  'application-card.css', 'checkout.css', 'controls.css', 'empty-state-card.css', 'form-fields.css', 'input-otp.css',
+  'application-card.css', 'checkout.css', 'empty-state-card.css', 'form-fields.css', 'input-otp.css',
   'landing.css', 'layout.css', 'overlays.css', 'paged-carousel.css', 'payment-confirmation.css', 'processing.css',
   'results.css', 'toast.css',
 ]);
