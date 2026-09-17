@@ -47,7 +47,6 @@
 .es-root .es-results-status{margin:0;color:var(--es-secondary);font:400 12px/18px var(--es-font);overflow-wrap:anywhere}
 .es-root .es-collection-toolbar{display:flex;flex-wrap:wrap;gap:var(--es-space-8);align-items:center;min-width:0}
 .es-root .es-collection-search{flex:1;min-width:0}
-.es-root .es-collection-search>.es-search-field{width:100%}
 .es-root .es-collection-filters{display:flex;flex-wrap:wrap;gap:var(--es-space-4);min-width:0}
 @media(hover:hover){.es-root .es-application-card:hover{border-color:var(--es-border-strong)}.es-root .es-application-card:hover .es-application-sheet{transform:translateX(3px) rotate(13deg)}.es-root .es-application-identity h3>button:hover,.es-root .es-application-details-action:hover,.es-root .es-application-documents>button:hover{color:var(--es-heading)}.es-root .es-application-primary:hover{background:var(--es-pressed)}}
 .es-root .es-application-card:focus-within .es-application-sheet{transform:translateX(3px) rotate(13deg)}
