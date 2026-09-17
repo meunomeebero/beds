@@ -1,0 +1,7 @@
+interface:
+  display_name: "Marc Lou Landing Page"
+  short_description: "SaaS landing clarity, product proof and conversion"
+  default_prompt: "Use $marc-lou-landing-page to improve this SaaS landing page with clear positioning, credible product proof and an honest next action."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,112 @@
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import { Button } from './controls';
+import { Icon } from './foundation';
+import { SegmentedMeter } from './feedback';
+import { MeterSegments } from './meter-segments';
+import './processing.css';
+
+export type ProcessingStep = {
+  id: string;
+  label: string;
+  detail: string;
+  state: 'pending' | 'active' | 'complete';
+  statusLabel: string;
+  progress: number;
+};
+
+export type ProcessingStory = {
+  title: string;
+  caption: string;
+  speaker: string;
+  elapsedLabel: string;
+  durationLabel: string;
+  transcriptLabel: string;
+  chapters: readonly { id: string; time: string; title: string; body: string; current: boolean }[];
+};
+
+export type ProcessingViewProps = {
+  title: string;
+  description: string;
+  context: string;
+  mark?: ReactNode;
+  state: 'running' | 'waiting' | 'success' | 'error';
+  statusLabel: string;
+  /** Caller signal, never elapsed-time completion. Null means indeterminate. */
+  progress: number | null;
+  progressLabel: string;
+  progressDescription: string;
+  stepsLabel: string;
+  steps: readonly ProcessingStep[];
+  story: ProcessingStory;
+  message?: string;
+  /** Announce stage/terminal changes only, not every progress tick. */
+  announcement: string;
+  detailsLabel: string;
+  logs: readonly string[];
+  scores?: { label: string; note: string; items: readonly { id: string; label: string; value: number }[] };
+  motion: { paused: boolean; pauseLabel: string; resumeLabel: string; description: string; onPausedChange: (paused: boolean) => void };
+  actions?: readonly { label: string; onClick: () => void; primary?: boolean }[];
+};
+
+function percentage(value: number, ceiling = 100) {
+  return Number.isFinite(value) ? Math.max(0, Math.min(ceiling, value)) : 0;
+}
+
+/** Presentation only. The host owns requests, timing, stages and terminal signals. */
+export function ProcessingView({ title, description, context, mark, state, statusLabel, progress, progressLabel, progressDescription, stepsLabel, steps, story, message, announcement, detailsLabel, logs, scores, motion, actions }: ProcessingViewProps) {
+  const id = useId();
+  const art = useRef<HTMLDivElement>(null);
+  const [artVisible, setArtVisible] = useState(true);
+  useEffect(() => {
+    const node = art.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(([entry]) => setArtVisible(entry.isIntersecting));
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+  const terminal = state === 'success' || state === 'error';
+  const value = state === 'success' ? 100 : progress === null || !Number.isFinite(progress) ? null : percentage(progress, 95);
+  return <section className="es-processing" data-state={state} data-motion-paused={motion.paused || terminal || undefined} aria-labelledby={`${id}-title`}>
+    <header className="es-processing-heading">
+      <div className="es-processing-identity">{mark}<span>{context}</span></div>
+      <h1 id={`${id}-title`}>{title}</h1>
+      <p>{description}</p>
+    </header>
+    <div className="es-processing-workspace">
+      <div className="es-processing-main">
+        <div className="es-processing-progress">
+          <div className="es-processing-progress-label"><span>{progressLabel}</span><strong>{value === null ? statusLabel : `${Math.round(value)}%`}</strong></div>
+          <MeterSegments label={progressLabel} value={value} tone="brand" role="progressbar" valueText={value === null ? statusLabel : `${Math.round(value)}% — ${statusLabel}`} />
+          <p>{progressDescription}</p>
+        </div>
+        {message && <p className="es-processing-message" data-state={state}><Icon name={state === 'error' ? 'AlertCircle' : state === 'success' ? 'CheckCircle2' : 'Info'} purpose="action" /><span>{message}</span></p>}
+        <ol className="es-processing-steps" aria-label={stepsLabel}>
+          {steps.map((step, index) => <li key={step.id} data-state={step.state} aria-current={step.state === 'active' ? 'step' : undefined}>
+            <span className="es-processing-step-icon" aria-hidden="true">{step.state === 'complete' ? <Icon name="Check" purpose="action" /> : <span>{index + 1}</span>}</span>
+            <div className="es-processing-step-copy"><div className="es-processing-step-heading"><h2>{step.label}</h2><span>{step.statusLabel}</span></div><p>{step.detail}</p>
+              <progress aria-label={step.label} max={100} value={percentage(step.progress)} />
+            </div>
+          </li>)}
+        </ol>
+        <details className="es-processing-details"><summary>{detailsLabel}<Icon name="ChevronDown" purpose="action" /></summary><ol>{logs.map((line, index) => <li key={`${index}-${line}`}><Icon name="Check" purpose="small" /><span>{line}</span></li>)}</ol></details>
+        {scores && <section className="es-processing-scores" aria-label={scores.label}><h2>{scores.label}</h2><p>{scores.note}</p><div>{scores.items.map(score => <SegmentedMeter key={score.id} label={score.label} value={score.value} tone="brand" />)}</div></section>}
+        {actions && <div className="es-processing-actions">{actions.map(action => <Button key={action.label} label={action.label} variant={action.primary ? 'primary' : 'secondary'} onClick={action.onClick} />)}</div>}
+      </div>
+      <aside className="es-processing-story" aria-labelledby={`${id}-story`}>
+        <div className="es-processing-story-card">
+          <div className="es-processing-playback"><span>{story.elapsedLabel} <span aria-hidden="true">/</span> {story.durationLabel}</span><Button label={motion.paused ? motion.resumeLabel : motion.pauseLabel} disabled={terminal} onClick={() => motion.onPausedChange(!motion.paused)} aria-describedby={`${id}-motion`} /></div>
+          <div ref={art} className="es-processing-art" data-offscreen={!artVisible || undefined} aria-hidden="true">
+            <div className="es-processing-sheet es-processing-sheet--back" />
+            <div className="es-processing-sheet es-processing-sheet--front"><span className="es-processing-art-avatar" /><span className="es-processing-art-line es-processing-art-line--name" /><span className="es-processing-art-line" /><span className="es-processing-art-block"><span /><span /><span /></span><span className="es-processing-art-block"><span /><span /><span /></span><span className="es-processing-scan" /></div>
+            <span className="es-processing-art-badge"><Icon name={state === 'success' ? 'Check' : state === 'error' ? 'AlertCircle' : 'ScanText'} purpose="feature" /></span>
+          </div>
+          <div className="es-processing-story-copy"><span>{story.speaker}</span><h2 id={`${id}-story`}>{story.title}</h2><p>{story.caption}</p></div>
+          <p id={`${id}-motion`} className="es-processing-motion-note">{motion.description}</p>
+        </div>
+        <details className="es-processing-transcript"><summary>{story.transcriptLabel}<Icon name="ChevronDown" purpose="action" /></summary><ol>{story.chapters.map(chapter => <li key={chapter.id} aria-current={chapter.current ? 'true' : undefined}><span>{chapter.time}</span><div><h3>{chapter.title}</h3><p>{chapter.body}</p></div></li>)}</ol></details>
+      </aside>
+    </div>
+    <p className="es-visually-hidden" role="status" aria-live="polite" aria-atomic="true">{state === 'error' ? '' : announcement}</p>
+    <p className="es-visually-hidden" role="alert" aria-atomic="true">{state === 'error' ? announcement : ''}</p>
+  </section>;
+}
