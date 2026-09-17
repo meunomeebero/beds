@@ -16,6 +16,7 @@
     "src",
     "fonts",
     "scripts",
+    "skills",
     "docs",
     "evidence",
     "examples",
@@ -38,16 +39,19 @@
     "typescript": ">=5.9 <7"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
     "input-otp": "^1.4.2",
-    "lucide-react": "^1.24.0"
+    "lucide-react": "^1.24.0",
+    "motion": "^13.4.0",
+    "tailwind-merge": "^3.7.0"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json && node scripts/build-css.mjs",
     "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "check": "node scripts/check-library.mjs --tokens src/tokens.css",
     "check:consumer": "node scripts/check-consumer.mjs",
-    "test:guards": "node --test scripts/contracts.test.mjs scripts/visual-audit.test.mjs scripts/package-artifact.test.mjs scripts/build-artifact.test.mjs scripts/docs.test.mjs",
+    "test:guards": "node --test scripts/contracts.test.mjs scripts/visual-audit.test.mjs scripts/package-artifact.test.mjs scripts/build-artifact.test.mjs scripts/docs.test.mjs scripts/results.test.mjs scripts/checkout.test.mjs",
     "check:docs": "node scripts/check-docs.mjs",
     "check:visual-baseline": "node scripts/check-visual-baseline.mjs",
     "check:artifact": "node scripts/check-package-artifact.mjs"
@@ -60,5 +64,9 @@
     "typescript": {
       "optional": true
     }
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
   }
 }

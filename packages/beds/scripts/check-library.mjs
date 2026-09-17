@@ -24,6 +24,15 @@ const NAMED_SEMANTIC_VISUAL_PROPS = new Map([
   ['Stack', new Map([['gap', new Set(['tight', 'default', 'section'])]])],
   ['Inline', new Map([['gap', new Set(['tight', 'default'])]])],
 ]);
+/** Motion contract: interaction motion is expressed with motion/react, not CSS. Stylesheets still carrying
+ *  CSS transitions/keyframes are listed here until their component migrates; the list only shrinks. */
+const CSS_MOTION_ALLOWLIST = new Set([
+  'application-card.css', 'checkout.css', 'controls.css', 'empty-state-card.css', 'form-fields.css', 'input-otp.css',
+  'landing.css', 'layout.css', 'overlays.css', 'paged-carousel.css', 'payment-confirmation.css', 'processing.css',
+  'results.css', 'toast.css',
+]);
+/** Legibility floor: no product text below 12px (badges, metadata, tooltips included). */
+const MIN_FONT_SIZE_PX = 12;
 
 function isNamedSemanticVisualProp(component, prop) {
   return NAMED_SEMANTIC_VISUAL_PROPS.get(component)?.has(prop) ?? false;
@@ -98,6 +107,15 @@ export function checkLibrary({ root = DEFAULT_ROOT, tokens = [] } = {}) {
     for (const match of text.matchAll(/(?:^|[;{])\s*(--[\w-]+)\s*:/g)) declarations.add(match[1]);
     for (const match of text.matchAll(/var\(\s*(--[\w-]+)/g)) references.push({ file, token: match[1], line: text.slice(0, match.index).split('\n').length });
     if (!canonical.has(file)) {
+      const lineOf = index => text.slice(0, index).split('\n').length;
+      const base = path.basename(file);
+      if (base !== 'tailwind.css' && !CSS_MOTION_ALLOWLIST.has(base)) {
+        for (const match of text.matchAll(/@keyframes\b|(?:^|[;{\s])transition(?:-[a-z]+)?\s*:/g)) issue(file, 'CSS_MOTION', 'Interaction motion belongs in motion/react; this stylesheet is not in the CSS motion allowlist.', lineOf(match.index));
+      }
+      for (const match of text.matchAll(/font-size\s*:\s*(\d+(?:\.\d+)?)px|font\s*:[^;{}]*?\b(\d+(?:\.\d+)?)px\s*\//g)) {
+        const size = Number(match[1] ?? match[2]);
+        if (size < MIN_FONT_SIZE_PX) issue(file, 'FONT_SIZE_FLOOR', `${size}px text is below the ${MIN_FONT_SIZE_PX}px legibility floor.`, lineOf(match.index));
+      }
       for (const match of text.matchAll(/#[\da-f]{3,8}\b|\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color|color-mix)\s*\(/gi)) issue(file, 'RAW_COLOR', 'Color values belong in a configured canonical token stylesheet.', text.slice(0, match.index).split('\n').length);
       const withoutFontFaces = text.replace(/@font-face\s*\{[^}]*\}/g, match => ' '.repeat(match.length));
       for (const match of withoutFontFaces.matchAll(/font-family\s*:\s*([^;}]+)/g)) if (!/^(?:var\(|inherit\s*$)/.test(match[1])) issue(file, 'RAW_FONT', 'Component font family must resolve through the canonical Inter token.', text.slice(0, match.index).split('\n').length);

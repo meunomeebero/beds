@@ -1,15 +1,21 @@
 @font-face{font-family:'Espaco Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url('../fonts/InterVariable.woff2') format('woff2')}
 @font-face{font-family:'Espaco Inter';font-style:italic;font-weight:100 900;font-display:swap;src:url('../fonts/InterVariable-Italic.woff2') format('woff2')}
 @font-face{font-family:'Espaco Geist Mono';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/GeistMono-Regular.woff2') format('woff2')}
+/* Token contract = shadcn naming, BEDS values. Theme blocks declare the shadcn vocabulary
+   (background/foreground/primary/muted/…); the historical --es-* names below are aliases kept
+   only until each component migrates to utilities, then deleted. See FOUNDATIONS.md "Token contract". */
 .es-root {
- --es-mono:'Espaco Geist Mono',ui-monospace,monospace;
- --es-font:'Espaco Inter',Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
- --es-info:#0077e6;--es-success:#15b042;--es-warning:#e87800;--es-error:#e83535;--es-focus:#0077e6;
+ --font-mono:'Espaco Geist Mono',ui-monospace,monospace;
+ --font-sans:'Espaco Inter',Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+ --radius:8px;
+ --info:#0077e6;--success:#15b042;--warning:#e87800;--destructive:#e83535;--destructive-foreground:#ffffff;
+ --es-mono:var(--font-mono);--es-font:var(--font-sans);
+ --es-info:var(--info);--es-success:var(--success);--es-warning:var(--warning);--es-error:var(--destructive);--es-focus:var(--ring);
  --es-white:#ffffff;--es-switch-thumb-on:#ffffff;--es-black:#000000;--es-transparent:transparent;--es-overlay:#0000007a;
  --es-sidebar-width:264px;--es-rail-width:62px;--es-chat-width:640px;--es-home-width:720px;--es-dashboard-width:880px;
  --es-account-width:280px;--es-choice-width:260px;--es-command-width:672px;
  --es-space-1:2px;--es-space-2:4px;--es-space-3:6px;--es-space-4:8px;--es-space-5:10px;--es-space-6:12px;--es-space-7:14px;--es-space-8:16px;--es-space-9:20px;--es-space-10:24px;--es-space-11:32px;--es-space-12:48px;
- --es-radius-2:2px;--es-radius-6:6px;--es-radius-7:7px;--es-radius-8:8px;--es-radius-10:10px;--es-radius-14:14px;--es-radius-20:20px;--es-radius-full:999px;
+ --es-radius-2:2px;--es-radius-6:6px;--es-radius-7:7px;--es-radius-8:var(--radius);--es-radius-10:10px;--es-radius-14:14px;--es-radius-20:20px;--es-radius-full:999px;
  --es-radius-card:24px;--es-radius-panel:20px;
  --es-disclosure-lines:3;
  --es-image-outline:rgba(0,0,0,.1);
@@ -17,25 +23,45 @@
  --es-shadow-xs:0 1px 2px #0000000d;
 }
 .es-root[data-theme='light'] {
- color-scheme:light;--es-bg:#ffffff;--es-sidebar:#fbfaf9;--es-surface:#ffffff;--es-subtle:#edece9;--es-raised:#edece9;--es-hover:#e6e4e0;--es-pressed:#dbd8d2;
- --es-text:#37352e;--es-secondary:#6a6966;--es-placeholder:#6a6966;--es-inverse:#191919;--es-border:#00000014;--es-border-subtle:#0000000f;--es-border-strong:#0000001f;
- --es-control-border:#787775;--es-error-text:#c52a2a;
- --es-primary:#202020;--es-on-primary:#ffffff;--es-field:#ffffff;--es-message-user:#edece9;--es-switch-off:#787775;--es-switch-thumb:#ffffff;
+ color-scheme:light;
+ --background:#ffffff;--foreground:#37352e;
+ --card:#ffffff;--card-foreground:#37352e;--popover:#ffffff;--popover-foreground:#37352e;
+ --primary:#202020;--primary-foreground:#ffffff;
+ --secondary:#edece9;--secondary-foreground:#37352e;
+ --muted:#edece9;--muted-foreground:#6a6966;
+ --accent:#e6e4e0;--accent-foreground:#37352e;
+ --border:#00000014;--input:#787775;--ring:#0077e6;
+ --sidebar:#fbfaf9;--sidebar-foreground:#37352e;--sidebar-primary:#202020;--sidebar-primary-foreground:#ffffff;--sidebar-accent:#edece9;--sidebar-accent-foreground:#37352e;--sidebar-border:#00000014;--sidebar-ring:#0077e6;
+ --chart-1:#0077e6;--chart-2:#15b042;--chart-3:#e87800;--chart-4:#e83535;--chart-5:#6a6966;
+ --es-bg:var(--background);--es-sidebar:var(--sidebar);--es-surface:var(--card);--es-subtle:var(--muted);--es-raised:#edece9;--es-hover:var(--accent);--es-pressed:#dbd8d2;
+ --es-text:var(--foreground);--es-secondary:var(--muted-foreground);--es-placeholder:#6a6966;--es-inverse:#191919;--es-border:var(--border);--es-border-subtle:#0000000f;--es-border-strong:#0000001f;
+ --es-control-border:var(--input);--es-error-text:#c52a2a;--es-focus-ring:#0077e63d;--es-error-ring:#e8353533;
+ --es-primary:var(--primary);--es-on-primary:var(--primary-foreground);--es-field:#ffffff;--es-message-user:#edece9;--es-switch-off:#787775;--es-switch-thumb:#ffffff;
  --es-success-subtle:#caface;--es-error-subtle:#ffe4e0;--es-badge-success-marker:#0b7a2b;--es-badge-warning-marker:#a54f00;--es-badge-error-marker:#c52a2a;--es-badge-info-marker:#0066c2;
  --es-shadow-account:0 0 0 1px #0000000f,0 20px 25px -5px #0000001f,0 8px 10px -6px #00000029;
  --es-glass:#00000008;--es-glass-border:#0000001f;--es-shadow-dialog:0 1px 2px #0000000a,0 8px 24px #0000000f;
- --es-selected:#edece9;--es-composer-surface:#ffffff;
- --es-composer-context:#fbfaf9;--es-composer-border:#0000000f;--es-composer-focus:#787775;--es-control:#edece9;--es-heading:#37352e;--es-input-text:#37352e;--es-badge:#edece9;--es-on-badge:#6a6966;--es-send:#202020;--es-on-send:#ffffff;
+ --es-selected:var(--sidebar-accent);--es-composer-surface:#ffffff;
+ --es-composer-context:#fbfaf9;--es-composer-border:#0000000f;--es-composer-focus:#787775;--es-control:var(--secondary);--es-heading:#37352e;--es-input-text:#37352e;--es-badge:#edece9;--es-on-badge:#6a6966;--es-send:#202020;--es-on-send:#ffffff;
 }
 .es-root[data-theme='dark'] {
+ color-scheme:dark;
+ --background:#191919;--foreground:#cecece;
+ --card:#202020;--card-foreground:#cecece;--popover:#202020;--popover-foreground:#cecece;
+ --primary:#f1f1f1;--primary-foreground:#242424;
+ --secondary:#262626;--secondary-foreground:#cecece;
+ --muted:#232323;--muted-foreground:#949494;
+ --accent:#ffffff05;--accent-foreground:#cecece;
+ --border:#ffffff0c;--input:#858585;--ring:#b9b9b9;
+ --sidebar:#191919;--sidebar-foreground:#cecece;--sidebar-primary:#f1f1f1;--sidebar-primary-foreground:#242424;--sidebar-accent:#2a2a2a;--sidebar-accent-foreground:#cecece;--sidebar-border:#ffffff0c;--sidebar-ring:#b9b9b9;
+ --chart-1:#5aaaff;--chart-2:#49c670;--chart-3:#ff9f32;--chart-4:#ff7b7b;--chart-5:#949494;
  --es-image-outline:rgba(255,255,255,.1);
- color-scheme:dark;--es-bg:#191919;--es-sidebar:#191919;--es-surface:#202020;--es-subtle:#232323;--es-raised:#272727;--es-hover:#ffffff05;--es-pressed:#ffffff0c;
- --es-text:#cecece;--es-secondary:#949494;--es-placeholder:#949494;--es-inverse:#f1f1f1;--es-border:#ffffff0c;--es-border-subtle:#ffffff06;--es-border-strong:#ffffff13;
- --es-control-border:#858585;--es-error-text:#ff7b7b;
- --es-primary:#f1f1f1;--es-on-primary:#242424;--es-field:#191919;--es-message-user:#232323;--es-switch-off:#414141;--es-switch-thumb:#c8c8c8;
+ --es-bg:var(--background);--es-sidebar:var(--sidebar);--es-surface:var(--card);--es-subtle:var(--muted);--es-raised:#272727;--es-hover:var(--accent);--es-pressed:#ffffff0c;
+ --es-text:var(--foreground);--es-secondary:var(--muted-foreground);--es-placeholder:#949494;--es-inverse:#f1f1f1;--es-border:var(--border);--es-border-subtle:#ffffff06;--es-border-strong:#ffffff13;
+ --es-control-border:var(--input);--es-error-text:#ff7b7b;--es-focus-ring:#b9b9b93d;--es-error-ring:#e8353547;
+ --es-primary:var(--primary);--es-on-primary:var(--primary-foreground);--es-field:#191919;--es-message-user:#232323;--es-switch-off:#414141;--es-switch-thumb:#c8c8c8;
  --es-success-subtle:#053818;--es-error-subtle:#570808;--es-badge-success-marker:#49c670;--es-badge-warning-marker:#ff9f32;--es-badge-error-marker:#ff7b7b;--es-badge-info-marker:#5aaaff;
  --es-shadow-account:0 1px 2px #00000044,0 8px 24px #00000044;
  --es-glass:#ffffff02;--es-glass-border:#ffffff13;--es-shadow-dialog:0 1px 1px #0000001f,0 12px 32px #00000024;
- --es-selected:#2a2a2a;--es-composer-surface:#191919;--es-focus:#b9b9b9;--es-overlay:#080808a8;
- --es-composer-context:#222222;--es-composer-border:#ffffff04;--es-composer-focus:#ffffff17;--es-control:#262626;--es-heading:#d4d4d4;--es-input-text:#d0d0d0;--es-badge:#414141;--es-on-badge:#e5e5e5;--es-send:#dedede;--es-on-send:#292929;
+ --es-selected:var(--sidebar-accent);--es-composer-surface:#191919;--es-overlay:#080808a8;
+ --es-composer-context:#222222;--es-composer-border:#ffffff04;--es-composer-focus:#ffffff17;--es-control:var(--secondary);--es-heading:#d4d4d4;--es-input-text:#d0d0d0;--es-badge:#414141;--es-on-badge:#e5e5e5;--es-send:#dedede;--es-on-send:#292929;
 }

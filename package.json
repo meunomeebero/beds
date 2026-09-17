@@ -2,8 +2,12 @@
   "name": "beds-workspace",
   "private": true,
   "type": "module",
-  "workspaces": ["packages/*"],
-  "engines": { "node": ">=22" },
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "vite apps/web/labs/espaco-library --config apps/web/labs/espaco-library/vite.config.ts",
     "build": "npm run build --workspace beds",
@@ -18,6 +22,7 @@
   },
   "devDependencies": {
     "@playwright/test": "1.58.2",
+    "@tailwindcss/vite": "^4.3.3",
     "@types/node": "24.12.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
