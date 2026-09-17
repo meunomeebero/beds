@@ -28,7 +28,7 @@ const plans: PricingPlan[] = [{
 | Image |src + alt required;optional fallbackLabel;empty alt for decorative art;host-owned meaningful image where needed |
 | Price |Complete localized label;optional description for billing terms;no numeric formatting,currency conversion or inferred interval |
 | Features |Readonly `{id,text}[]`;unique stable IDs;native named ul/list;empty array removes benefits block |
-| Action |`{label,onClick,busy?,disabled?}`;exact callback only;busy also disables;actionNote explains unavailable/current plan;feedback announces host-supplied result |
+| Action |Exclusive `{label,onClick,busy?,disabled?}` or `{label,href}`;callback busy also disables;native href has no busy/disabled/callback;actionNote explains unavailable/current plan;feedback announces host-supplied result |
 | PricingSection / PricingSectionProps |Required title/plans;optional description,mark,headingLevel1/2(default);mark uses an existing noninteractive DS identity component |
 | PricingPlan |PricingCardProps without headingLevel,plus unique stable id;section supplies H2 below H1 or H3 below H2 |
 
@@ -42,7 +42,14 @@ explain loading/unavailability and provide appropriate recovery outside it.
 Keep billing period,renewal,total obligations and relevant conditions visible
 beside the price using price.description/actionNote. Do not advertise a monthly
 equivalent as the actual bill or invent "free/no card required" claims.
-Catalog amounts and benefits are fixtures,not proposed Curriculol policy.
+Standalone pricing-catalog amounts and benefits are fixtures,not proposed
+Curriculol policy. The separate [Curriculol landing](LANDING-PAGE.md) records
+its product-evidence snapshot; no billing logic moves into the library.
+
+September16 local addition: native href actions preserve link behavior and
+browser Back.44px minimum,r999,p10/16,existing control/text or featured brand/
+on-brand tokens;hover1px/pressed2px inset ring;2px focus outline. Callback
+geometry and busy/disabled behavior unchanged. No version/publication change.
 PlanCard remains the compact account/usage component;FeatureCard remains the
 image-first onboarding/presentation component. Neither contract changed.
 

@@ -7,6 +7,7 @@ These rules do not certify the source application or every browser/device. Accou
 | Surface | Entry → transition → result | Re-entry / recovery |
 |---|---|---|
 | Theme |Provider theme → ThemeToggle → callback → new provider theme |Selected state matches actual palette; absent callback disabled; no silent persistence |
+| Landing composition |Native entry/skip link → product demo tabs or FAQ/menu disclosure → native destination → Back |Menu Escape returns focus; links close menu; controlled demo state; readable native answers; immediate reduced-motion states; no fake network results. [Contract](LANDING-PAGE.md) |
 | Landing footer |Native footer/nav links → supplied destination → browser Back |Optional groups/action omitted without empty controls; complete text wraps; no own network/loading/success; destination owns recovery. [Contract](LANDING-FOOTER.md) |
 | Landing benefits |Read ordered cards → native CTA → supplied destination → browser Back |Static/no card interaction; optional art/action omitted; empty data omits list; no simulated result, fetching or spinner; destination owns recovery. [Contract](BENEFITS.md) |
 | Settings navigation |Tab→edit→save/error→correct→re-entry |One roving stop;arrows/Home/End;settings RTL arrows mirror;inactive panels hidden/mounted;scroll overflow confined to tablist;draft preserved across tabs;loading/error recovery and destructive actions simulated only in catalog. [Contract](SETTINGS.md) |
@@ -56,6 +57,32 @@ These rules do not certify the source application or every browser/device. Accou
 | Empty/notice |Caller condition → explanation and optional recovery |No upsell inferred; action callback supplied; status/error announcement where appropriate |
 | Code snippet |Labelled value → explicit Copy click → async callback or browser clipboard |Copying prevents duplicate click; copied status; error offers retry/manual selection; no network request |
 
+Checkout:catalog → review quantity/total/method → explicit submit → pending →
+verified-host confirmation or recovery → deliberate return. Pix CPF only;
+hosted card collects no local card data. Mock confirms only by explicit preview
+control;no timer/query success,real charge or fiscal invoice. [Contract](CHECKOUT.md).
+
+Processing:entry CTA → staged presentation → explicit confirmation or failure
+→ explicit full result navigation/retry → exit/re-entry. Never auto100%;manual-review has no retry.
+Pause freezes narrative,not master estimate;hidden/offscreen and reduced-motion
+guards. Native disclosures retain complete activity/story. [Contract](PROCESSING.md).
+
+Results:confirmed processing → explicit result CTA → evidence + eligible next
+step → optional local checkout → explicit simulated success or retry/cancel.
+Free analysis/account reports distinct;already-paid documents never credit-gated.
+Low fit/excellent score/existing result/unknown balance/missing proof have useful
+non-purchase branches. Regression signed,partial score never zero. [Contract](RESULTS.md).
+
+## Motion contract
+
+Interaction motion (state changes, enter/exit, gestures, feedback) is expressed with `motion/react` — the market-standard engine every adopted library (beUI and other shadcn-compatible sources) already uses. Rules:
+
+- Easing: BEDS curve `[.16,1,.3,1]` (`--ease-out-expo` in `@theme`); durations per component evidence.
+- `useReducedMotion` mandatory on every `motion/react` usage; reduced motion jumps to the final state.
+- CSS `transition`/`@keyframes` allowed only for trivial color hover and only inside the shrinking allowlist of unmigrated stylesheets in `check-library.mjs`; new interaction keyframes fail the build.
+- Motion never replaces the non-animated state signal (color, text, ARIA).
+- Marketing animations are product-owned durations; never shortened by a DS migration (project rule).
+
 ## Non-negotiable semantics
 
 Application tracking: [ApplicationCard state contract](APPLICATION-CARD.md).
@@ -69,7 +96,8 @@ stable polite announcement. Preview operations stay local and reversible.
 |---|---|
 | Accessible names |Icon-only actions named; decorative glyph hidden; group/input labels persistent |
 | Selected state |Native checked/current/selected/pressed semantics; never color alone. Primary NavItem active: filled currentColor icon with sidebar-color stroke; inactive returns to outline. Selection follows controlled active/aria-current, not hover or pointer press |
-| Focus |Visible treatment; source-equivalent style where measured; local engineering A where source behavior unverified; mobile drawer restores after the close frame rather than into an inert main region |
+| Focus |Visible treatment; source-equivalent style where measured; local engineering A where source behavior unverified; mobile drawer restores after the close frame rather than into an inert main region. Two idioms, chosen by anatomy: borderless actions (button, icon button, tab) keep the canonical 2px solid `--es-focus` outline at offset2; bordered text fields (`es-text-input`,`es-text-area`) instead recolor their own border to `--es-focus` plus a 3px `--es-focus-ring` shadow at offset0, because an offset outline over an existing 1px border read as a detached second ring. `es-search-field` applies the same idiom on `:focus-within`, since it is a bordered shell around a borderless input. Fields keep a transparent outline so forced-colors still paints `Highlight`. Invalid fields swap to `--es-error`/`--es-error-ring` |
+| Control motion |Interaction motion is expressed with `motion/react` (Motion contract below); CSS transitions/keyframes survive only in the shrinking allowlist of unmigrated stylesheets in `check-library.mjs`. Legacy CSS idiom (pre-migration, still live in allowlisted files): fields transition border/ring/background 150ms ease-out; actions transition color 150ms and press to `scale(.97)` in 120ms BEDS easing; a newly invalid field nudges once (280ms) and the error message settles in (180ms); the switch thumb travels `translateX(14px)` in 180ms, the checkbox check scales in from `.6` (160ms) and the radio dot grows from `scale(0)` (160ms). All of it collapses under `prefers-reduced-motion:reduce`; motion never replaces the non-animated state signal |
 | Nested overlays |Escape dismisses active overlay before parent drawer; do not strand focus in removed content |
 | Keyboard |Native text/radio/checkbox behavior; documented choice navigation; no keyboard trap outside modal intent |
 | Errors |Explain recovery near relevant control; associate alert/description; retain entered values |

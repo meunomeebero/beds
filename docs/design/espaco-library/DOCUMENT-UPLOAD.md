@@ -10,7 +10,7 @@ Owner-supplied September15 drop-screen screenshot: overlapping document sheets,
 centered title/instruction and one picker action. **A adaptation**, not extracted
 CSS. Original CSS artwork; no screenshot/third-party illustration redistributed.
 Reference rainbow background/window chrome omitted: the existing BEDS canvas,
-Inter and one brand accent remain authoritative. No motion dependency.
+Inter and one brand accent remain authoritative. No motion beyond the shared `motion` contract.
 
 ## Public contract
 

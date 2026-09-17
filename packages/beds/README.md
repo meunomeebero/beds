@@ -33,6 +33,13 @@ import 'beds/styles.css';
 
 The package includes source, declarations, fonts/licenses, portable documentation, evidence and audit scripts. For every BEDS UI task, agents must automatically use `better-interface` and its six owners before design/code decisions and before handoff,without waiting for a user invocation. Better skills are installed separately; [Interface quality](docs/INTERFACE-QUALITY.md) pins their source and supplies the required consumer `AGENTS.md` routing. No automatic background auditor or skill installation is implied.
 
+The [marc-lou-landing-page skill](skills/marc-lou-landing-page/SKILL.md) is bundled
+with its references and agent metadata. It adds a landing-specific product/copy
+lens, not a new visual system or a conversion guarantee. Follow
+[Landing-page routing](docs/LANDING-PAGE-SKILL.md) for automatic consumer use and
+optional native discovery. Added after RC16; the published RC16 archive above
+does not include this source addition. No global installation or auto-upgrade.
+
 ```sh
 node node_modules/beds/scripts/check-consumer.mjs src/ui
 ```

@@ -10,6 +10,12 @@ decisions and before handoff; no explicit user invocation needed. Read
 its routing in each consuming UI scope's `AGENTS.md`. The protocol is mandatory;
 it is not an automatic skill installer or a guarantee of visual approval.
 
+Landing work also uses [marc-lou-landing-page](docs/design/espaco-library/LANDING-PAGE-SKILL.md):
+portable guidance for positioning, product proof and conversion-focused copy.
+The complete skill is bundled in source/local candidates under `skills/`; it is
+not in the published RC16 archive yet. Consumer agents need the documented
+routing or explicit skill installation; no runtime or background audit is added.
+
 ## Develop
 
 Node22+; npm workspace with a committed lockfile.
@@ -21,6 +27,8 @@ npm run dev
 ```
 
 Catalog: `http://127.0.0.1:5283/?view=components&theme=dark`.
+Curriculol landing candidate: `?view=landing&theme=light` (product demo,
+benefits, credits, FAQ and native local-preview CTAs; no production integration).
 Use `?view=lucy`, `?view=mcp`, `?view=feature-card` or `?view=tokens`.
 Settings form example: `?view=settings-form` (native Enter submission,
 caller validation/focus, light/dark; no account request).
@@ -39,6 +47,8 @@ Landing footer: `?view=landing-footer` (closing message, navigation, decorative
 wordmark and native CTA; local preview links, no landing integration).
 Payment confirmation: `?view=payment-confirmation` (animated receipt, invoice
 pending/error/recovery; synthetic only, no charge or fiscal issuance).
+Checkout: `?view=checkout` (quantity,Pix/card,summary and recovery;synthetic only,
+no provider or charge). Supports both fixed themes.
 Illustrated empty state: `?view=empty-state` (all-clear, first use, optional
 action and image recovery; original light/dark artwork; no product request).
 Folder/flies variant: `?view=empty-state&preview=folder&brand=curriculol`
@@ -96,6 +106,10 @@ Wrap only explicitly migrated screens; never enclose legacy UI to simulate migra
 | [Blog posts](docs/design/espaco-library/BLOG-POST.md) | Compact editorial cards, native article links and thumbnail recovery |
 | [Landing footer](docs/design/espaco-library/LANDING-FOOTER.md) | Oversized brand, compact navigation and native closing CTA |
 | [Landing benefits](docs/design/espaco-library/BENEFITS.md) | Responsive bento, original feature illustrations and one profile CTA; `?view=benefits` |
+| [Landing composition and review](docs/design/espaco-library/LANDING-PAGE.md) | Reusable hero/demo/workflow/FAQ, Curriculol product evidence, Marc/Better/Emil review; `?view=landing` |
+| [Processing screens](docs/design/espaco-library/PROCESSING.md) | Shared animated analysis/optimization; `?view=analysis-loading` / `?view=optimization-loading`; local simulation only |
+| [Results and conversion](docs/design/espaco-library/RESULTS.md) | Shared result patterns; `?view=analysis-result` / `?view=optimization-result`; Revenue-Centric,free/account/paid boundaries and simulated checkout |
+| [Checkout](docs/design/espaco-library/CHECKOUT.md) | Focused purchase,exact host-owned total,Pix/card fields and recovery;Revenue-Centric,local simulation only |
 | [Settings](docs/design/espaco-library/SETTINGS.md) | Top tabs, borderless groups and local account preferences preview |
 | [Payment confirmation](docs/design/espaco-library/PAYMENT-CONFIRMATION.md) | Printer-style receipt, separate invoice status and controlled actions |
 | [Application card](docs/design/espaco-library/APPLICATION-CARD.md) | Personal notes, document folio, scores and controlled next steps |
@@ -113,6 +127,9 @@ Wrap only explicitly migrated screens; never enclose legacy UI to simulate migra
 | [Consumer contract](docs/design/espaco-library/CONSUMER-CONTRACT.md) | Application composition |
 | [Governance](docs/design/espaco-library/GOVERNANCE.md) | Change and acceptance gates |
 | [Interface quality](docs/design/espaco-library/INTERFACE-QUALITY.md) | Better skill routing |
+| [Landing-page skill](docs/design/espaco-library/LANDING-PAGE-SKILL.md) | Bundled Marc Lou adaptation, landing-only routing and consumer setup |
+| [External component sourcing](docs/design/espaco-library/EXTERNAL-COMPONENT-SOURCING.md) | beUI-first search before building a missing pattern; adapt-never-install contract and attribution |
+| [beUI opportunities audit](docs/design/espaco-library/BEUI-OPPORTUNITIES-2026-09-16.md) | Measured motion gap, replace/enhance/new candidates by intensity, and the decisions still owed |
 | [MCP/Profile review, 2026-09-15](docs/design/espaco-library/REVIEW-MCP-PROFILE-2026-09-15.md) | Six-domain preview audit; unresolved findings, not release approval |
 | [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.md) | Build/pack/import parity |
 | [Validation](docs/design/espaco-library/VALIDATION.md) | Snapshot-specific results |

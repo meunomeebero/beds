@@ -4,6 +4,130 @@ Canonical repository:`meunomeebero/beds`. Current release candidate:
 `beds@0.1.7-rc.16`,2026-09-15. Publication identity/hash belong to the immutable
 GitHub prerelease;this record describes source validation,not deployment.
 
+## Local checkout — September16
+
+[Checkout contract and Revenue-Centric review](CHECKOUT.md):three reusable
+patterns;one synthetic Curriculol composition. Revenue-Centric/form-CRO drive
+explicit value,total,conditional fields and recovery;Better covers six domains;
+Emil/review-animations preserve modest selection feedback and truthful receipts.
+No repricing,forced bundle,countdown,provider call or payment inferred from time.
+
+Checkout browser:16 passed,0 skips,20.7s. Light/dark1440/768/390/320px;28 captures;
+quantity/preset/custom prices;Pix/card conditional fields;creation retry;pending
+reload without CPF;slow/error/closed recovery;explicit confirmation;context
+return without entitlement mutation;keyboard/dialog focus;44px controls;
+sampled text contrast≥4.5:1;reduced motion,forced colors,CSS200% zoom proxy.
+No observed console/page errors or external/mutating requests. Command:
+`PLAYWRIGHT_BASE_URL=http://127.0.0.1:5296 npx playwright test --config apps/web/labs/espaco-library/playwright.config.ts checkout.spec.ts --reporter=line`.
+
+All100 quantity totals matched current product arithmetic. Copy target40→44px
+and offscreen confirmation focus corrected before final tests. Final320px
+header/currency wrapping polished and all16 cases rerun. Main visual review:
+desktop dark form/pending/receipt,light desktop and mobile light/dark captures.
+No approved screenshot baseline or measured conversion uplift.
+
+`npm run verify` passed:build/typecheck;129 components/92 tokens;32 consumer
+roots/38 files;0 violations.38 guard tests and4 quality-routing tests passed.
+Fresh package parity and extracted-consumer import smoke passed. Source/package
+archive is local only;published RC16 remains unchanged.
+
+Catalog entry only;full result-CTA/order/fulfillment integration remains separate.
+No production edits,provider/auth/payment integration,real credits,fiscal
+documents,commit,push,release or consumer upgrade. Native screen-reader speech,
+physical devices,Safari/Firefox,native zoom and performance profiling unverified.
+Scoped verification,not entire-catalog reapproval or owner aesthetic acceptance.
+
+## Local analysis/optimization results — September16
+
+[Result contract and Revenue-Centric review](RESULTS.md):five reusable patterns,
+two synthetic pages,contextual credit offer and explicit simulated checkout.
+Revenue-Centric informs value→outcome→priced action;Better covers all six
+domains;Emil covers220ms optional entry and interruptible feedback. Free
+analysis/account access and already-paid documents remain separate from sales.
+
+Results browser:16 passed,0 skips,25.7s. Light/dark1440/768/390/320px,24 captures,
+all fixture branches,checkout cancel/fail/confirm/return,free reports,known vs
+unknown balance,negative/missing/partial scores,paid artifacts at zero credits,
+local search boundary,keyboard/modal focus,44px actions,sampled text contrast
+≥4.5:1,reduced motion and CSS200% zoom proxy. No observed console/page errors or
+external/mutating requests. Command:
+`PLAYWRIGHT_BASE_URL=http://127.0.0.1:5296 npm run test:browser -- results.spec.ts --reporter=line`.
+
+Shared Dialog focus-after-content-replacement fixed;four existing dropdown/
+dialog desktop/mobile cases rerun and passed,10.6s. Processing and shared-meter
+regressions rerun after full-result navigation and optional-Arya narrative:
+18 passed,0 skips,34.4s. Total scoped browser cases:38 passed. Three new
+server-rendered result guards included in the package verification.
+
+`npm run verify` passed:build/typecheck;126 components/92 tokens;86 Markdown
+files/828 local targets;31 consumer roots/36 files;0 violations.36 guard tests
+and4 quality-routing tests passed. Fresh package parity and extracted-consumer
+import smoke passed. `git diff --check` clean. The generated archive is a local
+candidate,not a replacement for the immutable published RC16 release.
+
+Independent review:unresolved jobs route and Arya narrative mismatch corrected,
+then rechecked read-only in code/Chromium. Existing90s/75s cadence preserved.
+Main visual review:both dark desktop results,checkout,light desktop and both
+theme390px captures. No approved screenshot baseline or measured conversion
+uplift. This is scoped verification,not a repeat of the entire catalog audit.
+
+No production edits,providers,real billing,actual generated PDF/editor/share,
+commit,push,release or consumer upgrade. Owner aesthetic acceptance,native
+screen-reader speech,physical devices,Safari/Firefox,native browser zoom and
+performance profiling remain unverified. Published RC16 stays unchanged.
+
+## Local processing port — September16
+
+[Source mapping and six-domain review](PROCESSING.md):one shared `ProcessingView`,
+two isolated Curriculol playground hosts. Existing source cadence90s/75s,
+five phases,captions,logs and illustrative scores;host-confirmed100% only.
+Better/Emil review applied;idle timer finding fixed and independently rechecked.
+Independent code/selected-render result:PASS_WITH_NOTES,not aesthetic sign-off.
+
+`npm run verify` passed:121 public components/92 tokens,30 consumer roots/34
+files,0 violations;33 guards +4 routing tests;fresh artifact/import parity.
+Focused browser command:
+`PLAYWRIGHT_BASE_URL=http://127.0.0.1:5296 npm run test:browser -- processing.spec.ts score-meter.spec.ts --reporter=line`.
+Final run after timer fix:18 passed,0 skips,35.7s (12 processing +6 existing meter).
+Both themes,desktop/mobile,1440/768/390/320px,entry→start→terminal→result/re-entry,
+pause/resume,full timeline,wait/error/retry/manual recovery,keyboard/focus,
+long content,contrast≥4.5:1 sampled text,44px component controls,reduced motion,
+forced colors and CSS200% zoom proxy. Existing meters retain role/value/bounds.
+Processing suite observed no external/mutating request or console error.
+36 processing screenshots;dark desktop/light320px,error and success inspected.
+Initial mobile timing failure during concurrent editing passed isolated and
+stable full reruns;assertions retained. Full catalog not rerun for this port.
+
+Current product unchanged;no provider,upload,billing,email,commit,push or release.
+Game/audio/confetti and real results excluded. Historical11s/9s vs30s/25s vs
+current90s/75s policy drift recorded;owner decision before product integration.
+Owner aesthetic approval,real providers,screen-reader speech,physical devices,
+Safari/Firefox,actual browser zoom and performance profiling remain unverified.
+
+## Local landing composition — September16
+
+[Contract and six-domain review](LANDING-PAGE.md):7 reusable components,
+native pricing-link action and Curriculol-only playground composition.
+Marc Lou adaptation guided promise/proof/CTA;Better reviewed all six domains;
+Emil reviewed minimal feedback/reduced motion. No published-version change.
+
+`npm run verify` passed:120 public components/92 tokens,29 consumer roots/32
+files,0 violations;33 guards +4 routing tests;fresh artifact/import parity.
+Playwright:10 landing +20 benefits/footer/pricing cases passed,0 skips.
+Light/dark1440/768/390/320px,keyboard/focus,CTA round trips,narrow container,
+contrast≥4.5:1 in sampled functional text,CSS200% zoom/RTL,forced colors,
+reduced motion. Full-page and mobile screenshots inspected;not pixel baselines.
+
+Initial test setup corrected:scope FAQ summaries separately from mobile Menu;
+count running transitions rather than retained completed animation objects.
+Build-guard fixture updated to include new CSS;missing-asset failure retained.
+No assertion removed to hide a rendered defect.
+
+Production/auth/upload/payment/analysis and actual browser zoom,Safari/Firefox,
+screen-reader speech,physical devices,performance profiling,owner aesthetic
+acceptance and conversion uplift remain unverified. No commit/push/release.
+Earlier validation sections describe their own snapshots,not this new surface.
+
 ## RC16 — consolidated Better review
 
 [Six-domain review](REVIEW-CONSOLIDATION-2026-09-15.md) and separate

@@ -74,12 +74,14 @@ function prepareRebuild(root) {
   }
 }
 
-function requiredPackagePaths(root) {
+export function requiredPackagePaths(root) {
   const docs = [...filesIn(path.resolve(root, '../../docs/design/espaco-library')).keys()]
     .filter(file => file.endsWith('.md'))
     .map(file => path.posix.join('package', 'docs', file));
   const fonts = [...filesIn(path.join(root, 'fonts')).keys()]
     .map(file => path.posix.join('package', 'fonts', file));
+  const skills = [...filesIn(path.join(root, 'skills')).keys()]
+    .map(file => path.posix.join('package', 'skills', file));
   return [
     'package/package.json',
     'package/README.md',
@@ -90,6 +92,7 @@ function requiredPackagePaths(root) {
     'package/dist/reset.css',
     ...docs,
     ...fonts,
+    ...skills,
   ];
 }
 

@@ -66,11 +66,18 @@ export function checkDocs({ inputs, boundary, indexes = [] }) {
   return { files: files.length, links, issues };
 }
 
+function packageDocInputs(root) {
+  const skills = path.join(root, 'skills');
+  return [
+    path.join(root, 'README.md'),
+    path.join(root, 'AGENTS.md'),
+    path.join(root, 'docs'),
+    ...(fs.existsSync(skills) ? [skills] : []),
+  ];
+}
+
 export function checkPackageDocs(root) {
-  return checkDocs({
-    inputs: [path.join(root, 'README.md'), path.join(root, 'AGENTS.md'), path.join(root, 'docs')],
-    boundary: root,
-  });
+  return checkDocs({ inputs: packageDocInputs(root), boundary: root });
 }
 
 if (process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(process.argv[1]) === fs.realpathSync(fileURLToPath(import.meta.url))) {
@@ -81,7 +88,7 @@ if (process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(process
     const result = explicit.length
       ? checkDocs({ inputs: explicit })
       : checkDocs({
-          inputs: [path.join(packageRoot, 'README.md'), path.join(packageRoot, 'AGENTS.md'), path.join(packageRoot, 'docs'), ...(hasCanonical ? [canonical] : [])],
+          inputs: [...packageDocInputs(packageRoot), ...(hasCanonical ? [canonical] : [])],
           indexes: hasCanonical ? [
             { index: path.join(canonical, 'README.md'), directory: canonical },
             { index: path.resolve(packageRoot, '../../README.md'), directory: canonical },

@@ -42,7 +42,7 @@ The adopted main canvas is full-bleed`#191919`. The local prototype's outer`#171
 | Library switch off /thumb |`#414141` /`#c8c8c8`;A mapping for library-only control |
 | Account shadow |`0 1px 2px #00000044,0 8px 24px #00000044`;A dark adoption;280px/r12 current account geometry |
 
-Functional information/success/warning/error colors stay unchanged in their existing uses. Inter and Geist remain fixed; only the three sidebar text contexts are A additions in the type metadata. New role aliases keep controls, selection, composer parts, heading/input text, badges andsend surfaces distinct instead of recoloring unrelated components through one shared token. Functional badge tones use fixed theme-specific marker roles, each at least3:1 against `--es-badge`; their 10px text uses the accessible foreground rather than functional ink.
+Functional information/success/warning/error colors stay unchanged in their existing uses. Inter and Geist remain fixed; only the three sidebar text contexts are A additions in the type metadata. New role aliases keep controls, selection, composer parts, heading/input text, badges andsend surfaces distinct instead of recoloring unrelated components through one shared token. Functional badge tones use fixed theme-specific marker roles, each at least3:1 against `--es-badge`; their 12px text uses the accessible foreground rather than functional ink.
 
 The source light secondary `#787775` is retained as historical neutral step/evidence, but the shared small-text and badge-text role uses `#6a6966` (A). Against the actual light surfaces `#ffffff`, `#fbfaf9` and `#edece9`, it yields 5.49:1, 5.27:1 and 4.65:1 contrast respectively. This is a global semantic-token correction; consumers cannot override it. The composer focus contour retains its measured source color because it is a non-text indicator with a separate UI-component contrast requirement.
 
@@ -68,7 +68,7 @@ Latest user direction: transparent cards and broader corners from the supplied M
 | Carousel |Opt-in continuous forward34px/s;equal-width repeated groups with16px seam gap;instant period rebase between identical content;hidden scrollbar;no visible playback/direction controls |
 | PagedCarousel |Manual finite paging;one100% slide per snap;16px trailing gutter;40px circular controls (44px narrow);no autoplay or loop;keyboard movement instant |
 | Toast |Top16px centered,max520px;max50dvh scroll viewport,4px focus inset;40px minimum pill,r999 desktop/r16 narrow;8px stack gap;wrapped copy,32px close/44px mobile controls;180ms entrance;reduced motion opacity-only/static pending marker |
-| Conversation |8px stack gap;message max80% desktop/88% narrow;14/22.4px text;8px×14px content inset;r18 with contextual8px tail;transparent assistant/user message token;metadata11/16px |
+| Conversation |8px stack gap;message max80% desktop/88% narrow;14/22.4px text;8px×14px content inset;r18 with contextual8px tail;transparent assistant/user message token;metadata12/16px |
 | Reduced motion |Automatic rail stopped;native touch/trackpad/keyboard scroll retained;new hover transitions removed |
 
 September15 status refinement (A, owner requested cleaner application-card
@@ -77,7 +77,7 @@ transparent background, no padding/border/shadow,6px dot and6px gap. Dot reuses
 existing badge marker tokens by tone; neutral uses secondary. Long labels grow
 and wrap without truncation. Static ApplicationCard status adopts this variant;
 interactive status selectors retain their distinct control shape. Default
-`purpose="tag"` retains the compact10/14px badge, unchanged. This is a documented
+`purpose="tag"` retains the compact12/16px badge, unchanged. This is a documented
 adaptation for owner review, not a new reference measurement or palette.
 
 Fixed radius tokens: `--es-radius-panel`, `--es-radius-card`. Preserve measured MCP16px shells, account12px popup, compact controls and dialog-specific radii. Do not inflate every component or recolor `--es-surface` to simulate transparent cards.
@@ -99,6 +99,31 @@ One1600ms transform reveal after120ms,existing cubic-bezier(.16,1,.3,1);full
 layout reserved and actions immediately usable;reduced motion static. No new
 tokens or dependency. [Payment confirmation](PAYMENT-CONFIRMATION.md) owns API,
 state,reference provenance and validation. Owner aesthetic approval pending.
+
+### Full landing composition — September16 adaptation
+
+Product-first Curriculol playground → A candidate,not measured source CSS.
+Shared1040px content;header16/24px inset,24px gaps,44px links/theme control.
+Brand20/28px500,10px glyph gap. Below768px:12/16px header,8px gaps,18px brand,
+native Menu disclosure with44px summary;full-width popup within16px gutters,
+r14,p8,semantic surface/shadow. DOM reading order retained.
+Hero1088px outer maximum,64px top/24px sides;36px top/16px sides narrow.
+H1 Inter58/1.08,500,−2.4px,17ch;38/1.12,−1.2px narrow.
+Description16/1.65,max53ch,24px top;15px/20px top narrow. Eyebrow13/20;
+note12/18. Actions48px minimum,r999,p12/20,gap12,28px top;primary brand/on-brand,
+secondary neutral. Proof48px top/32px narrow. Sections72/24px or48/16px;
+benefits inherit this wrapper without double inset.
+Demo r24,p8,semantic context/shadow;inner panels r16=24−8,p24;grid1:1.55,gap8.
+Inline container≤650px stacks,p16. Document p20/16,min330px;compact p16/0,no
+min-height;identity21/28,body13/21,20px groups,note12/18. No real document output.
+Workflow max1040px,three columns/gap48,40px below centered intro;36px numbered
+tile/r10,12/18px mono. Narrow vertical list/gap28,36px number +16px gap +copy.
+Section H2 32/1.4,500,−.8px;28px/−.5px narrow. FAQ1:1.5,gap64;one column/gap24
+narrow;summary64px minimum,16px block inset,15/22px;answer14/23px.
+FAQ glyph45deg/150ms existing cubic-bezier(.16,1,.3,1);CTA150ms ease-out
+color/shadow only. Both gated by no-preference;no autoplay/new motion dependency.
+No new tokens,fonts or palette. [Contract and review](LANDING-PAGE.md).
+Owner aesthetic approval pending;published RC16 unchanged.
 
 ### Landing footer — September15 adaptation
 
@@ -150,7 +175,7 @@ thumbnail,r8=20−12,cover crop,existing image outline;48px at≤360px container
 10px gap;metadata stacks author above date/reading time. No-image variant removes
 the column. Shared workspace author avatar
 16px/r4;title14/21px500,excerpt13/20px400,metadata12/18px400;4px content rhythm.
-Topics11/18px400,p0×6,r999,subtle/secondary tokens,4px wrapping gap and4px top
+Topics12/18px400,p0×6,r999,subtle/secondary tokens,4px wrapping gap and4px top
 inset. Titles and metadata wrap;excerpt at most two lines,full text at
 destination. Feed maximum640px from chat-width role,12px row gap;no fixed card
 height. Secondary metadata/excerpt become primary while interacting;topic
@@ -161,7 +186,7 @@ surface/ink remain unchanged. [Blog posts](BLOG-POST.md) owns API/QA.
 Owner-supplied events list → A mini-calendar anatomy,not measured source CSS.
 DateItem:transparent row,min76px,p12,gap16,r20;no dividers or animation. Narrow
 ≤767px:p8 inline,gap12,r14. Calendar48px wide,p4,r12;inner r8=12−4;existing
-surface + structural shadow ring/xs shadow. Month11px/1.45,500,+.4px,uppercase,
+surface + structural shadow ring/xs shadow. Month12px/1.45,500,+.4px,uppercase,
 subtle surface/secondary ink,p2 inline;day20/24px500,tabular numerals. Calendar
 rests at48px square but grows for longer localized labels. Content
 16/24px500 title;13/20px400 description;4px vertical/12px heading-status gap.
@@ -406,11 +431,11 @@ Inter 4.1 variable normal/italic is the fixed interface family; Geist Mono 400 i
 | PageContentHeader (MCP) | 15/24px | 500; contextual rule, not a change to PageHeader |
 | Body / body-small | 14/21px / 13/20px | 400 / inherited −.1px |
 | Label / option | 13/16px | 500 / 450; inherited −.1px |
-| Caption / overline | 11/16px | 400 / 500; 0 / +.55px |
+| Caption / overline | 12/16px | 400 / 500; 0 / +.55px |
 | Metric | 24/30px | 500 / −.2px; tabular numerals |
 | Composer | 14/22.4px | 400 / −.15px |
 | Settings input | 13/20px | 400 / −.1px |
-| MCP code / copy label | Geist Mono 11/20px / Inter 14/16px | 400 / 500 |
+| MCP code / copy label | Geist Mono 12/20px / Inter 14/16px | 400 / 500 |
 
 Sidebar, AccountMenu and FeatureCard contextual type are specified above. Uppercase is limited to the explicit overline context. No general uppercase SaaS heading rule. Optical sizing is auto; font features normal; browser rasterization may differ.
 
@@ -426,8 +451,9 @@ September15 reconciliation: PageContentHeader now executes15/24px; exported side
 | ResponsiveGrid | Two equal columns from 768px; one through 767px; 16px gap; children min-width:0 |
 | Composer | 20px radius; 120px minimum input panel; 14px vertical/16px horizontal inset; 36px agent strip |
 | Suggestions | 40px row; 24px icon tile; 20px heading-to-composer gap; 48px recent-section separation |
+| Landing rhythm | Hero top64px;section block72px;standalone benefits block72px;FAQ column gap64px;mobile hero36px/section48px. Marketing scale above the48px ceiling composes as an exact scale multiple → `calc(var(--es-space-10) * 3)`;never a new raw value or new token |
 
-These are named relationships, not consumer pixel options. Fixed widths are maxima; wrapping may increase row heights. Source coordinates never authorize absolute-positioning a screen.
+These are named relationships, not consumer pixel options. Fixed widths are maxima; wrapping may increase row heights. Source coordinates never authorize absolute-positioning a screen. Layout rhythm resolves through `--es-space-*`; raw pixels stay only for control geometry mirroring `controls.css` and for decorative art nudges with no scale step.
 
 ## Current compact controls and overlays
 
@@ -465,7 +491,7 @@ not measured CSS from the supplied raster. Existing CommandPalette unchanged.
 | Theme / pill segment | 24px group; 22px options; 1px inset/2px gap. Account overrides are scoped above. |
 | Activity tabs | 30px minimum group; 24px minimum tabs; 2px inset/gap; r8/r6 |
 | Connection tabs | 16px shell radius; 53px strip; 8px inset; distributed 36px tablist/r10; 28px options. Desktop panel16/32/32px; mobile16/16/24px. |
-| Joined choices | 36px; 11/16px labels; 8px horizontal padding/r8 outer corners |
+| Joined choices | 36px; 12/16px labels; 8px horizontal padding/r8 outer corners |
 | Switch | 32×18.4px track; 16px thumb; fixed functional blue checked state;contrast-qualified resting boundary;20px label leading |
 | Segmented meter | 28 vertical segments;16px high;2px gap/radius;shared by usage and ApplicationCard ATS/FIT/match;count is geometry,not billing or scoring policy |
 | MCP code | 42px region/r12; raised semantic surface; 10/12px code padding; 40px copy control |
@@ -485,6 +511,39 @@ Settings-panel buttons36px minimum desktop,44px mobile;switch rows44px;mobile
 editable text16px,theme/select triggers and links44px. Defaults unchanged.
 No new motion;underline changes immediately. Existing reduced-motion behavior
 retained;forced colors adds a system-color selected boundary.
+
+## Checkout presentation — September16 adaptation
+
+Focused1040px purchase shell;form/summary1.4:1,48px gap,stack below768px.
+Summary-first DOM;native return and one named main. H1 28/36→24/32,total36/44;
+summary radius24,padding24→20;16px editable input,44px actions,48px radio rows.
+Existing neutral surfaces and purchase roles;no new palette or elevation.
+150ms reduced-motion-aware selection feedback;receipt motion retains its own
+contract. Prices,fields,terms and confirmation remain host-owned.
+[Checkout](CHECKOUT.md) owns provenance,flow and evidence.
+
+## Processing presentation — September16 adaptation
+
+Current Curriculol status/narrative split → shared BEDS adaptation. Fixed
+1040px maximum,32px block inset,48px groups,1.35:1 columns;760px container stacks.
+Inter28/36px500 heading,24/32px narrow;14/22px body,13/20px supporting copy.
+28px/r8 phase markers,24px row gap,shared28-segment master,3px stage progress.
+Story r24,p24/p16 narrow;semantic document sheets and one3200ms scan;400ms
+confirmed-success mark.44px controls,full wrapping,no new tokens/dependencies.
+[Processing](PROCESSING.md) owns exact geometry,90s/75s fixture provenance,
+historical timing conflict,pause/reduced motion and review limits.
+
+## Result presentation — September16 adaptation
+
+A: current Curriculol V4 evidence/entitlements,not pixel-porting legacy styles.
+Shared1040px max,24px block inset;desktop1.35:1 columns/gap32;700px container
+stacks proof→next action→long details. H1Inter28/36px500,24/31px narrow;
+body14/22,detail13/21. Score56/60px500 (48/52narrow),prior32/40,tabular;
+28 existing vertical segments. r24/p24 surfaces,p16below380px. Offer20/27px500,
+price24/32,terms12/19;44px wrapping controls. Shared neutrals/brand and semantic
+positive/error delta roles;no new tokens.220ms opacity/6px entry only in
+no-preference mode;all useful content immediately operable. No rolling score,
+confetti,artificial payment success or blocked document. [Contract](RESULTS.md).
 
 ## Icons and motion
 
@@ -514,6 +573,8 @@ Adopted sidebar dimensions/type and retained compact control roles remain on mob
 Source durations150/250/400ms and ease-out `cubic-bezier(.16,1,.3,1)` are D; sidebar width/hover150ms also observed in computed styles. Declared reduced-motion rules are not full accessibility verification. Only implemented, reviewed motion paths belong to the package contract; do not invent decorative animation while filling missing states.
 
 ## Complete canonical token register
+
+Most names below are historical aliases into the shadcn contract of the same theme blocks (see "Token contract" above): `--es-bg`→`--background`, `--es-text`→`--foreground`, `--es-primary`→`--primary`, `--es-surface`→`--card`, `--es-subtle`→`--muted`, `--es-secondary`→`--muted-foreground`, `--es-hover`→`--accent`, `--es-error`→`--destructive`, `--es-border`→`--border`, `--es-control-border`→`--input`, `--es-focus`→`--ring`, `--es-sidebar`→`--sidebar`. Values stay identical. Extensions without a shadcn equivalent stay `--es-*` permanently.
 
 Current adopted snapshot of `packages/beds/src/tokens.css`,2026-09-14:87 distinct CSS custom properties plus2 provider runtime properties,89 total. Shared declarations provide defaults;theme assignments override them. Sidebar/dark values follow the latest user-approved Lucy adoption above. Light values retain the existing palette;new aliases preserve its established role values. Raw [Marketer source evidence](../../../packages/beds/evidence/marketer-reference.json) remains unchanged and is not a claim that these A adoption values were measured there. Never override these properties in consuming apps.
 
@@ -597,6 +658,8 @@ These47 rows include44 additional property names and3 overrides of shared defaul
 | `--es-border-strong` | `#0000001f` | `#ffffff13` |
 | `--es-control-border` | `#787775` | `#858585` |
 | `--es-error-text` | `#c52a2a` | `#ff7b7b` |
+| `--es-focus-ring` | `#0077e63d` | `#b9b9b93d` |
+| `--es-error-ring` | `#e8353533` | `#e8353547` |
 | `--es-image-outline` | `rgba(0,0,0,.1)` | `rgba(255,255,255,.1)` |
 | `--es-primary` | `#202020` | `#f1f1f1` |
 | `--es-on-primary` | `#ffffff` | `#242424` |
@@ -628,6 +691,20 @@ These47 rows include44 additional property names and3 overrides of shared defaul
 | `--es-on-send` | `#ffffff` | `#292929` |
 | `--es-focus` | `#0077e6` | `#b9b9b9` |
 | `--es-overlay` | `#0000007a` | `#080808a8` |
+
+## Token contract — shadcn naming, BEDS values (since 2026-09-17)
+
+Each `.es-root[data-theme]` block declares the shadcn vocabulary (`--background`,`--foreground`,`--card`,`--popover`,`--primary`,`--secondary`,`--muted`,`--accent`,`--destructive`,`--border`,`--input`,`--ring`,`--sidebar*`,`--chart-1..5`) with the BEDS values below. Historical `--es-*` names are aliases (`--es-bg: var(--background)`) kept until each component migrates to Tailwind utilities, then deleted. BEDS extensions without a shadcn equivalent (`--es-switch-off`,`--es-message-user`,`--es-glass`…) stay `--es-*` permanently. `--radius:8px` is the shared radius; `@theme` in `src/tailwind.css` derives `radius-sm..4xl`, the 4px spacing grid, the BEDS type scale under Tailwind names (`--text-sm:13px/20px`), the measured tracking values and the BEDS easing. Tailwind utilities compile into `dist/styles.css` at build; consumers never install Tailwind.
+
+### Objective fixes — 2026-09-17
+
+Approved corrections of decisions that violated accessibility or ergonomics (not taste). Proportions and palette are untouched.
+
+| # | Was | Now | Why |
+|---|---|---|---|
+| 1 | Field text 13px on every screen | 16px under `@media (pointer: coarse)` | iOS Safari zooms the page on focus below 16px |
+| 2 | Text at 10px/11px (badge, metadata, snippets) | 12px floor, enforced by `check-library` | legibility floor |
+| 3 | 32px touch targets on mobile | invisible 44px hit area via `::after` under `pointer: coarse` | WCAG 2.5.8 / HIG; desktop geometry unchanged |
 
 ### Provider-owned runtime properties — 2
 

@@ -18,6 +18,7 @@ The artifact gate rebuilds a temporary copy and compares generated `dist/` and p
 | API | Packed `dist/index.js` and declarations exist and expose the current public components. |
 | CSS | Packed `styles.css` and `reset.css` exactly match an isolated build. |
 | Docs | Every canonical library document is regenerated under package `docs/`. |
+| Skills | Every file under package `skills/` survives packing, including references and agent metadata; extracted skill Markdown links stay within the package and resolve. |
 | Assets | A canonical document cannot reference an absent lab or evidence asset. The build fails instead of emitting partial docs. |
 | Consumer | The unpacked tarball imports without Vite or TypeScript aliases. |
 

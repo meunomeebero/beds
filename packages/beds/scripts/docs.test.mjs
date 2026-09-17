@@ -64,6 +64,55 @@ test('packed docs pass with only bundled targets and no source repository', () =
   assert.deepEqual(checkPackageDocs(root).issues, []);
 }));
 
+test('packed docs scan optional skills and accept bundled skill references', () => fixture((root, write) => {
+  write('README.md', '[skill](skills/example/SKILL.md)');
+  write('AGENTS.md', '[map](docs/README.md)');
+  write('docs/README.md', '# Docs');
+  write('skills/example/SKILL.md', '[principles](references/principles.md) [interface](agents/openai.yaml)');
+  write('skills/example/references/principles.md', '[docs](../../../docs/README.md)');
+  write('skills/example/agents/openai.yaml', 'interface:\n  display_name: Example');
+  const result = checkPackageDocs(root);
+  assert.equal(result.files, 5);
+  assert.deepEqual(result.issues, []);
+}));
+
+test('packed docs reject a missing skill-local reference', () => fixture((root, write) => {
+  write('README.md', '# Package');
+  write('AGENTS.md', '# Rules');
+  write('docs/README.md', '# Docs');
+  const skill = write('skills/example/SKILL.md', '[principles](references/missing.md)');
+  assert.deepEqual(checkPackageDocs(root).issues, [{
+    code: 'DOC_LINK_MISSING',
+    path: `${skill} -> ${path.join(root, 'skills/example/references/missing.md')}`,
+  }]);
+}));
+
+test('packed docs reject repository-only links from nested skill Markdown', () => fixture((root, write) => {
+  const outside = write('repository-only.md', '# Source-only document');
+  write('package/README.md', '# Package');
+  write('package/AGENTS.md', '# Rules');
+  write('package/docs/README.md', '# Docs');
+  write('package/skills/example/SKILL.md', '# Example');
+  const reference = write('package/skills/example/references/extra.md', '[source](../../../../repository-only.md)');
+  assert.deepEqual(checkPackageDocs(path.join(root, 'package')).issues, [{
+    code: 'DOC_OUTSIDE_PACKAGE',
+    path: `${reference} -> ${outside}`,
+  }]);
+}));
+
+test('default CLI scans skill Markdown even when the package docs do not link it', () => fixture((root, write) => {
+  write('packages/beds/README.md', '# Package');
+  write('packages/beds/AGENTS.md', '# Rules');
+  write('packages/beds/docs/README.md', '# Docs');
+  write('packages/beds/skills/example/SKILL.md', '# Example');
+  write('packages/beds/skills/example/references/extra.md', '[missing](missing.md)');
+  const script = write('packages/beds/scripts/check-docs.mjs', fs.readFileSync(new URL('./check-docs.mjs', import.meta.url)));
+  const result = spawnSync(process.execPath, [script], { encoding: 'utf8' });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /DOC_LINK_MISSING/);
+  assert.match(result.stderr, /references\/missing\.md/);
+}));
+
 test('CLI invoked through a workspace symlink still rejects a missing target', () => fixture((root, write) => {
   const linked = path.join(root, 'linked-check-docs.mjs');
   fs.symlinkSync(fileURLToPath(new URL('./check-docs.mjs', import.meta.url)), linked);

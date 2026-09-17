@@ -75,7 +75,7 @@ entrypoints,semantics/surfaces/wrapping references;frontend-design direction.
 | Accessibility | Native link/title heading,one focus stop per card,decorative images,Tab/Enter/middle-click navigation,forced-colors focus | Clear in scoped browser/source review |
 | Layout | Thumbnail/content grid;no-image column removal;full title/tag wrapping;320px,RTL and zoom proxy | Clear;metadata consistently stacks on narrow cards |
 | Writing | Sentence-case PT-BR;clear authorship,reading time and fictitious-content disclosure;no invented metrics | Clear;source and rendered copy inspected |
-| Typography | Inter14/21px title,13/20px excerpt,12/18px metadata,11/18px topics;only excerpt clamped and recovered | Clear;long-title/tag renders inspected |
+| Typography | Inter14/21px title,13/20px excerpt,12/18px metadata,12/18px topics;only excerpt clamped and recovered | Clear;long-title/tag renders inspected |
 | Color | Existing semantic neutrals;actual rest/hover/pressed backgrounds,both themes | Clear;tested text contrast≥4.5:1 |
 | UI | Concentric r20/p12/r8 card-thumbnail relationship;quiet outline;fixed cover crop;load/failure/re-entry | Clear;desktop/mobile light/dark and failure captures inspected |
 

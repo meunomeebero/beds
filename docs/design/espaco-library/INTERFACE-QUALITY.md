@@ -42,6 +42,9 @@ Read each entrypoint completely;reuse it within the current task rather than rel
 - Source-diff review is a different scope:upstream `interface-review` is optional and user-invoked;not installed by this seven-skill replacement. Do not silently invoke it,resolve a different scope,or claim branch/PR coverage from a screen audit.
 - Missing skill:report the missing domain;continue safe in-scope work;do not approve missing coverage or auto-install without authority.
 - Do not load the removed polish skill alongside `better-ui`. Existing product/marketing skills remain contextual,not additional mandatory passes.
+- Result-to-purchase flows add `revenue-centric-design` when requested or relevant to the conversion decision;resolve the consuming project's skill and read its monetization/conversion references. [Results](RESULTS.md) records the Curriculol pass. Value precedes the offer;preserve free and already-paid access. This is a contextual lens,not a bundled skill,automatic price decision or measured conversion guarantee.
+- Checkout adds contextual `form-cro` for conditional fields,clear totals and recovery;[Checkout](CHECKOUT.md) records the scoped Revenue-Centric/Better/Emil pass. Never infer paid status from elapsed time,animation or a URL. Payment and fiscal issuance require separate evidence.
+- Landing strategy is a scoped automatic route: [marc-lou-landing-page](LANDING-PAGE-SKILL.md) applies to landing creation and positioning/hero/benefits/proof/offer/CTA review, not every primitive edit. It complements Better; it cannot replace visual/accessibility review, approved DS values or product-owner decisions. The skill is bundled; Better remains separately installed.
 
 ### Consumer agent entrypoint
 

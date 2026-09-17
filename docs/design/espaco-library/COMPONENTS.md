@@ -4,7 +4,40 @@ Visual decisions: [Foundations](FOUNDATIONS.md). Executed checks: [Validation](V
 
 Public entry: `packages/beds/src/index.ts`. Exact TypeScript declarations are the API authority. Import only from `beds`; no internal subpath, arbitrary className/style or raw element replacement. Named variants select fixed contexts. States: [STATES.md](STATES.md); dimensions/type: [FOUNDATIONS.md](FOUNDATIONS.md).
 
-Current inventory:113 public components;92 tokens. Additional exports: `useDesignSystem`, `brands`, `IconName`, `Theme`, `TextVariant`, `DataTableColumn`, `DataTableRow`, `DataTableState`, `FeatureCardProps`, `EmptyStateCardProps`, `OnboardingProps`, `AccountCreditsProps`, `CreditBalance`, `ForumTopicCardProps`, `BlogPostCardProps`, `LandingFooterProps`, `LandingFooterLink`, `LandingFooterGroup`, `BenefitsSectionProps`, `BenefitItem`, `BenefitIllustrationKind`, `ApplicationBoardColumn`, `ApplicationBoardItem`, `DateItemProps`, `DateItemDate`, `PaymentConfirmationProps`, `PaymentInvoice`, `PaymentReceiptRow`, `ChatOption`, pricing/decision/record-family types, `SearchResult` and read-only `typography/geometry/neutrals/themes` metadata; these are not extra visual components. A source-backed component can contain locally engineered A keyboard/recovery behavior. Feedback/populated-data patterns with no matching visible source state remain A/U.
+Current local inventory:129 public components;92 tokens. Published RC16 retains113 components. Additional exports: `useDesignSystem`, `brands`, `IconName`, `Theme`, `TextVariant`, `DataTableColumn`, `DataTableRow`, `DataTableState`, `FeatureCardProps`, `EmptyStateCardProps`, `OnboardingProps`, `AccountCreditsProps`, `CreditBalance`, `ForumTopicCardProps`, `BlogPostCardProps`, `LandingFooterProps`, `LandingFooterLink`, `LandingFooterGroup`, `LandingLink`, `ProductDemoTab`, `ProcessingViewProps`, `ProcessingStep`, `ProcessingStory`, `ResultLayoutProps`, `ResultScoreProps`, `ResultFindingsProps`, `ResultSectionProps`, `ResultOfferProps`, `ResultAction`, `CheckoutLayoutProps`, `OrderSummaryProps`, `CheckoutSectionProps`, `BenefitsSectionProps`, `BenefitItem`, `BenefitIllustrationKind`, `ApplicationBoardColumn`, `ApplicationBoardItem`, `DateItemProps`, `DateItemDate`, `PaymentConfirmationProps`, `PaymentInvoice`, `PaymentReceiptRow`, `ChatOption`, pricing/decision/record-family types, `SearchResult` and read-only `typography/geometry/neutrals/themes` metadata; these are not extra visual components. A source-backed component can contain locally engineered A keyboard/recovery behavior. Feedback/populated-data patterns with no matching visible source state remain A/U.
+
+## Checkout — 3
+
+`CheckoutLayout`,`OrderSummary`,`CheckoutSection`:focused purchase composition,
+host-formatted order summary,named form/status sections. No payment SDK,pricing
+logic or invoice assertion. Reuse fields,radio groups and confirmed-payment
+presentation. [Contract and source mapping](CHECKOUT.md).
+
+## Results — 5
+
+`ResultLayout`,`ResultScore`,`ResultFindings`,`ResultSection`,`ResultOffer`:
+proof first,contextual next action,readable findings and host-owned detail.
+Finite0–100 scores,missing value preserved,raw signed delta;max2 displayed
+decimals,sub0.01 change explicit. `locale` controls numeric formatting.
+Offers accept mutually exclusive native href or callback actions;price/terms
+describe the primary control. No entitlement,pricing,checkout or delivery logic.
+[Contract and source mapping](RESULTS.md). No slot machine or conversion promise.
+
+## Processing — 1
+
+`ProcessingView`: controlled ordered phases,estimated progress,narrative,
+disclosed activity,optional metrics,pause and host terminal/recovery actions.
+Types:`ProcessingViewProps`,`ProcessingStep`,`ProcessingStory`.
+[Contract and source mapping](PROCESSING.md);no application timing in the DS.
+
+## Landing composition — 7
+
+`LandingPageLayout`, `LandingHero`, `LandingSection`, `ProductDemo`,
+`DocumentPreview`, `ProcessSteps`, `FAQSection`: product-neutral native
+landmarks/navigation/CTAs, controlled demo tabs, readable document sample,
+ordered workflow and native disclosures. No new consumer styling API.
+Reuse existing benefits, pricing, footer and application card.
+[API, flow and scoped review](LANDING-PAGE.md).
 
 ## Landing benefits — 2
 
@@ -59,6 +92,7 @@ identity, options menu for supplied destinations; default purpose unchanged.
 |`TextLink` |`href`; optional `external/ariaLabel` |Text-level native link, shared hover/focus contract, underline from the border token; `external` adds a 12px up-right glyph and safe `rel`; no color/style overrides |
 |`BrandMark` |Optional accessible `label=Brand` |User-owned three18×4px bars,3px gaps,18×18 footprint; provider brand fill; A identity |
 |`ThemeToggle` |Optional `label/lightLabel/darkLabel` |Reads actual provider theme; invokes provider callback; disabled when callback absent; real theme control, unlike legacy fixture |
+|`AnimatedNumber` |`value` (`number \| null`), `format`; optional `fallback=—`, `duration=1.1`, `startOnView=false` |Tabular count-up to the true value. `null` or non-finite → renders `fallback`, never animates toward a fabricated number; reduced motion jumps straight to the final value; integer targets snap per frame. Not for evidence whose displayed text must stay stable, such as result scores. A adaptation of beUI `number` |
 
 Icon registry additions: `House`, `MessageCircle`, `ChartColumn`, `UserRound`, `Briefcase`, `Coins`, `ScanText`, `Bookmark`, `CalendarDays`, `ChevronsUpDown`, `Play`, `Pause`, `ArrowLeft`, `ShieldCheck` (privileged/admin rows). Existing names remain accepted. Former `SourceIcon` paths are [historical text evidence](../../../packages/beds/evidence/marketer-source-icons.txt), not runtime components. Callers cannot provide SVG paths, stroke, color or pixel size. Registry entries do not create configurable styling.
 
@@ -91,11 +125,11 @@ Primary navigation reuses `NavItem` inside `SidebarSection purpose="primary"`:4p
 
 | Component | API | States / constraints |
 |---|---|---|
-|`Button` |`label`; optional onClick/type/variant/compact/purpose/icon/disabled/busy/aria-describedby/aria-expanded/aria-controls |Primary/secondary/ghost; purpose default/welcome/connection; compact applies to default purpose only; native type; busy disables repeated action; disclosure toggles expose the controlled region state |
+|`Button` |`label`; optional onClick/type/variant/compact/purpose/icon/disabled/busy/aria-describedby/aria-expanded/aria-controls |Primary/secondary/ghost/destructive; purpose default/welcome/connection; compact applies to default purpose only; native type; busy shows an inline spinner with the label preserved and disables repeated action (motion/react rotation, static under reduced motion); destructive fills `--destructive` with `--destructive-foreground` ink; disclosure toggles expose the controlled region state |
 |`IconButton` |`label/icon/onClick`; optional disabled/aria-describedby |Accessible name; fixed action geometry |
 |`IconToggleButton` |`label/icon/pressed/onPressedChange`; optional disabled/aria-describedby |Controlled native `aria-pressed`; persistent accessible name; selected icon fills currentColor; no domain policy |
-|`TextField` |`label/value/onChange`; optional description/error/placeholder/disabled/readOnly/name/autoComplete/inputMode/spellCheck/focusOnError/type; purpose settings/connection |Persistent label; associated helper/error; semantic input mode/type and forwarded ref preserve fixed settings13/20px,36px or connection14/16px,40px geometry |
-|`TextAreaField` |Field contract except `type`; forwarded ref |Multiline role with fixed geometry; caller validation and optional error focus |
+|`TextField` |`label/value/onChange`; optional description/error/placeholder/disabled/readOnly/name/autoComplete/inputMode/spellCheck/focusOnError/reserveErrorLine/type; purpose settings/connection |Persistent label; associated helper/error; `reserveErrorLine` keeps the error slot occupied (visibility-hidden) so appearing errors never shift layout; semantic input mode/type and forwarded ref preserve fixed settings13/20px,36px or connection14/16px,40px geometry; 16px text under `pointer:coarse` (connection keeps its 40px box) |
+|`TextAreaField` |Field contract except `type`; forwarded ref |Multiline role with fixed geometry; caller validation and optional error focus; honors `reserveErrorLine` |
 |`SearchField` |`label/value/onChange`; optional placeholder/disabled/name/autoComplete/inputMode/spellCheck; forwarded ref |Native search input; filtering external |
 |`Checkbox` |`label/checked/onChange`; optional description/disabled |Native checked semantics; visible source checkbox U, local visual A |
 |`Switch` |Same toggle contract |Measured32×18.4px track/16px thumb; functional blue selected; native switch semantics;visible label names input,description associated separately without repetition |
@@ -145,7 +179,7 @@ Unlike the old prototype, portable AccountMenu exposes workspace and theme callb
 
 | Component | API | Evidence / constraint |
 |---|---|---|
-|`Badge` |`label`; tone neutral/success/warning/error/info; purpose tag(default)/status |Tag retains compact filled10/14px treatment and semantic inset. Status uses transparent12/18px regular secondary text,6px leading dot/gap; no border/shadow; complete labels wrap. Visible label carries meaning; no live-region or button semantics. Status is an A adaptation, preview in ApplicationCard catalog |
+|`Badge` |`label`; tone neutral/success/warning/error/info; purpose tag(default)/status |Tag retains compact filled12/16px treatment and semantic inset. Status uses transparent12/18px regular secondary text,6px leading dot/gap; no border/shadow; complete labels wrap. Visible label carries meaning; no live-region or button semantics. Status is an A adaptation, preview in ApplicationCard catalog |
 |`StatusDot` |`label/status` |Named status shape; no color-only meaning |
 |`Notice` |`title`; optional description/tone/onDismiss |Status/alert semantics; source complete notice matrix U; local A |
 |`EmptyState` |`title`; optional description/icon/action |Observed empty-state pattern; action supplied, not inferred upsell |
@@ -228,7 +262,7 @@ Existing Badge tag/status and compact RadioGroup styles remain unchanged.
 
 | Component | API | Evidence / constraint |
 |---|---|---|
-|`CodeSnippet` |`label/value`; optional async `onCopy(value)` and complete `messages: CodeSnippetMessages` |Measured MCP code/copy context;Geist Mono40011/20px;42px region,r12;caller owns localization including accessible label,pending,success,error recovery. English default preserves existing consumers;stable live region and inset focus ring |
+|`CodeSnippet` |`label/value`; optional async `onCopy(value)` and complete `messages: CodeSnippetMessages` |Measured MCP code/copy context;Geist Mono40012/20px;42px region,r12;caller owns localization including accessible label,pending,success,error recovery. English default preserves existing consumers;stable live region and inset focus ring |
 
 Copy begins only on a user click. Caller may inject an asynchronous copy callback; otherwise the component calls the browser clipboard API. Copying disables repeat activation; copied state announces success; failure offers retry or manual selection. Horizontally scrollable code remains selectable/focusable. These local recovery states are A, not evidence that source clipboard failures were observed. No pasted value is submitted to a network service.
 

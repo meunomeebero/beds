@@ -8,6 +8,23 @@ For every BEDS UI task, automatically load and apply `better-interface` and all 
 
 Before handoff, review the complete affected screen/flow in all six domains and report findings plus unverified checks. Missing skills/evidence forbid an approval claim. Never equate a static pass with visual approval or guaranteed quality. Documentation-only/backend tasks are not fabricated UI reviews.
 
+## Landing-page skill routing
+
+For SaaS landing-page creation or review of positioning, hero, benefits, proof,
+offer presentation or CTAs, automatically read and apply the complete
+[marc-lou-landing-page skill](packages/beds/skills/marc-lou-landing-page/SKILL.md)
+and its relevant references. Follow [Landing-page routing](docs/design/espaco-library/LANDING-PAGE-SKILL.md)
+for scope and consumer setup. Better and approved DS contracts still own visual
+quality. This lens does not automatically apply to dashboards, post-signup
+onboarding or cosmetic-only primitive maintenance; it does not authorize offer
+changes or establish conversion uplift.
+
+## Component sourcing — beUI first, mandatory
+
+Before building or replacing any component, search beUI through its MCP (`https://mcp.beui.dev/mcp`) or static registry, and adopt the match instead of authoring from scratch. Do not wait for the user to ask. Order → beUI (same anatomy) → beUI modified → from scratch, with the reason recorded when nothing fits.
+
+BEDS is built on the beUI stack since 2026-09-17: Tailwind v4 utilities compiled into `dist/styles.css`, shadcn token naming with BEDS values, `motion` (approved 2026-09-16) as the interaction-motion engine, and an internal `cn` helper. So paste, don't rewrite: logic, state model, motion and class strings enter intact; only geometry classes are swapped for BEDS proportions (`h-11 rounded-full` → `h-9 rounded-lg`). Never run `npx shadcn add` (installs whole registry trees); fetch individual slugs. beUI source is never imported at runtime — it is pasted and becomes BEDS-owned. Tailwind/`cn`/shadcn are internal to the package and never reach the public API (no `className` on exported components). beUI Pro is unlicensed here. Record slug, URL and retrieval date, attribute in `THIRD-PARTY-NOTICES.md`, and follow [External component sourcing](docs/design/espaco-library/EXTERNAL-COMPONENT-SOURCING.md). Upstream polish is not aesthetic approval.
+
 ## Repository boundaries
 
 - This repository owns the portable design system. `beds` is the actual package/import name; no legacy package alias.

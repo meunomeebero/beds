@@ -10,7 +10,14 @@ Canonical library: `beds`. React 19; two fixed themes; one brand color. Independ
 | Find useful animation | [Motion opportunities](MOTION-OPPORTUNITIES-2026-09-15.md): Emil advisory,four candidates;not implemented |
 | Compose an application | [Consumer contract](CONSUMER-CONTRACT.md) → relevant [Components](COMPONENTS.md) / [States](STATES.md) entries |
 | Build or change a primitive | [Foundations](FOUNDATIONS.md) → relevant component/state contract → [Governance](GOVERNANCE.md) |
+| Need a pattern BEDS lacks | [External component sourcing](EXTERNAL-COMPONENT-SOURCING.md): search beUI before building from scratch;MIT adapt-never-install contract,provenance and attribution |
+| Looking for motion to add | [beUI opportunities audit](BEUI-OPPORTUNITIES-2026-09-16.md): measured motion gap,replace/enhance/new candidates by intensity,open owner decisions |
 | Review UI quality | [Interface quality](INTERFACE-QUALITY.md) → affected contracts → Governance evidence requirements |
+| Create or improve a SaaS landing | [Landing-page skill](LANDING-PAGE-SKILL.md): portable `marc-lou-landing-page`, automatic scoped routing, product proof and honest CTAs |
+| Compose the full landing | [Landing composition and review](LANDING-PAGE.md): shared header/hero/demo/workflow/FAQ, Curriculol preview, product evidence and scoped Better/Emil results |
+| Show processing stages | [Processing](PROCESSING.md): controlled analysis/optimization presentation,current90s/75s fixtures,pause/recovery and timing-policy drift |
+| Show analysis/optimization results | [Results](RESULTS.md): reusable proof/report/next-step patterns,Revenue-Centric conversion,owned-artifact access and simulated payment |
+| Compose checkout | [Checkout](CHECKOUT.md): clear total,conditional fields,payment recovery and explicit mock confirmation;Revenue-Centric and form friction |
 | Build personal opportunity cards | [Application card](APPLICATION-CARD.md): original-property mapping, adaptation and state contract |
 | Organize opportunities by status | [Application kanban](KANBAN.md): compact cards, controlled moves and responsive status lanes |
 | Build global discovery/search | [Search dialog](SEARCH-DIALOG.md): category filters, result rows, keyboard, controlled data and recovery |

@@ -10,7 +10,7 @@ Scope: the portable library and explicitly identified consumers. Start at the [m
 | Implementation | Public declarations own API syntax; CSS owns executed values. A mismatch with the approved contract is a defect to investigate, not an automatic new design decision. |
 | Evidence | M = measured; D = declared; A = local adaptation; U = unobserved. Evidence describes its recorded state; historical measurements cannot override later explicit adoptions. |
 | Product ownership | Caller owns copy, data, routing, requests, callbacks, recovery and business policy. A fixture is not a product requirement. |
-| Design changes | Use an existing semantic variant first. Missing pattern → shared proposal; no CSS, token override or arbitrary visual prop in a consumer. |
+| Design changes | Use an existing semantic variant first. Missing pattern → search beUI per [External component sourcing](EXTERNAL-COMPONENT-SOURCING.md), then shared proposal; no CSS, token override or arbitrary visual prop in a consumer. |
 | New decision | Record rationale, affected components, source/adaptation, states, migration impact and validation. Ask the design owner if resolving the conflict requires a new aesthetic or product choice. |
 | Accessibility | Report objective failures even if a shared rule causes them. Reference fidelity and design approval never waive accessibility findings. |
 
