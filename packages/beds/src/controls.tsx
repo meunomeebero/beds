@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useId, useRef, type ForwardedRef, type InputHTMLAttributes, type KeyboardEvent, type ReactNode } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { AnimatePresence, animate, motion, useReducedMotion } from 'motion/react';
 import { Icon, type IconName } from './foundation';
 import { cn } from './lib/utils';
 import { EASE_OUT } from './lib/ease';
@@ -144,21 +144,63 @@ function useFieldIds(description?: string, error?: string) {
 }
 
 function FieldNotes({ id, description, error, reserveErrorLine }: { id: string; description?: string; error?: string; reserveErrorLine?: boolean }) {
+  const reduce = useReducedMotion();
   const showError = Boolean(error) || Boolean(reserveErrorLine);
-  return <>{description && <p id={`${id}-description`} className="es-field-description">{description}</p>}{showError && <p id={error ? `${id}-error` : undefined} className="es-field-error" data-reserved={!error || undefined} role={error ? 'alert' : undefined}><Icon name="AlertCircle" purpose="small" />{error}</p>}</>;
+  return <>
+    {description && <p id={`${id}-description`} className="text-xs leading-[18px] text-muted-foreground">{description}</p>}
+    <div className={cn(reserveErrorLine ? 'min-h-4' : 'contents')}>
+      <AnimatePresence initial={false}>
+        {error ? <motion.p
+          id={`${id}-error`}
+          role="alert"
+          initial={reduce ? { opacity: 0 } : { opacity: 0, y: -2, filter: 'blur(4px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          exit={reduce ? { opacity: 0 } : { opacity: 0, y: -2, filter: 'blur(4px)' }}
+          transition={{ duration: 0.18, ease: EASE_OUT }}
+          className="flex items-baseline gap-1 text-xs leading-[18px] text-[color:var(--es-error-text)]"
+        ><Icon name="AlertCircle" purpose="small" />{error}</motion.p> : null}
+      </AnimatePresence>
+    </div>
+  </>;
+}
+
+const TEXT_INPUT_BASE = 'box-border w-full min-w-0 px-2.5 text-sm leading-[20px] tracking-normal border border-input rounded-lg bg-field text-input-text placeholder:text-muted-foreground disabled:opacity-50 disabled:cursor-not-allowed read-only:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-transparent focus-visible:border-ring focus-visible:shadow-[0_0_0_3px_var(--es-focus-ring)] aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-visible:border-destructive aria-[invalid=true]:focus-visible:shadow-[0_0_0_3px_var(--es-error-ring)]';
+const TEXT_INPUT_SETTINGS = 'h-9 py-1 pointer-coarse:h-11 pointer-coarse:py-0 pointer-coarse:text-lg pointer-coarse:leading-6';
+const TEXT_INPUT_CONNECTION = 'h-10 py-1 px-4 text-[14px] leading-4 rounded-xl pointer-coarse:h-10 pointer-coarse:text-lg pointer-coarse:leading-6';
+
+/** Shake the field once when a new error appears — adopted from beUI `input` (state intent + reduce-motion guard). */
+function useErrorShake<T extends HTMLElement>(error?: string) {
+  const ref = useRef<T>(null);
+  const reduce = useReducedMotion();
+  useEffect(() => {
+    if (!ref.current || reduce || !error) return;
+    animate(ref.current, { x: [0, -3, 3, -2, 2, 0] }, { duration: 0.28, ease: [0.36, 0.07, 0.19, 0.97] });
+  }, [error, reduce]);
+  return ref;
 }
 
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function TextField({ label, value, onChange, description, error, placeholder, disabled, readOnly, name, autoComplete, inputMode, spellCheck, focusOnError, reserveErrorLine, purpose = 'settings', type = 'text' }, forwardedRef) {
   const { id, describedBy } = useFieldIds(description, error);
   const inputRef = useErrorFocus<HTMLInputElement>(error, focusOnError);
-  return <div className="es-field"><label htmlFor={id}>{label}</label><input ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} type={type} name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} className="es-text-input" data-purpose={purpose} value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} /><FieldNotes id={id} description={description} error={error} reserveErrorLine={reserveErrorLine} /></div>;
+  const shakeRef = useErrorShake<HTMLDivElement>(error);
+  const sizeClass = purpose === 'connection' ? TEXT_INPUT_CONNECTION : TEXT_INPUT_SETTINGS;
+  return <div className="grid gap-2 min-w-0" ref={shakeRef}>
+    <label htmlFor={id} className="text-sm font-medium leading-4 tracking-normal text-foreground">{label}</label>
+    <input ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} type={type} name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} data-purpose={purpose} value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} className={cn(TEXT_INPUT_BASE, sizeClass)} />
+    <FieldNotes id={id} description={description} error={error} reserveErrorLine={reserveErrorLine} />
+  </div>;
 });
 TextField.displayName = 'TextField';
 
 export const TextAreaField = forwardRef<HTMLTextAreaElement, FieldProps>(function TextAreaField({ label, value, onChange, description, error, placeholder, disabled, readOnly, name, autoComplete, inputMode, spellCheck, focusOnError, reserveErrorLine }, forwardedRef) {
   const { id, describedBy } = useFieldIds(description, error);
   const inputRef = useErrorFocus<HTMLTextAreaElement>(error, focusOnError);
-  return <div className="es-field"><label htmlFor={id}>{label}</label><textarea ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} className="es-text-area" value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} /><FieldNotes id={id} description={description} error={error} reserveErrorLine={reserveErrorLine} /></div>;
+  const shakeRef = useErrorShake<HTMLDivElement>(error);
+  return <div className="grid gap-2 min-w-0" ref={shakeRef}>
+    <label htmlFor={id} className="text-sm font-medium leading-4 tracking-normal text-foreground">{label}</label>
+    <textarea ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} className={cn(TEXT_INPUT_BASE, 'min-h-25 py-2 resize-y align-top')} />
+    <FieldNotes id={id} description={description} error={error} reserveErrorLine={reserveErrorLine} />
+  </div>;
 });
 TextAreaField.displayName = 'TextAreaField';
 
@@ -167,7 +209,11 @@ export const SearchField = forwardRef<HTMLInputElement, {
   name?: string; autoComplete?: string; inputMode?: InputHTMLAttributes<HTMLInputElement>['inputMode']; spellCheck?: boolean;
 }>(function SearchField({ label, value, onChange, placeholder, disabled, name, autoComplete, inputMode, spellCheck }, forwardedRef) {
   const id = useId();
-  return <div className="es-search-field"><label htmlFor={id}><Icon name="Search" purpose="action" /><span className="es-visually-hidden">{label}</span></label><input ref={forwardedRef} id={id} type="search" name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} /></div>;
+  return <label htmlFor={id} className={cn('box-border flex items-center gap-2 h-8 min-w-0 px-2.5 border border-input rounded-lg bg-surface text-sm leading-5 tracking-normal', 'transition-colors focus-within:border-ring focus-within:shadow-[0_0_0_3px_var(--es-focus-ring)] focus-within:outline-transparent', 'has-[input:disabled]:opacity-50 pointer-coarse:h-11')}>
+    <span aria-hidden className="flex items-center text-muted-foreground"><Icon name="Search" purpose="action" /></span>
+    <span className="sr-only">{label}</span>
+    <input ref={forwardedRef} id={id} type="search" name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} className="min-w-0 w-full h-full p-0 border-0 bg-transparent text-sm leading-5 text-foreground placeholder:text-muted-foreground focus:outline-none" />
+  </label>;
 });
 SearchField.displayName = 'SearchField';
 

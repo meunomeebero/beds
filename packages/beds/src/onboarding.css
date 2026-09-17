@@ -10,7 +10,7 @@
 .es-onboarding-heading p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--es-secondary); text-wrap: pretty; overflow-wrap: anywhere; }
 .es-onboarding-fields { border: 0; padding: 0; margin: 0; min-width: 0; display: flex; flex-direction: column; gap: var(--es-space-10); }
 .es-onboarding-fields > * { min-width: 0; }
-.es-onboarding-fields .es-text-input, .es-onboarding-fields .es-text-area { min-height: 40px; font-size: 14px; }
+.es-onboarding-fields input[type="text"],.es-onboarding-fields input[type="email"],.es-onboarding-fields input[type="url"],.es-onboarding-fields input[type="tel"],.es-onboarding-fields input[type="password"],.es-onboarding-fields textarea { min-height: 40px; font-size: 14px; }
 .es-onboarding-fields .es-field > label { line-height: 1.5; }
 .es-onboarding-bottom { margin-block-start: auto; padding-block-start: var(--es-space-8); display: flex; flex-direction: column; gap: var(--es-space-6); }
 .es-onboarding-feedback p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--es-text); overflow-wrap: anywhere; }
@@ -47,7 +47,7 @@
 }
 @media (max-width: 767px) {
   .es-onboarding { padding: var(--es-space-11) var(--es-space-8); justify-content: flex-start; gap: var(--es-space-10); }
-  .es-onboarding-fields .es-text-input, .es-onboarding-fields .es-text-area { font-size: 16px; min-height: 44px; }
+  .es-onboarding-fields input[type="text"],.es-onboarding-fields input[type="email"],.es-onboarding-fields input[type="url"],.es-onboarding-fields input[type="tel"],.es-onboarding-fields input[type="password"],.es-onboarding-fields textarea { font-size: 16px; min-height: 44px; }
   .es-onboarding .es-onboarding-actions button { min-height: 44px; }
 }
 @media (forced-colors: active) {

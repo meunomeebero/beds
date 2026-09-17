@@ -1,29 +1,9 @@
 /* Button / IconButton / IconToggleButton: migrated to Tailwind + motion in controls.tsx (Fable F1 — beUI `button`, 2026-09-17).
    Geometry preserved (32/28/40px, r=8/6/12/10px), motion press scale(.97) per BEDS easing, focus visible ring (no offset gap). */
 
-.es-root .es-field{display:grid;gap:8px;min-width:0}
-.es-root .es-field>label{color:var(--es-text);font:500 13px/16px var(--es-font);letter-spacing:-.1px}
-.es-root .es-text-input,.es-root .es-text-area{width:100%;min-width:0;min-height:36px;padding:4px 10px;border:1px solid var(--es-control-border);border-radius:8px;background:var(--es-field);color:var(--es-input-text);font:400 13px/20px var(--es-font);letter-spacing:-.1px}
-.es-root .es-text-area{min-height:100px;padding:8px 10px;resize:vertical}
-.es-root .es-text-input[data-purpose="connection"]{min-height:40px;padding:4px 16px;border-radius:10px;font-size:14px;line-height:16px}
-.es-root :where(.es-text-input,.es-text-area)::placeholder{color:var(--es-placeholder)}
-.es-root :where(.es-text-input,.es-text-area):disabled{opacity:.5;cursor:default}
-.es-root :where(.es-text-input,.es-text-area)[readonly]{color:var(--es-secondary)}
-.es-root :where(.es-text-input,.es-text-area)[aria-invalid="true"]{border-color:var(--es-error)}
-.es-root .es-field-description,.es-root .es-field-error{margin:0;color:var(--es-secondary);font:400 12px/18px var(--es-font)}
-.es-root .es-field-error{display:flex;align-items:baseline;gap:4px;color:var(--es-error-text)}
-.es-root .es-field-error[data-reserved]{visibility:hidden}
-.es-root .es-field-error>svg{align-self:flex-start;margin-top:3px}
-.es-root .es-search-field{display:flex;align-items:center;gap:8px;height:32px;min-width:0;padding:0 10px;border:1px solid var(--es-control-border);border-radius:8px;background:var(--es-surface)}
-.es-root .es-search-field>label{display:flex;align-items:center;color:var(--es-secondary)}
-.es-root .es-search-field>input{min-width:0;width:100%;height:100%;padding:0;border:0;background:transparent;color:var(--es-text);font:400 13px/20px var(--es-font)}
-.es-root .es-search-field>input::placeholder{color:var(--es-placeholder)}
-.es-root .es-search-field:has(input:disabled){opacity:.5}
-.es-root .es-search-field{transition:border-color 150ms ease-out,box-shadow 150ms ease-out}
-.es-root .es-search-field:focus-within{outline:2px solid transparent;outline-offset:0;border-color:var(--es-focus);box-shadow:0 0 0 3px var(--es-focus-ring)}
-@media(forced-colors:active){.es-root .es-search-field:focus-within{outline-color:Highlight}}
-@media(prefers-reduced-motion:reduce){.es-root .es-search-field{transition:none}}
-.es-root .es-search-field>input:focus-visible{outline:0}
+/* TextField / TextAreaField / SearchField: migrated to Tailwind + motion in controls.tsx (Fable F1 — beUI `input`, 2026-09-17).
+   Geometry preserved (36/40px, r=8/10px), focus border + soft ring replaces offset outline, error shake uses motion `animate`
+   and the error message settles in via AnimatePresence (no CSS keyframes). Touch ergonomics inlined in the controls. */
 
 /* Checkbox geometry is derived; switch track/thumb dimensions were measured live. */
 .es-root .es-checkbox,.es-root .es-switch{display:inline-flex;position:relative;align-items:center;gap:8px;max-width:100%;min-height:32px;cursor:pointer}
@@ -69,19 +49,10 @@
 .es-root .es-tabs[data-variant="connection"] .es-tab-panel{margin:0;padding:16px 32px 32px;border:0;min-width:0}
 .es-root .es-tab-panel{margin-top:16px;min-width:0}
 .es-root :where(button[aria-pressed],button:not([aria-pressed]):not([aria-label]),.es-icon-button,.es-icon-toggle-button,.es-tabs-list>[role="tab"],.es-tab-panel):focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
-/* Fields carry their own border, so an offset outline read as a second detached ring. The border takes the focus colour and a soft ring replaces the gap; the transparent outline keeps forced-colors visible. */
-.es-root :where(.es-text-input,.es-text-area):focus-visible{outline:2px solid transparent;outline-offset:0;border-color:var(--es-focus);box-shadow:0 0 0 3px var(--es-focus-ring)}
-.es-root :where(.es-text-input,.es-text-area)[aria-invalid="true"]:focus-visible{border-color:var(--es-error);box-shadow:0 0 0 3px var(--es-error-ring)}
-@media(forced-colors:active){.es-root :where(.es-text-input,.es-text-area):focus-visible{outline-color:Highlight}}
-.es-root :where(.es-text-input,.es-text-area){transition:border-color 150ms ease-out,box-shadow 150ms ease-out,background-color 150ms ease-out}
-@media(prefers-reduced-motion:reduce){.es-root :where(.es-text-input,.es-text-area){transition:none}}
-/* Error carries its own motion: the field nudges once so the correction is noticed, and the message settles in instead of snapping. */
-@keyframes es-field-nudge{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}50%{transform:translateX(3px)}75%{transform:translateX(-1px)}}
-@keyframes es-field-error-in{from{opacity:0;transform:translateY(-2px)}to{opacity:1;transform:translateY(0)}}
-@media(prefers-reduced-motion:no-preference){
-  .es-root :where(.es-text-input,.es-text-area)[aria-invalid="true"]{animation:es-field-nudge 280ms cubic-bezier(.36,.07,.19,.97)}
-  .es-root .es-field-error{animation:es-field-error-in 180ms cubic-bezier(.16,1,.3,1)}
-}
+/* Fields now own their focus idiom via Tailwind utilities (border-ring + shadow-[0_0_0_3px_var(--es-focus-ring)]); forced-colors
+   paints Highlight through the explicit `outline:transparent` set on focus. */
+/* Field transitions removed — TextField/TextAreaField/SearchField now use Tailwind transition-colors + motion for shake. */
+/* Field error shake/error-in keyframes removed — replaced by motion `animate` (one-shot x oscillation) and AnimatePresence in controls.tsx. */
 /* Binary controls: the switch thumb travels instead of teleporting (translateX14px = 30px inner − 16px thumb), and the check enters instead of appearing. */
 .es-root .es-switch-track{transition:background-color 180ms cubic-bezier(.16,1,.3,1),border-color 180ms cubic-bezier(.16,1,.3,1)}
 .es-root .es-switch-track>span{transition:transform 180ms cubic-bezier(.16,1,.3,1),background-color 180ms ease-out}
@@ -94,10 +65,6 @@
    area was tried and rejected: an ::after inset -6px inflates scrollWidth by 6px (reads as clipped text in evidence specs)
    and the label overlay breaks the hidden input's hit-target actionability. Real geometry keeps both honest. */
 @media(pointer:coarse){
-  .es-root .es-text-input,.es-root .es-text-area{min-height:44px;font-size:16px;line-height:24px}
-  .es-root .es-text-input[data-purpose="connection"]{min-height:40px;font-size:16px;line-height:24px}
-  .es-root .es-search-field{height:44px}
-  .es-root .es-search-field>input{font-size:16px;line-height:24px}
   .es-root .es-tabs-list>[role="tab"]{min-height:44px}
   .es-root .es-checkbox,.es-root .es-switch,.es-root .es-radio-option{min-height:44px}
 }

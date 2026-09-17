@@ -22,7 +22,7 @@
 .es-root .es-decision-feedback { margin: 0; color: var(--es-text); font: 400 13px/20px var(--es-font); overflow-wrap: anywhere; }
 .es-root .es-decision-feedback:empty { position: absolute; width: 1px; height: 1px; clip-path: inset(50%); overflow: hidden; }
 .es-root .es-question-form { display: grid; gap: var(--es-space-8); min-width: 0; }
-.es-root .es-question-form .es-field-error { color: var(--es-text); line-height: 20px; }
-.es-root .es-question-form .es-field-error > .es-icon { color: var(--es-badge-error-marker); }
+.es-root .es-question-form [role="alert"] { color: var(--es-text); line-height: 20px; }
+.es-root .es-question-form [role="alert"] > svg { color: var(--es-badge-error-marker); }
 @media (max-width: 767px) { .es-root .es-decision-actions > .es-button { min-height: 44px; } }
 @media (forced-colors: active) { .es-root .es-decision-status { outline: 1px solid CanvasText; } }

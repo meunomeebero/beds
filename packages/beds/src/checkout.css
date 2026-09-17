@@ -33,7 +33,7 @@
 .es-root .es-checkout .es-radio-option > input:checked + .es-radio-indicator > span { background:var(--es-text); }
 .es-root .es-checkout .es-radio-option:has(input:focus-visible) { outline:2px solid var(--es-focus); outline-offset:3px; }
 .es-root .es-checkout .es-radio-option > input:focus-visible + .es-radio-indicator { outline:none; }
-.es-root .es-checkout .es-text-input { min-height:44px; padding:10px 12px; font-size:16px; line-height:22px; }
+.es-root .es-checkout input[type="text"],.es-root .es-checkout input[type="email"],.es-root .es-checkout input[type="url"],.es-root .es-checkout input[type="tel"],.es-root .es-checkout input[type="password"],.es-root .es-checkout input[type="search"] { min-height:44px; padding-block:10px; padding-inline:12px; font-size:16px; line-height:22px; }
 /* BEDS Button (migrated to Tailwind + motion) keeps the checkout touch-target override:
    selectors now match the rendered DOM (button element + data attributes / aria-label) instead of the legacy .es-button class. */
 .es-root .es-checkout :is(button, .es-text-link) { min-height:44px; height:auto; white-space:normal; }
