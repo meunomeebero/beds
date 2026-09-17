@@ -263,12 +263,14 @@ export function Switch({ label, checked, onChange, description, disabled }: Togg
 
 type Choice = { id: string; label: string; disabled?: boolean };
 
-/** Pill: 22px span (24px container incl. padding) · 13px label · joined: 36px row · label maintained as radiogroup with Arrow nav. */
+/** Pill: 22px span (24px container incl. padding) · 13px label · joined: 36px row · label maintained as radiogroup with Arrow nav.
+ *  Legacy class hooks (.es-segmented-choice, .es-segmented-choice-span) preserved for theme CSS like
+ *  patterns.css `.es-account-appearance .es-segmented-choice > span { min-height: 20px }`. */
 const SEGMENTED_PILL = 'box-border inline-flex items-stretch shrink-0 gap-0.5 max-w-full p-px rounded-full bg-subtle';
 const SEGMENTED_JOINED = 'box-border inline-flex items-stretch shrink-0 gap-0 max-w-full h-9 rounded-lg bg-transparent shadow-[inset_0_0_0_1px_var(--es-border)]';
-const SEGMENTED_CHOICE = 'relative min-w-0 flex-none cursor-pointer';
-const SEGMENTED_SPAN_PILL = 'flex items-center justify-center min-h-[22px] px-2 rounded-full text-secondary text-xs leading-4 tracking-normal font-medium whitespace-nowrap transition-colors';
-const SEGMENTED_SPAN_JOINED = 'flex items-center justify-center h-9 rounded-none bg-sidebar text-xs leading-4 tracking-normal font-medium whitespace-nowrap first:rounded-l-lg last:rounded-r-lg';
+const SEGMENTED_CHOICE = 'es-segmented-choice relative min-w-0 flex-none cursor-pointer';
+const SEGMENTED_SPAN_PILL = 'es-segmented-choice-span flex items-center justify-center min-h-[22px] px-2 rounded-full text-muted-foreground text-xs leading-4 tracking-normal font-medium whitespace-nowrap transition-colors';
+const SEGMENTED_SPAN_JOINED = 'es-segmented-choice-span flex items-center justify-center h-9 rounded-none bg-sidebar text-xs leading-4 tracking-normal font-medium whitespace-nowrap first:rounded-l-lg last:rounded-r-lg';
 const SEGMENTED_SPAN_CHECKED = 'text-foreground bg-surface shadow-[0_1px_2px_var(--es-border)]';
 
 export function SegmentedControl({ label, value, options, onChange, variant = 'pill' }: {
