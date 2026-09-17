@@ -219,14 +219,46 @@ SearchField.displayName = 'SearchField';
 
 type ToggleProps = { label: string; checked: boolean; onChange: (checked: boolean) => void; description?: string; disabled?: boolean };
 
+const TOGGLE_LABEL = 'text-sm leading-[20px] tracking-normal text-foreground flex flex-col gap-1 min-w-0 break-words';
+const TOGGLE_DESCRIPTION = 'text-xs leading-[18px] text-muted-foreground';
+const TOGGLE_WRAPPER = 'box-border inline-flex items-center gap-2 min-h-8 cursor-pointer max-w-full pointer-coarse:min-h-11 data-[disabled=true]:opacity-50 data-[disabled=true]:cursor-not-allowed';
+
 export function Checkbox({ label, checked, onChange, description, disabled }: ToggleProps) {
   const id = useId();
-  return <label className="es-checkbox" data-disabled={disabled || undefined}><input type="checkbox" checked={checked} onChange={event => onChange(event.target.checked)} disabled={disabled} aria-describedby={description ? id : undefined} /><span className="es-checkbox-box" aria-hidden="true">{checked && <Icon name="Check" purpose="small" />}</span><span className="es-toggle-copy"><span>{label}</span>{description && <small id={id}>{description}</small>}</span></label>;
+  const reduce = useReducedMotion();
+  return <label data-disabled={disabled || undefined} className={cn(TOGGLE_WRAPPER)}>
+    <input type="checkbox" className="peer absolute w-px h-px p-0 m-0 opacity-0" checked={checked} onChange={event => onChange(event.target.checked)} disabled={disabled} aria-describedby={description ? id : undefined} />
+    <span aria-hidden className={cn('peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-ring relative inline-flex shrink-0 items-center justify-center h-4 w-4 rounded-md border', 'border-input bg-surface text-bg', checked && 'border-foreground bg-foreground text-background')}>
+      <AnimatePresence initial={false}>
+        {checked ? <motion.span
+          key="check"
+          initial={reduce ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.6 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.6 }}
+          transition={reduce ? { duration: 0 } : { duration: 0.16, ease: EASE_OUT }}
+          className="inline-flex"
+        ><Icon name="Check" purpose="small" /></motion.span> : null}
+      </AnimatePresence>
+    </span>
+    <span className={TOGGLE_LABEL}><span>{label}</span>{description && <small id={id} className={TOGGLE_DESCRIPTION}>{description}</small>}</span>
+  </label>;
 }
 
 export function Switch({ label, checked, onChange, description, disabled }: ToggleProps) {
   const id = useId();
-  return <label className="es-switch" data-disabled={disabled || undefined}><span className="es-toggle-copy"><span id={`${id}-label`}>{label}</span>{description && <small id={id}>{description}</small>}</span><input type="checkbox" role="switch" checked={checked} onChange={event => onChange(event.target.checked)} disabled={disabled} aria-labelledby={`${id}-label`} aria-describedby={description ? id : undefined} /><span className="es-switch-track" aria-hidden="true"><span /></span></label>;
+  const reduce = useReducedMotion();
+  return <label data-disabled={disabled || undefined} className={cn(TOGGLE_WRAPPER, 'justify-between gap-4 py-2.5')}>
+    <span className={cn(TOGGLE_LABEL, 'font-medium')}><span id={`${id}-label`}>{label}</span>{description && <small id={id} className={cn(TOGGLE_DESCRIPTION, 'text-xs leading-4')}>{description}</small>}</span>
+    <input type="checkbox" role="switch" className="peer absolute w-px h-px p-0 m-0 opacity-0" checked={checked} onChange={event => onChange(event.target.checked)} disabled={disabled} aria-labelledby={`${id}-label`} aria-describedby={description ? id : undefined} />
+    <span aria-hidden className={cn('peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-ring relative inline-flex shrink-0 items-center w-8 h-[18.4px] px-0 rounded-full border', 'border-input bg-switch-off', checked && 'border-info bg-info')}>
+      <motion.span
+        aria-hidden
+        animate={{ x: reduce || !checked ? 0 : 14 }}
+        transition={reduce ? { duration: 0 } : { duration: 0.18, ease: EASE_OUT }}
+        className="block h-4 w-4 rounded-full bg-switch-thumb"
+      />
+    </span>
+  </label>;
 }
 
 type Choice = { id: string; label: string; disabled?: boolean };
