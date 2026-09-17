@@ -1,6 +1,9 @@
 import { forwardRef, useEffect, useId, useRef, type ForwardedRef, type InputHTMLAttributes, type KeyboardEvent, type ReactNode } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { Icon, type IconName } from './foundation';
+import { cn } from './lib/utils';
+import { EASE_OUT } from './lib/ease';
+import { useHoverCapable } from './lib/hooks/use-hover-capable';
 import './controls.css';
 
 type ButtonProps = {
@@ -11,24 +14,101 @@ type ButtonProps = {
   'aria-expanded'?: boolean; 'aria-controls'?: string;
 };
 
+const BUTTON_VARIANT: Record<NonNullable<ButtonProps['variant']>, string> = {
+  primary: 'bg-primary text-primary-foreground',
+  secondary: 'bg-secondary text-secondary-foreground',
+  ghost: 'bg-transparent text-muted-foreground hover:bg-accent hover:text-foreground',
+  destructive: 'bg-destructive text-destructive-foreground',
+};
+
+/** Geometry is owned by BEDS: 32px default / 28px compact / 40px welcome / 40px connection (preserved on touch).
+ *  `box-border` + `h-*` (exact height, not min-height) — matches the legacy CSS where the visible button height was 40px regardless of text content.
+ *  Pointer-coarse (mobile) bumps the default size to 44px while keeping welcome/connection at 40px per FOUNDATIONS. */
+const BUTTON_SIZE: Record<'compact' | 'default' | 'welcome' | 'connection', string> = {
+  compact: 'h-7 rounded-md px-2.5 gap-1',
+  default: 'h-8 rounded-lg px-2.5 gap-1 pointer-coarse:h-11',
+  welcome: 'h-10 rounded-[12px] px-3.5 gap-1.5', // arbitrary radius: BEDS welcome has r=12px (no token match)
+  connection: 'h-10 rounded-xl px-4 gap-1.5',
+};
+
 export function Button({ label, onClick, type = 'button', variant = 'secondary', compact = false, purpose = 'default', icon, disabled, busy, 'aria-describedby': describedBy, 'aria-expanded': ariaExpanded, 'aria-controls': ariaControls }: ButtonProps) {
-  const reducedMotion = useReducedMotion();
-  return <button className="es-button" data-variant={variant} data-purpose={purpose} data-compact={purpose === 'default' && compact || undefined} type={type} onClick={onClick} disabled={disabled || busy} aria-busy={busy || undefined} aria-describedby={describedBy} aria-expanded={ariaExpanded} aria-controls={ariaControls}>
-    {(busy || icon) && <motion.span className="es-button-spinner" aria-hidden animate={busy && !reducedMotion ? { rotate: 360 } : undefined} transition={busy && !reducedMotion ? { repeat: Infinity, duration: 0.9, ease: 'linear' } : undefined}><Icon name={busy ? 'Loader2' : icon!} purpose="action" /></motion.span>}<span>{label}</span>
-  </button>;
+  const reduce = useReducedMotion();
+  const canHover = useHoverCapable();
+  const sizeKey = purpose === 'default' && compact ? 'compact' : purpose;
+  return <motion.button
+    type={type}
+    onClick={onClick}
+    disabled={disabled || busy}
+    aria-busy={busy || undefined}
+    aria-describedby={describedBy}
+    aria-expanded={ariaExpanded}
+    aria-controls={ariaControls}
+    data-variant={variant}
+    data-purpose={purpose}
+    data-compact={purpose === 'default' && compact || undefined}
+    whileTap={reduce || disabled || busy ? undefined : { scale: 0.97 }}
+    whileHover={reduce || !canHover || disabled || busy ? undefined : { scale: 1.01 }}
+    transition={{ duration: 0.12, ease: EASE_OUT }}
+    className={cn(
+      'box-border inline-flex items-center justify-center max-w-full text-sm font-medium tracking-normal',
+      'border-0 transition-colors cursor-pointer disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed',
+      'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+      BUTTON_VARIANT[variant],
+      BUTTON_SIZE[sizeKey],
+    )}
+  >
+    {(busy || icon) && <motion.span aria-hidden className="inline-flex shrink-0" animate={busy && !reduce ? { rotate: 360 } : undefined} transition={busy && !reduce ? { repeat: Infinity, duration: 0.9, ease: 'linear' } : undefined}><Icon name={busy ? 'Loader2' : icon!} purpose="action" /></motion.span>}
+    <span className="min-w-0 break-words">{label}</span>
+  </motion.button>;
 }
 
 export function IconButton({ label, icon, onClick, disabled, 'aria-describedby': describedBy }: {
   label: string; icon: IconName; onClick: () => void; disabled?: boolean; 'aria-describedby'?: string;
 }) {
-  return <button type="button" className="es-icon-button" aria-label={label} aria-describedby={describedBy} onClick={onClick} disabled={disabled}><Icon name={icon} purpose="action" /></button>;
+  const reduce = useReducedMotion();
+  return <motion.button
+    type="button"
+    aria-label={label}
+    aria-describedby={describedBy}
+    onClick={onClick}
+    disabled={disabled}
+    whileTap={reduce || disabled ? undefined : { scale: 0.97 }}
+    transition={{ duration: 0.12, ease: EASE_OUT }}
+    className={cn(
+      'box-border inline-flex items-center justify-center shrink-0 border-0',
+      'h-8 w-8 rounded-lg bg-transparent text-muted-foreground cursor-pointer',
+      'transition-colors hover:text-foreground hover:bg-accent',
+      'disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed',
+      'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+      'pointer-coarse:h-11 pointer-coarse:w-11',
+    )}
+  ><Icon name={icon} purpose="action" /></motion.button>;
 }
 
 /** Controlled compact toggle with a native pressed state and persistent accessible name. */
 export function IconToggleButton({ label, icon, pressed, onPressedChange, disabled, 'aria-describedby': describedBy }: {
   label: string; icon: IconName; pressed: boolean; onPressedChange: (pressed: boolean) => void; disabled?: boolean; 'aria-describedby'?: string;
 }) {
-  return <button type="button" className="es-icon-toggle-button" aria-label={label} aria-pressed={pressed} aria-describedby={describedBy} onClick={() => onPressedChange(!pressed)} disabled={disabled}><Icon name={icon} purpose="action" /></button>;
+  const reduce = useReducedMotion();
+  return <motion.button
+    type="button"
+    aria-label={label}
+    aria-pressed={pressed}
+    aria-describedby={describedBy}
+    onClick={() => onPressedChange(!pressed)}
+    disabled={disabled}
+    whileTap={reduce || disabled ? undefined : { scale: 0.97 }}
+    transition={{ duration: 0.12, ease: EASE_OUT }}
+    className={cn(
+      'box-border inline-flex items-center justify-center shrink-0 border-0',
+      'h-8 w-8 rounded-lg bg-transparent text-muted-foreground cursor-pointer',
+      'transition-colors hover:text-foreground hover:bg-accent',
+      'aria-pressed:bg-accent aria-pressed:text-foreground aria-pressed:[&_svg]:fill-current',
+      'disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed',
+      'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+      'pointer-coarse:h-11 pointer-coarse:w-11',
+    )}
+  ><Icon name={icon} purpose="action" /></motion.button>;
 }
 
 type FieldProps = {

@@ -17,7 +17,9 @@
 .es-onboarding-feedback:has(p:not(:empty)) { padding: var(--es-space-4) var(--es-space-6); border-inline-start: 2px solid var(--es-border-strong); }
 .es-onboarding-feedback[data-tone="error"]:has(p:not(:empty)) { border-inline-start-color: var(--es-badge-error-marker); }
 .es-onboarding-actions { display: flex; flex-direction: column; gap: var(--es-space-4); }
-.es-onboarding .es-onboarding-actions .es-button { width: 100%; min-height: 40px; }
+/* BEDS Button (migrated to Tailwind + motion): the welcome variant keeps 40px on touch per FOUNDATIONS;
+   this selector replaces the legacy .es-button class with the rendered DOM (button element) and the data-purpose marker. */
+.es-onboarding .es-onboarding-actions button { width: 100%; }
 .es-onboarding-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--es-space-8); width: 100%; max-width: 960px; font-size: 12px; line-height: 1.5; color: var(--es-secondary); text-align: center; overflow-wrap: anywhere; }
 .es-onboarding-preview { display: none; min-width: 0; position: relative; overflow: hidden; border-radius: var(--es-radius-panel); background: var(--es-subtle); padding-block-start: 56px; padding-inline-start: var(--es-space-12); }
 .es-onboarding-window { min-height: 100%; width: 560px; box-sizing: border-box; border: 1px solid var(--es-border); border-radius: var(--es-radius-panel) 0 0 0; background: var(--es-bg); box-shadow: var(--es-shadow-popup); }
@@ -46,7 +48,7 @@
 @media (max-width: 767px) {
   .es-onboarding { padding: var(--es-space-11) var(--es-space-8); justify-content: flex-start; gap: var(--es-space-10); }
   .es-onboarding-fields .es-text-input, .es-onboarding-fields .es-text-area { font-size: 16px; min-height: 44px; }
-  .es-onboarding .es-onboarding-actions .es-button { min-height: 44px; }
+  .es-onboarding .es-onboarding-actions button { min-height: 44px; }
 }
 @media (forced-colors: active) {
   .es-onboarding-card { border-color: CanvasText; }

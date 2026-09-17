@@ -34,12 +34,14 @@
 .es-root .es-checkout .es-radio-option:has(input:focus-visible) { outline:2px solid var(--es-focus); outline-offset:3px; }
 .es-root .es-checkout .es-radio-option > input:focus-visible + .es-radio-indicator { outline:none; }
 .es-root .es-checkout .es-text-input { min-height:44px; padding:10px 12px; font-size:16px; line-height:22px; }
-.es-root .es-checkout :is(.es-button,.es-text-link) { min-height:44px; height:auto; white-space:normal; }
-.es-root .es-checkout .es-button { padding:12px 14px; line-height:20px; }
+/* BEDS Button (migrated to Tailwind + motion) keeps the checkout touch-target override:
+   selectors now match the rendered DOM (button element + data attributes / aria-label) instead of the legacy .es-button class. */
+.es-root .es-checkout :is(button, .es-text-link) { min-height:44px; height:auto; white-space:normal; }
+.es-root .es-checkout button { padding:12px 14px; line-height:20px; }
 .es-root .es-checkout .es-text-link { display:inline-flex; align-items:center; }
-.es-root .es-checkout .es-dialog .es-icon-button { width:44px; height:44px; }
+.es-root .es-checkout .es-dialog button[aria-label] { width:44px; height:44px; padding:0; }
 .es-root .es-checkout .es-code-snippet > button { min-height:44px; }
-.es-root .es-checkout form.es-stack .es-button[type=submit] { width:100%; }
+.es-root .es-checkout form.es-stack button[type=submit] { width:100%; }
 .es-root :is(.es-checkout,.es-order-summary) :is(h1,h2,p,dt,dd,span,bdi,button,a) { overflow-wrap:anywhere; }
 .es-root .es-order-summary { padding:var(--es-space-10); min-width:0; border:1px solid var(--es-border); border-radius:var(--es-radius-card); background:var(--es-sidebar); }
 .es-root .es-order-summary > header { display:flex; align-items:center; gap:var(--es-space-5); margin-bottom:var(--es-space-10); }

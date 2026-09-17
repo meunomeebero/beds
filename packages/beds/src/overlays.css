@@ -103,7 +103,7 @@
 .es-root .es-search-footer>span{display:flex;align-items:center;gap:6px}
 .es-root .es-search-footer kbd{padding:1px 5px;border:1px solid var(--es-border-strong);border-radius:4px;background:var(--es-surface);font:inherit;color:var(--es-text);white-space:nowrap}
 @media(hover:hover){.es-root .es-search-categories button:not(:disabled):hover{background:var(--es-hover)}}
-@media(max-width:767px){.es-root .es-search-dialog-header{padding-inline-start:16px}.es-root .es-search-dialog-header>.es-icon-button{min-width:44px;min-height:44px}.es-root .es-search-dialog-field{margin-inline:16px}.es-root .es-search-categories{padding-inline:16px;gap:8px}.es-root .es-search-categories button{min-height:44px}.es-root .es-search-results-heading{padding-inline:16px}.es-root .es-search-results{padding-inline:8px}.es-root .es-search-result{padding-inline:8px}.es-root .es-search-footer{padding-inline:16px;gap:12px}.es-root .es-search-message>.es-button{min-height:44px}}
+@media(max-width:767px){.es-root .es-search-dialog-header{padding-inline-start:16px}.es-root .es-search-dialog-header>button[aria-label]{min-width:44px;min-height:44px}.es-root .es-search-dialog-field{margin-inline:16px}.es-root .es-search-categories{padding-inline:16px;gap:8px}.es-root .es-search-categories button{min-height:44px}.es-root .es-search-results-heading{padding-inline:16px}.es-root .es-search-results{padding-inline:8px}.es-root .es-search-result{padding-inline:8px}.es-root .es-search-footer{padding-inline:16px;gap:12px}.es-root .es-search-message>button{min-height:44px}}
 @media(forced-colors:active){.es-root .es-search-result[data-active=true]{outline:2px solid Highlight;outline-offset:-2px}.es-root .es-search-categories button[aria-pressed=true]{border-color:Highlight}}
 
 /* Drawer: a viewport-edge panel, not a rounded card or a resizable window. */
@@ -115,7 +115,7 @@
 .es-root .es-drawer-heading h2{margin:0;font:500 16px/1.5 var(--es-font);letter-spacing:-.15px;color:var(--es-heading);text-wrap:balance}
 .es-root .es-drawer-heading p{margin:4px 0 0;font:400 13px/1.5 var(--es-font);color:var(--es-secondary);text-wrap:pretty}
 .es-root .es-drawer-close{position:sticky;top:0;grid-column:2;grid-row:1;align-self:start}
-.es-root .es-drawer-close>.es-icon-button{min-width:40px;min-height:40px}
+.es-root .es-drawer-close>button[aria-label]{min-width:40px;min-height:40px}
 .es-root .es-drawer-header-actions{grid-column:1/-1;display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:8px}
 .es-root .es-drawer-body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;scroll-padding-block:24px;padding:24px;padding-bottom:max(24px,env(safe-area-inset-bottom))}
 .es-root .es-drawer-body:focus-visible{outline:2px solid var(--es-focus);outline-offset:-4px}
@@ -125,7 +125,7 @@
 .es-root .es-drawer-section>h3{margin:0 0 8px;font:500 13px/1.5 var(--es-font);color:var(--es-heading)}
 .es-root .es-drawer-section>div{min-width:0}
 .es-root .es-drawer-actions{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px;flex:none;max-height:35%;overflow:auto;padding:16px 24px;padding-bottom:max(16px,env(safe-area-inset-bottom));border-top:1px solid var(--es-border-subtle)}
-.es-root .es-drawer :where(.es-button,.es-icon-toggle-button){min-height:40px}
-.es-root .es-drawer :where(.es-button,.es-empty-state>button){max-width:100%;height:auto;white-space:normal;overflow-wrap:anywhere}
-.es-root .es-drawer .es-button>span{min-width:0;white-space:normal;overflow-wrap:anywhere}
-@media(max-width:767px){.es-root .es-drawer{width:100%;border-inline-start:0}.es-root .es-drawer-header,.es-root .es-drawer-body,.es-root .es-drawer-actions{padding-inline:max(16px,env(safe-area-inset-left),env(safe-area-inset-right))}.es-root .es-drawer-close>.es-icon-button,.es-root .es-drawer :where(.es-button,.es-icon-button,.es-icon-toggle-button,.es-empty-state>button){min-height:44px;min-width:44px}}
+.es-root .es-drawer :where(button,.es-icon-toggle-button){min-height:40px}
+.es-root .es-drawer :where(button,.es-empty-state>button){max-width:100%;height:auto;white-space:normal;overflow-wrap:anywhere}
+.es-root .es-drawer button>span{min-width:0;white-space:normal;overflow-wrap:anywhere}
+@media(max-width:767px){.es-root .es-drawer{width:100%;border-inline-start:0}.es-root .es-drawer-header,.es-root .es-drawer-body,.es-root .es-drawer-actions{padding-inline:max(16px,env(safe-area-inset-left),env(safe-area-inset-right))}.es-root .es-drawer-close>button[aria-label],.es-root .es-drawer :where(button,.es-icon-button,.es-icon-toggle-button,.es-empty-state>button){min-height:44px;min-width:44px}}
