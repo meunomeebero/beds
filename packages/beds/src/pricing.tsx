@@ -11,7 +11,10 @@ export type PricingCardProps = {
   price: { label: string; description?: string };
   featuresLabel: string;
   features: readonly { id: string; text: string }[];
-  action: { label: string; onClick: () => void; busy?: boolean; disabled?: boolean };
+  action: { label: string } & (
+    | { href: string; onClick?: never; busy?: never; disabled?: never }
+    | { href?: never; onClick: () => void; busy?: boolean; disabled?: boolean }
+  );
   actionNote?: string;
   feedback?: string;
   featured?: boolean;
@@ -34,7 +37,9 @@ export function PricingCard({ title, description, image, price, featuresLabel, f
       {features.length > 0 && <div className="es-pricing-benefits"><p id={`${id}-features`}>{featuresLabel}</p><ul role="list" aria-labelledby={`${id}-features`}>{features.map(feature => <li key={feature.id}><Icon name="CheckCircle2" purpose="action" /><span>{feature.text}</span></li>)}</ul></div>}
       <div className="es-pricing-footer">
         {actionNote && <p className="es-pricing-note" id={`${id}-note`}>{actionNote}</p>}
-        <Button label={action.label} onClick={action.onClick} busy={action.busy} disabled={action.disabled} purpose="welcome" aria-describedby={actionDescription} />
+        {action.href !== undefined
+          ? <a className="es-pricing-link" href={action.href} aria-describedby={actionDescription}>{action.label}</a>
+          : <Button label={action.label} onClick={action.onClick} busy={action.busy} disabled={action.disabled} purpose="welcome" aria-describedby={actionDescription} />}
         <p className="es-pricing-feedback" role="status" aria-atomic="true">{feedback ?? ''}</p>
       </div>
     </div>

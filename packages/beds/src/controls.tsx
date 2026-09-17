@@ -1,18 +1,20 @@
 import { forwardRef, useEffect, useId, useRef, type ForwardedRef, type InputHTMLAttributes, type KeyboardEvent, type ReactNode } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
 import { Icon, type IconName } from './foundation';
 import './controls.css';
 
 type ButtonProps = {
   label: string; onClick?: () => void; type?: 'button' | 'submit' | 'reset';
-  variant?: 'primary' | 'secondary' | 'ghost'; compact?: boolean; icon?: IconName;
+  variant?: 'primary' | 'secondary' | 'ghost' | 'destructive'; compact?: boolean; icon?: IconName;
   purpose?: 'default' | 'welcome' | 'connection'; disabled?: boolean; busy?: boolean; 'aria-describedby'?: string;
   /** Disclosure toggles: expose the expanded state of the controlled region. */
   'aria-expanded'?: boolean; 'aria-controls'?: string;
 };
 
 export function Button({ label, onClick, type = 'button', variant = 'secondary', compact = false, purpose = 'default', icon, disabled, busy, 'aria-describedby': describedBy, 'aria-expanded': ariaExpanded, 'aria-controls': ariaControls }: ButtonProps) {
+  const reducedMotion = useReducedMotion();
   return <button className="es-button" data-variant={variant} data-purpose={purpose} data-compact={purpose === 'default' && compact || undefined} type={type} onClick={onClick} disabled={disabled || busy} aria-busy={busy || undefined} aria-describedby={describedBy} aria-expanded={ariaExpanded} aria-controls={ariaControls}>
-    {(busy || icon) && <Icon name={busy ? 'Loader2' : icon!} purpose="action" />}<span>{label}</span>
+    {(busy || icon) && <motion.span className="es-button-spinner" aria-hidden animate={busy && !reducedMotion ? { rotate: 360 } : undefined} transition={busy && !reducedMotion ? { repeat: Infinity, duration: 0.9, ease: 'linear' } : undefined}><Icon name={busy ? 'Loader2' : icon!} purpose="action" /></motion.span>}<span>{label}</span>
   </button>;
 }
 
@@ -33,6 +35,8 @@ type FieldProps = {
   label: string; value: string; onChange: (value: string) => void; description?: string;
   error?: string; placeholder?: string; disabled?: boolean; readOnly?: boolean;
   name?: string; autoComplete?: string; inputMode?: InputHTMLAttributes<HTMLInputElement>['inputMode']; spellCheck?: boolean; focusOnError?: boolean;
+  /** Keep the error slot occupied while there is no error, so appearing errors never shift the layout below. */
+  reserveErrorLine?: boolean;
 };
 
 type TextFieldProps = FieldProps & { purpose?: 'settings' | 'connection'; type?: 'text' | 'email' | 'url' | 'tel' | 'password' };
@@ -59,21 +63,22 @@ function useFieldIds(description?: string, error?: string) {
   return { id, describedBy };
 }
 
-function FieldNotes({ id, description, error }: { id: string; description?: string; error?: string }) {
-  return <>{description && <p id={`${id}-description`} className="es-field-description">{description}</p>}{error && <p id={`${id}-error`} className="es-field-error" role="alert"><Icon name="AlertCircle" purpose="small" />{error}</p>}</>;
+function FieldNotes({ id, description, error, reserveErrorLine }: { id: string; description?: string; error?: string; reserveErrorLine?: boolean }) {
+  const showError = Boolean(error) || Boolean(reserveErrorLine);
+  return <>{description && <p id={`${id}-description`} className="es-field-description">{description}</p>}{showError && <p id={error ? `${id}-error` : undefined} className="es-field-error" data-reserved={!error || undefined} role={error ? 'alert' : undefined}><Icon name="AlertCircle" purpose="small" />{error}</p>}</>;
 }
 
-export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function TextField({ label, value, onChange, description, error, placeholder, disabled, readOnly, name, autoComplete, inputMode, spellCheck, focusOnError, purpose = 'settings', type = 'text' }, forwardedRef) {
+export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function TextField({ label, value, onChange, description, error, placeholder, disabled, readOnly, name, autoComplete, inputMode, spellCheck, focusOnError, reserveErrorLine, purpose = 'settings', type = 'text' }, forwardedRef) {
   const { id, describedBy } = useFieldIds(description, error);
   const inputRef = useErrorFocus<HTMLInputElement>(error, focusOnError);
-  return <div className="es-field"><label htmlFor={id}>{label}</label><input ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} type={type} name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} className="es-text-input" data-purpose={purpose} value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} /><FieldNotes id={id} description={description} error={error} /></div>;
+  return <div className="es-field"><label htmlFor={id}>{label}</label><input ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} type={type} name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} className="es-text-input" data-purpose={purpose} value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} /><FieldNotes id={id} description={description} error={error} reserveErrorLine={reserveErrorLine} /></div>;
 });
 TextField.displayName = 'TextField';
 
-export const TextAreaField = forwardRef<HTMLTextAreaElement, FieldProps>(function TextAreaField({ label, value, onChange, description, error, placeholder, disabled, readOnly, name, autoComplete, inputMode, spellCheck, focusOnError }, forwardedRef) {
+export const TextAreaField = forwardRef<HTMLTextAreaElement, FieldProps>(function TextAreaField({ label, value, onChange, description, error, placeholder, disabled, readOnly, name, autoComplete, inputMode, spellCheck, focusOnError, reserveErrorLine }, forwardedRef) {
   const { id, describedBy } = useFieldIds(description, error);
   const inputRef = useErrorFocus<HTMLTextAreaElement>(error, focusOnError);
-  return <div className="es-field"><label htmlFor={id}>{label}</label><textarea ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} className="es-text-area" value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} /><FieldNotes id={id} description={description} error={error} /></div>;
+  return <div className="es-field"><label htmlFor={id}>{label}</label><textarea ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} className="es-text-area" value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} /><FieldNotes id={id} description={description} error={error} reserveErrorLine={reserveErrorLine} /></div>;
 });
 TextAreaField.displayName = 'TextAreaField';
 

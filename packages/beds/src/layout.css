@@ -21,7 +21,7 @@
 .es-root .es-nav-item--active{background:var(--es-selected);color:var(--es-text)}
 .es-root .es-nav-item--locked{color:var(--es-secondary);opacity:.55}
 .es-root .es-nav-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.es-root .es-nav-badge{margin-left:auto;border-radius:4px;min-width:16px;padding:0 4px;color:var(--es-on-badge);background:var(--es-badge);text-align:center;font-size:11px;line-height:16px;font-variant-numeric:tabular-nums}
+.es-root .es-nav-badge{margin-left:auto;border-radius:4px;min-width:16px;padding:0 4px;color:var(--es-on-badge);background:var(--es-badge);text-align:center;font-size:12px;line-height:16px;font-variant-numeric:tabular-nums}
 .es-root .es-sidebar-section--primary{margin:3px 0 6px}
 .es-root .es-sidebar-section--primary>.es-sidebar-items{flex-direction:row;align-items:center;gap:4px}
 .es-root .es-sidebar-section--primary .es-nav-item{position:relative;isolation:isolate;width:auto;flex-shrink:0;min-height:40px;padding:0 11px;gap:9px;border-radius:30px;background:transparent;white-space:nowrap;line-height:21px}
@@ -67,7 +67,7 @@
 .es-root .es-collection-card{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:16px;min-block-size:260px}
 .es-root .es-collection-card-header,.es-root .es-collection-card-identity,.es-root .es-collection-card-selection,.es-root .es-collection-card-actions{display:flex;align-items:center}
 .es-root .es-collection-card-header{justify-content:space-between;gap:12px;min-width:0}
-.es-root .es-collection-card-identity{gap:8px;min-width:0;color:var(--es-secondary);font:400 11px/16px var(--es-font)}
+.es-root .es-collection-card-identity{gap:8px;min-width:0;color:var(--es-secondary);font:400 12px/16px var(--es-font)}
 .es-root .es-collection-card-identity>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .es-root .es-collection-card-selection{flex:none}
 .es-root .es-collection-card-body{display:flex;flex-direction:column;gap:12px;min-width:0}

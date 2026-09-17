@@ -266,6 +266,15 @@ export function Dialog({ open, onOpenChange, title, description, children, actio
   const id = useId();
   const dialog = useRef<HTMLDialogElement>(null);
   useModal(open, dialog);
+  useLayoutEffect(() => {
+    const element = dialog.current;
+    // A completed action can replace the focused control. Recover only lost
+    // focus, never steal it from a nested modal or another active control.
+    if (!open || !element) return;
+    if (element.ownerDocument.activeElement === element.ownerDocument.body) {
+      element.querySelector<HTMLButtonElement>('button')?.focus({ preventScroll: true });
+    }
+  }, [open, children, actions]);
   return <dialog ref={dialog} className="es-dialog" data-variant={variant} aria-labelledby={`${id}-title`} aria-describedby={description ? `${id}-description` : undefined} onKeyDown={containModalTab} onCancel={event => { event.preventDefault(); onOpenChange(false); }} onClick={event => { if (outsideDialog(event)) onOpenChange(false); }}>{variant === 'welcome' && artwork && <div className="es-dialog-artwork">{artwork}</div>}<div className="es-dialog-header"><div><h2 id={`${id}-title`}>{title}</h2>{description && <p id={`${id}-description`}>{description}</p>}</div><IconButton label="Fechar" icon="X" onClick={() => onOpenChange(false)} /></div>{children && <div className="es-dialog-body">{children}</div>}{actions && <div className="es-dialog-actions">{actions}</div>}</dialog>;
 }
 

@@ -35,7 +35,7 @@
 .es-root :where(.es-select-trigger,.es-select-popup,.es-menu-popup):focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
 
 .es-root .es-tooltip-anchor{display:inline-flex;max-width:100%}
-.es-root .es-tooltip{position:fixed;inset:auto;margin:0;padding:5px 8px;overflow-wrap:anywhere;border:1px solid var(--es-border);border-radius:6px;background:var(--es-inverse);color:var(--es-bg);box-shadow:var(--es-shadow-popup);font:400 11px/16px var(--es-font)}
+.es-root .es-tooltip{position:fixed;inset:auto;margin:0;padding:5px 8px;overflow-wrap:anywhere;border:1px solid var(--es-border);border-radius:6px;background:var(--es-inverse);color:var(--es-bg);box-shadow:var(--es-shadow-popup);font:400 12px/16px var(--es-font)}
 .es-root .es-dialog,.es-root .es-command{width:min(672px,calc(100vw - 32px));max-width:calc(100vw - 32px);max-height:calc(100dvh - 32px);padding:0;border:1px solid var(--es-border);border-radius:14px;overflow:auto;overscroll-behavior:contain;background:var(--es-surface);color:var(--es-text);box-shadow:var(--es-shadow-popup);font-family:var(--es-font)}
 .es-root .es-dialog::backdrop,.es-root .es-command::backdrop{background:var(--es-overlay)}
 .es-root .es-dialog-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px 24px 16px;border-bottom:1px solid var(--es-border-subtle)}

@@ -1,4 +1,4 @@
-export { DesignSystemProvider, useDesignSystem, Icon, Text, Avatar, TextLink, BrandMark, ThemeToggle, brands } from './foundation';
+export { DesignSystemProvider, useDesignSystem, Icon, Text, Avatar, TextLink, BrandMark, ThemeToggle, AnimatedNumber, brands } from './foundation';
 export type { IconName, Theme, TextVariant } from './foundation';
 export { typography, geometry, neutrals, themes } from './tokens';
 export { Button, IconButton, IconToggleButton, TextField, TextAreaField, SearchField, Checkbox, Switch, SegmentedControl, Tabs } from './controls';
@@ -12,6 +12,11 @@ export { PagedCarousel, type PagedCarouselProps } from './paged-carousel';
 export { DisclosureText, LabelField, DisclosedRecords } from './disclosure';
 export { SettingsForm, SettingsRow, SettingsGroup, IntegrationRow, RecentItem, PlanCard, AccountMenu } from './patterns';
 export { Badge, StatusDot, Notice, EmptyState, Skeleton, LoadingIndicator, ProgressBar, SegmentedMeter, Metric, DataList } from './feedback';
+export { ProcessingView, type ProcessingViewProps, type ProcessingStep, type ProcessingStory } from './processing';
+export { ResultLayout, ResultScore, ResultFindings, ResultSection, ResultOffer } from './results';
+export type { ResultLayoutProps, ResultScoreProps, ResultFindingsProps, ResultSectionProps, ResultOfferProps, ResultAction } from './results';
+export { CheckoutLayout, OrderSummary, CheckoutSection } from './checkout';
+export type { CheckoutLayoutProps, OrderSummaryProps, CheckoutSectionProps } from './checkout';
 export { Conversation, ConversationBubble, ChatLayout, ChatComposer, SuggestionRow, ChatMessage, ChatThread, ChatOptions, type ChatOption, type ComposerAttachment, type ComposerAttachmentPicker } from './chat';
 export { CodeSnippet, type CodeSnippetMessages } from './technical';
 export { FeatureCard, type FeatureCardProps } from './feature-card';
@@ -21,6 +26,8 @@ export { ForumTopicCard, ForumTopicList, type ForumTopicCardProps } from './foru
 export { BlogPostCard, BlogPostList, type BlogPostCardProps } from './blog-post';
 export { LandingFooter, type LandingFooterProps, type LandingFooterLink, type LandingFooterGroup } from './landing-footer';
 export { BenefitsSection, BenefitIllustration, type BenefitsSectionProps, type BenefitItem, type BenefitIllustrationKind } from './benefits';
+export { LandingPageLayout, LandingHero, LandingSection, ProductDemo, DocumentPreview, ProcessSteps, FAQSection } from './landing';
+export type { LandingLink, ProductDemoTab } from './landing';
 export { DateItem, DateItemList, type DateItemProps, type DateItemDate } from './date-item';
 export { PaymentConfirmation, type PaymentConfirmationProps, type PaymentInvoice, type PaymentReceiptRow } from './payment-confirmation';
 export { DefinitionTable, OptionList } from './records';

@@ -49,7 +49,7 @@
 .es-root .es-account-action>span:not(.es-account-workspace-mark){min-width:0;overflow-wrap:anywhere}
 .es-root .es-account-action>svg:last-child:not(:first-child){margin-left:auto}
 .es-root .es-account-action:disabled{opacity:.45;cursor:not-allowed}
-.es-root .es-account-workspace-mark{display:flex;align-items:center;justify-content:center;width:17px;height:17px;flex-shrink:0;overflow:hidden;border-radius:4px;background:var(--es-subtle);font-size:10px;line-height:14px}
+.es-root .es-account-workspace-mark{display:flex;align-items:center;justify-content:center;width:17px;height:17px;flex-shrink:0;overflow:hidden;border-radius:4px;background:var(--es-subtle);font-size:12px;line-height:16px}
 .es-root .es-account-workspace-mark>.es-avatar{width:100%;height:100%}
 .es-root .es-account-action--all-workspaces{margin-top:4px;background:var(--es-control)}
 .es-root .es-account-appearance{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:30px;padding:3px 8px}

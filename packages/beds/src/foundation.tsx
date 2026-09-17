@@ -1,4 +1,5 @@
-import { createContext, useContext, useId, useState, type CSSProperties, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { animate, useInView, useReducedMotion } from 'motion/react';
 import { Inbox } from 'lucide-react';
 import { Home, Activity, BarChart3, Plug, Folder, MessageSquare, Plus, Search, PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, Check, X, Settings2, CircleHelp, Sun, Moon, LogOut, MoreHorizontal, ArrowUp, ArrowRight, ArrowUpRight, Paperclip, Command, FileText, CheckCircle2, AlertCircle, Info, Loader2, User, Sparkles, Globe, Bell, Copy, CreditCard, House, MessageCircle, ChartColumn, UserRound, Briefcase, Coins, ScanText, Bookmark, CalendarDays, ChevronsUpDown, Play, Pause, ArrowLeft, ShieldCheck, Image, Table2 } from 'lucide-react';
 
@@ -32,6 +33,45 @@ export function DesignSystemProvider({ children, theme, brandColor = brands.refe
 export function Icon({ name, purpose = 'navigation' }: { name: IconName; purpose?: 'navigation' | 'action' | 'small' | 'feature' }) {
   const Glyph = icons[name];
   return <Glyph className={`es-icon es-icon--${purpose}`} aria-hidden="true" focusable="false" strokeWidth={1.5} />;
+}
+
+/**
+ * Adapted from beUI `number` (MIT, https://beui.dev/r/number/raw, retrieved 2026-09-16).
+ * Upstream Tailwind classes, `cn` helper and easing module are dropped; motion intent and
+ * in-view/reduced-motion behavior are re-expressed with BEDS easing and tokens.
+ * Missing evidence stays missing: a null or non-finite value never animates toward a fabricated number.
+ */
+export function AnimatedNumber({ value, format, fallback = '—', duration = 1.1, startOnView = false }: {
+  value: number | null; format: (value: number) => string; fallback?: string; duration?: number; startOnView?: boolean;
+}) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, amount: .6 });
+  const prefersReducedMotion = useReducedMotion();
+  const [frame, setFrame] = useState(0);
+  const unavailable = value === null || !Number.isFinite(value);
+  const waitingForView = startOnView && !inView;
+
+  useEffect(() => {
+    if (unavailable || waitingForView) return;
+
+    if (prefersReducedMotion) {
+      setFrame(value);
+      return;
+    }
+
+    const snapToInteger = Number.isInteger(value);
+    const controls = animate(0, value, {
+      duration,
+      ease: [.16, 1, .3, 1],
+      onUpdate: current => setFrame(snapToInteger ? Math.round(current) : current),
+    });
+    return () => controls.stop();
+  }, [unavailable, waitingForView, prefersReducedMotion, value, duration]);
+
+  if (unavailable) return <span className="es-animated-number">{fallback}</span>;
+
+  // Single text node: the last frame equals the true value, so no duplicated or doubly announced number.
+  return <span ref={ref} className="es-animated-number">{format(frame)}</span>;
 }
 
 export type TextVariant = 'page-title' | 'section-title' | 'chat-title' | 'body' | 'body-small' | 'label' | 'caption' | 'overline' | 'option' | 'metric';

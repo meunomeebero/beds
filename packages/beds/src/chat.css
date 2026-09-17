@@ -34,13 +34,13 @@
 .es-root .es-conversation-bubble[data-role=user]{align-self:flex-end;align-items:flex-end}
 .es-root .es-conversation-content{width:fit-content;max-width:100%;min-width:0;padding:8px 14px;border:1px solid var(--es-border-subtle);border-radius:18px 18px 18px 8px;background:var(--es-transparent);text-wrap:pretty}
 .es-root .es-conversation-bubble[data-role=user] .es-conversation-content{border-color:var(--es-transparent);border-radius:18px 18px 8px 18px;background:var(--es-message-user)}
-.es-root .es-conversation-meta{display:flex;max-width:100%;align-items:center;gap:8px;padding-inline:10px;color:var(--es-secondary);font-size:11px;line-height:16px}
+.es-root .es-conversation-meta{display:flex;max-width:100%;align-items:center;gap:8px;padding-inline:10px;color:var(--es-secondary);font-size:12px;line-height:16px}
 .es-root .es-conversation-bubble[data-role=user] .es-conversation-meta{justify-content:flex-end}
 .es-root .es-conversation-meta time{white-space:nowrap;font-variant-numeric:tabular-nums}
 .es-root .es-conversation-reactions{display:flex;min-height:24px;align-items:center;gap:4px;padding:2px 6px;border:1px solid var(--es-border-subtle);border-radius:999px;background:var(--es-raised)}
 .es-root .es-chat-message{display:flex;max-width:100%;flex-direction:column;gap:4px}
 .es-root .es-chat-message .es-conversation-bubble[data-role=user]{align-self:flex-end}
-.es-root .es-chat-message>small{font-size:11px;line-height:16px;color:var(--es-secondary)}.es-root .es-chat-message-error{font-size:12px;line-height:18px;color:var(--es-error-text)}
+.es-root .es-chat-message>small{font-size:12px;line-height:16px;color:var(--es-secondary)}.es-root .es-chat-message-error{font-size:12px;line-height:18px;color:var(--es-error-text)}
 .es-root .es-chat-message-error button{margin-left:8px;padding:2px 6px;border:0;border-radius:6px;background:var(--es-subtle);color:var(--es-text)}
 @media(hover:hover){.es-root .es-suggestion:hover,.es-root .es-composer-attach:not(:disabled):hover{background:var(--es-subtle)}}
 @media(max-width:767px){.es-root .es-chat-layout{padding-top:56px}.es-root .es-suggestion{flex-wrap:wrap;column-gap:10px;row-gap:2px}.es-root .es-suggestion>small{flex-basis:100%;padding-left:34px}.es-root .es-composer-toolbar{gap:4px}.es-root .es-composer-toolbar>div{gap:4px}}

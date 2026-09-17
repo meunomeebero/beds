@@ -1,5 +1,5 @@
 /* A: owner-supplied bento anatomy; fixed geometry, original token-based artwork. */
-.es-root .es-benefits{padding:72px var(--es-space-10);background:var(--es-bg);color:var(--es-text);overflow-wrap:anywhere}
+.es-root .es-benefits{padding:calc(var(--es-space-10) * 3) var(--es-space-10);background:var(--es-bg);color:var(--es-text);overflow-wrap:anywhere}
 .es-root .es-benefits-inner{container-type:inline-size;max-inline-size:1040px;margin-inline:auto;min-inline-size:0}
 .es-root .es-benefits-intro{text-align:center;max-inline-size:600px;margin-inline:auto;margin-block-end:var(--es-space-12)}
 .es-root .es-benefits-intro>h1,.es-root .es-benefits-intro>h2{color:var(--es-heading);font-size:32px;line-height:1.4;font-weight:500;letter-spacing:-.8px;text-wrap:balance}

@@ -1,29 +1,31 @@
 .es-root {box-sizing:border-box;min-height:100%;background:var(--es-bg);color:var(--es-text);font-family:var(--es-font);font-size:13px;line-height:20px;letter-spacing:-.1px;font-weight:400;font-optical-sizing:auto;font-feature-settings:normal;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 .es-root *, .es-root *::before, .es-root *::after {box-sizing:border-box}
 .es-root :where(h1,h2,h3,h4,h5,h6,p,ul,ol){margin:0}
-.es-root :where(button,input,textarea,select){font-family:inherit;color:inherit;letter-spacing:inherit}
-.es-root :where(button,a){-webkit-tap-highlight-color:var(--es-transparent)}
-.es-root :where(button){cursor:pointer}
-.es-root :where(button:disabled){cursor:not-allowed}
-.es-root :where(a){color:inherit;text-decoration:none}
-.es-root :where(button,a,input,textarea,select,[tabindex]):focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
+/* Element defaults sit at zero specificity so any component rule or utility (outline-none, text-*, cursor-*) wins over them. */
+:where(.es-root) :where(button,input,textarea,select){font-family:inherit;color:inherit;letter-spacing:inherit}
+:where(.es-root) :where(button,a){-webkit-tap-highlight-color:var(--es-transparent)}
+:where(.es-root) :where(button){cursor:pointer}
+:where(.es-root) :where(button:disabled){cursor:not-allowed}
+:where(.es-root) :where(a){color:inherit;text-decoration:none}
+:where(.es-root) :where(button,a,input,textarea,select,[tabindex]):where(:focus-visible){outline:2px solid var(--es-focus);outline-offset:2px}
 .es-root :where([hidden]){display:none!important}
 .es-root .es-icon{display:block;flex-shrink:0;width:14px;height:14px}
 .es-root .es-icon--small{width:12px;height:12px}.es-root .es-icon--action{width:16px;height:16px}.es-root .es-icon--feature{width:20px;height:20px}
 .es-root .es-text{margin:0;overflow-wrap:anywhere}.es-root .es-text--secondary{color:var(--es-secondary)}
+.es-root .es-animated-number{font-variant-numeric:tabular-nums}
 .es-root .es-text--page-title{color:var(--es-heading);font-size:16px;line-height:20px;font-weight:500;letter-spacing:-.15px}
 .es-root .es-text--section-title{color:var(--es-heading);font-size:13px;line-height:20px;font-weight:500}
 .es-root .es-text--chat-title{color:var(--es-heading);font-size:16px;line-height:24px;font-weight:500;letter-spacing:-.15px}
 .es-root .es-text--body{font-size:14px;line-height:21px;font-weight:400}
 .es-root .es-text--body-small{font-size:13px;line-height:20px;font-weight:400}
 .es-root .es-text--label{font-size:13px;line-height:16px;font-weight:500}
-.es-root .es-text--caption{font-size:11px;line-height:16px;font-weight:400;letter-spacing:0}
-.es-root .es-text--overline{font-size:11px;line-height:16px;font-weight:500;letter-spacing:.55px;text-transform:uppercase}
+.es-root .es-text--caption{font-size:12px;line-height:16px;font-weight:400;letter-spacing:0}
+.es-root .es-text--overline{font-size:12px;line-height:16px;font-weight:500;letter-spacing:.55px;text-transform:uppercase}
 .es-root .es-text--option{font-size:13px;line-height:16px;font-weight:450}
 .es-root .es-text--metric{font-size:24px;line-height:30px;font-weight:500;letter-spacing:-.2px;font-variant-numeric:tabular-nums}
 .es-root .es-avatar{display:inline-flex;align-items:center;justify-content:center;flex:none;background:var(--es-subtle);color:var(--es-secondary);overflow:hidden;width:28px;height:28px;border-radius:50%;font-size:12px;line-height:16px}
 .es-root .es-avatar img{width:100%;height:100%;object-fit:cover}
-.es-root .es-avatar--workspace{width:16px;height:16px;font-size:10px;line-height:12px;border-radius:4px;border:1px solid var(--es-border-subtle)}
+.es-root .es-avatar--workspace{width:16px;height:16px;font-size:12px;line-height:14px;border-radius:4px;border:1px solid var(--es-border-subtle)}
 .es-root .es-avatar--profile{width:64px;height:64px;font-size:20px;line-height:24px;border-radius:12px}
 .es-root .es-avatar--forum{width:40px;height:40px;font-size:13px;line-height:20px;border-radius:8px;outline:1px solid var(--es-image-outline);outline-offset:-1px}
 .es-root .es-text-link{color:inherit;text-decoration:underline;text-decoration-color:var(--es-border);text-underline-offset:2px;border-radius:2px}

@@ -4,7 +4,7 @@
 .es-root :is(button,a).es-date-item{cursor:pointer}
 .es-date-item-calendar{display:block;flex:0 0 48px;box-sizing:border-box;inline-size:48px;padding:var(--es-space-2);border-radius:12px;background:var(--es-surface);box-shadow:0 0 0 1px var(--es-border),var(--es-shadow-xs);text-align:center}
 .es-date-item-sheet{display:flex;flex-direction:column;border-radius:var(--es-radius-8);overflow:hidden;box-shadow:0 0 0 1px var(--es-border)}
-.es-date-item-month{padding-inline:var(--es-space-1);background:var(--es-subtle);color:var(--es-secondary);font-size:11px;font-weight:500;line-height:1.45;letter-spacing:.4px;text-transform:uppercase;overflow-wrap:anywhere}
+.es-date-item-month{padding-inline:var(--es-space-1);background:var(--es-subtle);color:var(--es-secondary);font-size:12px;font-weight:500;line-height:1.45;letter-spacing:.4px;text-transform:uppercase;overflow-wrap:anywhere}
 .es-date-item-day{font-size:20px;font-weight:500;line-height:1.2;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 .es-date-item-content{flex:1;min-inline-size:0;display:grid;gap:var(--es-space-2)}
 .es-date-item-heading{display:flex;flex-wrap:wrap;align-items:center;column-gap:var(--es-space-6);row-gap:var(--es-space-2);min-inline-size:0}
