@@ -295,8 +295,8 @@ export function SegmentedControl({ label, value, options, onChange, variant = 'p
 }
 
 const TABS_LIST_ACTIVITY = 'inline-flex items-center gap-0.5 max-w-full min-h-[30px] p-0.5 border border-border-subtle rounded-lg bg-subtle pointer-coarse:min-h-11';
-const TABS_TAB_ACTIVITY = 'flex-1 min-w-0 min-h-6 px-2 border-0 rounded-md bg-transparent text-secondary text-xs leading-4 font-medium whitespace-nowrap cursor-pointer pointer-coarse:min-h-11';
-const TABS_TAB_CONNECTION = 'min-h-7 px-2 border border-transparent rounded-lg text-sm leading-4';
+const TABS_TAB_ACTIVITY = 'flex-1 min-w-0 min-h-6 px-2 border-0 rounded-md bg-transparent text-secondary text-xs leading-4 font-medium whitespace-nowrap cursor-pointer pointer-coarse:min-h-11 transition-colors motion-reduce:transition-none';
+const TABS_TAB_CONNECTION = 'min-h-7 px-2 border border-transparent rounded-lg text-sm leading-4 transition-colors motion-reduce:transition-none';
 const TABS_TAB_SELECTED = 'bg-surface text-foreground shadow-[0_1px_2px_var(--es-border)]';
 
 export function Tabs({ label, value, items, onChange, variant = 'activity' }: {

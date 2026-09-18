@@ -78,14 +78,17 @@ test('content shells remain transparent and selection survives soft hover', asyn
     }
     const tab = page.getByRole('tab', { name: 'Visão geral', exact: true });
     await expect(tab).toHaveAttribute('aria-selected', 'true');
-    await expect(tab).toHaveCSS('transition-duration', '0.15s, 0.15s, 0.15s');
+    // migrated tab expresses trivial color hover via `transition-colors` (150ms), not a legacy 3-property transition
+    expect(await tab.evaluate(el => getComputedStyle(el).transitionProperty)).toContain('background-color');
+    await expect(tab).toHaveCSS('transition-duration', '0.15s');
     const tabBackground = await tab.evaluate(el => getComputedStyle(el).backgroundColor);
     if (info.project.name === 'desktop') {
       await tab.hover();
       await expect(tab).toHaveCSS('background-color', tabBackground);
     }
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await expect(tab).toHaveCSS('transition-duration', '0s');
+    // reduced motion collapses the transition to property:none; the duration token itself stays 0.15s
+    await expect(tab).toHaveCSS('transition-property', 'none');
     await page.emulateMedia({ reducedMotion: 'no-preference' });
   }
 });
