@@ -35,6 +35,8 @@ export function Button({ label, onClick, type = 'button', variant = 'secondary',
   const reduce = useReducedMotion();
   const canHover = useHoverCapable();
   const sizeKey = purpose === 'default' && compact ? 'compact' : purpose;
+  // hover stays non-geometric (BEDS owns the measured box): filled variants lift via brightness, ghost keeps its hover:bg-accent token veil
+  const hover = variant === 'ghost' ? undefined : { filter: 'brightness(1.06)' };
   return <motion.button
     type={type}
     onClick={onClick}
@@ -47,7 +49,7 @@ export function Button({ label, onClick, type = 'button', variant = 'secondary',
     data-purpose={purpose}
     data-compact={purpose === 'default' && compact || undefined}
     whileTap={reduce || disabled || busy ? undefined : { scale: 0.97 }}
-    whileHover={reduce || !canHover || disabled || busy ? undefined : { scale: 1.01 }}
+    whileHover={reduce || !canHover || disabled || busy ? undefined : hover}
     transition={{ duration: 0.12, ease: EASE_OUT }}
     className={cn(
       'es-button box-border inline-flex items-center justify-center max-w-full text-sm font-medium tracking-normal',
