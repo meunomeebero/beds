@@ -510,7 +510,7 @@ Unboxed groups use0 border/inset,16/24px medium headings,24px internal gaps.
 Settings-panel buttons36px minimum desktop,44px mobile;switch rows44px;mobile
 editable text16px,theme/select triggers and links44px. Defaults unchanged.
 No new motion;underline changes immediately. Existing reduced-motion behavior
-retained;forced colors adds a system-color selected boundary.
+retained;forced colors adds a system-color selected boundary. The settings variant is still legacy CSS in `controls.css` pending Tailwind migration; the activity and connection Tabs variants are migrated (F1).
 
 ## Checkout presentation — September16 adaptation
 
@@ -694,7 +694,7 @@ These47 rows include44 additional property names and3 overrides of shared defaul
 
 ## Token contract — shadcn naming, BEDS values (since 2026-09-17)
 
-Each `.es-root[data-theme]` block declares the shadcn vocabulary (`--background`,`--foreground`,`--card`,`--popover`,`--primary`,`--secondary`,`--muted`,`--accent`,`--destructive`,`--border`,`--input`,`--ring`,`--sidebar*`,`--chart-1..5`) with the BEDS values below. Historical `--es-*` names are aliases (`--es-bg: var(--background)`) kept until each component migrates to Tailwind utilities, then deleted. BEDS extensions without a shadcn equivalent (`--es-switch-off`,`--es-message-user`,`--es-glass`…) stay `--es-*` permanently. `--radius:8px` is the shared radius; `@theme` in `src/tailwind.css` derives `radius-sm..4xl`, the 4px spacing grid, the BEDS type scale under Tailwind names (`--text-sm:13px/20px`), the measured tracking values and the BEDS easing. Tailwind utilities compile into `dist/styles.css` at build; consumers never install Tailwind.
+Each `.es-root[data-theme]` block declares the shadcn vocabulary (`--background`,`--foreground`,`--card`,`--popover`,`--primary`,`--secondary`,`--muted`,`--accent`,`--destructive`,`--border`,`--input`,`--ring`,`--sidebar*`,`--chart-1..5`) with the BEDS values below. Historical `--es-*` names are aliases (`--es-bg: var(--background)`) kept until each component migrates to Tailwind utilities, then deleted. BEDS extensions without a shadcn equivalent (`--es-switch-off`,`--es-message-user`,`--es-glass`…) stay `--es-*` permanently. `--radius:8px` is the shared radius; `@theme` in `src/tailwind.css` derives `radius-sm..4xl`, the 4px spacing grid, the BEDS type scale under Tailwind names (`--text-sm:13px/20px`), the measured tracking values and the BEDS easing. Tailwind utilities compile into `dist/styles.css` at build; consumers never install Tailwind. As of F1.1 (2026-09-17) the compiled sheet is 218,710 bytes (~214 KiB) raw / 35,731 bytes (~35 KiB) gzipped — a point-in-time reference, not a budget (`check:artifact` asserts presence only).
 
 ### Objective fixes — 2026-09-17
 

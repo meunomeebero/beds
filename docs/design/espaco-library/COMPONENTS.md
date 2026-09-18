@@ -140,6 +140,8 @@ Primary navigation reuses `NavItem` inside `SidebarSection purpose="primary"`:4p
 
 Welcome action context is a source-measured fixed button purpose:40px high,12px radius,14px horizontal padding,14/16px medium label. Connection action uses40px height/10px radius. These are not general size APIs; use each with its matching context.
 
+Button, IconButton, IconToggleButton, TextField, TextAreaField, SearchField, Checkbox, Switch, SegmentedControl and the activity/connection Tabs are migrated to Tailwind utilities + `motion/react` (F1, beUI-sourced, 2026-09-17): API and source-measured geometry preserved, legacy `.es-*` class hooks dropped for element/role/`data-purpose` selectors, interaction motion in the [motion contract](STATES.md). Checkbox/Switch keep a full-area invisible native input (`inset-0`, `opacity-0`) so the real element owns the >=44px coarse hit-target. The settings Tabs variant stays legacy CSS pending migration.
+
 ## Overlays — 10
 
 | Component | API | Constraints |
