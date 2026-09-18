@@ -27,7 +27,7 @@ const BUTTON_VARIANT: Record<NonNullable<ButtonProps['variant']>, string> = {
 const BUTTON_SIZE: Record<'compact' | 'default' | 'welcome' | 'connection', string> = {
   compact: 'min-h-7 rounded-md px-2.5 gap-1',
   default: 'min-h-8 min-w-0 rounded-lg px-2.5 gap-1 pointer-coarse:min-h-11',
-  welcome: 'min-h-[40px] rounded-[12px] px-3.5 gap-1.5 pointer-coarse:min-h-11', // arbitrary radius: BEDS welcome has r=12px (no token match); grows to 44px on coarse pointer
+  welcome: 'min-h-[40px] rounded-[12px] px-3.5 gap-1.5', // arbitrary radius: BEDS welcome has r=12px (no token match); preserved on touch (FOUNDATIONS)
   connection: 'min-h-[40px] rounded-xl px-4 gap-1.5', // connection keeps 40px on touch (FOUNDATIONS)
 };
 
