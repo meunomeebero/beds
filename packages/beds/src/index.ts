@@ -1,11 +1,13 @@
 export { DesignSystemProvider, useDesignSystem, Icon, Text, Avatar, TextLink, BrandMark, ThemeToggle, AnimatedNumber, brands } from './foundation';
 export type { IconName, Theme, TextVariant } from './foundation';
+export { NumberTicker, type NumberTickerProps } from './number-ticker';
 export { typography, geometry, neutrals, themes } from './tokens';
 export { Button, IconButton, IconToggleButton, TextField, TextAreaField, SearchField, Checkbox, Switch, SegmentedControl, Tabs } from './controls';
 export { RadioGroup, FileUploadField } from './form-fields';
 export type { RadioOption, RadioGroupProps, FileUploadFieldProps } from './form-fields';
 export { Select, FilterSelect, HelpLabel, DropdownMenu, Tooltip, Dialog, Drawer, DrawerSection, CommandPalette, SearchDialog } from './overlays';
 export type { SearchResult } from './overlays';
+export { Dock, DockItem, DockSeparator, type DockProps, type DockItemProps } from './dock';
 export { AppShell, SidebarHeader, WorkspaceTrigger, SidebarSection, NavItem, SidebarFooter, ContentHeader, PageContentHeader, Breadcrumbs, PageHeader, SectionHeader, Stack, Inline, ResponsiveGrid, Divider, Surface, CollectionCard, ActivityPanel } from './layout';
 export { DataTable, HorizontalRail, Carousel, ScrollableList, Pagination, type DataTableColumn, type DataTableRow, type DataTableState } from './data';
 export { PagedCarousel, type PagedCarouselProps } from './paged-carousel';

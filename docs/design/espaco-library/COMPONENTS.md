@@ -121,6 +121,8 @@ Icon registry additions: `House`, `MessageCircle`, `ChartColumn`, `UserRound`, `
 
 Primary navigation reuses `NavItem` inside `SidebarSection purpose="primary"`:4px group gap,9px icon/text gap,11px horizontal padding and14px/21px text. Selected appearance persists on hover;150ms neutral transition,none with reduced motion. Collapsed rail preserves accessible names and42px-wide controls within62px. Mobile keeps the768px breakpoint.
 
+`Dock` / `DockItem` / `DockSeparator` are migrated to Tailwind + `motion/react` (beUI `dock`, 2026-09-18): 44px fixed item size, active pill glides via `layoutId` (`SPRING_LAYOUT`), glass `bg-card/80` + `backdrop-blur-xl`. No public sizing or styling escape hatches.
+
 ## Controls — 12
 
 | Component | API | States / constraints |
@@ -201,6 +203,8 @@ Unlike the old prototype, portable AccountMenu exposes workspace and theme callb
 |`Pagination` |`label/page/pageCount/summary({page,pageCount})/previousLabel/nextLabel/onPageChange` |Controlled one-based adjacent navigation; bounds normalize non-finite/fractional values; summary receives the same normalized values; responsive stack; no request or route behavior |
 
 `value=0` is valid. Null/non-finite value or invalid max yields unavailable; finite out-of-range values clamp defensively. No arbitrary segment count, dimensions or score thresholds exposed. Before/after meaning and source data accuracy remain caller responsibilities.
+
+`NumberTicker` (beUI `number-ticker`, 2026-09-18) renders slot-machine rolling digits with staggered entrance; inherits font metrics; reduced-motion guards. Use for live metrics/counts only — never for the fabricated ATS score, which stays static by invariant. Public `className`/`digitClassName` props were removed per the BEDS contract.
 
 Carousel RC11 replaces the RC9 edge-reversal/toolbar contract. Overflow uses three rendered copies of caller-controlled cards;one group is exposed to assistive navigation/Tab at a time. Pointer selection promotes its copy before focus;matching controlled values update every copy. Supply stable keyed,presentational cards;keep dialogs,requests and side effects outside repeated children. No per-copy data fetching,uncontrolled selection,caller hardcoded DOM IDs or analytics mount events. Underfilled rails stay single/static. Locale hint describes native scroll and Space pause;former pause/resume/previous/next label props removed.
 

@@ -41,3 +41,17 @@ export const SPRING_LAYOUT = {
   damping: 32,
   mass: 0.6,
 } as const;
+
+/** Cursor-follow physics for decorative mouse tracking (magnetic, tilt, dock). */
+export const SPRING_MOUSE = {
+  stiffness: 200,
+  damping: 15,
+  mass: 0.3,
+} as const;
+
+/** Dragged handles and fills (sliders) — critically damped `useSpring` config. */
+export const SPRING_GLIDE = {
+  stiffness: 700,
+  damping: 50,
+  mass: 0.5,
+} as const;
