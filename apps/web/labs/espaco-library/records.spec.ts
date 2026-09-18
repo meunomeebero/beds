@@ -52,7 +52,7 @@ test('disclosure keyboard, controlled options, disabled and empty re-entry', asy
   await expect(toggle).toHaveAttribute('aria-expanded', 'true');
   await toggle.press('Tab');
   await expect(documents).toBeFocused();
-  await expect(documents.locator('+ .es-switch-track')).toHaveCSS('outline-style', 'solid');
+  await expect(documents.locator('+ span')).toHaveCSS('outline-style', 'solid');
   await documents.press('Space');
   await expect(documents).not.toBeChecked();
   await expect(list.getByRole('status')).toHaveText('Compartilhamento desativado somente neste exemplo.');

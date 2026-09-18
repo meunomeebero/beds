@@ -167,7 +167,7 @@ for (const theme of ['light', 'dark'] as const) {
     await page.goto(`/?view=components&theme=${theme}`);
     await page.getByRole('heading', { name: 'Componentes', exact: true }).waitFor();
     const colors = await page.locator('.es-root').evaluate(root => {
-      const placeholder = root.querySelector<HTMLInputElement>('.es-text-input')!;
+      const placeholder = root.querySelector<HTMLInputElement>('input[data-purpose]')!;
       return {
         placeholder: getComputedStyle(placeholder, '::placeholder').color,
         field: getComputedStyle(placeholder).backgroundColor,
