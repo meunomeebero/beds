@@ -25,11 +25,21 @@ const BUTTON_VARIANT: Record<NonNullable<ButtonProps['variant']>, string> = {
  *  `box-border` + `h-*` (exact height, not min-height) — matches the legacy CSS where the visible button height was 40px regardless of text content.
  *  Pointer-coarse (mobile) bumps the default size to 44px while keeping welcome/connection at 40px per FOUNDATIONS. */
 const BUTTON_SIZE: Record<'compact' | 'default' | 'welcome' | 'connection', string> = {
-  compact: 'min-h-7 rounded-md px-2.5 gap-1',
-  default: 'min-h-8 min-w-0 rounded-lg px-2.5 gap-1 pointer-coarse:min-h-11',
-  welcome: 'min-h-[40px] rounded-[12px] px-3.5 gap-1.5', // arbitrary radius: BEDS welcome has r=12px (no token match); preserved on touch (FOUNDATIONS)
-  connection: 'min-h-[40px] rounded-xl px-4 gap-1.5', // connection keeps 40px on touch (FOUNDATIONS)
+  compact: 'min-h-7 rounded-md px-2.5',
+  default: 'min-h-8 min-w-0 rounded-lg px-2.5 pointer-coarse:min-h-11',
+  welcome: 'min-h-[40px] rounded-[12px] px-3.5', // arbitrary radius: BEDS welcome has r=12px (no token match); preserved on touch (FOUNDATIONS)
+  connection: 'min-h-[40px] rounded-xl px-4', // connection keeps 40px on touch (FOUNDATIONS)
 };
+
+const BUTTON_GAP: Record<string, string> = {
+  compact: 'gap-1',
+  default: 'gap-1',
+  welcome: 'gap-1.5',
+  connection: 'gap-1.5',
+};
+
+// Press feedback lives on an inert child: the measured button box never scales (BEDS owns geometry; keyboard Enter also triggers whileTap).
+const TAP_PRESS = { tap: { scale: 0.97 } };
 
 export function Button({ label, onClick, type = 'button', variant = 'secondary', compact = false, purpose = 'default', icon, disabled, busy, 'aria-describedby': describedBy, 'aria-expanded': ariaExpanded, 'aria-controls': ariaControls }: ButtonProps) {
   const reduce = useReducedMotion();
@@ -48,7 +58,7 @@ export function Button({ label, onClick, type = 'button', variant = 'secondary',
     data-variant={variant}
     data-purpose={purpose}
     data-compact={purpose === 'default' && compact || undefined}
-    whileTap={reduce || disabled || busy ? undefined : { scale: 0.97 }}
+    whileTap={reduce || disabled || busy ? undefined : 'tap'}
     whileHover={reduce || !canHover || disabled || busy ? undefined : hover}
     transition={{ duration: 0.12, ease: EASE_OUT }}
     className={cn(
@@ -59,8 +69,10 @@ export function Button({ label, onClick, type = 'button', variant = 'secondary',
       BUTTON_SIZE[sizeKey],
     )}
   >
-    {(busy || icon) && <motion.span aria-hidden className="inline-flex shrink-0" animate={busy && !reduce ? { rotate: 360 } : undefined} transition={busy && !reduce ? { repeat: Infinity, duration: 0.9, ease: 'linear' } : undefined}><Icon name={busy ? 'Loader2' : icon!} purpose="action" /></motion.span>}
-    <span className="min-w-0 break-words">{label}</span>
+    <motion.span className={cn('inline-flex items-center justify-center max-w-full', BUTTON_GAP[sizeKey])} variants={TAP_PRESS} transition={{ duration: 0.12, ease: EASE_OUT }}>
+      {(busy || icon) && <motion.span aria-hidden className="inline-flex shrink-0" animate={busy && !reduce ? { rotate: 360 } : undefined} transition={busy && !reduce ? { repeat: Infinity, duration: 0.9, ease: 'linear' } : undefined}><Icon name={busy ? 'Loader2' : icon!} purpose="action" /></motion.span>}
+      <span className="min-w-0 break-words">{label}</span>
+    </motion.span>
   </motion.button>;
 }
 
@@ -74,7 +86,7 @@ export function IconButton({ label, icon, onClick, disabled, 'aria-describedby':
     aria-describedby={describedBy}
     onClick={onClick}
     disabled={disabled}
-    whileTap={reduce || disabled ? undefined : { scale: 0.97 }}
+    whileTap={reduce || disabled ? undefined : 'tap'}
     transition={{ duration: 0.12, ease: EASE_OUT }}
     className={cn(
       'es-icon-button box-border inline-flex items-center justify-center shrink-0 border-0',
@@ -84,7 +96,7 @@ export function IconButton({ label, icon, onClick, disabled, 'aria-describedby':
       'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
       'pointer-coarse:min-h-11 pointer-coarse:min-w-11',
     )}
-  ><Icon name={icon} purpose="action" /></motion.button>;
+  ><motion.span className="inline-flex" variants={TAP_PRESS} transition={{ duration: 0.12, ease: EASE_OUT }}><Icon name={icon} purpose="action" /></motion.span></motion.button>;
 }
 
 /** Controlled compact toggle with a native pressed state and persistent accessible name. */
@@ -99,7 +111,7 @@ export function IconToggleButton({ label, icon, pressed, onPressedChange, disabl
     aria-describedby={describedBy}
     onClick={() => onPressedChange(!pressed)}
     disabled={disabled}
-    whileTap={reduce || disabled ? undefined : { scale: 0.97 }}
+    whileTap={reduce || disabled ? undefined : 'tap'}
     transition={{ duration: 0.12, ease: EASE_OUT }}
     className={cn(
       'es-icon-toggle-button box-border inline-flex items-center justify-center shrink-0 border-0',
@@ -110,7 +122,7 @@ export function IconToggleButton({ label, icon, pressed, onPressedChange, disabl
       'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
       'pointer-coarse:min-h-11 pointer-coarse:min-w-11',
     )}
-  ><Icon name={icon} purpose="action" /></motion.button>;
+  ><motion.span className="inline-flex" variants={TAP_PRESS} transition={{ duration: 0.12, ease: EASE_OUT }}><Icon name={icon} purpose="action" /></motion.span></motion.button>;
 }
 
 type FieldProps = {
