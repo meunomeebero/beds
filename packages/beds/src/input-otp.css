@@ -15,9 +15,9 @@
 .es-root .es-otp:has(input:disabled){opacity:.5;cursor:not-allowed}
 .es-root .es-otp-message{display:flex;align-items:flex-start;gap:4px;margin:0;min-height:20px;color:var(--es-secondary);font:400 13px/20px var(--es-font);overflow-wrap:anywhere;text-wrap:pretty}
 .es-root .es-otp-message[data-status="error"]{color:var(--es-error-text)}
-.es-root .es-otp-message[data-status="success"]{color:var(--es-success)}
+.es-root .es-otp-message[data-status="success"]{color:var(--es-secondary)}
 .es-root .es-otp-message-copy{min-width:0;overflow-wrap:anywhere}
-.es-root .es-otp-success-icon{display:inline-flex;flex:none;margin-block-start:2px;color:var(--es-success);pointer-events:none}
+.es-root .es-otp-success-icon{display:inline-flex;flex:none;margin-block-start:2px;color:var(--es-badge-success-marker);pointer-events:none}
 @media(forced-colors:active){
  .es-root .es-otp-slot{border-color:CanvasText}
  .es-root .es-otp-slot[data-active="true"]{outline-color:Highlight}
