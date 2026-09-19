@@ -110,7 +110,8 @@ render, while only the internal segmented fill uses the reveal motion. The
 reduced-motion behavior remain unchanged. No auto-success, request, scoring or
 navigation is introduced. The other candidate slugs (`loading-states`,
 `agent-activity`, `tool-result`, `file-diff`) are deferred because their public
-state models do not match this surface.
+state models do not match this surface. Terminal-first score meters render
+fully filled without an entrance animation.
 
 ## Quality and evidence
 

@@ -23,6 +23,13 @@ async function start(page: Page, kind: ProcessingDemoKind, theme: 'light' | 'dar
   return screen;
 }
 
+async function advanceToScores(page: Page, durationSeconds: number) {
+  const target = durationSeconds * 1000 * .67 + 5000;
+  for (let elapsed = 0; elapsed < target; elapsed += 5000) {
+    await page.clock.runFor(Math.min(5000, target - elapsed));
+  }
+}
+
 function scores(screen: Locator) {
   return screen.locator('.es-processing-scores');
 }
@@ -32,7 +39,7 @@ test.describe('ProcessingView · beUI todo-list adaptation', () => {
     test(`${kind} ${theme} keeps final score text stable while ATS segments fill`, async ({ page }) => {
       const fixture = processingFixtures[kind];
       const screen = await start(page, kind, theme);
-      await page.clock.runFor(fixture.durationSeconds * 1000 * .67 + 1000);
+      await advanceToScores(page, fixture.durationSeconds);
       const scoreRegion = scores(screen);
       await expect(scoreRegion).toBeVisible();
 
@@ -53,7 +60,7 @@ test.describe('ProcessingView · beUI todo-list adaptation', () => {
   test('pause freezes a segment fill and resume lets the visual finish without changing its value', async ({ page }) => {
     const fixture = processingFixtures.analysis;
     const screen = await start(page, 'analysis', 'dark');
-    await page.clock.runFor(fixture.durationSeconds * 1000 * .67 + 1000);
+    await advanceToScores(page, fixture.durationSeconds);
     const meter = scores(screen).locator('.es-segmented-bars').first();
     await expect(meter).toBeVisible();
     await page.clock.runFor(40);
@@ -71,16 +78,33 @@ test.describe('ProcessingView · beUI todo-list adaptation', () => {
     await expect(meter).toHaveAttribute('aria-valuenow', String(fixture.scores[0].value));
   });
 
+  test('terminal-first scores render fully filled without an entrance animation', async ({ page }) => {
+    const screen = await start(page, 'analysis', 'dark');
+    await page.getByRole('button', { name: 'Simular conclusão', exact: true }).click();
+    await expect(screen).toHaveAttribute('data-state', 'success');
+    await expect(screen).toHaveAttribute('data-motion-paused', 'true');
+    const scoreRegion = scores(screen);
+    await expect(scoreRegion).toBeVisible();
+    for (const meter of await scoreRegion.locator('.es-segmented-bars').all()) {
+      expect(await meter.evaluate(element => getComputedStyle(element).clipPath)).toMatch(/inset\(0px 0(?:\.0+)?%/);
+      expect(await meter.evaluate(element => element.getAnimations().length)).toBe(0);
+    }
+  });
+
   test('reduced motion keeps the todo status marks and ATS fill static', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     const fixture = processingFixtures.optimization;
     const screen = await start(page, 'optimization', 'light');
-    await page.clock.runFor(fixture.durationSeconds * 1000 * .67 + 1000);
+    await advanceToScores(page, fixture.durationSeconds);
     const scoreRegion = scores(screen);
     await expect(scoreRegion).toBeVisible();
     for (const meter of await scoreRegion.locator('.es-segmented-bars').all()) {
       expect(await meter.evaluate(element => getComputedStyle(element).clipPath)).toBe('none');
       expect(await meter.evaluate(element => element.getAnimations().length)).toBe(0);
+    }
+    for (const mark of await screen.locator('.es-processing-step-icon > span').all()) {
+      expect(await mark.evaluate(element => getComputedStyle(element).transform)).toBe('none');
+      expect(await mark.evaluate(element => element.getAnimations().length)).toBe(0);
     }
     expect(await screen.locator('.es-processing-transcript li').count()).toBe(fixture.chapters.length);
   });

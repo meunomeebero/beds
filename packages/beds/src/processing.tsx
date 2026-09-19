@@ -108,7 +108,7 @@ export function ProcessingView({ title, description, context, mark, state, statu
           </li>)}
         </ol>
         <details className="es-processing-details"><summary>{detailsLabel}<Icon name="ChevronDown" purpose="action" /></summary><ol>{logs.map((line, index) => <li key={`${index}-${line}`}><Icon name="Check" purpose="small" /><span>{line}</span></li>)}</ol></details>
-        {scores && <section className="es-processing-scores" aria-label={scores.label}><h2>{scores.label}</h2><p>{scores.note}</p><div>{scores.items.map(score => <ProcessingScoreMeter key={score.id} label={score.label} value={score.value} paused={motion.paused} />)}</div></section>}
+        {scores && <section className="es-processing-scores" aria-label={scores.label}><h2>{scores.label}</h2><p>{scores.note}</p><div>{scores.items.map(score => <ProcessingScoreMeter key={score.id} label={score.label} value={score.value} paused={motion.paused || terminal} />)}</div></section>}
         {actions && <div className="es-processing-actions">{actions.map(action => <Button key={action.label} label={action.label} variant={action.primary ? 'primary' : 'secondary'} onClick={action.onClick} />)}</div>}
       </div>
       <aside className="es-processing-story" aria-labelledby={`${id}-story`}>

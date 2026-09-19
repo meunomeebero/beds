@@ -25,7 +25,7 @@ export function MeterSegments({ label, value, max = 100, tone = 'neutral', round
   const filled = ratio === null ? 0 : rounding === 'down' ? Math.floor(ratio * count) : Math.round(ratio * count);
   const reduce = useReducedMotion() ?? false;
   const canAnimate = animateFill && ratio !== null;
-  const fillProgress = useMotionValue(canAnimate && !reduce ? 0 : 1);
+  const fillProgress = useMotionValue(canAnimate && !reduce && !paused ? 0 : 1);
   const clipPath = useTransform(fillProgress, current => `inset(0 ${Math.max(0, 100 - current * 100)}% 0 0)`);
 
   useEffect(() => {
