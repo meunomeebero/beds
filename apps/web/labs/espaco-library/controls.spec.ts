@@ -291,6 +291,26 @@ for (const theme of ['light', 'dark'] as const) {
       await expect(rejectedFirst).toBeChecked();
       await expect(rejected.locator('[data-segmented-indicator]')).toHaveCount(1);
 
+      const pointerRecovery = page.getByRole('radiogroup', { name: 'BER-10 rejected keyboard then pointer' });
+      const pointerFirst = pointerRecovery.getByRole('radio', { name: 'First', exact: true });
+      const pointerSecond = pointerRecovery.getByRole('radio', { name: 'Second', exact: true });
+      await pointerFirst.focus();
+      await pointerFirst.press('ArrowRight');
+      await expect(pointerSecond).toBeFocused();
+      await expect(pointerFirst).toBeChecked();
+      const pointerVisual = pointerSecond.locator('xpath=following-sibling::span');
+      const pointerBounds = await pointerVisual.boundingBox();
+      expect(pointerBounds).not.toBeNull();
+      await page.mouse.click(pointerBounds!.x + pointerBounds!.width / 2, pointerBounds!.y + pointerBounds!.height / 2);
+      await expect(pointerSecond).toBeChecked();
+      const pointerIndicator = pointerRecovery.locator('[data-segmented-indicator]');
+      await page.waitForTimeout(10);
+      const pointerFrame0 = await pointerIndicator.evaluate(element => getComputedStyle(element).transform);
+      await page.waitForTimeout(50);
+      const pointerFrame50 = await pointerIndicator.evaluate(element => getComputedStyle(element).transform);
+      expect(pointerFrame50).not.toBe(pointerFrame0);
+      expect(pointerFrame50).not.toBe('none');
+
       const sibling = page.getByRole('radiogroup', { name: 'BER-10 sibling instance' });
       await expect(sibling.getByRole('radio', { name: 'First', exact: true })).toBeChecked();
       await expect(sibling.locator('[data-segmented-indicator]')).toHaveCount(1);
@@ -341,7 +361,16 @@ for (const theme of ['light', 'dark'] as const) {
       await comfortable.press('ArrowLeft');
       await expect(compact).toBeChecked();
       await expect(compact).toBeFocused();
-      await expect.poll(async () => indicator.evaluate(element => getComputedStyle(element).transform)).toBe('none');
+      await expect(indicator).toHaveCSS('transform', 'none');
+      await page.waitForTimeout(16);
+      await expect(indicator).toHaveCSS('transform', 'none');
+
+      await comfortable.focus();
+      await comfortable.press('Space');
+      await expect(comfortable).toBeChecked();
+      await expect(indicator).toHaveCSS('transform', 'none');
+      await page.waitForTimeout(16);
+      await expect(indicator).toHaveCSS('transform', 'none');
 
       await page.emulateMedia({ reducedMotion: 'reduce' });
       await page.reload();

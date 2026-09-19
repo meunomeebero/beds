@@ -307,11 +307,17 @@ export function SegmentedControl({ label, value, options, onChange, variant = 'p
   const reduce = useReducedMotion() ?? false;
   const groupRef = useRef<HTMLDivElement>(null);
   const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
-  const [keyboardTarget, setKeyboardTarget] = useState<string | null>(null);
+  const [keyboardInteraction, setKeyboardInteraction] = useState(false);
   useEffect(() => {
-    if (keyboardTarget === value) setKeyboardTarget(null);
-  }, [keyboardTarget, value]);
+    if (!keyboardInteraction) return;
+    const frame = window.requestAnimationFrame(() => setKeyboardInteraction(false));
+    return () => window.cancelAnimationFrame(frame);
+  }, [keyboardInteraction]);
   const navigate = (event: KeyboardEvent<HTMLInputElement>, current: string) => {
+    if (event.key === ' ' || event.key === 'Spacebar' || event.key === 'Space') {
+      setKeyboardInteraction(true);
+      return;
+    }
     const allowed = variant === 'pill' ? ['ArrowLeft', 'ArrowRight'] : ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'];
     if (!allowed.includes(event.key)) return;
     event.preventDefault();
@@ -321,7 +327,7 @@ export function SegmentedControl({ label, value, options, onChange, variant = 'p
     const nextIndex = event.key === 'Home' ? 0 : event.key === 'End' ? enabled.length - 1 : ((index + (event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 1) + enabled.length) % enabled.length);
     const next = enabled[nextIndex];
     if (!next) return;
-    setKeyboardTarget(next.id);
+    setKeyboardInteraction(true);
     onChange(next.id);
     const input = inputRefs.current[next.id];
     input?.focus({ preventScroll: true });
@@ -352,7 +358,7 @@ export function SegmentedControl({ label, value, options, onChange, variant = 'p
   const spanCls = variant === 'joined' ? SEGMENTED_SPAN_JOINED : SEGMENTED_SPAN_PILL;
   return <LayoutGroup id={`${name}-layout`}><div ref={groupRef} className={cn('es-segmented-control', listCls)} data-variant={variant} role="radiogroup" aria-label={label}>{options.map(option => {
     const selected = value === option.id;
-    return <label key={option.id} className={SEGMENTED_CHOICE}><input ref={input => { inputRefs.current[option.id] = input; }} type="radio" name={name} value={option.id} checked={selected} disabled={option.disabled} onChange={() => onChange(option.id)} onKeyDown={event => navigate(event, option.id)} className="absolute w-px h-px p-0 m-0 opacity-0 peer" /><motion.span whileTap={reduce || option.disabled ? undefined : { scale: 0.92 }} transition={SPRING_PRESS} className={cn(spanCls, selected && SEGMENTED_SPAN_CHECKED)}>{selected && <motion.span layoutId={`${name}-indicator`} initial={false} transition={reduce || keyboardTarget === value ? { duration: 0 } : SPRING_LAYOUT} className={SEGMENTED_INDICATOR} aria-hidden="true" data-segmented-indicator /> }<span className="relative z-10">{option.label}</span></motion.span></label>;
+    return <label key={option.id} onPointerDown={() => setKeyboardInteraction(false)} className={SEGMENTED_CHOICE}><input ref={input => { inputRefs.current[option.id] = input; }} type="radio" name={name} value={option.id} checked={selected} disabled={option.disabled} onChange={() => onChange(option.id)} onKeyDown={event => navigate(event, option.id)} className="absolute w-px h-px p-0 m-0 opacity-0 peer" /><motion.span whileTap={reduce || option.disabled ? undefined : { scale: 0.92 }} transition={SPRING_PRESS} className={cn(spanCls, selected && SEGMENTED_SPAN_CHECKED)}>{selected && <motion.span layoutId={`${name}-indicator`} initial={false} transition={reduce || keyboardInteraction ? { duration: 0 } : SPRING_LAYOUT} className={SEGMENTED_INDICATOR} aria-hidden="true" data-segmented-indicator /> }<span className="relative z-10">{option.label}</span></motion.span></label>;
   })}</div></LayoutGroup>;
 }
 

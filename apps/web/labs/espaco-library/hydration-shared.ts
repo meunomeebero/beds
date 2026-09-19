@@ -1,6 +1,13 @@
 import React from 'react';
 import { AppShell, DesignSystemProvider, NavItem, SegmentedControl, SidebarHeader, SidebarSection, Stack, Text } from 'beds';
 
+function HydrationCompletionMarker() {
+  React.useEffect(() => {
+    (window as Window & { __bedsHydrationComplete?: boolean }).__bedsHydrationComplete = true;
+  }, []);
+  return null;
+}
+
 export function HydrationProbe() {
   const [density, setDensity] = React.useState('compact');
   const [policy, setPolicy] = React.useState('allow');
@@ -32,6 +39,7 @@ export function HydrationProbe() {
           options: [{ id: 'allow', label: 'Allow' }, { id: 'confirm', label: 'Confirm' }],
           onChange: setPolicy,
         }),
+        React.createElement(HydrationCompletionMarker),
       ),
     }) },
   );

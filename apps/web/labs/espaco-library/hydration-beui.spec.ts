@@ -25,7 +25,6 @@ test('AppShell hydrates on a mobile matchMedia snapshot without mismatch errors'
       window.dispatchEvent(new Event('beds-hydration-markup-ready'));
     }, module.renderHydrationProbe());
     await page.waitForFunction(() => (window as Window & { __bedsHydrationComplete?: boolean }).__bedsHydrationComplete === true);
-    expect(errors.filter(error => /hydration|mismatch/i.test(error))).toEqual([]);
     const firstFrame = await page.locator('.es-app-shell').evaluate(element => ({
       grid: getComputedStyle(element).gridTemplateColumns,
       documentWidth: document.documentElement.scrollWidth,
@@ -44,6 +43,7 @@ test('AppShell hydrates on a mobile matchMedia snapshot without mismatch errors'
     await expect(segmented.nth(1).getByRole('radio', { name: 'Allow', exact: true })).toBeChecked();
     await expect(segmented.nth(0).locator('[data-segmented-indicator]')).toHaveCount(1);
     await expect(segmented.nth(1).locator('[data-segmented-indicator]')).toHaveCount(1);
+    expect(errors.filter(error => /hydration|mismatch/i.test(error))).toEqual([]);
   } finally {
     await (server as ViteDevServer).close();
   }
