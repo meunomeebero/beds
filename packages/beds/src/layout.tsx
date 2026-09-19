@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useId, useRef, useState, type ComponentProps, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useId, useRef, useState, useSyncExternalStore, type ComponentProps, type ReactNode } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { Icon, Text } from './foundation';
 import { HelpLabel } from './overlays';
@@ -19,6 +19,15 @@ const APP_SHELL_MORPH = {
   mass: 0.75,
 } as const;
 
+const MOBILE_QUERY = '(max-width: 767px)';
+function subscribeToMobile(onChange: () => void) {
+  const query = window.matchMedia(MOBILE_QUERY);
+  query.addEventListener('change', onChange);
+  return () => query.removeEventListener('change', onChange);
+}
+function getMobileSnapshot() { return window.matchMedia(MOBILE_QUERY).matches; }
+function getMobileServerSnapshot(): boolean | null { return null; }
+
 function trapTab(event: React.KeyboardEvent<HTMLElement>) {
   if (event.key !== 'Tab') return;
   const controls = [...event.currentTarget.querySelectorAll<HTMLElement>('button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex="0"]')].filter(control => control.getClientRects().length > 0);
@@ -32,7 +41,7 @@ function trapTab(event: React.KeyboardEvent<HTMLElement>) {
 export function AppShell({ sidebar, header, children, collapsed, onCollapsedChange, mobileOpen, onMobileOpenChange, contentWidth = 'home', navigationLabel = 'Navigation', closeNavigationLabel, skipToContentLabel = 'Ir para o conteúdo' }: {
   sidebar: ReactNode; header?: ReactNode; children: ReactNode; collapsed: boolean; onCollapsedChange: (collapsed: boolean) => void; mobileOpen: boolean; onMobileOpenChange: (open: boolean) => void; contentWidth?: 'chat' | 'home' | 'dashboard' | 'full'; navigationLabel?: string; closeNavigationLabel?: string; skipToContentLabel?: string;
 }) {
-  const [mobile, setMobile] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches);
+  const mobile = useSyncExternalStore(subscribeToMobile, getMobileSnapshot, getMobileServerSnapshot);
   const sidebarRef = useRef<HTMLElement>(null);
   const openRef = useRef<HTMLButtonElement>(null);
   const returnFocusTarget = useRef<HTMLElement | null>(null);
@@ -41,13 +50,6 @@ export function AppShell({ sidebar, header, children, collapsed, onCollapsedChan
   const contentId = useId();
   const contentRef = useRef<HTMLElement>(null);
   const reduce = useReducedMotion() ?? false;
-  useEffect(() => {
-    const query = window.matchMedia('(max-width: 767px)');
-    const update = () => setMobile(query.matches);
-    update();
-    query.addEventListener('change', update);
-    return () => query.removeEventListener('change', update);
-  }, []);
   useEffect(() => {
     if (!mobile || !mobileOpen) return;
     if (returnFocusFrame.current !== null) {
@@ -67,13 +69,13 @@ export function AppShell({ sidebar, header, children, collapsed, onCollapsedChan
       });
     };
   }, [mobile, mobileOpen]);
-  const drawerOpen = mobile && mobileOpen;
+  const drawerOpen = mobile === true && mobileOpen;
 
-  return <ShellContext.Provider value={{ collapsed, onCollapsedChange, mobile, mobileOpen, onMobileOpenChange }}>
+  return <ShellContext.Provider value={{ collapsed, onCollapsedChange, mobile: mobile === true, mobileOpen, onMobileOpenChange }}>
     <motion.div
       className={`es-app-shell${collapsed ? ' es-app-shell--collapsed' : ''}${drawerOpen ? ' es-app-shell--drawer-open' : ''}`}
       initial={false}
-      animate={{ gridTemplateColumns: mobile ? 'minmax(0,1fr)' : collapsed ? '62px minmax(0,1fr)' : '264px minmax(0,1fr)' }}
+      animate={mobile === null ? undefined : { gridTemplateColumns: mobile ? 'minmax(0,1fr)' : collapsed ? '62px minmax(0,1fr)' : '264px minmax(0,1fr)' }}
       transition={reduce ? { duration: 0 } : APP_SHELL_MORPH}
     >
       <a className="es-skip-link" href={`#${contentId}`} inert={drawerOpen} onClick={event => { event.preventDefault(); contentRef.current?.focus(); }}>{skipToContentLabel}</a>
