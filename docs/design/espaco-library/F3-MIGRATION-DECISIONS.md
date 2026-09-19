@@ -11,8 +11,9 @@ decision log, not a replacement for the consolidated F0–F4 tracker.
 | `Metric` | Existing string `value` plus optional `numericValue/formatValue` | Additive typed entry point. Animation requires both finite numeric data and its host formatter; the existing string remains the fallback. |
 | `PricingCard` | Existing literal `price.label` plus optional `price.amount` | Keep the first render/static price literal. Animate only after the controlled numeric amount changes, using the previous numeric value and host formatter. No currency, locale, interval or plan state is inferred from a label. |
 
-Source provenance for the adopted motion is recorded in
-[THIRD-PARTY-NOTICES](../../../THIRD-PARTY-NOTICES.md): beUI `number`,
+Source provenance for the adopted motion is recorded in the package
+[PROVENANCE](PROVENANCE.md) record and the repository `THIRD-PARTY-NOTICES.md`
+notice: beUI `number`,
 `https://beui.dev/r/number/raw`, and existing BEDS `number-ticker`,
 `https://beui.dev/r/number-ticker/raw`; both MIT, retrieved 2026-09-19 for
 this F3 decision (the original source records retain their earlier retrieval
