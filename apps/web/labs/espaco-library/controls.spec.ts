@@ -276,8 +276,12 @@ for (const theme of ['light', 'dark'] as const) {
       await expect(delayedSecond).toBeFocused();
       await expect(delayedFirst).toBeChecked();
       await expect(delayedSecond).not.toBeChecked();
-      await page.waitForTimeout(240);
+      const delayedIndicator = delayed.locator('[data-segmented-indicator]');
+      await expect.poll(async () => delayedSecond.isChecked()).toBe(true);
       await expect(delayedSecond).toBeChecked();
+      await expect(delayedIndicator).toHaveCSS('transform', 'none');
+      await page.waitForTimeout(60);
+      await expect(delayedIndicator).toHaveCSS('transform', 'none');
 
       const rejected = page.getByRole('radiogroup', { name: 'BER-10 rejection' });
       const rejectedFirst = rejected.getByRole('radio', { name: 'First', exact: true });
