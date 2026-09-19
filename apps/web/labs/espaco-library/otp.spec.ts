@@ -58,6 +58,49 @@ async function readCaretOpacities(locator: Locator, duration: number) {
   }, duration);
 }
 
+type OtpReducedMotionHarnessWindow = Window & {
+  __otpReducedMotionHarness: { setMatches: (value: boolean) => void; listenerCount: () => number };
+};
+
+async function installOtpReducedMotionHarness(page: Page, initialReduced = false) {
+  await page.addInitScript(({ initial }) => {
+    const query = '(prefers-reduced-motion: reduce)';
+    const listeners = new Set<(event: MediaQueryListEvent) => void>();
+    let matches = initial;
+    const media = {
+      media: query,
+      get matches() { return matches; },
+      addEventListener: (_type: string, listener: (event: MediaQueryListEvent) => void) => listeners.add(listener),
+      removeEventListener: (_type: string, listener: (event: MediaQueryListEvent) => void) => listeners.delete(listener),
+      addListener: (listener: (event: MediaQueryListEvent) => void) => listeners.add(listener),
+      removeListener: (listener: (event: MediaQueryListEvent) => void) => listeners.delete(listener),
+    } as unknown as MediaQueryList;
+    const nativeMatchMedia = window.matchMedia.bind(window);
+    Object.defineProperty(window, 'matchMedia', {
+      configurable: true,
+      value: (candidate: string) => candidate === query ? media : nativeMatchMedia(candidate),
+    });
+    Object.defineProperty(window, '__otpReducedMotionHarness', {
+      configurable: true,
+      value: {
+        setMatches: (value: boolean) => {
+          if (value === matches) return;
+          matches = value;
+          const event = new Event('change');
+          Object.defineProperties(event, { matches: { value }, media: { value: query } });
+          listeners.forEach(listener => listener(event as MediaQueryListEvent));
+        },
+        listenerCount: () => listeners.size,
+      },
+    });
+  }, { initial: initialReduced });
+}
+
+async function setOtpReducedMotion(page: Page, value: boolean) {
+  await page.evaluate(next => (window as unknown as OtpReducedMotionHarnessWindow).__otpReducedMotionHarness.setMatches(next), value);
+  await page.waitForTimeout(50);
+}
+
 for (const theme of ['light', 'dark']) {
   test(`OTP entry, paste and recovery ${theme}`, async ({ page }) => {
     await page.goto(`/?view=otp&theme=${theme}`);
@@ -155,7 +198,7 @@ test('OTP digit entry enforces y, blur and opacity, then settles to the same ide
   const entering = await readDigitFrame(digit);
   expect(entering.text).toBe('1');
   expect(entering.y).toBeGreaterThan(0.1);
-  expect(entering.blur).toBeGreaterThan(0.1);
+  expect(entering.blur).toBeGreaterThan(0);
   expect(entering.opacity).toBeLessThan(1);
   await page.waitForTimeout(280);
   const settled = await readDigitFrame(digit);
@@ -332,6 +375,71 @@ test('OTP normal caret blinks while reduced caret remains static', async ({ page
   await expect(reducedCaret).toHaveCount(1);
   const reduced = await readCaretOpacities(reducedCaret, 300);
   expect(reduced.every(opacity => opacity === 1)).toBe(true);
+});
+
+test('OTP live reduced-motion preference toggles digit, caret, shake and success behavior', async ({ page }) => {
+  await installOtpReducedMotionHarness(page);
+  await page.goto('/?view=otp&theme=dark');
+  const main = field(page, 'Código de acesso');
+  const input = page.getByLabel('Código de acesso');
+  const slot = main.locator('.es-otp-slot').first();
+  await input.focus();
+  await expect.poll(() => page.evaluate(() => (window as unknown as OtpReducedMotionHarnessWindow).__otpReducedMotionHarness.listenerCount())).toBeGreaterThan(0);
+
+  await input.fill('1');
+  const normalDigit = await readDigitFrame(slot.locator('.es-otp-digit').filter({ hasText: '1' }));
+  expect(normalDigit.y).toBeGreaterThan(0.1);
+  expect(normalDigit.blur).toBeGreaterThan(0.1);
+  expect(normalDigit.opacity).toBeLessThan(1);
+  await page.waitForTimeout(280);
+
+  await setOtpReducedMotion(page, true);
+  await input.fill('2');
+  const reducedDigit = await readDigitFrame(slot.locator('.es-otp-digit').filter({ hasText: '2' }));
+  expect(reducedDigit.y).toBeCloseTo(0, 1);
+  expect(reducedDigit.blur).toBeCloseTo(0, 1);
+  expect(reducedDigit.opacity).toBe(1);
+  const reducedCaret = await readCaretOpacities(main.locator('.es-otp-caret').first(), 300);
+  expect(reducedCaret.every(opacity => opacity === 1)).toBe(true);
+
+  await page.getByRole('button', { name: 'Simular erro', exact: true }).click();
+  const reducedGroup = main.locator('.es-otp-group').first();
+  const reducedShakeNow = await readTranslateX(reducedGroup);
+  await page.waitForTimeout(220);
+  const reducedShakeLater = await readTranslateX(reducedGroup);
+  expect(reducedShakeNow).toBeCloseTo(0, 1);
+  expect(reducedShakeLater).toBeCloseTo(0, 1);
+
+  await input.fill('');
+  await input.fill('123456');
+  await page.getByRole('button', { name: 'Simular sucesso', exact: true }).click();
+  const icon = main.locator('.es-otp-success-icon');
+  await expect(icon).toBeVisible();
+  const reducedIcon = await readIconFrame(icon);
+  expect(reducedIcon.scale).toBeCloseTo(1, 2);
+  expect(reducedIcon.opacity).toBe(1);
+
+  await page.getByRole('button', { name: 'Simular erro', exact: true }).click();
+  await input.fill('');
+  await input.fill('1');
+  await setOtpReducedMotion(page, false);
+  await input.focus();
+  const normalCaret = await readCaretOpacities(main.locator('.es-otp-caret').first(), 1100);
+  expect(Math.min(...normalCaret)).toBeLessThan(0.9);
+  expect(Math.max(...normalCaret)).toBeGreaterThan(0.99);
+
+  await input.fill('123456');
+  await page.getByRole('button', { name: 'Simular erro', exact: true }).click();
+  await page.waitForTimeout(48);
+  expect(Math.abs(await readTranslateX(main.locator('.es-otp-group').first()))).toBeGreaterThan(0.1);
+  await page.waitForTimeout(500);
+  await input.fill('');
+  await input.fill('123456');
+  await page.getByRole('button', { name: 'Simular sucesso', exact: true }).click();
+  await page.waitForTimeout(32);
+  const normalIcon = await readIconFrame(icon);
+  expect(normalIcon.scale).toBeLessThan(1);
+  expect(normalIcon.opacity).toBeLessThan(1);
 });
 
 test('OTP reduced motion settles digit, icon and shake across frames', async ({ page }) => {

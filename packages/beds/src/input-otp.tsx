@@ -1,10 +1,11 @@
 'use client';
 
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { createContext, useContext, useId, type ReactNode } from 'react';
 import { OTPInput, OTPInputContext, REGEXP_ONLY_DIGITS } from 'input-otp';
 import { Icon } from './foundation';
 import { EASE_OUT } from './lib/ease';
+import { useReducedMotionPreference } from './lib/hooks/use-reduced-motion';
 import './input-otp.css';
 
 export type InputOTPStatus = 'idle' | 'processing' | 'error' | 'success';
@@ -30,7 +31,7 @@ export function InputOTP({ label, value, onChange, maxLength = 6, status = 'idle
   const generatedId = useId();
   const inputId = id ?? generatedId;
   const descriptionId = `${inputId}-description`;
-  const reduce = useReducedMotion() ?? false;
+  const reduce = useReducedMotionPreference();
   return <div className="es-otp-field" data-status={status}>
     <label className="es-otp-label" htmlFor={inputId}>{label}</label>
     <StatusContext.Provider value={status}>
@@ -66,7 +67,7 @@ export function InputOTP({ label, value, onChange, maxLength = 6, status = 'idle
 
 export function InputOTPGroup({ children }: { children: ReactNode }) {
   const status = useContext(StatusContext);
-  const reduce = useReducedMotion() ?? false;
+  const reduce = useReducedMotionPreference();
   const shake = status === 'error' && !reduce ? { x: [0, -5, 5, -3, 3, -1, 0] } : { x: 0 };
   return <motion.div className="es-otp-group" aria-hidden="true" initial={false} animate={shake} transition={reduce ? { duration: 0 } : { duration: .45, ease: EASE_OUT }}>{children}</motion.div>;
 }
@@ -74,7 +75,7 @@ export function InputOTPGroup({ children }: { children: ReactNode }) {
 export function InputOTPSlot({ index }: { index: number }) {
   const context = useContext(OTPInputContext);
   const status = useContext(StatusContext);
-  const reduce = useReducedMotion() ?? false;
+  const reduce = useReducedMotionPreference();
   const slot = context?.slots[index];
   if (!slot) return null;
   return <div className="es-otp-slot" data-active={slot.isActive} data-filled={Boolean(slot.char)} data-status={status} aria-hidden="true">
