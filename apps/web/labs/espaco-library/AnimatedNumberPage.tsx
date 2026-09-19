@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { AnimatedNumber, Button, DesignSystemProvider, Inline, Stack, Text, type Theme } from 'beds';
 
-type NumberState = 'unavailable' | 'invalid' | 'ready';
+type NumberState = 'unavailable' | 'invalid' | 'ready' | 'updated';
 
 export default function AnimatedNumberPage() {
   const params = new URLSearchParams(window.location.search);
@@ -9,7 +9,8 @@ export default function AnimatedNumberPage() {
   const [state, setState] = useState<NumberState>('unavailable');
   const [startOnView, setStartOnView] = useState(false);
   const frames = useRef<number[]>([]);
-  const value = state === 'unavailable' ? null : state === 'invalid' ? Number.NaN : 42;
+  const value = state === 'unavailable' ? null : state === 'invalid' ? Number.NaN : state === 'updated' ? 84 : 42;
+  const initialValue = state === 'updated' ? 42 : undefined;
   const format = (number: number) => {
     frames.current.push(number);
     return String(Math.round(number));
@@ -29,13 +30,14 @@ export default function AnimatedNumberPage() {
             <Button label="Indisponível" compact onClick={() => setState('unavailable')} />
             <Button label="Inválido" compact onClick={() => setState('invalid')} />
             <Button label="Pronto" compact onClick={() => setState('ready')} />
+            <Button label="Atualizar 84" compact onClick={() => setState('updated')} />
             <Button label={startOnView ? 'Iniciar ao entrar' : 'Iniciar imediatamente'} compact onClick={() => setStartOnView(previous => !previous)} />
           </Inline>
         </Stack>
         <div style={{ minHeight: '1200px' }} aria-hidden="true" />
         <section aria-label="Número animado" data-testid="animated-number-state">
           <Text variant="label">Valor</Text>
-          <AnimatedNumber value={value} format={format} fallback="Indisponível" startOnView={startOnView} />
+          <AnimatedNumber value={value} initialValue={initialValue} format={format} fallback="Indisponível" startOnView={startOnView} />
         </section>
       </Stack>
     </main>

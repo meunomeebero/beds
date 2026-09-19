@@ -26,6 +26,8 @@ test('startOnView and reduced motion keep the ready first frame truthful', async
 
   await page.getByRole('button', { name: 'Pronto', exact: true }).click();
   await expect(page.getByTestId('animated-number-state')).toHaveAttribute('data-frame-trace', /^(?!.*0)/);
+  await page.getByRole('button', { name: 'Atualizar 84', exact: true }).click();
+  await expect(page.getByTestId('animated-number-state')).toHaveAttribute('data-frame-trace', /84$/);
   await page.locator('[aria-label="Número animado"]').scrollIntoViewIfNeeded();
-  await expect(page.locator('.es-animated-number')).toHaveText('42');
+  await expect(page.locator('.es-animated-number')).toHaveText('84');
 });

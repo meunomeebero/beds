@@ -83,7 +83,9 @@ export function AnimatedNumber({ value, format, fallback = '—', duration = 1.1
 
   // Synchronously fall back to the current true value when a previously unavailable
   // value becomes ready before the passive effect can settle the frame.
-  const renderedFrame = animationStart !== null && animationStart !== value
+  const renderedFrame = prefersReducedMotion
+    ? value
+    : animationStart !== null && animationStart !== value
     ? frame ?? animationStart
     : value;
   // Single text node: the last frame equals the true value, so no duplicated or doubly announced number.
