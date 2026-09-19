@@ -41,16 +41,19 @@ new phase.
 
 | Phase | Scope and beUI equivalents | Current checkpoint | Evidence / boundary |
 |---|---|---|---|
-| F0 | Stack, tokens, package boundary, guards and evidence protocol | Complete at the base checkpoint; integrated rerun remains required after the current source corrections | `7cf82fb`; package and guard contract recorded in [Validation](VALIDATION.md). No production integration, release or publication. |
-| F1 | Base controls and shell: controls/input/button/radio adaptations, Settings Tabs (`tabs`), AppShell/NavItem (`animated-sidebar`, `bounce-sidebar`) and their first-frame/reduced-motion behavior | Implemented; SSR-safe shell correction and cwd-independent hydration regression are committed; final independent re-review and integrated gate remain required | `1aed8df`, `a93091b`, `4ef908b`, `1a9fcec`, `9b55346`; settings/navigation focused browser evidence exists, but no final closeout claim until the final rerun. |
-| F2 | Overlays, feedback, navigation, selection and disclosure: `tooltip`, `drawer`, `context-menu`, `select`, `loader`, `animated-toast-stack`, `animated-badge`, `bouncy-accordion`, `command-palette`; compatible Tailwind/Motion adaptations for the remaining controls | Implemented with technical `PASS_WITH_NOTES` snapshots; final integrated rerun required | The focused F2 tracker and [Provenance](PROVENANCE.md) contain the per-component matrix. `morphing-search`/SearchDialog and `morphing-modal`/Dialog are `NO_FIT`; `bottom-sheet` is `DEFERRED_REQUIREMENT`; `text-animation`/Text and `popover` are `NO_FIT`. |
-| F3 | Numeric/data surfaces: typed `AccountCredits`, `Metric` and controlled `PricingCard` motion; review of DataTable, Pagination and ApplicationBoard | Implemented; reduced-motion first-frame correction is committed; final independent re-review and integrated gate remain required | `03c3256`, `20da53b`, `aa208c7`, `05d2b4a`; `table`, `adaptive-stepper` and `kanban`/`swipeable-list` are explicit `NO_FIT` decisions. No virtualization, quantity stepper, swipe actions or new row capabilities are added. |
-| F4 | Processing product moment: bounded `todo-list` status-mark adaptation and ATS segmented-fill reveal, with static truthful score text | Implemented and terminal meters are now guarded; final independent re-review and integrated gate remain required | `ccefbe0`, `31a8eab`; the 90s/75s host cadence, 95% hold, pause/offscreen/reduced motion, explicit completion and no-auto-success contract remain. `loading-states`, `agent-activity`, `tool-result` and `file-diff` are outside this public state model. |
+| F0 | Stack, tokens, package boundary, guards and evidence protocol | Technical `PASS_WITH_NOTES` | `7cf82fb` baseline plus the final integrated gates below. No production integration, release or publication. |
+| F1 | Base controls and shell: controls/input/button/radio adaptations, Settings Tabs (`tabs`), AppShell/NavItem (`animated-sidebar`, `bounce-sidebar`) and their first-frame/reduced-motion behavior | Technical `PASS_WITH_NOTES` | `1aed8df`, `a93091b`, `4ef908b`, `1a9fcec`, `9b55346`; focused Tabs/navigation evidence includes 12 passes and 4 intentional project-conditional skips. |
+| F2 | Overlays, feedback, navigation, selection and disclosure: `tooltip`, `drawer`, `context-menu`, `select`, `loader`, `animated-toast-stack`, `animated-badge`, `bouncy-accordion`, `command-palette`; compatible Tailwind/Motion adaptations for the remaining controls | Technical `PASS_WITH_NOTES` | The focused F2 tracker and [Provenance](PROVENANCE.md) contain the per-component matrix. `morphing-search`/SearchDialog and `morphing-modal`/Dialog are `NO_FIT`; `bottom-sheet` is `DEFERRED_REQUIREMENT`; `text-animation`/Text and `popover` are `NO_FIT`. |
+| F3 | Numeric/data surfaces: typed `AccountCredits`, `Metric` and controlled `PricingCard` motion; review of DataTable, Pagination and ApplicationBoard | Technical `PASS_WITH_NOTES` | `03c3256`, `20da53b`, `aa208c7`, `05d2b4a`, `8bfddae`, `fd9f9c9`; focused AnimatedNumber/AccountCredits/Pricing coverage is 10/10 across desktop/mobile. `table`, `adaptive-stepper` and `kanban`/`swipeable-list` are explicit `NO_FIT` decisions. |
+| F4 | Processing product moment: bounded `todo-list` status-mark adaptation and ATS segmented-fill reveal, with static truthful score text | Technical `PASS_WITH_NOTES` | `ccefbe0`, `31a8eab`; focused Processing plus legacy coverage is 26/26. The 90s/75s host cadence, 95% hold, pause/offscreen/reduced motion, explicit completion and no-auto-success contract remain. |
 
-At this checkpoint Auditor Ultra and Sol have not approved the closeout: the
-corrective commits are present, but the final independent re-review, integrated
-gates and artifact run remain required. No phase may be marked fully approved
-until those gates have been rerun on one SHA.
+Final technical freeze: `fd9f9c9`. `npm run verify` passed with 134 public
+components, 205 declared tokens, 98 Markdown files/925 local targets, 33
+consumer roots/39 files with 0 violations, 39 guards, 4 quality-routing tests,
+and extracted-artifact consumer smoke. The packed artifact SHA-256 is
+`452231bafcf921eb1cff53227340e4ffda31ff01c152a72a559247d6221580bd`.
+Independent Sol review is `PASS_WITH_NOTES` with no technical blockers. These
+are technical results, not aesthetic approval.
 
 ## Explicit no-fit and deferred decisions
 

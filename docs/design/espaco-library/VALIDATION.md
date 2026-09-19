@@ -3,22 +3,25 @@
 Canonical repository:`meunomeebero/beds`. Historical release candidate:
 `beds@0.1.7-rc.16`,2026-09-15. The current local candidate is
 `beds@0.1.7-rc.19`; current migration status is tracked in
-[F2 migration tracking](F2-MIGRATION-TRACKING.md). Publication identity/hash
+[F0–F4 migration closeout](F0-F4-MIGRATION-TRACKING.md). Publication identity/hash
 belong to an immutable GitHub prerelease;this record describes source validation,
 not deployment or release acceptance.
 
 ## Current F0–F4 closeout checkpoint — September 19
 
 The canonical phase inventory and acceptance criteria are in
-[F0–F4 migration closeout](F0-F4-MIGRATION-TRACKING.md). F0–F4 implementation
-work is present on the working branch, but this snapshot is not a final approval:
-Auditor Ultra and independent Sol review still require re-review of the committed
-SSR/hydration and reduced-motion first-frame corrections, followed by the
-integrated rerun on one SHA. The final desktop/mobile light/dark browser suite,
-`npm run verify` and artifact hash must be recorded after that re-review.
+[F0–F4 migration closeout](F0-F4-MIGRATION-TRACKING.md). Final technical
+freeze is `fd9f9c9`. `npm run verify` passed: 134 public components, 205
+declared tokens, 98 Markdown files/925 local targets, 33 consumer roots/39
+files with 0 violations, 39 guards, 4 quality-routing tests and extracted
+consumer smoke. Packed artifact SHA-256:
+`452231bafcf921eb1cff53227340e4ffda31ff01c152a72a559247d6221580bd`.
+Independent Sol review is `PASS_WITH_NOTES` with no technical blockers.
 
-The already-recorded focused results remain evidence, not a substitute for that
-closeout rerun: F2 component snapshots are in [F2 migration tracking](F2-MIGRATION-TRACKING.md),
+Focused final evidence: Tabs/navigation 12 passes plus 4 intentional
+project-conditional skips; Hydration and AnimatedNumber 6/6; typed pricing
+motion 2/2; and Processing focused plus legacy coverage 26/26 across the
+desktop/mobile matrix. F2 component snapshots are in [F2 migration tracking](F2-MIGRATION-TRACKING.md),
 F3 decisions and no-fit rows are in [F3 migration decisions](F3-MIGRATION-DECISIONS.md),
 and the F4 source mapping is in [Processing](PROCESSING.md). Technical review
 does not grant aesthetic approval; physical assistive technology, non-Chromium
