@@ -399,6 +399,14 @@ test('OTP controlled instances hydrate from renderToString without warnings', as
     const ids = await inputs.evaluateAll(nodes => nodes.map(node => node.id));
     expect(new Set(ids).size).toBe(2);
     for (const id of ids) await expect(page.locator(`label[for="${id}"]`)).toHaveCount(1);
+    await page.getByLabel('SSR código principal').press('End');
+    await page.getByLabel('SSR código principal').press('Backspace');
+    await expect(page.getByLabel('SSR código principal')).toHaveValue('12345');
+    await page.getByLabel('SSR código secundário').press('End');
+    await page.getByLabel('SSR código secundário').press('3');
+    await expect(page.getByLabel('SSR código secundário')).toHaveValue('123');
+    await expect(page.getByLabel('SSR código principal')).toHaveValue('12345');
+    expect(errors).toEqual([]);
   } finally {
     await (server as ViteDevServer).close();
   }
