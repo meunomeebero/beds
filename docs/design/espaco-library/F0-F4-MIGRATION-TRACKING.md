@@ -43,7 +43,7 @@ new phase.
 |---|---|---|---|
 | F0 | Stack, tokens, package boundary, guards and evidence protocol | Technical `PASS_WITH_NOTES` | `7cf82fb` baseline plus the final integrated gates below. No production integration, release or publication. |
 | F1 | Base controls and shell: controls/input/button/radio adaptations, Settings Tabs (`tabs`), AppShell/NavItem (`animated-sidebar`, `bounce-sidebar`) and their first-frame/reduced-motion behavior | Technical `PASS_WITH_NOTES` | `1aed8df`, `a93091b`, `4ef908b`, `1a9fcec`, `9b55346`; focused Tabs/navigation evidence includes 12 passes and 4 intentional project-conditional skips. |
-| F2 | Overlays, feedback, navigation, selection and disclosure: `tooltip`, `drawer`, `context-menu`, `select`, `loader`, `animated-toast-stack`, `animated-badge`, `bouncy-accordion`, `command-palette`; compatible Tailwind/Motion adaptations for the remaining controls | Technical `PASS_WITH_NOTES` | The focused F2 tracker and [Provenance](PROVENANCE.md) contain the per-component matrix. `morphing-search`/SearchDialog and `morphing-modal`/Dialog are `NO_FIT`; `bottom-sheet` is `DEFERRED_REQUIREMENT`; `text-animation`/Text and `popover` are `NO_FIT`. |
+| F2 | Overlays, feedback, navigation, selection and disclosure: `tooltip`, `drawer`, `context-menu`, `select`, `loader`, `animated-toast-stack`, `animated-badge`, `bouncy-accordion`, `command-palette`; compatible Tailwind/Motion adaptations for the remaining controls | Technical `PASS_WITH_NOTES` | The focused F2 tracker and [Provenance](PROVENANCE.md) contain the per-component matrix. BER35 adapts the approved `center-morph-modal` visual subset onto native Dialog; full `morphing-modal` and `morphing-search`/SearchDialog remain `NO_FIT`; `bottom-sheet` is `DEFERRED_REQUIREMENT`; `text-animation`/Text and `popover` are `NO_FIT`. |
 | F3 | Numeric/data surfaces: typed `AccountCredits`, `Metric` and controlled `PricingCard` motion; review of DataTable, Pagination and ApplicationBoard | Technical `PASS_WITH_NOTES` | `03c3256`, `20da53b`, `aa208c7`, `05d2b4a`, `8bfddae`, `fd9f9c9`; focused AnimatedNumber/AccountCredits/Pricing coverage is 10/10 across desktop/mobile. `table`, `adaptive-stepper` and `kanban`/`swipeable-list` are explicit `NO_FIT` decisions. |
 | F4 | Processing product moment: bounded `todo-list` status-mark adaptation and ATS segmented-fill reveal, with static truthful score text | Technical `PASS_WITH_NOTES` | `ccefbe0`, `31a8eab`; focused Processing plus legacy coverage is 26/26. The 90s/75s host cadence, 95% hold, pause/offscreen/reduced motion, explicit completion and no-auto-success contract remain. |
 
@@ -69,9 +69,11 @@ The F4 implementation and its review remain owned by `ccefbe0` and `31a8eab`.
 
 These are completed decisions and must not be represented as pending work:
 
-- `Dialog` versus `morphing-modal`: the upstream lifecycle and geometry would
-  replace native BEDS modal semantics and add a second focus/scroll state
-  machine.
+- `Dialog` versus full `morphing-modal`: the upstream lifecycle and geometry
+  would replace native BEDS modal semantics and add a second focus/scroll state
+  machine. BER35 separately adopts only the approved `center-morph-modal`
+  clip/opacity visual subset on the existing controlled native Dialog; it adds
+  no new public API, portal lifecycle or body-scroll owner.
 - `SearchDialog` versus `morphing-search`: the source owns an uncontrolled
   trigger morph, local filtering and public style/role escapes; BEDS owns a
   controlled native dialog with caller-owned async state and focus recovery.

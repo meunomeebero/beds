@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { cloneElement, isValidElement, useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent, type PointerEvent as ReactPointerEvent, type ReactElement, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { Avatar, Icon, type IconName } from './foundation';
@@ -6,8 +6,9 @@ import { Button, IconButton } from './controls';
 import { useDismiss } from './lib/hooks/use-dismiss';
 import { useHoverGesture } from './lib/hooks/use-hover-gesture';
 import { useTapGesture } from './lib/hooks/use-tap-gesture';
+import { useReducedMotionPreference } from './lib/hooks/use-reduced-motion';
 import { EASE_OUT, SPRING_PANEL } from './lib/ease';
-import { containModalTab, outsideDialog, useModal } from './lib/modal';
+import { containModalTab, dialogShell, outsideDialog, useModal, useModalWithInitialFocus } from './lib/modal';
 import { nextOption } from './lib/option-navigation';
 import { useAnchoredPopup } from './lib/anchored-popup';
 import { TooltipSurface, type TooltipSide } from './tooltip-surface';
@@ -229,22 +230,78 @@ export function Tooltip({ label, children }: { label: string; children: ReactEle
   return <TooltipPrimitive content={label} side="bottom">{children}</TooltipPrimitive>;
 }
 
+const DIALOG_UNFOLD_EASE = [0.2, 0, 0.2, 1] as const;
+const DIALOG_UNFOLD_TRANSITION = { duration: 0.43, ease: DIALOG_UNFOLD_EASE } as const;
+const DIALOG_REDUCED_TRANSITION = { duration: 0.14, ease: EASE_OUT } as const;
+
 export function Dialog({ open, onOpenChange, title, description, children, actions, variant = 'standard', artwork }: {
   open: boolean; onOpenChange: (open: boolean) => void; title: string; description?: string; children?: ReactNode; actions?: ReactNode; variant?: 'standard' | 'welcome'; artwork?: ReactNode;
 }) {
   const id = useId();
   const dialog = useRef<HTMLDialogElement>(null);
-  useModal(open, dialog);
+  const shellPointer = useRef(false);
+  const reduce = useReducedMotionPreference();
+  const radius = variant === 'welcome' ? 24 : 14;
+  const foldedClip = `inset(48% 48% 48% 48% round ${radius}px)`;
+  const openClip = `inset(0% 0% 0% 0% round ${radius}px)`;
+  const [present, setPresent] = useState(open);
+  const [settled, setSettled] = useState(() => open && reduce);
+  const presentRef = useRef(present);
+  const phaseRef = useRef(open ? 'open' : 'closed');
+  const wasOpen = useRef(open);
+  presentRef.current = present;
+  phaseRef.current = open ? 'open' : 'closed';
+  const focusShell = useCallback((element: HTMLDialogElement) => {
+    element.focus({ preventScroll: true });
+  }, []);
+  useModalWithInitialFocus(present, dialog, focusShell);
+  useLayoutEffect(() => {
+    if (open && !wasOpen.current) dialog.current?.focus({ preventScroll: true });
+    wasOpen.current = open;
+  }, [open]);
+  useEffect(() => {
+    if (open) {
+      setPresent(true);
+      if (reduce) setSettled(true);
+    } else if (present) {
+      setSettled(false);
+    }
+  }, [open, present, reduce]);
+  const interactive = present && open && (reduce || settled);
+  const entering = present && open && !reduce && !settled;
   useLayoutEffect(() => {
     const element = dialog.current;
     // A completed action can replace the focused control. Recover only lost
     // focus, never steal it from a nested modal or another active control.
-    if (!open || !element) return;
+    if (!open || !present || !element) return;
     if (element.ownerDocument.activeElement === element.ownerDocument.body) {
       element.querySelector<HTMLButtonElement>('button')?.focus({ preventScroll: true });
     }
-  }, [open, children, actions]);
-  return <dialog ref={dialog} className="es-dialog" data-variant={variant} aria-labelledby={`${id}-title`} aria-describedby={description ? `${id}-description` : undefined} onKeyDown={containModalTab} onCancel={event => { event.preventDefault(); onOpenChange(false); }} onClick={event => { if (outsideDialog(event)) onOpenChange(false); }}>{variant === 'welcome' && artwork && <div className="es-dialog-artwork">{artwork}</div>}<div className="es-dialog-header"><div><h2 id={`${id}-title`}>{title}</h2>{description && <p id={`${id}-description`}>{description}</p>}</div><IconButton label="Fechar" icon="X" onClick={() => onOpenChange(false)} /></div>{children && <div className="es-dialog-body">{children}</div>}{actions && <div className="es-dialog-actions">{actions}</div>}</dialog>;
+  }, [open, present, children, actions]);
+  return <dialog ref={dialog} className="es-dialog es-dialog-shell" data-variant={variant} data-phase={open ? (entering ? 'entering' : 'open') : 'exiting'} data-motion={reduce ? 'reduced' : 'full'} tabIndex={-1} aria-modal="true" aria-labelledby={`${id}-title`} aria-describedby={description ? `${id}-description` : undefined}
+    onKeyDown={event => {
+      if (event.key === 'Tab' && entering) {
+        event.preventDefault(); dialog.current?.focus({ preventScroll: true }); return;
+      }
+      containModalTab(event);
+    }}
+    onCancel={event => { if (event.target !== event.currentTarget) return; event.preventDefault(); if (open) onOpenChange(false); }}
+    onPointerDown={event => { shellPointer.current = dialogShell(event); }}
+    onClick={event => { const shell = shellPointer.current && dialogShell(event); shellPointer.current = false; if (open && shell) onOpenChange(false); }}>
+    <motion.div className="es-dialog-surface" data-phase={open ? (interactive ? 'settled' : 'entry-inert') : 'exit-inert'} inert={!interactive} style={{ pointerEvents: interactive ? 'auto' : 'none' }}
+      initial={reduce ? { opacity: 0, clipPath: openClip } : { opacity: 1, clipPath: foldedClip }}
+      animate={open ? (reduce ? { opacity: 1, clipPath: openClip } : { opacity: 1, clipPath: openClip }) : (reduce ? { opacity: 0, clipPath: openClip } : { opacity: 1, clipPath: foldedClip })}
+      transition={reduce ? DIALOG_REDUCED_TRANSITION : DIALOG_UNFOLD_TRANSITION}
+      onAnimationComplete={() => {
+        if (phaseRef.current === 'open') setSettled(true);
+        else if (presentRef.current) setPresent(false);
+      }}>
+      {variant === 'welcome' && artwork && <div className="es-dialog-artwork">{artwork}</div>}
+      <div className="es-dialog-header"><div><h2 id={`${id}-title`}>{title}</h2>{description && <p id={`${id}-description`}>{description}</p>}</div><IconButton label="Fechar" icon="X" onClick={() => onOpenChange(false)} /></div>
+      {children && <div className="es-dialog-body">{children}</div>}
+      {actions && <div className="es-dialog-actions">{actions}</div>}
+    </motion.div>
+  </dialog>;
 }
 
 /** Modal detail panel. Content, requests and any unsaved-change decision belong to the caller. */
@@ -261,7 +318,7 @@ export function Drawer({ open, onOpenChange, title, description, children, actio
   const startedOutside = useRef(false);
   const [overflow, setOverflow] = useState(false);
   const [present, setPresent] = useState(open);
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionPreference();
   const directionRoot = typeof document !== 'undefined' ? document.querySelector<HTMLElement>('.es-root') ?? document.documentElement : null;
   const rtl = directionRoot ? getComputedStyle(directionRoot).direction === 'rtl' : false;
   const offscreen = rtl ? '-100%' : '100%';

@@ -30,6 +30,7 @@ test('drawer entry, local save, keyboard containment, nested dialog and focus re
   await page.getByRole('button', { name: 'Ver origem' }).click();
   const nested = page.getByRole('dialog', { name: 'Origem da oportunidade' });
   await expect(nested).toBeVisible();
+  await expect(nested.locator(':scope > .es-dialog-surface')).toHaveAttribute('data-phase', 'settled');
   await page.keyboard.press('Tab');
   await expect(nested.getByRole('button', { name: 'Fechar', exact: true })).toBeFocused();
   await page.keyboard.press('Escape');

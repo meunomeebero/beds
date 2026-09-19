@@ -36,21 +36,28 @@
 
 /* Tooltip: migrated to beUI logic + motion/react in overlays.tsx; portal surface uses compiled Tailwind tokens. */
 .es-root .es-drawer::backdrop{background:var(--es-overlay)}
-.es-root .es-dialog,.es-root .es-command{width:min(672px,calc(100vw - 32px));max-width:calc(100vw - 32px);max-height:calc(100dvh - 32px);padding:0;border:1px solid var(--es-border);border-radius:14px;overflow:auto;overscroll-behavior:contain;background:var(--es-surface);color:var(--es-text);box-shadow:var(--es-shadow-popup);font-family:var(--es-font)}
-.es-root .es-dialog::backdrop,.es-root .es-command::backdrop{background:var(--es-overlay)}
+.es-root .es-command{width:min(672px,calc(100vw - 32px));max-width:calc(100vw - 32px);max-height:calc(100dvh - 32px);padding:0;border:1px solid var(--es-border);border-radius:14px;overflow:auto;overscroll-behavior:contain;background:var(--es-surface);color:var(--es-text);box-shadow:var(--es-shadow-popup);font-family:var(--es-font)}
+.es-root .es-dialog-shell{display:block;width:min(672px,calc(100vw - 32px));max-width:calc(100vw - 32px);max-height:calc(100dvh - 32px);margin:auto;padding:0;border:0;border-radius:14px;overflow:visible;overscroll-behavior:contain;background:transparent;color:var(--es-text);font-family:var(--es-font);outline:0}
+.es-root .es-dialog-shell:not([open]){display:none}
+.es-root .es-dialog-shell::backdrop{background:var(--es-overlay)}
+.es-root .es-dialog-shell:focus-visible .es-dialog-surface{outline:2px solid var(--es-focus);outline-offset:3px}
+.es-root .es-dialog-surface{width:100%;max-height:calc(100dvh - 32px);padding:0;overflow:auto;overscroll-behavior:contain;border:1px solid var(--es-border);border-radius:14px;background:var(--es-surface);color:var(--es-text);box-shadow:var(--es-shadow-popup);font-family:var(--es-font);will-change:clip-path}
 .es-root .es-dialog-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px 24px 16px;border-bottom:1px solid var(--es-border-subtle)}
 .es-root .es-dialog-header>div{min-width:0}
 .es-root .es-dialog-header h2{margin:0;color:var(--es-text);font:500 16px/24px var(--es-font);letter-spacing:-.1px}
 .es-root .es-dialog-header p{margin:4px 0 0;color:var(--es-secondary);font:400 13px/20px var(--es-font)}
 .es-root .es-dialog-body{padding:20px 24px;min-width:0}
 .es-root .es-dialog-actions{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px;padding:16px 24px;border-top:1px solid var(--es-border-subtle)}
-.es-root .es-dialog[data-variant="welcome"]{width:min(480px,calc(100vw - 32px));border-radius:24px}
+.es-root .es-dialog-shell[data-variant="welcome"]{width:min(480px,calc(100vw - 32px));border-radius:24px}
+.es-root .es-dialog-shell[data-variant="welcome"]>.es-dialog-surface{border-radius:24px}
 .es-root .es-dialog-artwork{display:flex;align-items:center;justify-content:center;height:200px;overflow:hidden}
-.es-root .es-dialog[data-variant="welcome"]>.es-dialog-header{padding:24px 24px 0;border-bottom:0}
-.es-root .es-dialog[data-variant="welcome"] [data-purpose="welcome"]{min-height:40px;padding-top:6px;padding-bottom:6px}
-.es-root .es-dialog[data-variant="welcome"]>.es-dialog-header h2{font-size:18px;line-height:24px;letter-spacing:-.15px}
-.es-root .es-dialog[data-variant="welcome"]>.es-dialog-body{padding:16px 24px}
-.es-root .es-dialog[data-variant="welcome"]>.es-dialog-actions{padding:16px 24px 24px;border-top:0}
+.es-root .es-dialog-shell[data-variant="welcome"]>.es-dialog-surface>.es-dialog-header{padding:24px 24px 0;border-bottom:0}
+.es-root .es-dialog-shell[data-variant="welcome"] [data-purpose="welcome"]{min-height:40px;padding-top:6px;padding-bottom:6px}
+.es-root .es-dialog-shell[data-variant="welcome"]>.es-dialog-surface>.es-dialog-header h2{font-size:18px;line-height:24px;letter-spacing:-.15px}
+.es-root .es-dialog-shell[data-variant="welcome"]>.es-dialog-surface>.es-dialog-body{padding:16px 24px}
+.es-root .es-dialog-shell[data-variant="welcome"]>.es-dialog-surface>.es-dialog-actions{padding:16px 24px 24px;border-top:0}
+@media(max-width:767px){.es-root .es-dialog-shell{max-height:calc(100dvh - 32px)}.es-root .es-dialog-surface{max-height:calc(100dvh - 32px)}}
+@media(forced-colors:active){.es-root .es-dialog-shell:focus-visible .es-dialog-surface{outline-color:Highlight}}
 .es-root .es-command-search{display:flex;align-items:center;gap:10px;min-height:56px;padding:10px 16px;border-bottom:1px solid var(--es-border-subtle);color:var(--es-secondary)}
 .es-root .es-command-search>input{width:100%;min-width:0;padding:0;border:0;background:transparent;color:var(--es-text);font:400 15px/24px var(--es-font);letter-spacing:-.1px}
 .es-root .es-command-search>input::placeholder{color:var(--es-placeholder)}
