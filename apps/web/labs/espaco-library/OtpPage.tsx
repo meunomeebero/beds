@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AppShell, Button, DesignSystemProvider, InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator, PageHeader, Stack, Text, brands, type InputOTPStatus } from 'beds';
 
 export default function OtpPage() {
@@ -9,7 +9,13 @@ export default function OtpPage() {
   const [rejectChanges, setRejectChanges] = useState(false);
   const [completion, setCompletion] = useState('');
   const [completionCount, setCompletionCount] = useState(0);
+  const [delayedValue, setDelayedValue] = useState('');
+  const delayedTimer = useRef<number | undefined>(undefined);
   const theme = new URLSearchParams(location.search).get('theme') === 'light' ? 'light' : 'dark';
+  const delayed = new URLSearchParams(location.search).get('fixture') === 'delayed';
+  useEffect(() => () => {
+    if (delayedTimer.current !== undefined) window.clearTimeout(delayedTimer.current);
+  }, []);
   const messages = { idle: 'Exemplo visual. Nenhum código é enviado ou validado.', processing: 'Verificando — estado demonstrativo.', error: 'Código inválido. Confira os dígitos e tente novamente.', success: 'Código confirmado — estado demonstrativo.' };
   return <DesignSystemProvider theme={theme} brandColor={brands.curriculol}>
     <AppShell sidebar={null} contentWidth="chat" collapsed={true} onCollapsedChange={() => {}} mobileOpen={false} onMobileOpenChange={() => {}}>
@@ -26,6 +32,10 @@ export default function OtpPage() {
           <Button label={rejectChanges ? 'Aceitar alterações' : 'Rejeitar alterações'} variant="ghost" onClick={() => setRejectChanges(current => !current)} />
         </Stack>
         <Text tone="secondary">{rejectChanges ? 'O caller está rejeitando alterações controladas; o valor visual permanece no último valor aceito.' : 'O caller controla o valor e a mensagem; completar o código não cria um estado de sucesso.'}</Text>
+        {delayed && <InputOTP label="Código com aceitação atrasada" value={delayedValue} onChange={next => {
+          if (delayedTimer.current !== undefined) window.clearTimeout(delayedTimer.current);
+          delayedTimer.current = window.setTimeout(() => setDelayedValue(next), 120);
+        }} message="Fixture de aceitação controlada após 120ms." />}
         <InputOTP label="Código curto (4 dígitos)" maxLength={4} value={shortValue} onChange={setShortValue} message="Comprimento mínimo de fixture: 4 slots." />
         <InputOTP label="Código dividido (8 dígitos)" maxLength={8} value={splitValue} onChange={setSplitValue} message="Dois grupos e um separador decorativo." >
           <InputOTPGroup>{[0, 1, 2, 3].map(index => <InputOTPSlot key={index} index={index} />)}</InputOTPGroup>

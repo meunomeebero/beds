@@ -1,4 +1,6 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Locator, type Page } from '@playwright/test';
+import { createServer, type ViteDevServer } from 'vite';
+import { fileURLToPath } from 'node:url';
 
 async function paste(page: Page, label: string, value: string) {
   await page.getByLabel(label).evaluate((node, text) => {
@@ -10,6 +12,50 @@ async function paste(page: Page, label: string, value: string) {
 
 function field(page: Page, label: string) {
   return page.locator('.es-otp-field').filter({ has: page.getByLabel(label) });
+}
+
+type DigitFrame = { text: string; y: number; blur: number; opacity: number; transform: string; filter: string };
+
+async function readDigitFrame(locator: Locator): Promise<DigitFrame> {
+  return locator.evaluate(node => {
+    const style = getComputedStyle(node);
+    const matrix = new DOMMatrixReadOnly(style.transform);
+    const blur = Number(style.filter.match(/blur\(([-\d.]+)px\)/)?.[1] ?? 0);
+    return { text: node.textContent ?? '', y: matrix.m42, blur, opacity: Number(style.opacity), transform: style.transform, filter: style.filter };
+  });
+}
+
+async function readDigitFrames(locator: Locator): Promise<DigitFrame[]> {
+  return locator.evaluateAll(nodes => nodes.map(node => {
+    const style = getComputedStyle(node);
+    const matrix = new DOMMatrixReadOnly(style.transform);
+    const blur = Number(style.filter.match(/blur\(([-\d.]+)px\)/)?.[1] ?? 0);
+    return { text: node.textContent ?? '', y: matrix.m42, blur, opacity: Number(style.opacity), transform: style.transform, filter: style.filter };
+  }));
+}
+
+async function readIconFrame(locator: Locator) {
+  return locator.evaluate(node => {
+    const style = getComputedStyle(node);
+    const matrix = new DOMMatrixReadOnly(style.transform);
+    return { scale: matrix.a, opacity: Number(style.opacity), transform: style.transform };
+  });
+}
+
+async function readTranslateX(locator: Locator) {
+  return locator.evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m41);
+}
+
+async function readCaretOpacities(locator: Locator, duration: number) {
+  return locator.evaluate(async (node, sampleDuration) => {
+    const values: number[] = [];
+    const start = performance.now();
+    while (performance.now() - start < sampleDuration) {
+      values.push(Number(getComputedStyle(node).opacity));
+      await new Promise(requestAnimationFrame);
+    }
+    return values;
+  }, duration);
 }
 
 for (const theme of ['light', 'dark']) {
@@ -98,105 +144,149 @@ for (const theme of ['light', 'dark']) {
   });
 }
 
-test('OTP motion has intermediate and settled frames', async ({ page }) => {
+test('OTP digit entry enforces y, blur and opacity, then settles to the same identity', async ({ page }) => {
   await page.goto('/?view=otp&theme=dark');
   const main = field(page, 'Código de acesso');
   const input = page.getByLabel('Código de acesso');
+  const slot = main.locator('.es-otp-slot').first();
   await input.fill('1');
-  await page.waitForTimeout(60);
-  const digitDuring = await main.locator('.es-otp-digit').first().evaluate(node => ({
-    transform: getComputedStyle(node).transform,
-    filter: getComputedStyle(node).filter,
-    opacity: getComputedStyle(node).opacity,
-  }));
-  expect(digitDuring.transform !== 'none' || digitDuring.filter !== 'none' || digitDuring.opacity !== '1').toBe(true);
-  await page.waitForTimeout(260);
-  await expect(main.locator('.es-otp-digit').first()).toHaveText('1');
-  const digitSettled = await main.locator('.es-otp-digit').first().evaluate(node => ({
-    transform: getComputedStyle(node).transform,
-    filter: getComputedStyle(node).filter,
-    opacity: getComputedStyle(node).opacity,
-  }));
-  expect(digitSettled.opacity).toBe('1');
-  await input.fill('123456');
-  await page.getByRole('button', { name: 'Simular erro', exact: true }).click();
-  await page.waitForTimeout(60);
-  const shakeDuring = await main.locator('.es-otp-group').evaluate(node => getComputedStyle(node).transform);
-  expect(shakeDuring).not.toBe('none');
-  await page.waitForTimeout(500);
-  await expect(main.locator('.es-otp-group')).toHaveCSS('transform', 'none');
+  const digit = slot.locator('.es-otp-digit');
+  await expect(digit).toHaveCount(1);
+  const entering = await readDigitFrame(digit);
+  expect(entering.text).toBe('1');
+  expect(entering.y).toBeGreaterThan(0.1);
+  expect(entering.blur).toBeGreaterThan(0.1);
+  expect(entering.opacity).toBeLessThan(1);
+  await page.waitForTimeout(280);
+  const settled = await readDigitFrame(digit);
+  expect(settled.text).toBe(entering.text);
+  expect(settled.y).toBeCloseTo(0, 1);
+  expect(settled.blur).toBeCloseTo(0, 1);
+  expect(settled.opacity).toBe(1);
+  expect(settled.transform).toBe('none');
+  expect(settled.filter).toBe('blur(0px)');
 });
 
-test('OTP success presence animates, exits and re-enters', async ({ page }) => {
+test('OTP rapid digit replacement and removal preserve intermediate exits and settled identity', async ({ page }) => {
+  await page.goto('/?view=otp&theme=light');
+  const main = field(page, 'Código de acesso');
+  const input = page.getByLabel('Código de acesso');
+  const slot = main.locator('.es-otp-slot').first();
+  await input.fill('1');
+  await page.waitForTimeout(280);
+
+  await input.fill('2');
+  await expect(slot.locator('.es-otp-digit')).toHaveCount(2);
+  const replacing = await readDigitFrames(slot.locator('.es-otp-digit'));
+  const oldDigit = replacing.find(frame => frame.text === '1');
+  const newDigit = replacing.find(frame => frame.text === '2');
+  expect(oldDigit).toBeDefined();
+  expect(newDigit).toBeDefined();
+  expect(oldDigit!.y).toBeLessThan(-0.1);
+  expect(oldDigit!.blur).toBeGreaterThan(0.1);
+  expect(oldDigit!.opacity).toBeLessThan(1);
+  expect(newDigit!.y).toBeGreaterThan(0.1);
+  expect(newDigit!.blur).toBeGreaterThan(0.1);
+  expect(newDigit!.opacity).toBeLessThan(1);
+  await page.waitForTimeout(280);
+  await expect(slot.locator('.es-otp-digit')).toHaveCount(1);
+  const replaced = await readDigitFrame(slot.locator('.es-otp-digit'));
+  expect(replaced.text).toBe('2');
+  expect(replaced.y).toBeCloseTo(0, 1);
+  expect(replaced.blur).toBeCloseTo(0, 1);
+  expect(replaced.opacity).toBe(1);
+
+  await input.fill('');
+  await page.waitForTimeout(32);
+  await expect(slot.locator('.es-otp-digit')).toHaveCount(1);
+  const removing = await readDigitFrame(slot.locator('.es-otp-digit'));
+  expect(removing.text).toBe('2');
+  expect(removing.y).toBeLessThan(-0.1);
+  expect(removing.blur).toBeGreaterThan(0.1);
+  expect(removing.opacity).toBeLessThan(1);
+  await page.waitForTimeout(280);
+  await expect(slot.locator('.es-otp-digit')).toHaveCount(0);
+  await expect(slot.locator('.es-otp-placeholder')).toHaveCount(1);
+});
+
+test('OTP repeated error and recovery replays the shake and clears the invalid state', async ({ page }) => {
+  await page.goto('/?view=otp&theme=dark');
+  const main = field(page, 'Código de acesso');
+  const input = page.getByLabel('Código de acesso');
+  const group = main.locator('.es-otp-group').first();
+  const error = page.getByRole('button', { name: 'Simular erro', exact: true });
+
+  await input.fill('123456');
+  await error.click();
+  await expect(input).toHaveAttribute('aria-invalid', 'true');
+  await page.waitForTimeout(48);
+  expect(Math.abs(await readTranslateX(group))).toBeGreaterThan(0.1);
+  await page.waitForTimeout(500);
+  expect(await readTranslateX(group)).toBeCloseTo(0, 1);
+
+  await input.press('End');
+  await input.press('Backspace');
+  await input.press('4');
+  await expect(input).toHaveAttribute('aria-invalid', 'false');
+  await error.click();
+  await expect(input).toHaveAttribute('aria-invalid', 'true');
+  await page.waitForTimeout(48);
+  expect(Math.abs(await readTranslateX(group))).toBeGreaterThan(0.1);
+  await page.waitForTimeout(500);
+  expect(await readTranslateX(group)).toBeCloseTo(0, 1);
+
+  await input.fill('');
+  await input.fill('111111');
+  await expect(input).toHaveAttribute('aria-invalid', 'false');
+});
+
+test('OTP success presence exposes entrance, exit and interruption intermediate frames', async ({ page }) => {
   await page.goto('/?view=otp&theme=dark');
   const main = field(page, 'Código de acesso');
   const input = page.getByLabel('Código de acesso');
   const success = page.getByRole('button', { name: 'Simular sucesso', exact: true });
   const error = page.getByRole('button', { name: 'Simular erro', exact: true });
+  const icon = main.locator('.es-otp-success-icon');
   await input.fill('123456');
 
   await success.click();
-  const icon = main.locator('.es-otp-success-icon');
   await expect(icon).toBeVisible();
   await page.waitForTimeout(32);
-  const entering = await icon.evaluate(node => ({
-    transform: getComputedStyle(node).transform,
-    opacity: getComputedStyle(node).opacity,
-  }));
-  expect(entering.transform !== 'none' || entering.opacity !== '1').toBe(true);
+  const entering = await readIconFrame(icon);
+  expect(entering.scale).toBeLessThan(1);
+  expect(entering.opacity).toBeLessThan(1);
   await page.waitForTimeout(500);
-  const settled = await icon.evaluate(node => ({
-    transform: getComputedStyle(node).transform,
-    opacity: getComputedStyle(node).opacity,
-  }));
-  expect(settled.opacity).toBe('1');
+  const settled = await readIconFrame(icon);
+  expect(settled.scale).toBeCloseTo(1, 2);
+  expect(settled.opacity).toBe(1);
 
   await error.click();
+  await expect(icon).toHaveCount(1);
+  await page.waitForTimeout(32);
+  const exiting = await readIconFrame(icon);
+  expect(exiting.scale).toBeLessThan(1);
+  expect(exiting.opacity).toBeLessThan(1);
   await expect(icon).toHaveCount(0);
-  await success.click();
-  await expect(icon).toBeVisible();
-  await page.waitForTimeout(500);
-  await expect(icon).toHaveCSS('opacity', '1');
-  await expect(main.locator('.es-otp-success-icon')).toHaveCount(1);
-});
 
-test('OTP success presence interruption settles the latest status', async ({ page }) => {
-  await page.goto('/?view=otp&theme=light');
-  const main = field(page, 'Código de acesso');
-  const input = page.getByLabel('Código de acesso');
-  const success = page.getByRole('button', { name: 'Simular sucesso', exact: true });
-  const error = page.getByRole('button', { name: 'Simular erro', exact: true });
-  await input.fill('123456');
   await success.click();
   await page.waitForTimeout(32);
   await error.click();
-  await page.waitForTimeout(48);
+  await expect(icon).toHaveCount(1);
+  await page.waitForTimeout(32);
+  const interruptedExit = await readIconFrame(icon);
+  expect(interruptedExit.scale).toBeLessThan(1);
+  expect(interruptedExit.opacity).toBeLessThan(1);
   await success.click();
-  const icon = main.locator('.es-otp-success-icon');
   await expect(icon).toBeVisible();
+  await page.waitForTimeout(32);
+  const interruptedReentry = await readIconFrame(icon);
+  expect(interruptedReentry.scale).toBeLessThan(1);
+  expect(interruptedReentry.opacity).toBeLessThan(1);
   await page.waitForTimeout(500);
-  await expect(icon).toHaveCSS('opacity', '1');
+  const reentered = await readIconFrame(icon);
+  expect(reentered.scale).toBeCloseTo(1, 2);
+  expect(reentered.opacity).toBe(1);
   await expect(main.locator('.es-otp-success-icon')).toHaveCount(1);
-});
-
-test('OTP reduced motion is static and success settles inline', async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/?view=otp&theme=light');
-  const main = field(page, 'Código de acesso');
-  const input = page.getByLabel('Código de acesso');
-  await input.fill('123456');
-  const reducedDigit = await main.locator('.es-otp-digit').first().evaluate(node => ({
-    transform: getComputedStyle(node).transform,
-    filter: getComputedStyle(node).filter,
-    opacity: getComputedStyle(node).opacity,
-  }));
-  expect(reducedDigit.filter).toBe('none');
-  expect(reducedDigit.opacity).toBe('1');
-  await page.getByRole('button', { name: 'Simular sucesso', exact: true }).click();
-  await expect(main.locator('.es-otp-success-icon')).toBeVisible();
-  const iconStyle = await main.locator('.es-otp-success-icon').evaluate(node => ({ transform: getComputedStyle(node).transform, opacity: getComputedStyle(node).opacity }));
-  expect(iconStyle.opacity).toBe('1');
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
 test('OTP controlled rejection keeps caller value and instances isolated', async ({ page }) => {
@@ -213,6 +303,107 @@ test('OTP controlled rejection keeps caller value and instances isolated', async
   await expect(short).toHaveValue('');
 });
 
+test('OTP delayed controlled acceptance keeps the caller value until it accepts', async ({ page }) => {
+  await page.goto('/?view=otp&fixture=delayed&theme=light');
+  const input = page.getByLabel('Código com aceitação atrasada');
+  await input.fill('1');
+  await page.waitForTimeout(48);
+  await expect(input).toHaveValue('');
+  await expect(field(page, 'Código com aceitação atrasada').locator('.es-otp-digit')).toHaveCount(0);
+  await page.waitForTimeout(140);
+  await expect(input).toHaveValue('1');
+  await expect(field(page, 'Código com aceitação atrasada').locator('.es-otp-digit')).toHaveText('1');
+});
+
+test('OTP normal caret blinks while reduced caret remains static', async ({ page }) => {
+  await page.goto('/?view=otp&theme=dark');
+  const input = page.getByLabel('Código de acesso');
+  await input.focus();
+  const caret = field(page, 'Código de acesso').locator('.es-otp-caret').first();
+  await expect(caret).toHaveCount(1);
+  const normal = await readCaretOpacities(caret, 1100);
+  expect(Math.min(...normal)).toBeLessThan(0.9);
+  expect(Math.max(...normal)).toBeGreaterThan(0.99);
+
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.reload();
+  await input.focus();
+  const reducedCaret = field(page, 'Código de acesso').locator('.es-otp-caret').first();
+  await expect(reducedCaret).toHaveCount(1);
+  const reduced = await readCaretOpacities(reducedCaret, 300);
+  expect(reduced.every(opacity => opacity === 1)).toBe(true);
+});
+
+test('OTP reduced motion settles digit, icon and shake across frames', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/?view=otp&theme=light');
+  const main = field(page, 'Código de acesso');
+  const input = page.getByLabel('Código de acesso');
+  await input.fill('1');
+  const digit = main.locator('.es-otp-slot').first().locator('.es-otp-digit');
+  const digitNow = await readDigitFrame(digit);
+  await page.waitForTimeout(220);
+  const digitLater = await readDigitFrame(digit);
+  for (const frame of [digitNow, digitLater]) {
+    expect(frame.y).toBeCloseTo(0, 1);
+    expect(frame.blur).toBeCloseTo(0, 1);
+    expect(frame.opacity).toBe(1);
+  }
+
+  await page.getByRole('button', { name: 'Simular erro', exact: true }).click();
+  const group = main.locator('.es-otp-group').first();
+  const shakeNow = await readTranslateX(group);
+  await page.waitForTimeout(220);
+  const shakeLater = await readTranslateX(group);
+  expect(shakeNow).toBeCloseTo(0, 1);
+  expect(shakeLater).toBeCloseTo(0, 1);
+
+  await page.getByRole('button', { name: 'Simular sucesso', exact: true }).click();
+  const icon = main.locator('.es-otp-success-icon');
+  await expect(icon).toBeVisible();
+  const iconNow = await readIconFrame(icon);
+  await page.waitForTimeout(220);
+  const iconLater = await readIconFrame(icon);
+  for (const frame of [iconNow, iconLater]) {
+    expect(frame.scale).toBeCloseTo(1, 2);
+    expect(frame.opacity).toBe(1);
+  }
+});
+
+test('OTP controlled instances hydrate from renderToString without warnings', async ({ page }) => {
+  const viteConfig = fileURLToPath(new URL('./vite.config.ts', import.meta.url));
+  const repoRoot = fileURLToPath(new URL('../../../../', import.meta.url));
+  const hydrationPage = '/apps/web/labs/espaco-library/otp-hydration.html';
+  const server = await createServer({ root: repoRoot, configFile: viteConfig, server: { host: '127.0.0.1', port: 0, strictPort: false } });
+  await server.listen();
+  try {
+    const module = await server.ssrLoadModule('/apps/web/labs/espaco-library/otp-hydration-server.ts') as { renderOtpHydrationProbe: () => string };
+    const address = server.httpServer?.address();
+    if (!address || typeof address === 'string') throw new Error('Expected the OTP hydration Vite server to expose a TCP address.');
+    const errors: string[] = [];
+    page.on('console', message => { if (message.type() === 'error' || /warning/i.test(message.text())) errors.push(message.text()); });
+    page.on('pageerror', error => errors.push(error.message));
+    const origin = `http://127.0.0.1:${address.port}`;
+    await page.goto(`${origin}${hydrationPage}`);
+    await page.evaluate(markup => {
+      document.getElementById('otp-hydration-root')!.innerHTML = markup;
+      (window as Window & { __otpHydrationMarkupReady?: boolean }).__otpHydrationMarkupReady = true;
+      window.dispatchEvent(new Event('otp-hydration-markup-ready'));
+    }, module.renderOtpHydrationProbe());
+    await page.waitForFunction(() => (window as Window & { __otpHydrationComplete?: boolean }).__otpHydrationComplete === true);
+    expect(errors).toEqual([]);
+    const inputs = page.locator('.es-otp-field input');
+    await expect(inputs).toHaveCount(2);
+    await expect(page.getByLabel('SSR código principal')).toHaveValue('123456');
+    await expect(page.getByLabel('SSR código secundário')).toHaveValue('12');
+    const ids = await inputs.evaluateAll(nodes => nodes.map(node => node.id));
+    expect(new Set(ids).size).toBe(2);
+    for (const id of ids) await expect(page.locator(`label[for="${id}"]`)).toHaveCount(1);
+  } finally {
+    await (server as ViteDevServer).close();
+  }
+});
+
 test('OTP CSS zoom proxy is identified separately from real browser zoom', async ({ page }) => {
   test.info().annotations.push({ type: 'limitation', description: 'CSS zoom:2 proxy only; native browser zoom and physical devices remain unverified.' });
   await page.goto('/?view=otp&theme=dark');
@@ -222,23 +413,27 @@ test('OTP CSS zoom proxy is identified separately from real browser zoom', async
   expect(await main.locator('.es-otp-slot').first().evaluate(node => getComputedStyle(node).fontVariantNumeric)).toContain('tabular-nums');
 });
 
-test('OTP forced colors keeps structural focus and status cues', async ({ page }) => {
+test('OTP forced colors preserves the active focus ring and status cues', async ({ page }) => {
   await page.emulateMedia({ forcedColors: 'active' });
   await page.goto('/?view=otp&theme=light');
   const main = field(page, 'Código de acesso');
   const input = page.getByLabel('Código de acesso');
   await input.focus();
   await expect(input).toBeFocused();
+  const activeSlot = main.locator('.es-otp-slot[data-active="true"]');
+  await expect(activeSlot).toHaveCount(1);
+  const focus = await activeSlot.evaluate(node => {
+    const style = getComputedStyle(node);
+    return { outlineStyle: style.outlineStyle, outlineWidth: style.outlineWidth, outlineColor: style.outlineColor };
+  });
+  expect(focus.outlineStyle).toBe('solid');
+  expect(focus.outlineWidth).toBe('2px');
+  expect(focus.outlineColor).not.toBe('transparent');
   await input.fill('123456');
   await page.getByRole('button', { name: 'Simular erro', exact: true }).click();
   await expect(input).toHaveAttribute('aria-invalid', 'true');
   await expect(main.getByRole('status')).toContainText('Código inválido');
-  const colors = await main.locator('.es-otp-slot').first().evaluate(node => ({
-    borderColor: getComputedStyle(node).borderColor,
-    outlineColor: getComputedStyle(node).outlineColor,
-  }));
-  expect(colors.borderColor).toBeTruthy();
-  expect(colors.outlineColor).toBeTruthy();
+  await expect(main.locator('.es-otp-slot').first()).toHaveCSS('border-color', /rgb|rgba/);
 });
 
 for (const theme of ['light', 'dark']) {
