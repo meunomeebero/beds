@@ -3,10 +3,11 @@ import { createServer, type ViteDevServer } from 'vite';
 import { fileURLToPath } from 'node:url';
 
 const viteConfig = fileURLToPath(new URL('./vite.config.ts', import.meta.url));
+const repoRoot = fileURLToPath(new URL('../../../../', import.meta.url));
 const hydrationPage = '/apps/web/labs/espaco-library/hydration.html';
 
 test('AppShell hydrates on a mobile matchMedia snapshot without mismatch errors', async ({ page }) => {
-  const server = await createServer({ configFile: viteConfig, server: { host: '127.0.0.1', port: 0, strictPort: false } });
+  const server = await createServer({ root: repoRoot, configFile: viteConfig, server: { host: '127.0.0.1', port: 0, strictPort: false } });
   await server.listen();
   try {
     const module = await server.ssrLoadModule('/apps/web/labs/espaco-library/hydration-server.ts') as { renderHydrationProbe: () => string };
