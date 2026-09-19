@@ -101,6 +101,7 @@ Wrap only explicitly migrated screens; never enclose legacy UI to simulate migra
 | [Library map](docs/design/espaco-library/README.md) | Routing and boundaries |
 | [Foundations](docs/design/espaco-library/FOUNDATIONS.md) | Approved visual values |
 | [Components](docs/design/espaco-library/COMPONENTS.md) | Public component anatomy |
+| [InputOTP](docs/design/espaco-library/INPUT-OTP.md) | Controlled 4/6/8 digit entry, caller-owned status, motion and evidence |
 | [Document upload](docs/design/espaco-library/DOCUMENT-UPLOAD.md) | Illustrated drop field, controlled selection and recovery |
 | [Date item](docs/design/espaco-library/DATE-ITEM.md) | Mini calendar, dated rows and optional native destinations |
 | [Blog posts](docs/design/espaco-library/BLOG-POST.md) | Compact editorial cards, native article links and thumbnail recovery |
