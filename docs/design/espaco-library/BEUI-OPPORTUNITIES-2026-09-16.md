@@ -60,7 +60,7 @@ Same anatomy we already own, plus motion we never wrote.
 | `ApplicationBoard` (kanban) | `swipeable-list`,`pull-to-refresh` | mobile row actions and refresh, absent today |
 | `ForumTopic`,`Records` | `heat-calendar`,`infinite-masonry`,`file-tree` | activity density;feed;threaded structure |
 | `DateItem`,`DateItemList` | `availability-scheduler` | zero motion today |
-| `ProcessingView` | `todo-list`,`loading-states`,`agent-activity`,`tool-result`,`file-diff` | staged progress with morphing status marks |
+| `ProcessingView` | `todo-list`,`loading-states`,`agent-activity`,`tool-result`,`file-diff` | F4 adopts `todo-list` status-mark and ATS segment-fill intent only; secondary candidates are deferred on public-state mismatch |
 | Overflow/toolbars | `overflow-actions`,`expandable-action-bar`,`expandable-control` | progressive disclosure of actions |
 | Cross-surface transitions | `shared-layout-bg` | continuity between card → detail |
 
@@ -81,7 +81,7 @@ Charts → BEDS has none. `heat-calendar` is the only broadly reusable one.
 | # | Item | Finding |
 |---|---|---|
 | 1 | Count-up on the ATS score | Attempted and reverted. `results.spec.ts` captures the score text, opens the search dialog and asserts the text is **unchanged**; a count-up makes the evidence non-deterministic and briefly renders scores that were never computed. `results.tsx` already carries the rule "Never animate a fabricated score". Options → animate the 28-segment meter fill with a stagger, or a blur/spring reveal of the true number, keeping the text stable. Ticker stays valid for credits and prices |
-| 2 | `todo-list` on the optimization screen | Iron rule 6 says never remove or shorten the praised loading animations; improve easing and reduced motion only. Replacing them needs an explicit owner override, and the retro terminal aesthetic was previously marked as deliberately preserved for this surface |
+| 2 | `todo-list` on the optimization screen | Resolved in F4 as a bounded local adaptation: retain the host-owned 90s/75s choreography, 95% hold and retro geometry; adopt only status-mark morphing and segmented ATS fill, with static true text and reduced-motion support |
 | 3 | `theme-toggle` View Transition | Repaints the whole page on theme change. Touches brand identity across every surface, not one component |
 | 4 | `scroll-animation` | Upstream pairs with Lenis → a second runtime dependency and hijacked native scrolling |
 | 5 | `table` virtualization | May pull a virtualization dependency; current `DataTable` lists are short |

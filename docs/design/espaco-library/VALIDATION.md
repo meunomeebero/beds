@@ -98,6 +98,11 @@ long content,contrast≥4.5:1 sampled text,44px component controls,reduced motio
 forced colors and CSS200% zoom proxy. Existing meters retain role/value/bounds.
 Processing suite observed no external/mutating request or console error.
 36 processing screenshots;dark desktop/light320px,error and success inspected.
+F4 `processing-beui.spec.ts`:12/12 passed on the same single preview port across
+desktop/mobile and light/dark. Final ATS text/ARIA values stay static while the
+segmented fill reveals; pause/resume and reduced motion are covered. Lab and
+library static gates passed. This is technical evidence,not aesthetic approval;
+physical AT,non-Chromium and owner acceptance remain pending.
 Initial mobile timing failure during concurrent editing passed isolated and
 stable full reruns;assertions retained. Full catalog not rerun for this port.
 

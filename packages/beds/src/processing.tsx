@@ -1,8 +1,9 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { Button } from './controls';
 import { Icon } from './foundation';
-import { SegmentedMeter } from './feedback';
 import { MeterSegments } from './meter-segments';
+import { SPRING_SWAP } from './lib/ease';
 import './processing.css';
 
 export type ProcessingStep = {
@@ -52,6 +53,24 @@ function percentage(value: number, ceiling = 100) {
   return Number.isFinite(value) ? Math.max(0, Math.min(ceiling, value)) : 0;
 }
 
+function ProcessingStepIcon({ state, index }: { state: ProcessingStep['state']; index: number }) {
+  const reduce = useReducedMotion() ?? false;
+  const complete = state === 'complete';
+  return <span className="es-processing-step-icon" aria-hidden="true">
+    <AnimatePresence initial={false} mode="popLayout">
+      {complete
+        ? <motion.span key="complete" initial={reduce ? false : { opacity: 0, scale: .72 }} animate={{ opacity: 1, scale: 1 }} exit={reduce ? undefined : { opacity: 0, scale: .72 }} transition={reduce ? { duration: 0 } : SPRING_SWAP}><Icon name="Check" purpose="action" /></motion.span>
+        : <motion.span key="pending" initial={reduce ? false : { opacity: 0, scale: .8 }} animate={{ opacity: 1, scale: 1 }} exit={reduce ? undefined : { opacity: 0, scale: .72 }} transition={reduce ? { duration: 0 } : SPRING_SWAP}>{index + 1}</motion.span>}
+    </AnimatePresence>
+  </span>;
+}
+
+function ProcessingScoreMeter({ label, value, paused }: { label: string; value: number; paused: boolean }) {
+  const valid = Number.isFinite(value);
+  const display = valid ? `${Math.round(percentage(value))}` : '—';
+  return <div className="es-segmented-meter"><div className="es-meter-label"><span>{label}</span><span>{display}</span></div><MeterSegments label={label} value={valid ? value : null} tone="brand" animateFill paused={paused} valueText={valid ? `${display}/100` : `${label}: unavailable`} /></div>;
+}
+
 /** Presentation only. The host owns requests, timing, stages and terminal signals. */
 export function ProcessingView({ title, description, context, mark, state, statusLabel, progress, progressLabel, progressDescription, stepsLabel, steps, story, message, announcement, detailsLabel, logs, scores, motion, actions }: ProcessingViewProps) {
   const id = useId();
@@ -82,14 +101,14 @@ export function ProcessingView({ title, description, context, mark, state, statu
         {message && <p className="es-processing-message" data-state={state}><Icon name={state === 'error' ? 'AlertCircle' : state === 'success' ? 'CheckCircle2' : 'Info'} purpose="action" /><span>{message}</span></p>}
         <ol className="es-processing-steps" aria-label={stepsLabel}>
           {steps.map((step, index) => <li key={step.id} data-state={step.state} aria-current={step.state === 'active' ? 'step' : undefined}>
-            <span className="es-processing-step-icon" aria-hidden="true">{step.state === 'complete' ? <Icon name="Check" purpose="action" /> : <span>{index + 1}</span>}</span>
+            <ProcessingStepIcon state={step.state} index={index} />
             <div className="es-processing-step-copy"><div className="es-processing-step-heading"><h2>{step.label}</h2><span>{step.statusLabel}</span></div><p>{step.detail}</p>
               <progress aria-label={step.label} max={100} value={percentage(step.progress)} />
             </div>
           </li>)}
         </ol>
         <details className="es-processing-details"><summary>{detailsLabel}<Icon name="ChevronDown" purpose="action" /></summary><ol>{logs.map((line, index) => <li key={`${index}-${line}`}><Icon name="Check" purpose="small" /><span>{line}</span></li>)}</ol></details>
-        {scores && <section className="es-processing-scores" aria-label={scores.label}><h2>{scores.label}</h2><p>{scores.note}</p><div>{scores.items.map(score => <SegmentedMeter key={score.id} label={score.label} value={score.value} tone="brand" />)}</div></section>}
+        {scores && <section className="es-processing-scores" aria-label={scores.label}><h2>{scores.label}</h2><p>{scores.note}</p><div>{scores.items.map(score => <ProcessingScoreMeter key={score.id} label={score.label} value={score.value} paused={motion.paused} />)}</div></section>}
         {actions && <div className="es-processing-actions">{actions.map(action => <Button key={action.label} label={action.label} variant={action.primary ? 'primary' : 'secondary'} onClick={action.onClick} />)}</div>}
       </div>
       <aside className="es-processing-story" aria-labelledby={`${id}-story`}>

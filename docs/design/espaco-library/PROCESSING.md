@@ -91,6 +91,27 @@ existing cubic(.16,1,.3,1). No new dependency/tokens. Story18/25px500;
 152px minimum copy reserve,grows freely;none narrow. Controls44px,p10/14;
 time12/18 tabular. Transcript12/19,headings13/20. No repeated dividers.
 
+## F4 beUI adaptation — 2026-09-19
+
+`ProcessingView` uses the free MIT `todo-list` source as a local reference for
+its status-mark swap and staged-fill intent. Source: [raw
+source](https://beui.dev/r/todo-list/raw), [registry
+item](https://beui.dev/r/todo-list.json), [repository](https://github.com/starc007/ui-components).
+Raw SHA-256
+`ee3b0baabf79fb941f0affbc21e9043c93cd02e59f71ed3f37d55702912cd210`; registry
+JSON SHA-256
+`f247b5cc7c399e851ddf91660ddfa462c7edcf59ecbac01b6a7139d13e86758`.
+
+The adaptation keeps host ownership and the existing `ProcessingView` API.
+Steps retain their 28px geometry; completion marks swap with reduced-motion
+guards. ATS score labels and true numeric values remain static from first
+render, while only the internal segmented fill uses the reveal motion. The
+90s/75s cadence, 95% hold until explicit confirmation, pause/offscreen and
+reduced-motion behavior remain unchanged. No auto-success, request, scoring or
+navigation is introduced. The other candidate slugs (`loading-states`,
+`agent-activity`, `tool-result`, `file-diff`) are deferred because their public
+state models do not match this surface.
+
 ## Quality and evidence
 
 Read/applied:all seven `better-*` entrypoints;project-adapted `emil-design-eng`
@@ -114,6 +135,14 @@ navigation/focus,re-entry,wait,error,retry and manual-review recovery. Light/dar
 1440/768/390/320px,long content,CSS200% zoom proxy,forced colors,reduced motion,
 sampled functional text contrast≥4.5:1 and44px component controls.36 captures.
 No observed console errors or external/mutating requests in these cases.
+
+F4 focused suite `processing-beui.spec.ts` passed12/12 on the same single
+preview port across desktop/mobile and light/dark. It verifies final ATS text
+and ARIA values remain stable while the segmented fill is present, paused fill
+stays within 0.01 percentage points, resume completes the reveal, and reduced
+motion has no meter animations. Lab typecheck, library typecheck, library
+contract check and docs check passed. This is technical evidence,not aesthetic
+approval; physical AT,non-Chromium and owner acceptance remain pending.
 
 Independent code/selected-render review:PASS_WITH_NOTES. One LOW idle-timer
 finding fixed and independently rechecked;no remaining code finding. This is
