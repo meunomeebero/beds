@@ -50,8 +50,10 @@ export function AnimatedNumber({ value, format, fallback = '—', duration = 1.1
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, amount: .6 });
   const prefersReducedMotion = useReducedMotion();
-  const animationStart = value !== null && Number.isFinite(initialValue) ? initialValue : value;
-  const [frame, setFrame] = useState(animationStart ?? 0);
+  const animationStart = value !== null && Number.isFinite(value)
+    ? typeof initialValue === 'number' && Number.isFinite(initialValue) ? initialValue : value
+    : null;
+  const [frame, setFrame] = useState<number | null>(animationStart);
   const unavailable = value === null || !Number.isFinite(value);
   const waitingForView = startOnView && !inView;
 
@@ -79,8 +81,13 @@ export function AnimatedNumber({ value, format, fallback = '—', duration = 1.1
 
   if (unavailable) return <span className="es-animated-number">{fallback}</span>;
 
+  // Synchronously fall back to the current true value when a previously unavailable
+  // value becomes ready before the passive effect can settle the frame.
+  const renderedFrame = animationStart !== null && animationStart !== value
+    ? frame ?? animationStart
+    : value;
   // Single text node: the last frame equals the true value, so no duplicated or doubly announced number.
-  return <span ref={ref} className="es-animated-number">{format(frame)}</span>;
+  return <span ref={ref} className="es-animated-number">{format(renderedFrame)}</span>;
 }
 
 export type TextVariant = 'page-title' | 'section-title' | 'chat-title' | 'body' | 'body-small' | 'label' | 'caption' | 'overline' | 'option' | 'metric';

@@ -50,7 +50,8 @@ and never derives a number from display text. Reduced motion settles immediately
 
 Keyboard uses the existing AccountMenu:open → first action →Tab→credits action;
 Escape restores trigger. Credit callback decides whether to close. Loading
-announces through stable status;error uses alert. No animated bars/count-up.
+announces through stable status;error uses alert. Meter bars stay static; only a
+typed controlled balance change animates its formatted text.
 Copy,large balances and plan names wrap instead of truncating. No network calls,
 storage,timers or real purchase requests in library or catalog fixture.
 
