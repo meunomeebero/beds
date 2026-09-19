@@ -51,7 +51,7 @@
     "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "check": "node scripts/check-library.mjs --tokens src/tokens.css",
     "check:consumer": "node scripts/check-consumer.mjs",
-    "test:guards": "node --test scripts/contracts.test.mjs scripts/visual-audit.test.mjs scripts/package-artifact.test.mjs scripts/build-artifact.test.mjs scripts/docs.test.mjs scripts/results.test.mjs scripts/checkout.test.mjs",
+    "test:guards": "node --test scripts/contracts.test.mjs scripts/visual-audit.test.mjs scripts/package-artifact.test.mjs scripts/build-artifact.test.mjs scripts/docs.test.mjs scripts/results.test.mjs scripts/checkout.test.mjs scripts/reduced-motion-hook.test.mjs",
     "check:docs": "node scripts/check-docs.mjs",
     "check:visual-baseline": "node scripts/check-visual-baseline.mjs",
     "check:artifact": "node scripts/check-package-artifact.mjs"
