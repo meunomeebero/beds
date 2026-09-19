@@ -36,8 +36,12 @@ for (const theme of ['light', 'dark'] as const) {
     const tab = page.getByRole('tab', { name: 'Conta', exact: true });
     const indicator = tab.locator('[data-tabs-indicator]');
     await expect(indicator).toBeVisible();
-    expect(await indicator.evaluate(element => getComputedStyle(element).transitionDuration)).toBe('0s');
+    expect(await indicator.evaluate(element => ({ animations: element.getAnimations().length, transform: getComputedStyle(element).transform }))).toEqual({ animations: 0, transform: 'none' });
+    await page.getByRole('tab', { name: 'Preferências', exact: true }).click();
+    const nextIndicator = page.getByRole('tab', { name: 'Preferências', exact: true }).locator('[data-tabs-indicator]');
+    await expect(nextIndicator).toBeVisible();
+    expect(await nextIndicator.evaluate(element => ({ animations: element.getAnimations().length, transform: getComputedStyle(element).transform }))).toEqual({ animations: 0, transform: 'none' });
     await page.emulateMedia({ forcedColors: 'active' });
-    expect(await indicator.evaluate(element => getComputedStyle(element).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
+    expect(await nextIndicator.evaluate(element => getComputedStyle(element).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
   });
 }

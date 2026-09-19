@@ -51,7 +51,14 @@ for (const theme of ['light', 'dark'] as const) {
 
   test(`navigation drawer and locked item preserve logical accessibility in ${theme}`, async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'mobile', 'The drawer contract is covered at mobile width.');
-    await page.goto(`/?view=disclosures&theme=${theme}`);
+    await page.goto(`/?view=disclosures&theme=${theme}`, { waitUntil: 'commit' });
+    const firstFrame = await page.locator('.es-app-shell').evaluate(element => {
+      const bounds = element.getBoundingClientRect();
+      return { grid: getComputedStyle(element).gridTemplateColumns, documentWidth: document.documentElement.scrollWidth, viewportWidth: innerWidth, right: bounds.right };
+    });
+    expect(firstFrame.grid).not.toMatch(/^264px/);
+    expect(firstFrame.documentWidth).toBeLessThanOrEqual(firstFrame.viewportWidth);
+    expect(firstFrame.right).toBeLessThanOrEqual(firstFrame.viewportWidth);
     await expect(page.getByRole('heading', { name: 'Informações do perfil', exact: true })).toBeVisible();
     const trigger = page.getByRole('button', { name: 'Navegação', exact: true });
     await trigger.click();

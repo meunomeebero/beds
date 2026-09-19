@@ -32,7 +32,7 @@ function trapTab(event: React.KeyboardEvent<HTMLElement>) {
 export function AppShell({ sidebar, header, children, collapsed, onCollapsedChange, mobileOpen, onMobileOpenChange, contentWidth = 'home', navigationLabel = 'Navigation', closeNavigationLabel, skipToContentLabel = 'Ir para o conteúdo' }: {
   sidebar: ReactNode; header?: ReactNode; children: ReactNode; collapsed: boolean; onCollapsedChange: (collapsed: boolean) => void; mobileOpen: boolean; onMobileOpenChange: (open: boolean) => void; contentWidth?: 'chat' | 'home' | 'dashboard' | 'full'; navigationLabel?: string; closeNavigationLabel?: string; skipToContentLabel?: string;
 }) {
-  const [mobile, setMobile] = useState(false);
+  const [mobile, setMobile] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches);
   const sidebarRef = useRef<HTMLElement>(null);
   const openRef = useRef<HTMLButtonElement>(null);
   const returnFocusTarget = useRef<HTMLElement | null>(null);
