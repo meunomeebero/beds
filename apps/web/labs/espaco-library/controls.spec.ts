@@ -89,7 +89,8 @@ for (const theme of ['light', 'dark'] as const) {
       const dialog = page.getByRole('dialog', { name: 'Configuração demonstrativa' });
       await expect(dialog).toBeVisible();
       await expectWithinViewport(dialog);
-      await expect(dialog).toHaveCSS('background-color', theme === 'dark' ? 'rgb(32, 32, 32)' : 'rgb(255, 255, 255)');
+      await expect(dialog.locator(':scope > .es-dialog-surface')).toHaveCSS('background-color', theme === 'dark' ? 'rgb(32, 32, 32)' : 'rgb(255, 255, 255)');
+      await expect(dialog).toHaveAttribute('data-phase', 'open');
       const backgroundScroll = await page.evaluate(() => window.scrollY);
       await page.mouse.move(1, 1);
       await page.mouse.wheel(0, 240);
