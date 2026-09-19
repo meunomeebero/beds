@@ -12,6 +12,7 @@ Canonical library: `beds`. React 19; two fixed themes; one brand color. Independ
 | Build or change a primitive | [Foundations](FOUNDATIONS.md) → relevant component/state contract → [Governance](GOVERNANCE.md) |
 | Need a pattern BEDS lacks | [External component sourcing](EXTERNAL-COMPONENT-SOURCING.md): search beUI before building from scratch;MIT adapt-never-install contract,provenance and attribution |
 | Track F2 beUI migration | [F2 migration tracking](F2-MIGRATION-TRACKING.md): implementation status, helper dependencies, extraction boundary and restart point |
+| Track F3 numeric/data decisions | [F3 decisions](F3-MIGRATION-DECISIONS.md): typed numeric motion adoption and explicit no-fit provenance |
 | Looking for motion to add | [beUI opportunities audit](BEUI-OPPORTUNITIES-2026-09-16.md): measured motion gap,replace/enhance/new candidates by intensity,open owner decisions |
 | Review UI quality | [Interface quality](INTERFACE-QUALITY.md) → affected contracts → Governance evidence requirements |
 | Create or improve a SaaS landing | [Landing-page skill](LANDING-PAGE-SKILL.md): portable `marc-lou-landing-page`, automatic scoped routing, product proof and honest CTAs |

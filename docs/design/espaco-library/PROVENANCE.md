@@ -68,6 +68,53 @@ These are local BEDS adaptations, not runtime imports. The public registry and c
 | LoadingIndicator | beUI `loader`, MIT, [raw](https://beui.dev/r/loader/raw), [registry item](https://beui.dev/r/loader.json); retrieved 2026-09-19; raw SHA-256 `24a3255b7a9b106cd60c246853864b541d9dd665c9fda99d314b74c98a01d66c`; registry JSON SHA-256 `0bd742a4322bfe6594ba1d9e21b83c99cf33c197d3bddb582db1d6679cd1bd97` | Local adaptation in `feedback.tsx` / `feedback.css`; focused and integrated technical/artifact checks are PASS_WITH_NOTES, with focused evidence retained. Non-Chromium, physical AT and aesthetics remain pending. |
 | Toaster / toast | beUI `animated-toast-stack`, MIT, [raw](https://beui.dev/r/animated-toast-stack/raw); retrieved 2026-09-19; local source-comment SHA-256 `e1fe639d87cc5419b720e48289a9ee2ba776050413cede9b8f08af48ee28da28` | Local adaptation in `toast.tsx` / `toast.css`; public event API, top-centered geometry, timeout/pause/live-region/focus recovery retained. Focused and integrated technical/artifact checks are PASS_WITH_NOTES. Non-Chromium, physical AT and aesthetics remain pending. |
 
+| Tabs settings | beUI `tabs`, MIT, [raw](https://beui.dev/r/tabs/raw), [registry item](https://beui.dev/r/tabs.json), retrieved 2026-09-19; raw SHA-256 `7e3def75375631d855187fd39dcc4398e6f16313149d2be21375a2eae5a7d649`; registry JSON SHA-256 `486f271a0b4de568ba5382e1c5bd602a69ff19385c528460a506845e9a749803` | `packages/beds/src/controls.tsx` adopts the compatible shared `layoutId` indicator and reduced-motion intent for the settings variant, while Tailwind now owns the measured 4px lane, 48px tab row and 24px panel gap. The monolithic `{label,value,items,onChange,variant}` API, native tab semantics, roving focus, RTL arrow contract, scroll lane and forced-colors state remain BEDS-owned; beUI's compound tabs API and scroll/reveal controls are not exposed. Focused `tabs-settings-beui.spec.ts` covers desktop/mobile, light/dark, keyboard/RTL, reduced motion and forced colors. No runtime beUI import. |
+| AppShell navigation | beUI `animated-sidebar` and `bounce-sidebar`, MIT, [animated raw](https://beui.dev/r/animated-sidebar/raw), [animated registry item](https://beui.dev/r/animated-sidebar.json), [bounce raw](https://beui.dev/r/bounce-sidebar/raw), [bounce registry item](https://beui.dev/r/bounce-sidebar.json), retrieved 2026-09-19; animated raw SHA-256 `e78473dbbb235a856fa1696dce81ee7663b14ae0cb22e5f795bb96551f987a0c`; animated registry JSON SHA-256 `e821e9fe78f217d569701d85c521611f88b196795f521c9272784a0e30702cf2`; bounce raw SHA-256 `62f577208fde0dd7317d96f6b996019ba72d4b2c416ceba361fa0c4bece061c5`; bounce registry JSON SHA-256 `08b7f9778226417cd3d9bf0eb1618ee4e2a620953261f4ecf75e3b6201a63ad3` | `packages/beds/src/layout.tsx` adopts only compatible motion/anatomy: a reduced-motion guarded shell grid interpolation, a scoped active-row `layoutId` indicator and the bounce source's spring intent. BEDS preserves its public AppShell/SidebarSection/NavItem APIs, 264px/62px geometry, 31px/40px rows, native mobile drawer, skip link, inert/focus restoration, logical RTL placement and locked-button semantics. beUI's provider/composable API, 16rem/4.25rem widths, Ctrl/Cmd+B shortcut, portal dialog ownership and custom item model are not exposed. Focused `navigation-beui.spec.ts` covers desktop/mobile, light/dark, icon state, hover/pressed, RTL drawer, locked aria/disabled and geometry. No runtime beUI import. |
+| SearchDialog | beUI `morphing-search`, MIT, [raw](https://beui.dev/r/morphing-search/raw), [registry item](https://beui.dev/r/morphing-search.json), retrieved 2026-09-19; raw SHA-256 `e7b5f55159f78d83df0754705980b04784ad7214f92fb87d3bcc82102729996d`; registry JSON SHA-256 `959dcdab4757566087e075bba41cdaf0c613e8be247170cf08d188e53ae173d8` | NO_FIT; no source logic or motion was adopted. The source owns an uncontrolled trigger-to-dialog morph, local filtering/categories, `className`/icon escapes and a custom portal/role/scroll-lock lifecycle. BEDS SearchDialog owns a controlled native `<dialog>`, caller-owned async/loading/error/filter state, labels, disabled identity, IME-safe query editing and return-focus semantics. `CommandPalette` remains the compatible beUI adaptation. |
+| EmptyState | beUI `not-found`, MIT, [raw](https://beui.dev/r/not-found/raw), retrieved 2026-09-19; raw SHA-256 `df94905c8d6bbf61e8b1bc02382d62f05aeb9fe84c21c18e3acdd3c0d024ea1d`; registry endpoint returned HTTP 404 | NO_FIT for direct replacement: the source is an expressive 404/illustration pattern, not the compact `EmptyState`/`EmptyStateCard` icon-title-description-action contract. BEDS keeps its deterministic accessible empty-state anatomy; a future display-only illustration may be separately specified. No source code or new capability adopted. |
+| Carousel / PagedCarousel / HorizontalRail | beUI `cylinder-carousel` and `marquee`, MIT, [cylinder raw](https://beui.dev/r/cylinder-carousel/raw), [cylinder registry item](https://beui.dev/r/cylinder-carousel.json), [marquee raw](https://beui.dev/r/marquee/raw), [marquee registry item](https://beui.dev/r/marquee.json), retrieved 2026-09-19; cylinder raw SHA-256 `2a0ee658595e356985ae0b76009201506f74c0f7e7675c1de2a32e5ada57d8d3`; cylinder registry JSON SHA-256 `fd905d596940706df4d140dcfba6ac8af564418e1bb66a2f111a640eccba9ba0`; marquee raw SHA-256 `d8d1d371d0d2c800e4ddfd8293f1141b625f084ff7d9b12ca108c37d0b1512d4`; marquee registry JSON SHA-256 `41f83bb7a912ac4fe7d2b19e203d9e8383eae92bfb1dc50f48571e5164e25c82` | DEFERRED_REQUIREMENT: cylinder-carousel introduces a draggable spring/projection/arc/auto-rotate spatial model, and marquee introduces duplicated infinite CSS tracks and direction/speed controls. Neither substitutes the current finite/manual native-scroll and reduced-motion/pause/visibility contracts. Preserve existing BEDS behavior; future opt-in spatial/infinite patterns need their own public state and accessibility contract. |
+| Popover | beUI `popover`, MIT, [raw](https://beui.dev/r/popover/raw), [registry item](https://beui.dev/r/popover.json), retrieved 2026-09-19; raw SHA-256 `79ec5103702ab4c5d4802b6533b8b73219cf1695c4461ac63a60a4a8e60ae8ef`; registry JSON SHA-256 `5c0c3f5141c136f19d5ef6248189a7521fcd26f033a857620f2e6482bc6d73db` | NO_FIT/no new public export: the source's goo clip-path morph, hover/click modes, render-prop compound API and custom touch positioning do not match the existing native/shared anchored mechanics in Tooltip, Select and DropdownMenu. Preserve those contracts rather than introduce a generic Popover capability. |
+| DataTable | beUI `table`, MIT, [raw](https://beui.dev/r/table/raw), [registry item](https://beui.dev/r/table.json), retrieved 2026-09-19; raw SHA-256 `7496bd8522412b5ec050a41b47d493a4292a5a49919b2b9fbbd591e4dbca543f`; registry JSON SHA-256 `45f58d7dcb5528877fc4581aa69d363a22f123f4e58ac60dd89ff604fc4b4904` | DEFERRED_REQUIREMENT: source adds virtualization, sorting, selection, resize/reorder, editable cells and menus. Those are new capabilities and state ownership, not a compatible motion/anatomy slice for the current read-only controlled BEDS DataTable. Keep the existing contract until a separately approved capability table exists. |
+| Notice / Skeleton / Avatar | No matching free beUI raw slug resolved for `notice`, `skeleton` or `avatar` on 2026-09-19; raw endpoints returned HTTP 404 | No beUI source, license or runtime capability was adopted. BEDS keeps Notice's alert/status and dismiss semantics, Skeleton's aria-hidden static placeholder, and Avatar's deterministic initials plus keyed image-failure fallback. |
+
+## F3 numeric/data decisions — 2026-09-19
+
+The full decision record is [F3 migration decisions](F3-MIGRATION-DECISIONS.md).
+The adopted motion uses existing local BEDS adaptations of beUI `number`
+(`https://beui.dev/r/number/raw`, MIT) and `number-ticker`
+(`https://beui.dev/r/number-ticker/raw`, MIT); both were rechecked on
+2026-09-19. `AccountCredits`, `Metric` and `PricingCard` receive typed numeric
+values and host formatters where motion is meaningful. Localized display labels
+are never parsed. No runtime beUI import is added.
+
+The same review records explicit F3 NO_FIT decisions for beUI `table`,
+`adaptive-stepper` and the absent `kanban` slug (HTTP 404), plus the
+`swipeable-list` candidate whose mobile swipe/action contract cannot preserve
+the controlled BEDS `ApplicationBoard` lanes and move model. These are resolved
+decisions, not open migration rows.
+
+## F4 Processing adaptation — 2026-09-19
+
+`ProcessingView` adopts only the status-mark swap and segment-fill intent from
+beUI `todo-list`, MIT: [raw source](https://beui.dev/r/todo-list/raw), [registry
+item](https://beui.dev/r/todo-list.json), [repository](https://github.com/starc007/ui-components).
+Retrieved 2026-09-19. Raw SHA-256
+`ee3b0baabf79fb941f0affbc21e9043c93cd02e59f71ed3f37d55702912cd210`; registry
+JSON SHA-256
+`f247b5cc7c399e851ddf91660ddfa462c7edcf59ecbac01b6a7139d13e86758`; repository
+main HEAD `90c29d7f80f661263f7b424629738e40a5a48db7`; MIT license SHA-256
+`9e27b491d5691a1bd95708e79de23beb2962f33fe6c1ee31ab639f43009a0b20`.
+
+The local adaptation stays in `packages/beds/src/processing.tsx` and
+`meter-segments.tsx`. BEDS preserves the public ProcessingView API, numbered
+28px tiles, host-owned timing, 95% waiting cap, pause/offscreen/reduced-motion
+contracts and final ARIA values. ATS labels and numeric text are host-provided
+and static from first render; only the internal 28-segment fill reveals. The
+source collapsible list, completion counter, auto-collapse, detail model and
+public styling escapes are not exposed. `loading-states`, `agent-activity`,
+`tool-result` and `file-diff` remain outside F4 because their state models do
+not match this public contract.
+
 ## Surface matrix
 
 | Source surface | Inspected | Remaining U |

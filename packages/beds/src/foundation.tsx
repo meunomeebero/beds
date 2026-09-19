@@ -40,14 +40,18 @@ export function Icon({ name, purpose = 'navigation' }: { name: IconName; purpose
  * Upstream Tailwind classes, `cn` helper and easing module are dropped; motion intent and
  * in-view/reduced-motion behavior are re-expressed with BEDS easing and tokens.
  * Missing evidence stays missing: a null or non-finite value never animates toward a fabricated number.
+ * Without `initialValue`, the first frame is the caller's real value and no
+ * invented zero is shown. Pass `initialValue` only when it is a known prior
+ * value from the same controlled source.
  */
-export function AnimatedNumber({ value, format, fallback = '—', duration = 1.1, startOnView = false }: {
-  value: number | null; format: (value: number) => string; fallback?: string; duration?: number; startOnView?: boolean;
+export function AnimatedNumber({ value, format, fallback = '—', duration = 1.1, startOnView = false, initialValue }: {
+  value: number | null; format: (value: number) => string; fallback?: string; duration?: number; startOnView?: boolean; initialValue?: number;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, amount: .6 });
   const prefersReducedMotion = useReducedMotion();
-  const [frame, setFrame] = useState(0);
+  const animationStart = value !== null && Number.isFinite(initialValue) ? initialValue : value;
+  const [frame, setFrame] = useState(animationStart ?? 0);
   const unavailable = value === null || !Number.isFinite(value);
   const waitingForView = startOnView && !inView;
 
@@ -59,14 +63,19 @@ export function AnimatedNumber({ value, format, fallback = '—', duration = 1.1
       return;
     }
 
+    if (animationStart === value || animationStart === null || animationStart === undefined) {
+      setFrame(value);
+      return;
+    }
+
     const snapToInteger = Number.isInteger(value);
-    const controls = animate(0, value, {
+    const controls = animate(animationStart, value, {
       duration,
       ease: [.16, 1, .3, 1],
       onUpdate: current => setFrame(snapToInteger ? Math.round(current) : current),
     });
     return () => controls.stop();
-  }, [unavailable, waitingForView, prefersReducedMotion, value, duration]);
+  }, [animationStart, unavailable, waitingForView, prefersReducedMotion, value, duration]);
 
   if (unavailable) return <span className="es-animated-number">{fallback}</span>;
 

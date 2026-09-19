@@ -14,7 +14,7 @@ No sidebar replacement,workspace switcher requirement,price or billing policy.
 | Prop | Meaning |
 |---|---|
 | `plan`, `label` |Host-provided plan heading and localized balance label |
-| `balance.status=ready` |Finite nonnegative numeric `value`;localized `formattedValue`;optional truthful `limit`. Host keeps formatted/numeric values consistent. Blank format falls back to raw number |
+| `balance.status=ready` |Finite nonnegative numeric `value`;localized `formattedValue`;optional truthful `limit`. Host keeps formatted/numeric values consistent. Optional `formatValue(value)` is the typed formatter used for a live balance animation; the component never parses `formattedValue`. |
 | `balance.status=loading/unavailable/error` |Required informative `message`;no old number,no zero,no quota graphic. Error explains retry/recovery |
 | `invalidValueLabel` |Required localized fallback for negative/nonfinite numeric data;never render NaN/Infinity or a fabricated zero |
 | `action` |Optional label/callback/disabled/busy. Native primary button;host chooses details/retry/upgrade and owns authorization/outcome. No inferred purchase or automatic retry |
@@ -41,6 +41,12 @@ it does not mean renewal,delivery,successful payment or a guarantee.
 opaque menu surface;subtle empty segments remain distinct from the canvas.
 Account footer owns8px outside inset;card owns12px inside,r8,16px section rhythm.
 Existing menu geometry is not enlarged to fit the reference screenshot scale.
+
+When `formatValue` is supplied, a controlled change between two ready balances
+uses the shared `AnimatedNumber` from the numeric values; the first frame keeps
+the caller-rendered `formattedValue` static. Without it, the display remains
+static. This keeps localized separators and currency conventions in host code
+and never derives a number from display text. Reduced motion settles immediately.
 
 Keyboard uses the existing AccountMenu:open → first action →Tab→credits action;
 Escape restores trigger. Credit callback decides whether to close. Loading

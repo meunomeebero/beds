@@ -14,7 +14,7 @@ export { DataTable, HorizontalRail, Carousel, ScrollableList, Pagination, type D
 export { PagedCarousel, type PagedCarouselProps } from './paged-carousel';
 export { DisclosureText, LabelField, DisclosedRecords } from './disclosure';
 export { SettingsForm, SettingsRow, SettingsGroup, IntegrationRow, RecentItem, PlanCard, AccountMenu } from './patterns';
-export { Badge, StatusDot, Notice, EmptyState, Skeleton, LoadingIndicator, ProgressBar, SegmentedMeter, Metric, DataList } from './feedback';
+export { Badge, StatusDot, Notice, EmptyState, Skeleton, LoadingIndicator, ProgressBar, SegmentedMeter, Metric, DataList, type MetricProps } from './feedback';
 export { ProcessingView, type ProcessingViewProps, type ProcessingStep, type ProcessingStory } from './processing';
 export { ResultLayout, ResultScore, ResultFindings, ResultSection, ResultOffer } from './results';
 export type { ResultLayoutProps, ResultScoreProps, ResultFindingsProps, ResultSectionProps, ResultOfferProps, ResultAction } from './results';

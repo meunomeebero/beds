@@ -1,6 +1,6 @@
-import { useId, type ReactNode } from 'react';
+import { useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { AnimatePresence, motion, useReducedMotion, type Variants } from 'motion/react';
-import { Icon, type IconName } from './foundation';
+import { AnimatedNumber, Icon, type IconName } from './foundation';
 import { MeterSegments, meterFraction as fraction } from './meter-segments';
 import { EASE_IN_OUT, EASE_OUT } from './lib/ease';
 import { cn } from './lib/utils';
@@ -122,8 +122,36 @@ export function SegmentedMeter({ label, value, max = 100, tone = 'neutral' }: { 
   const ratio = fraction(value, max);
   return <div className="es-segmented-meter" data-tone={tone}><div className="es-meter-label"><span>{label}</span><span>{ratio === null ? '—' : Math.round(ratio * max)}</span></div><MeterSegments label={label} value={value} max={max} tone={tone} /></div>;
 }
-export function Metric({ label, value, description }: { label: string; value: string; description?: string }) {
-  return <div className="es-metric"><span>{label}</span><strong>{value}</strong>{description && <small>{description}</small>}</div>;
+export type MetricProps = {
+  label: string;
+  /** Caller-rendered fallback; never parsed to recover a numeric value. */
+  value: string;
+  /** Optional authoritative numeric value for a live metric. */
+  numericValue?: number;
+  /** Localized formatter paired with numericValue. */
+  formatValue?: (value: number) => string;
+  description?: string;
+};
+
+function AnimatedMetricValue({ value, fallback, format }: { value: number; fallback: string; format: (value: number) => string }) {
+  const previous = useRef<number | null>(null);
+  const [animatedFrom, setAnimatedFrom] = useState<number | null>(null);
+
+  useLayoutEffect(() => {
+    const prior = previous.current;
+    previous.current = value;
+    if (prior !== null && prior !== value) setAnimatedFrom(prior);
+  }, [value]);
+
+  if (animatedFrom === null) return <>{fallback}</>;
+  return <AnimatedNumber value={value} initialValue={animatedFrom} format={format} fallback={fallback} />;
+}
+
+export function Metric({ label, value, numericValue, formatValue, description }: MetricProps) {
+  const canAnimate = numericValue !== undefined && Number.isFinite(numericValue) && formatValue !== undefined;
+  return <div className="es-metric"><span>{label}</span><strong>{canAnimate
+    ? <AnimatedMetricValue value={numericValue} format={formatValue} fallback={value} />
+    : value}</strong>{description && <small>{description}</small>}</div>;
 }
 export function DataList({ label, children }: { label: string; children: ReactNode }) {
   const id = useId();

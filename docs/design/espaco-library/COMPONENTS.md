@@ -56,7 +56,7 @@ No generated destinations or product state. [Contract](LANDING-FOOTER.md).
 
 | Component | Contract | Evidence / constraint |
 |---|---|---|
-|`ApplicationBoard` |`label/columns`;optional `onMove/announcement/emptyLabel` |Controlled status lanes;derived counts;explicit allowed moves;compact shared ApplicationCard;no drag/persistence;[contract](KANBAN.md) |
+|`ApplicationBoard` |`label/columns`;optional `onMove/announcement/emptyLabel` |Controlled status lanes;derived counts;explicit allowed moves;compact shared ApplicationCard;no drag/persistence;[contract](KANBAN.md). F3 NO_FIT for beUI `kanban` (registry slug 404) and `swipeable-list`: mobile swipe actions/refresh would add a different item contract and interaction model |
 
 `ApplicationCard purpose="kanban"`: named compact layout, small folio beside
 identity, options menu for supplied destinations; default purpose unchanged.
@@ -142,7 +142,7 @@ Primary navigation reuses `NavItem` inside `SidebarSection purpose="primary"`:4p
 
 Welcome action context is a source-measured fixed button purpose:40px high,12px radius,14px horizontal padding,14/16px medium label. Connection action uses40px height/10px radius. These are not general size APIs; use each with its matching context.
 
-Button, IconButton, IconToggleButton, TextField, TextAreaField, SearchField, Checkbox, Switch, SegmentedControl and the activity/connection Tabs are migrated to Tailwind utilities + `motion/react` (F1, beUI-sourced, 2026-09-17): API and source-measured geometry preserved, legacy `.es-*` class hooks dropped for element/role/`data-purpose` selectors, interaction motion in the [motion contract](STATES.md). Checkbox/Switch keep a full-area invisible native input (`inset-0`, `opacity-0`) so the real element owns the >=44px coarse hit-target. The settings Tabs variant stays legacy CSS pending migration.
+Button, IconButton, IconToggleButton, TextField, TextAreaField, SearchField, Checkbox, Switch, SegmentedControl and all Tabs variants are migrated to Tailwind utilities + `motion/react` (F1/F2, beUI-sourced, 2026-09-19): API and source-measured geometry preserved, legacy `.es-*` class hooks dropped for element/role/`data-purpose` selectors, interaction motion in the [motion contract](STATES.md). Checkbox/Switch keep a full-area invisible native input (`inset-0`, `opacity-0`) so the real element owns the >=44px coarse hit-target. Settings keeps its measured scroll lane, RTL keyboard behavior, forced-colors indicator and 2px underline; the shared layout indicator is reduced-motion guarded.
 
 ## Overlays — 10
 
@@ -193,14 +193,14 @@ Unlike the old prototype, portable AccountMenu exposes workspace and theme callb
 |`Toaster` + `toast` |Mount one `Toaster`; `toast(message|{id,message,tone,action,lifetime})`; `dismissToast(id)` |Fixed top-center notification stack adapted from beUI `animated-toast-stack`; upsert by id; neutral/pending/success/warning/error/info; pending/error/warning/action notices persist; explicit close with translated dismissLabel and focus recovery; informational minimum5000ms,0 persists; hover/focus/hidden document pauses; scrollable queue retains every recovery; no position, motion or styling escape |
 |`ProgressBar` |`label/value`; max100 default; tone neutral/brand |Native progress for available values; unavailable status; guarded finite bounds; A generic data primitive |
 |`SegmentedMeter` |`label/value`; max100 default; tone neutral/brand/success |28 vertical segments,16px high,2px gap/radius;shared internal anatomy with ApplicationCard;label/ARIA value authoritative;generic quantization nearest,score quantization floor |
-|`Metric` |`label/value`; optional description |Fixed contextual display; populated source analytics U; A |
+|`Metric` |`label/value`; optional `numericValue/formatValue` and description |Fixed contextual display; typed numeric animation only when the caller supplies both live value and formatter; never parses the display string |
 |`DataList` |`label/children` |Named grouping of library rows; not a source data-table implementation |
-|`DataTable` |`label/unavailableLabel/columns/rows/state` |Native table semantics; fixed 640px narrow scroll lane; its region joins Tab order only with horizontal overflow; caller controls data and recovery; no selection/sorting |
+|`DataTable` |`label/unavailableLabel/columns/rows/state` |Native table semantics; fixed 640px narrow scroll lane; its region joins Tab order only with horizontal overflow; caller controls data and recovery; no selection/sorting; beUI `table` is explicit F3 NO_FIT because virtualization,selection,resize/reorder,editing and menus would change this contract |
 |`HorizontalRail` |`label/children` |Fixed manual 272–320px card lane; touch, trackpad and native focused horizontal-key scroll only; no autoplay, pagination, card state or style escape |
 |`Carousel` |`label/children`;optional localized `interactionHint` |Continuous forward34px/s circular rail;no visible playback/arrows;native scroll;hover/focus pauses,touch/wheel resumes after1200ms idle;Space on focused region toggles persistent pause;offscreen/hidden/reduced-motion stops;no motion tuning |
 |`PagedCarousel` |`label/previousLabel/nextLabel/slideLabel({index,count})/children` |Finite manual gallery;one full-width slide per snap;drag/touch and adjacent buttons;Left/Right on focused region jump without animation;reduced motion makes button navigation instant;no autoplay,loop,plugins or visual escape hatch |
 |`ScrollableList` |`label/children` |Fixed 192px vertical list region; all children remain rendered; joins Tab order only when it overflows; no virtualization, ordering or data state |
-|`Pagination` |`label/page/pageCount/summary({page,pageCount})/previousLabel/nextLabel/onPageChange` |Controlled one-based adjacent navigation; bounds normalize non-finite/fractional values; summary receives the same normalized values; responsive stack; no request or route behavior |
+|`Pagination` |`label/page/pageCount/summary({page,pageCount})/previousLabel/nextLabel/onPageChange` |Controlled one-based adjacent navigation; bounds normalize non-finite/fractional values; summary receives the same normalized values; responsive stack; no request or route behavior; beUI `adaptive-stepper` is explicit F3 NO_FIT because quantity-stepper semantics and rolling numeric UI do not preserve page navigation |
 
 `value=0` is valid. Null/non-finite value or invalid max yields unavailable; finite out-of-range values clamp defensively. No arbitrary segment count, dimensions or score thresholds exposed. Before/after meaning and source data accuracy remain caller responsibilities.
 
@@ -245,7 +245,7 @@ Exact type exports and consumer examples: [Decision contract](DECISIONS.md).
 
 | Component | API | Evidence / constraint |
 |---|---|---|
-|`PricingCard` |`title/description/image/price/featuresLabel/features/action`;optional featured/actionNote/feedback/headingLevel |Transparent360px maximum,r24,p20;4:1 art;literal price and billing description;semantic benefit list;one full-width40/44px pill action;caller owns requests and outcomes |
+|`PricingCard` |`title/description/image/price/featuresLabel/features/action`;optional featured/actionNote/feedback/headingLevel |Transparent360px maximum,r24,p20;4:1 art;literal price and billing description;optional typed `price.amount` animates only a controlled real change;semantic benefit list;one full-width40/44px pill action;caller owns requests and outcomes |
 |`PricingSection` |`title/plans`;optional description/mark/headingLevel |Centered720px maximum;two columns when space permits,one below664px available width;named section and semantic heading hierarchy;only first explicitly featured plan gets brand emphasis |
 
 Full API,source adaptation and validation: [Pricing contract](PRICING.md).

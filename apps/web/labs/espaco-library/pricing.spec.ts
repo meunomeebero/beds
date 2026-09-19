@@ -86,6 +86,17 @@ test('selection is explicit, recoverable and never creates an actual subscriptio
   await expect(starter.getByRole('button')).toHaveAccessibleDescription('Sem cobrança neste exemplo. Plano atual apenas nesta demonstração.');
 });
 
+test('price motion uses a typed controlled amount and never parses the literal label', async ({ page }) => {
+  await page.goto('/?view=pricing&theme=dark&brand=curriculol');
+  const price = page.locator('.es-pricing-card[data-featured=true] .es-pricing-price');
+  await expect(price).toHaveText('R$ 49/mês');
+  await expect(price.locator('.es-animated-number')).toHaveCount(0);
+
+  await page.getByRole('switch', { name: 'Testar texto longo' }).click();
+  await expect(price.locator('.es-animated-number')).toHaveCount(1);
+  await expect(price).toHaveText('R$ 1.249,90 por mês');
+});
+
 test('long prices and copy reflow, with single-plan and empty-benefit alternatives', async ({ page }, info) => {
   for (const theme of ['light', 'dark']) {
     await page.goto('/?view=pricing&theme=' + theme + '&brand=curriculol');
