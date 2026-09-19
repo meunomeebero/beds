@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test('null and non-finite values never flash a fabricated frame before ready', async ({ page }) => {
   await page.goto('/?view=animated-number&theme=dark');
   const value = page.locator('.es-animated-number');
-  const state = page.getByTestId('animated-number-state');
+  const state = page.locator('.es-animated-number');
   await expect(value).toHaveText('Indisponível');
 
   await page.getByRole('button', { name: 'Pronto', exact: true }).click();
@@ -25,9 +25,9 @@ test('startOnView and reduced motion keep the ready first frame truthful', async
   await expect(page.getByRole('button', { name: 'Iniciar ao entrar', exact: true })).toBeVisible();
 
   await page.getByRole('button', { name: 'Pronto', exact: true }).click();
-  await expect(page.getByTestId('animated-number-state')).toHaveAttribute('data-frame-trace', /^(?!.*0)/);
+  await expect(page.locator('.es-animated-number')).toHaveAttribute('data-frame-trace', /^(?!.*0)/);
   await page.getByRole('button', { name: 'Atualizar 84', exact: true }).click();
-  await expect(page.getByTestId('animated-number-state')).toHaveAttribute('data-frame-trace', /84$/);
-  await page.locator('[aria-label="Número animado"]').scrollIntoViewIfNeeded();
+  await expect(page.locator('.es-animated-number')).toHaveAttribute('data-frame-trace', /84$/);
+  await page.locator('.es-animated-number').scrollIntoViewIfNeeded();
   await expect(page.locator('.es-animated-number')).toHaveText('84');
 });

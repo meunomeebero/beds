@@ -1,11 +1,13 @@
 import { useLayoutEffect, useRef, useState } from 'react';
-import { AnimatedNumber, Button, DesignSystemProvider, Inline, Stack, Text, type Theme } from 'beds';
+import { AnimatedNumber, AppShell, Button, DesignSystemProvider, Inline, PageHeader, SidebarHeader, Stack, Surface, Text, brands, type Theme } from 'beds';
 
 type NumberState = 'unavailable' | 'invalid' | 'ready' | 'updated';
 
 export default function AnimatedNumberPage() {
   const params = new URLSearchParams(window.location.search);
   const [theme, setTheme] = useState<Theme>(params.get('theme') === 'light' ? 'light' : 'dark');
+  const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [state, setState] = useState<NumberState>('unavailable');
   const [startOnView, setStartOnView] = useState(false);
   const frames = useRef<number[]>([]);
@@ -17,15 +19,14 @@ export default function AnimatedNumberPage() {
   };
 
   useLayoutEffect(() => {
-    document.querySelector('[data-testid="animated-number-state"]')?.setAttribute('data-frame-trace', frames.current.join(','));
+    document.querySelector('.es-animated-number')?.setAttribute('data-frame-trace', frames.current.join(','));
   }, [state, startOnView]);
 
-  return <DesignSystemProvider theme={theme} brandColor="#d0f300" onThemeChange={setTheme}>
-    <main>
+  return <DesignSystemProvider theme={theme} brandColor={brands.curriculol} onThemeChange={setTheme}>
+    <AppShell collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} contentWidth="home" sidebar={<SidebarHeader><Text>Fixture F3</Text></SidebarHeader>}>
       <Stack gap="section">
+        <PageHeader title="AnimatedNumber regression" description="Controlled synthetic values for first-frame, visibility and reduced-motion checks." />
         <Stack>
-          <Text variant="page-title">AnimatedNumber regression</Text>
-          <Text tone="secondary">Controlled synthetic values for first-frame, visibility and reduced-motion checks.</Text>
           <Inline>
             <Button label="Indisponível" compact onClick={() => setState('unavailable')} />
             <Button label="Inválido" compact onClick={() => setState('invalid')} />
@@ -34,12 +35,12 @@ export default function AnimatedNumberPage() {
             <Button label={startOnView ? 'Iniciar ao entrar' : 'Iniciar imediatamente'} compact onClick={() => setStartOnView(previous => !previous)} />
           </Inline>
         </Stack>
-        <div style={{ minHeight: '1200px' }} aria-hidden="true" />
-        <section aria-label="Número animado" data-testid="animated-number-state">
+        {Array.from({ length: 16 }, (_, index) => <Text key={index} tone="secondary">Área de rolagem sintética para validar a animação somente quando o valor entra na viewport.</Text>)}
+        <Surface role="panel"><Stack gap="tight">
           <Text variant="label">Valor</Text>
           <AnimatedNumber value={value} initialValue={initialValue} format={format} fallback="Indisponível" startOnView={startOnView} />
-        </section>
+        </Stack></Surface>
       </Stack>
-    </main>
+    </AppShell>
   </DesignSystemProvider>;
 }
