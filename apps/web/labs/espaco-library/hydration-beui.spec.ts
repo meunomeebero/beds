@@ -33,6 +33,17 @@ test('AppShell hydrates on a mobile matchMedia snapshot without mismatch errors'
     }));
     expect(firstFrame.grid).not.toMatch(/^264px/);
     expect(firstFrame.documentWidth).toBeLessThanOrEqual(firstFrame.viewportWidth);
+    const segmented = page.getByRole('radiogroup');
+    await expect(segmented).toHaveCount(2);
+    const radioNames = await segmented.locator('input[type="radio"]').evaluateAll(inputs => inputs.map(input => input.getAttribute('name')));
+    expect(new Set(radioNames).size).toBe(2);
+    await expect(segmented.nth(0).locator('[data-segmented-indicator]')).toHaveCount(1);
+    await expect(segmented.nth(1).locator('[data-segmented-indicator]')).toHaveCount(1);
+    await segmented.nth(0).getByRole('radio', { name: 'Compact', exact: true }).press('ArrowRight');
+    await expect(segmented.nth(0).getByRole('radio', { name: 'Comfortable', exact: true })).toBeChecked();
+    await expect(segmented.nth(1).getByRole('radio', { name: 'Allow', exact: true })).toBeChecked();
+    await expect(segmented.nth(0).locator('[data-segmented-indicator]')).toHaveCount(1);
+    await expect(segmented.nth(1).locator('[data-segmented-indicator]')).toHaveCount(1);
   } finally {
     await (server as ViteDevServer).close();
   }

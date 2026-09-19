@@ -296,14 +296,26 @@ for (const theme of ['light', 'dark'] as const) {
       await expect(sibling.locator('[data-segmented-indicator]')).toHaveCount(1);
     });
 
-    test('SegmentedControl exposes settling, interruption, press feedback and reduced motion states', async ({ page }) => {
+    test('SegmentedControl exposes settling, interruption, press feedback and reduced motion states', async ({ page }, testInfo) => {
       const segments = page.getByRole('radiogroup', { name: 'Densidade demonstrativa' });
       const compact = segments.getByRole('radio', { name: 'Compacto', exact: true });
       const comfortable = segments.getByRole('radio', { name: 'Confortável', exact: true });
       const compactVisual = compact.locator('xpath=following-sibling::span');
       await compact.focus();
       await expect(compactVisual).toHaveCSS('outline-width', '2px');
-      await expect(compactVisual).toHaveCSS('outline-offset', '2px');
+      await expect(compactVisual).toHaveCSS('outline-offset', '-2px');
+      const focusPaint = await compactVisual.evaluate(element => {
+        const visual = element.getBoundingClientRect();
+        const group = element.parentElement?.parentElement?.getBoundingClientRect();
+        const styles = getComputedStyle(element);
+        const width = Number.parseFloat(styles.outlineWidth);
+        const offset = Number.parseFloat(styles.outlineOffset);
+        return { left: visual.left - width - offset, right: visual.right + width + offset, groupLeft: group?.left, groupRight: group?.right, viewport: innerWidth };
+      });
+      expect(focusPaint.left).toBeGreaterThanOrEqual(focusPaint.groupLeft!);
+      expect(focusPaint.right).toBeLessThanOrEqual(focusPaint.groupRight!);
+      expect(focusPaint.right).toBeLessThanOrEqual(focusPaint.viewport);
+      await page.screenshot({ path: testInfo.outputPath(`segmented-focus-${theme}-${testInfo.project.name}.png`), fullPage: false });
       const compactBounds = await compactVisual.boundingBox();
       expect(compactBounds).not.toBeNull();
       await page.mouse.move(compactBounds!.x + compactBounds!.width / 2, compactBounds!.y + compactBounds!.height / 2);
@@ -315,7 +327,9 @@ for (const theme of ['light', 'dark'] as const) {
       await page.waitForTimeout(220);
       await expect(compactVisual).toHaveCSS('transform', 'none');
 
-      await compact.press('ArrowRight');
+      const comfortableBounds = await comfortable.locator('xpath=following-sibling::span').boundingBox();
+      expect(comfortableBounds).not.toBeNull();
+      await page.mouse.click(comfortableBounds!.x + comfortableBounds!.width / 2, comfortableBounds!.y + comfortableBounds!.height / 2);
       await expect(comfortable).toBeChecked();
       const indicator = segments.locator('[data-segmented-indicator]');
       await page.waitForTimeout(10);
@@ -327,12 +341,7 @@ for (const theme of ['light', 'dark'] as const) {
       await comfortable.press('ArrowLeft');
       await expect(compact).toBeChecked();
       await expect(compact).toBeFocused();
-      await page.waitForTimeout(500);
-      const settled = await indicator.evaluate(element => {
-        const transform = getComputedStyle(element).transform;
-        return transform === 'none' ? 0 : Math.abs(new DOMMatrix(transform).e);
-      });
-      expect(settled).toBeLessThan(1);
+      await expect.poll(async () => indicator.evaluate(element => getComputedStyle(element).transform)).toBe('none');
 
       await page.emulateMedia({ reducedMotion: 'reduce' });
       await page.reload();
@@ -349,7 +358,9 @@ for (const theme of ['light', 'dark'] as const) {
       const forcedVisual = forcedCompact.locator('xpath=following-sibling::span');
       await forcedCompact.focus();
       await expect(forcedVisual).toHaveCSS('outline-width', '2px');
+      await expect(forcedVisual).toHaveCSS('outline-offset', '-2px');
       await expect(forcedVisual).toHaveCSS('outline-style', 'solid');
+      await page.screenshot({ path: testInfo.outputPath(`segmented-focus-forced-${theme}-${testInfo.project.name}.png`), fullPage: false });
     });
 
     test('SegmentedControl preserves historical arrow order in RTL', async ({ page }) => {
@@ -361,6 +372,32 @@ for (const theme of ['light', 'dark'] as const) {
       await compact.press('ArrowRight');
       await expect(comfortable).toBeFocused();
       await expect(comfortable).toBeChecked();
+    });
+
+    test('SegmentedControl keeps RTL focus and content inside a narrow lane', async ({ page }) => {
+      await page.setViewportSize({ width: 320, height: 844 });
+      await page.goto(`/?view=components&theme=${theme}&ber10=1`);
+      await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
+      const group = page.getByRole('radiogroup', { name: 'BER-10 long labels' });
+      const shortOption = group.getByRole('radio', { name: 'Short', exact: true });
+      const endOption = group.getByRole('radio', { name: 'Another localized choice', exact: true });
+      await shortOption.press('End');
+      await expect(endOption).toBeFocused();
+      await expect(endOption).toBeChecked();
+      const state = await endOption.locator('xpath=following-sibling::span').evaluate(element => {
+        const visual = element.getBoundingClientRect();
+        const group = element.parentElement?.parentElement?.getBoundingClientRect();
+        const text = element.querySelector('span.relative')?.getBoundingClientRect();
+        const styles = getComputedStyle(element);
+        const width = Number.parseFloat(styles.outlineWidth);
+        const offset = Number.parseFloat(styles.outlineOffset);
+        return { textLeft: text?.left, textRight: text?.right, paintLeft: visual.left - width - offset, paintRight: visual.right + width + offset, groupLeft: group?.left, groupRight: group?.right, scrollLeft: element.parentElement?.parentElement?.scrollLeft };
+      });
+      expect(state.textLeft).toBeGreaterThanOrEqual(state.groupLeft!);
+      expect(state.textRight).toBeLessThanOrEqual(state.groupRight!);
+      expect(state.paintLeft).toBeGreaterThanOrEqual(state.groupLeft! - 1);
+      expect(state.paintRight).toBeLessThanOrEqual(state.groupRight! + 1);
+      expect(state.scrollLeft).not.toBe(0);
     });
 
     test('SegmentedControl keeps a long localized option reachable at 320px', async ({ page }) => {
@@ -458,7 +495,7 @@ for (const theme of ['light', 'dark'] as const) {
       expect(state.scrollLeft).toBeLessThanOrEqual(state.maxScroll);
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
       expect(state.outlineWidth).toBe('2px');
-      expect(state.outlineOffset).toBe('2px');
+      expect(state.outlineOffset).toBe('-2px');
       expect(state.visualRight).toBeGreaterThan(state.groupLeft);
       expect(state.visualLeft).toBeLessThan(state.groupRight);
       await longOption.press('ArrowLeft');

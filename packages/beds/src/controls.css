@@ -36,6 +36,12 @@
   .es-root .es-segmented-choice>input:not(:disabled):not(:checked)+span:hover{color:var(--es-text)}
 }
 
+/* Segmented pills keep their 24px lane: the keyboard ring is painted inside the 22px visual, so overflow clipping cannot hide it. */
+.es-root .es-segmented-choice>input:focus-visible+.es-segmented-choice-span{outline-offset:-2px}
+@media(forced-colors:active){.es-root .es-segmented-choice>input:focus-visible+.es-segmented-choice-span{outline-color:Highlight}}
+/* RTL scroll ranges round fractional label widths to whole CSS pixels; one logical end pixel keeps the focused item fully revealable. */
+.es-root .es-segmented-control:dir(rtl){padding-inline-end:2px}
+
 /* Fixed dark selection roles adopted from the Lucy preview — scoped to the segmented control
    so the dialog and other data-variant surfaces keep their token background. */
 .es-root[data-theme=dark] .es-segmented-control:not([data-variant=joined]){background:var(--es-control)}
