@@ -1,8 +1,8 @@
 import { forwardRef, useEffect, useId, useRef, type ForwardedRef, type InputHTMLAttributes, type KeyboardEvent, type ReactNode } from 'react';
-import { AnimatePresence, animate, motion, useReducedMotion } from 'motion/react';
+import { AnimatePresence, animate, LayoutGroup, motion, useReducedMotion } from 'motion/react';
 import { Icon, type IconName } from './foundation';
 import { cn } from './lib/utils';
-import { EASE_OUT } from './lib/ease';
+import { EASE_OUT, SPRING_LAYOUT } from './lib/ease';
 import { useHoverCapable } from './lib/hooks/use-hover-capable';
 import './controls.css';
 
@@ -318,6 +318,7 @@ export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
 }) {
   const id = useId();
   const list = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion() ?? false;
   const selected = items.find(item => item.id === value && !item.disabled) ?? items.find(item => !item.disabled);
   const navigate = (event: KeyboardEvent<HTMLButtonElement>, current: string) => {
     if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
@@ -333,9 +334,12 @@ export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
     list.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[items.indexOf(next)]?.focus();
   };
   const connectionListStyle = variant === 'connection' ? { gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))`, minWidth: '560px' } : undefined;
-  const tabList = <div ref={list} className={cn(variant === 'connection' && 'grid items-center gap-0 w-full min-h-9 p-1 border-0 rounded-xl bg-subtle', variant === 'activity' && TABS_LIST_ACTIVITY, variant === 'settings' && 'es-tabs-list flex items-stretch gap-2 w-full min-w-0 px-2 pt-2 border-0 border-b border-border rounded-none bg-transparent overflow-x-auto overscroll-x-contain')} role="tablist" aria-label={label} style={connectionListStyle}>{items.map((item, index) => <button key={item.id} id={`${id}-tab-${index}`} type="button" role="tab" aria-controls={`${id}-panel-${index}`} aria-selected={selected?.id === item.id} tabIndex={selected?.id === item.id ? 0 : -1} disabled={item.disabled} onClick={() => onChange(item.id)} onKeyDown={event => navigate(event, item.id)} className={cn(variant === 'connection' && TABS_TAB_CONNECTION, variant === 'activity' && TABS_TAB_ACTIVITY, variant === 'settings' && 'es-settings-tab relative flex-none min-h-12 px-0 pb-4 pt-0.5 rounded-md bg-transparent shadow-none text-sm leading-5 font-normal', selected?.id === item.id && (variant !== 'settings') && TABS_TAB_SELECTED)}>{variant === 'settings' ? <span className="es-settings-tab-label block px-2.5 py-2 rounded-md">{item.label}</span> : item.label}</button>)}</div>;
+  const tabList = <div ref={list} className={cn(variant === 'connection' && 'grid items-center gap-0 w-full min-h-9 p-1 border-0 rounded-xl bg-subtle', variant === 'activity' && TABS_LIST_ACTIVITY, variant === 'settings' && 'es-tabs-list flex items-stretch gap-1 w-full min-w-0 px-1 pt-1 pb-0 border-0 border-b border-border rounded-none bg-transparent overflow-x-auto overscroll-x-contain [scrollbar-width:thin] [scroll-padding-inline:4px]')} role="tablist" aria-label={label} style={connectionListStyle}>{items.map((item, index) => {
+    const active = selected?.id === item.id;
+    return <button key={item.id} id={`${id}-tab-${index}`} type="button" role="tab" aria-controls={`${id}-panel-${index}`} aria-selected={active} tabIndex={active ? 0 : -1} disabled={item.disabled} onClick={() => onChange(item.id)} onKeyDown={event => navigate(event, item.id)} className={cn(variant === 'connection' && TABS_TAB_CONNECTION, variant === 'activity' && TABS_TAB_ACTIVITY, variant === 'settings' && 'es-settings-tab relative flex-none min-h-12 border-none px-0 pb-2 pt-0.5 rounded-md bg-transparent shadow-none text-sm leading-5 font-normal', active && (variant !== 'settings') && TABS_TAB_SELECTED)}>{variant === 'settings' ? <><span className="es-settings-tab-label block px-2.5 py-2 rounded-md">{item.label}</span>{active && <motion.span layoutId={`${id}-settings-indicator`} initial={false} transition={reduce ? { duration: 0 } : SPRING_LAYOUT} className="es-settings-tab-indicator" data-tabs-indicator aria-hidden="true" />}</> : item.label}</button>;
+  })}</div>;
   // `rounded-[16px]` is an arbitrary value: BEDS tokens only ship --radius (8px) and the Tailwind scale
   // (rounded-xl = 10px, rounded-2xl = 14px). 16px has no token, so the connection Tabs radius stays as an
   // explicit arbitrary value. Same convention as `rounded-[12px]` on the welcome variant.
-  return <div className={cn('es-tabs min-w-0', variant === 'connection' && 'rounded-[16px] overflow-hidden border border-border-subtle shadow-[0_1px_2px_var(--es-border-subtle)]')} data-variant={variant}>{variant === 'connection' ? <div className="es-tabs-connection-strip contain-inline-size w-full max-w-full min-w-0 overflow-x-auto p-2 border-b border-border-subtle">{tabList}</div> : tabList}{items.map((item, index) => <div key={item.id} id={`${id}-panel-${index}`} className={cn(variant === 'connection' ? 'es-tab-panel m-0 px-8 pt-4 pb-8 border-0 min-w-0' : 'mt-4 min-w-0', variant !== 'connection' && 'es-tab-panel')} role="tabpanel" aria-labelledby={`${id}-tab-${index}`} hidden={selected?.id !== item.id} tabIndex={0}>{item.content}</div>)}</div>;
+  return <LayoutGroup id={id}><div className={cn('es-tabs min-w-0', variant === 'connection' && 'rounded-[16px] overflow-hidden border border-border-subtle shadow-[0_1px_2px_var(--es-border-subtle)]')} data-variant={variant}>{variant === 'connection' ? <div className="es-tabs-connection-strip contain-inline-size w-full max-w-full min-w-0 overflow-x-auto p-2 border-b border-border-subtle">{tabList}</div> : tabList}{items.map((item, index) => <div key={item.id} id={`${id}-panel-${index}`} className={cn(variant === 'connection' ? 'es-tab-panel m-0 px-8 pt-4 pb-8 border-0 min-w-0' : variant === 'settings' ? 'mt-6 min-w-0' : 'mt-4 min-w-0', variant !== 'connection' && 'es-tab-panel')} role="tabpanel" aria-labelledby={`${id}-tab-${index}`} hidden={selected?.id !== item.id} tabIndex={0}>{item.content}</div>)}</div></LayoutGroup>;
 }
