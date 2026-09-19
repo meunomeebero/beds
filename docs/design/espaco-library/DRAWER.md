@@ -41,7 +41,7 @@ source CSS. Source chat, artwork and alternate window modes not copied.
 | Footer |16px block/24px inline;8px wrapping action gap;40px controls |
 | Narrow |16px inline safe-area inset;44px controls;full width |
 | Growth |Header max40%,footer max35%;each can scroll;sticky close;body consumes remainder |
-| Motion |Immediate repeated inspection;no new animation;shared control/reduced-motion behavior unchanged |
+| Motion |beUI Drawer adaptation: `SPRING_PANEL` panel entry/exit preserves the source full-travel `±100%` inline-end direction; reduced motion uses an opacity-only transition; native modal, inert background, scroll lock and focus recovery remain BEDS-owned. The earlier 2026-09-15 read-only advisory proposing bounded 16/8px travel was not implemented and is superseded by the later checkpoint approving the beUI/Motion expression |
 
 Transparent-card rule does not remove opaque overlay surfaces. Existing
 Dialog,SearchDialog,CommandPalette unchanged. No bottom-sheet,drag gesture,
@@ -97,14 +97,21 @@ inspected flow;not a whole-library conformance claim.
 Checks: `npm run verify` (type/build,89 components/90 tokens,docs/consumer
 guards,31 guard/routing tests,packed import/parity); explicit
 `node packages/beds/scripts/check-consumer.mjs apps/web/labs/espaco-library/DrawerPage.tsx`.
-Browser: `PLAYWRIGHT_BASE_URL=http://127.0.0.1:5296 npm run test:browser -- drawer.spec.ts --reporter=line`;
-6 passed;both projects. Final combined run with `drawer.spec.ts search-dialog.spec.ts`
+Browser baseline: `PLAYWRIGHT_BASE_URL=http://127.0.0.1:5296 npm run test:browser -- drawer.spec.ts --reporter=line`;
+6 passed;both projects. Final combined baseline run with `drawer.spec.ts search-dialog.spec.ts`
 passed12 tests (including the existing search flow);no browser runtime errors
 in the responsive checks. Screenshots:
 [dark desktop](../../../apps/web/labs/espaco-library/evidence/drawer/desktop-dark-1440.png),
 [light mobile](../../../apps/web/labs/espaco-library/evidence/drawer/mobile-light-390.png),
 [zoom/RTL](../../../apps/web/labs/espaco-library/evidence/drawer/desktop-zoom-rtl.png).
 
+Focused F2 gate (2026-09-19): `npm run test:browser -- drawer-beui.spec.ts
+drawer.spec.ts --reporter=line --workers=1`; 10 passed across desktop/mobile,
+no skips or failures. `npm run typecheck --workspace beds`, lab `tsc` and
+`git diff --check` passed. New focused screenshots:
+[dark desktop](../../../apps/web/labs/espaco-library/evidence/drawer-beui/desktop-dark.png),
+[dark mobile](../../../apps/web/labs/espaco-library/evidence/drawer-beui/mobile-dark.png).
+
 Not verified:VoiceOver,physical devices,Firefox/Safari,APCA,real browser zoom
-(CSS zoom is a proxy),real product integration. Engineering checks passed;
-overall acceptance **PENDING** independent review and owner aesthetic approval.
+(CSS zoom is a proxy). Integrated verify and engineering checks passed;
+overall acceptance **PENDING** non-Chromium/physical AT and owner aesthetic approval.

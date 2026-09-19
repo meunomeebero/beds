@@ -1,8 +1,11 @@
 # Espaço library — validation record
 
-Canonical repository:`meunomeebero/beds`. Current release candidate:
-`beds@0.1.7-rc.16`,2026-09-15. Publication identity/hash belong to the immutable
-GitHub prerelease;this record describes source validation,not deployment.
+Canonical repository:`meunomeebero/beds`. Historical release candidate:
+`beds@0.1.7-rc.16`,2026-09-15. The current local candidate is
+`beds@0.1.7-rc.19`; current migration status is tracked in
+[F2 migration tracking](F2-MIGRATION-TRACKING.md). Publication identity/hash
+belong to an immutable GitHub prerelease;this record describes source validation,
+not deployment or release acceptance.
 
 ## Local checkout — September16
 

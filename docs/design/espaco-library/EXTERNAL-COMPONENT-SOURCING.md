@@ -27,13 +27,13 @@ BEDS is built on the market-standard stack, so beUI source enters with almost no
 | `motion` (Framer Motion) | approved runtime dependency since 2026-09-16 (`motion@^13.4.0`) | import from `motion/react`; BEDS easing `[.16,1,.3,1]`; `useReducedMotion` mandatory |
 | `@/lib/utils` `cn` (clsx + tailwind-merge) | `packages/beds/src/lib/utils.ts`, internal only | keep; never exported |
 | `lucide-react` | already a declared dependency | keep |
-| `@radix-ui/*` primitives | added per component when pasted source requires it | register in `THIRD-PARTY-NOTICES.md` |
+| `@radix-ui/*` primitives | require separate explicit dependency authorization before any addition; this document does not authorize installation | an approved addition must update the manifest/lockfile, `THIRD-PARTY-NOTICES.md`, provenance and affected gates |
 
 ## Adaptation rules
 
 - Paste logic, state model, motion and classes intact. Geometry overrides only: swap upstream measurements for BEDS proportions (e.g. `h-11 rounded-full` → `h-9 rounded-lg`). BEDS proportions win by design-owner decision.
 - Pasted components always live in `packages/beds/src/` and ship through the package. The Tailwind build scans only that directory (`@source` in `src/tailwind.css`), so utilities referenced by source pasted anywhere else never compile into `dist/styles.css`.
-- Delete the component's legacy `.css` and remove any `--es-*` alias that only it used.
+- Delete upstream/legacy component `.css` only after the migrated source is present and checker evidence confirms the replacement; canonical shared BEDS styles and aliases are not removed merely because one component was adapted.
 - Public API stays rigid: no `className`,`style`,`tw`,`sx` on exported components (`check-library` FORBIDDEN). Consumers never see Tailwind.
 - A component reaching BEDS through this path becomes BEDS-owned: same API, token, state and evidence rules as any primitive.
 - Proprietary components (footer, landing, checkout, processing, future SaaS-specific patterns) are built in the same idiom: Tailwind utilities + `motion` + `cn`.
