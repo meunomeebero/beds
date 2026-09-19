@@ -6,7 +6,6 @@ type HydrationWindow = Window & { __otpHydrationComplete?: boolean; __otpHydrati
 
 function hydrate() {
   hydrateRoot(document.getElementById('otp-hydration-root')!, React.createElement(OtpHydrationProbe));
-  (window as HydrationWindow).__otpHydrationComplete = true;
 }
 
 if ((window as HydrationWindow).__otpHydrationMarkupReady) hydrate();
