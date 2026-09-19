@@ -127,6 +127,58 @@ test('OTP motion has intermediate and settled frames', async ({ page }) => {
   await expect(main.locator('.es-otp-group')).toHaveCSS('transform', 'none');
 });
 
+test('OTP success presence animates, exits and re-enters', async ({ page }) => {
+  await page.goto('/?view=otp&theme=dark');
+  const main = field(page, 'Código de acesso');
+  const input = page.getByLabel('Código de acesso');
+  const success = page.getByRole('button', { name: 'Simular sucesso', exact: true });
+  const error = page.getByRole('button', { name: 'Simular erro', exact: true });
+  await input.fill('123456');
+
+  await success.click();
+  const icon = main.locator('.es-otp-success-icon');
+  await expect(icon).toBeVisible();
+  await page.waitForTimeout(32);
+  const entering = await icon.evaluate(node => ({
+    transform: getComputedStyle(node).transform,
+    opacity: getComputedStyle(node).opacity,
+  }));
+  expect(entering.transform !== 'none' || entering.opacity !== '1').toBe(true);
+  await page.waitForTimeout(500);
+  const settled = await icon.evaluate(node => ({
+    transform: getComputedStyle(node).transform,
+    opacity: getComputedStyle(node).opacity,
+  }));
+  expect(settled.opacity).toBe('1');
+
+  await error.click();
+  await expect(icon).toHaveCount(0);
+  await success.click();
+  await expect(icon).toBeVisible();
+  await page.waitForTimeout(500);
+  await expect(icon).toHaveCSS('opacity', '1');
+  await expect(main.locator('.es-otp-success-icon')).toHaveCount(1);
+});
+
+test('OTP success presence interruption settles the latest status', async ({ page }) => {
+  await page.goto('/?view=otp&theme=light');
+  const main = field(page, 'Código de acesso');
+  const input = page.getByLabel('Código de acesso');
+  const success = page.getByRole('button', { name: 'Simular sucesso', exact: true });
+  const error = page.getByRole('button', { name: 'Simular erro', exact: true });
+  await input.fill('123456');
+  await success.click();
+  await page.waitForTimeout(32);
+  await error.click();
+  await page.waitForTimeout(48);
+  await success.click();
+  const icon = main.locator('.es-otp-success-icon');
+  await expect(icon).toBeVisible();
+  await page.waitForTimeout(500);
+  await expect(icon).toHaveCSS('opacity', '1');
+  await expect(main.locator('.es-otp-success-icon')).toHaveCount(1);
+});
+
 test('OTP reduced motion is static and success settles inline', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/?view=otp&theme=light');
@@ -188,6 +240,35 @@ test('OTP forced colors keeps structural focus and status cues', async ({ page }
   expect(colors.borderColor).toBeTruthy();
   expect(colors.outlineColor).toBeTruthy();
 });
+
+for (const theme of ['light', 'dark']) {
+  test(`OTP success text and icon contrast ${theme}`, async ({ page }) => {
+    await page.goto(`/?view=otp&theme=${theme}`);
+    const main = field(page, 'Código de acesso');
+    await page.getByLabel('Código de acesso').fill('123456');
+    await page.getByRole('button', { name: 'Simular sucesso', exact: true }).click();
+    await expect(main.locator('.es-otp-success-icon')).toBeVisible();
+    const contrast = await main.getByRole('status').evaluate(node => {
+      const parse = (color: string) => color.match(/[\d.]+/g)?.slice(0, 3).map(Number) ?? [0, 0, 0];
+      const luminance = (color: number[]) => color.map(channel => channel / 255).map(channel => channel <= .03928 ? channel / 12.92 : ((channel + .055) / 1.055) ** 2.4).reduce((sum, channel, index) => sum + channel * [0.2126, 0.7152, 0.0722][index], 0);
+      const ratio = (foreground: string, background: string) => {
+        const a = luminance(parse(foreground));
+        const b = luminance(parse(background));
+        return (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
+      };
+      const root = node.closest('.es-root');
+      const background = root ? getComputedStyle(root).backgroundColor : 'rgb(255, 255, 255)';
+      const icon = node.querySelector('.es-otp-success-icon');
+      return {
+        text: ratio(getComputedStyle(node).color, background),
+        icon: icon ? ratio(getComputedStyle(icon).color, background) : 0,
+        background,
+      };
+    });
+    expect(contrast.text).toBeGreaterThanOrEqual(4.5);
+    expect(contrast.icon).toBeGreaterThanOrEqual(4.5);
+  });
+}
 
 for (const theme of ['light', 'dark']) {
   test(`OTP evidence capture ${theme}`, async ({ page }, testInfo) => {

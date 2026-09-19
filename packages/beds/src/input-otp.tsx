@@ -45,17 +45,20 @@ export function InputOTP({ label, value, onChange, maxLength = 6, status = 'idle
       </OTPInput>
     </StatusContext.Provider>
     <p id={descriptionId} className="es-otp-message" role="status" data-status={status}>
-      {status === 'success' && <AnimatePresence initial={false} mode="popLayout">
-        <motion.span
-          key="success"
-          className="es-otp-success-icon"
-          initial={reduce ? false : { scale: .6, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={reduce ? { opacity: 0 } : { scale: .6, opacity: 0 }}
-          transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 500, damping: 28 }}
-          aria-hidden="true"
-        ><Icon name="Check" purpose="small" /></motion.span>
-      </AnimatePresence>}
+      {/* Keep presence mounted for status transitions; initial=false avoids an SSR success entrance. */}
+      <AnimatePresence initial={false} mode="popLayout">
+        {status === 'success' && (
+          <motion.span
+            key="success"
+            className="es-otp-success-icon"
+            initial={reduce ? false : { scale: .6, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={reduce ? { opacity: 0 } : { scale: .6, opacity: 0 }}
+            transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 500, damping: 28 }}
+            aria-hidden="true"
+          ><Icon name="Check" purpose="small" /></motion.span>
+        )}
+      </AnimatePresence>
       {message && <span className="es-otp-message-copy">{message}</span>}
     </p>
   </div>;
