@@ -26,7 +26,7 @@ const plans: PricingPlan[] = [{
 |---|---|
 | PricingCard / PricingCardProps |Required title,description,image,price,featuresLabel,features,action;optional featured,actionNote,feedback,headingLevel2(default)/3 |
 | Image |src + alt required;optional fallbackLabel;empty alt for decorative art;host-owned meaningful image where needed |
-| Price |Complete localized label;optional description for billing terms;no numeric formatting,currency conversion or inferred interval |
+| Price |Complete localized label;optional description for billing terms;no numeric formatting,currency conversion or inferred interval. Optional `amount: { value, format }` is an authoritative host-owned numeric pair for a real controlled price/package change; the label is never parsed. |
 | Features |Readonly `{id,text}[]`;unique stable IDs;native named ul/list;empty array removes benefits block |
 | Action |Exclusive `{label,onClick,busy?,disabled?}` or `{label,href}`;callback busy also disables;native href has no busy/disabled/callback;actionNote explains unavailable/current plan;feedback announces host-supplied result |
 | PricingSection / PricingSectionProps |Required title/plans;optional description,mark,headingLevel1/2(default);mark uses an existing noninteractive DS identity component |
@@ -45,6 +45,12 @@ equivalent as the actual bill or invent "free/no card required" claims.
 Standalone pricing-catalog amounts and benefits are fixtures,not proposed
 Curriculol policy. The separate [Curriculol landing](LANDING-PAGE.md) records
 its product-evidence snapshot; no billing logic moves into the library.
+
+`amount` keeps the initial price literal and animates only after the controlled
+numeric value changes. The host formatter owns currency, locale, precision and
+billing text; `AnimatedNumber` receives the previous and next numeric values.
+Static labels, localized strings and plan selection state never enter a parser or
+create an inferred price.
 
 September16 local addition: native href actions preserve link behavior and
 browser Back.44px minimum,r999,p10/16,existing control/text or featured brand/

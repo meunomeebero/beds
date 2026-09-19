@@ -63,6 +63,7 @@ Latest user direction: transparent cards and broader corners from the supplied M
 | Opaque contexts |Popover,tooltip,dialog and explicitly subtle/raised inset surfaces retain semantic fills;floating content must remain legible |
 | Logo greeting |Existing BrandMark;17.6px in Home leading slot (owner-requested20% reduction from22px);10px title gap;heading and sidebar unchanged |
 | HelpLabel |Dotted2px underline;180ms pointer entry/120ms exit grace;keyboard focus/touch toggle;280px explanation popup,r14,p16;above preferred,viewport-clamped |
+| Tooltip |beUI `tooltip` adaptation;8px trigger gap;BEDS r8 compact surface;bottom default to preserve the existing API contract;fixed portal remains inside `.es-root`;viewport-clamped;hover/focus/touch and reduced-motion opacity-only fallback |
 | FilterSelect |Transparent36px trigger,r8,p8/10;16px leading calendar and trailing up/down glyphs;existing260px choice popup |
 | Hover/selected |150ms ease-out color/background transition;neutral tokens;selected nav remains selected on hover;no transform or spring |
 | Carousel |Opt-in continuous forward34px/s;equal-width repeated groups with16px seam gap;instant period rebase between identical content;hidden scrollbar;no visible playback/direction controls |
@@ -76,6 +77,9 @@ status): `Badge purpose="status"` uses Inter12/18px400, secondary text,
 transparent background, no padding/border/shadow,6px dot and6px gap. Dot reuses
 existing badge marker tokens by tone; neutral uses secondary. Long labels grow
 and wrap without truncation. Static ApplicationCard status adopts this variant;
+the beUI `animated-badge` label/marker roll and layout spring are an interaction
+adaptation, disabled under reduced motion; upstream status/size/icon/pulse
+options are not public BEDS API.
 interactive status selectors retain their distinct control shape. Default
 `purpose="tag"` retains the compact12/16px badge, unchanged. This is a documented
 adaptation for owner review, not a new reference measurement or palette.
@@ -314,7 +318,7 @@ not tab navigation. Exact values are BEDS choices,not measured raster CSS.
 | Record row |56px minimum;8px block/16px inline inset;12px inline gap;28px decorative identity;flexible identity/link;trailing meta/disclosure |
 | Narrow record |≤480px container:12px inset;identity/link/meta stacked;icon and44px disclosure align to top;wrap long text,no horizontal scrolling |
 | Options |8px outer inset;r12=20−8;16px inner padding;subtle token panel;semantic fieldset;shared Switch,44px minimum label row;20px label/18px description leading |
-| Disclosure |32px desktop/44px narrow or coarse pointer;r8;neutral hover;2px focus outline,3px offset;no new motion |
+| Disclosure |32px desktop/44px narrow or coarse pointer;r8;neutral hover;2px focus outline,3px offset;beUI `bouncy-accordion` height/opacity/layout intent adapted with `useReducedMotion`;measured content and caller-owned records remain the semantic contract |
 
 Existing DataTable,IntegrationRow and SettingsRow contracts remain unchanged.
 Switch accessible name now references its visible label;description is separate.
@@ -464,8 +468,12 @@ Header/footer16px block and24px inline;body24px;16px narrow inline safe-area
 inset. Header H2 Inter16/24px500,description13/19.5px400;DrawerSection H3
 Inter13/19.5px500,32px separation and8px content gap. Controls40px,44px narrow.
 Independent body scroll;header/footer max40%/35% retain overflow recovery and
-sticky close. No new motion. [Drawer](DRAWER.md) owns API,states and evidence.
-These dimensions are documented adaptations,not raster-derived measurements.
+sticky close. The beUI `drawer` spring/opacity motion is adapted onto the
+existing native modal with the source full-travel `±100%` panel expression,
+preserving inline-end RTL geometry, browser inertness,
+scroll lock and focus recovery. [Drawer](DRAWER.md) owns API,states and
+evidence. These dimensions are documented adaptations,not raster-derived
+measurements.
 
 SearchDialog (September15,A): supplied discovery-overlay screenshot informs
 input → category filters → recent/results list → keyboard-help hierarchy.
@@ -510,7 +518,7 @@ Unboxed groups use0 border/inset,16/24px medium headings,24px internal gaps.
 Settings-panel buttons36px minimum desktop,44px mobile;switch rows44px;mobile
 editable text16px,theme/select triggers and links44px. Defaults unchanged.
 No new motion;underline changes immediately. Existing reduced-motion behavior
-retained;forced colors adds a system-color selected boundary. The settings variant is still legacy CSS in `controls.css` pending Tailwind migration; the activity and connection Tabs variants are migrated (F1).
+retained;forced colors adds a system-color selected boundary. The settings variant is migrated through Tailwind utilities plus the beUI `tabs` indicator intent with `motion/react`; the activity and connection Tabs variants remain migrated (F1). The BEDS geometry, forced-colors boundary, RTL keyboard behavior and controlled API remain authoritative; no legacy settings migration is pending.
 
 ## Checkout presentation — September16 adaptation
 

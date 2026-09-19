@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { motion, useReducedMotion, type Transition } from 'motion/react';
 import { Button } from './controls';
+import { cn } from './lib/utils';
 import './disclosure.css';
+
+const DISCLOSURE_OPEN_TRANSITION: Transition = { type: 'spring', duration: .58, bounce: .32 };
+const DISCLOSURE_CLOSE_TRANSITION: Transition = { type: 'spring', duration: .46, bounce: .26 };
+const DISCLOSURE_LAYOUT_TRANSITION: Transition = { type: 'spring', duration: .55, bounce: .38 };
 
 /** Measured line clamp. The toggle exists only when the content really
  * overflows its clamped layout, measured after fonts settle and on resize.
@@ -11,31 +17,47 @@ export function DisclosureText({ lines = 3, moreLabel, lessLabel, children }: {
 }) {
   const textId = useId();
   const ref = useRef<HTMLParagraphElement>(null);
+  const reduce = useReducedMotion();
   const [expanded, setExpanded] = useState(false);
   const [overflows, setOverflows] = useState(false);
+  const [heights, setHeights] = useState({ clamped: 0, full: 0 });
 
   const measure = useCallback(() => {
     const element = ref.current;
     if (!element) return;
-    // Always measure the clamped layout (expand + measure used to read the
-    // unclamped height and permanently hide the toggle after collapse).
-    if (expanded) element.classList.add('es-disclosure-text--clamped');
-    const overflows = element.scrollHeight > element.clientHeight + 1;
-    if (expanded) element.classList.remove('es-disclosure-text--clamped');
-    setOverflows(overflows);
+    // Always measure both layouts. The full string stays mounted for
+    // assistive reading, while the outer motion box owns the reveal.
+    element.classList.add('es-disclosure-text--clamped');
+    const clamped = element.offsetHeight;
+    const overflowing = element.scrollHeight > clamped + 1;
+    element.classList.remove('es-disclosure-text--clamped');
+    const full = element.offsetHeight;
+    setOverflows(overflowing);
+    setHeights(previous => previous.clamped === clamped && previous.full === full ? previous : { clamped, full });
+    if (!expanded) element.classList.add('es-disclosure-text--clamped');
   }, [expanded]);
 
   useLayoutEffect(() => {
     measure();
     if (document.fonts?.ready) void document.fonts.ready.then(measure);
+    const element = ref.current;
+    const observer = element ? new ResizeObserver(measure) : undefined;
+    if (element && observer) observer.observe(element);
     let timer: ReturnType<typeof setTimeout> | undefined;
     const onResize = () => { clearTimeout(timer); timer = setTimeout(measure, 120); };
     window.addEventListener('resize', onResize);
-    return () => { window.removeEventListener('resize', onResize); clearTimeout(timer); };
-  }, [measure, children]);
+    return () => { observer?.disconnect(); window.removeEventListener('resize', onResize); clearTimeout(timer); };
+  }, [measure, children, lines]);
 
   return <>
-    <p ref={ref} id={textId} className={`es-disclosure-text${expanded ? '' : ' es-disclosure-text--clamped'}`} style={{ '--es-disclosure-lines': lines } as CSSProperties}>{children}</p>
+    <motion.div
+      className="es-disclosure-content overflow-hidden"
+      initial={false}
+      animate={{ height: expanded ? heights.full : heights.clamped }}
+      transition={reduce ? { duration: 0 } : expanded ? DISCLOSURE_OPEN_TRANSITION : DISCLOSURE_CLOSE_TRANSITION}
+    >
+      <p ref={ref} id={textId} className={cn('es-disclosure-text', !expanded && 'es-disclosure-text--clamped')} style={{ '--es-disclosure-lines': lines } as CSSProperties}>{children}</p>
+    </motion.div>
     {(overflows || expanded) && <Button label={expanded ? lessLabel : moreLabel} variant="ghost" compact aria-expanded={expanded} aria-controls={textId} onClick={() => setExpanded(value => !value)} />}
   </>;
 }
@@ -49,8 +71,11 @@ export function LabelField({ labels, initialRows = 3, moreLabel, lessLabel }: {
 }) {
   const listId = useId();
   const listRef = useRef<HTMLUListElement>(null);
+  const restRef = useRef<HTMLUListElement>(null);
+  const reduce = useReducedMotion();
   const [cut, setCut] = useState<number | null>(null);
   const [expanded, setExpanded] = useState(false);
+  const [restHeight, setRestHeight] = useState(0);
   const trimmed = labels.map(label => label.trim()).filter(Boolean);
   const identity = trimmed.join('\u0000');
 
@@ -83,15 +108,35 @@ export function LabelField({ labels, initialRows = 3, moreLabel, lessLabel }: {
     return () => { window.removeEventListener('resize', onResize); clearTimeout(timer); };
   }, []);
 
-  const visible = cut === null || expanded ? trimmed : trimmed.slice(0, cut);
-  const hidden = cut === null || expanded ? [] : trimmed.slice(cut);
+  useLayoutEffect(() => {
+    const list = restRef.current;
+    if (!list) return;
+    const updateHeight = () => setRestHeight(list.offsetHeight);
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(list);
+    return () => observer.disconnect();
+  }, [cut, identity]);
+
+  const visible = cut === null ? trimmed : trimmed.slice(0, cut);
+  const hidden = cut === null ? [] : trimmed.slice(cut);
 
   if (trimmed.length === 0) return null;
 
   return <div className="es-label-field">
     <ul ref={listRef} id={listId} className="es-label-field-list">
       {visible.map((label, index) => <li key={`${label}-${index}`} className="es-label-field-item">{label}</li>)}
-      {hidden.length > 0 && <li className="es-label-field-rest" inert={!expanded || undefined}><ul className="es-label-field-rest-list">{hidden.map((label, index) => <li key={`${label}-${cut! + index}`} className="es-label-field-item">{label}</li>)}</ul></li>}
+      {hidden.length > 0 && <motion.li
+        className="es-label-field-rest"
+        data-expanded={expanded}
+        aria-hidden={!expanded}
+        inert={!expanded || undefined}
+        initial={false}
+        animate={{ height: expanded ? restHeight : 0, opacity: expanded ? 1 : 0 }}
+        transition={reduce ? { duration: 0 } : expanded ? DISCLOSURE_OPEN_TRANSITION : DISCLOSURE_CLOSE_TRANSITION}
+      >
+        <ul ref={restRef} className="es-label-field-rest-list">{hidden.map((label, index) => <li key={`${label}-${cut! + index}`} className="es-label-field-item">{label}</li>)}</ul>
+      </motion.li>}
     </ul>
     {cut !== null && <Button label={expanded ? lessLabel : moreLabel(hidden.length)} variant="ghost" compact aria-expanded={expanded} aria-controls={listId} onClick={() => setExpanded(value => !value)} />}
   </div>;
@@ -106,12 +151,13 @@ export function DisclosedRecords<T>({ records, visibleCount, moreLabel, lessLabe
   render: (records: readonly T[]) => ReactNode;
 }) {
   const regionId = useId();
+  const reduce = useReducedMotion();
   const [expanded, setExpanded] = useState(false);
   if (records.length <= visibleCount) return <>{render(records)}</>;
   const visible = expanded ? records : records.slice(0, visibleCount);
   const hidden = records.length - visibleCount;
   return <>
-    <div id={regionId}>{render(visible)}</div>
+    <motion.div id={regionId} layout="size" initial={false} transition={reduce ? { duration: 0 } : DISCLOSURE_LAYOUT_TRANSITION}>{render(visible)}</motion.div>
     {!expanded && <Button label={moreLabel(hidden)} variant="ghost" compact aria-expanded={false} aria-controls={regionId} onClick={() => setExpanded(true)} />}
     {expanded && <Button label={lessLabel} variant="ghost" compact aria-expanded={true} aria-controls={regionId} onClick={() => setExpanded(false)} />}
   </>;

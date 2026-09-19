@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { AccountCredits, AccountMenu, AppShell, Avatar, DesignSystemProvider, PageHeader, ResultsStatus, Select, SidebarHeader, Stack, Text, WorkspaceTrigger, brands, type CreditBalance } from 'beds';
 
-const normal: CreditBalance = { status: 'ready', value: 12500, formattedValue: '12.500', limit: 20000 };
+const formatCredits = (value: number) => Math.round(value).toLocaleString('pt-BR');
+const normal: CreditBalance = { status: 'ready', value: 12500, formattedValue: '12.500', formatValue: formatCredits, limit: 20000 };
 
 export default function AccountCreditsPage() {
   const params = new URLSearchParams(location.search);
@@ -15,13 +16,13 @@ export default function AccountCreditsPage() {
 
   function scenarioChange(value: string) {
     setScenario(value);
-    setBalance(value === 'zero' ? { status: 'ready', value: 0, formattedValue: '0', limit: 20000 }
-      : value === 'no-limit' ? { status: 'ready', value: 12500, formattedValue: '12.500' }
+    setBalance(value === 'zero' ? { status: 'ready', value: 0, formattedValue: '0', formatValue: formatCredits, limit: 20000 }
+      : value === 'no-limit' ? { status: 'ready', value: 12500, formattedValue: '12.500', formatValue: formatCredits }
       : value === 'loading' ? { status: 'loading', message: 'Consultando saldo…' }
       : value === 'unavailable' ? { status: 'unavailable', message: 'Saldo indisponível. Veja os detalhes de créditos.' }
       : value === 'error' ? { status: 'error', message: 'Não foi possível consultar o saldo. Tente novamente.' }
       : value === 'invalid' ? { status: 'ready', value: Number.NaN, formattedValue: 'NaN', limit: 20000 }
-      : value === 'long' ? { status: 'ready', value: 123456789, formattedValue: '123.456.789', limit: 200000000 }
+      : value === 'long' ? { status: 'ready', value: 123456789, formattedValue: '123.456.789', formatValue: formatCredits, limit: 200000000 }
       : normal);
   }
 

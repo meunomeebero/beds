@@ -56,7 +56,7 @@ No generated destinations or product state. [Contract](LANDING-FOOTER.md).
 
 | Component | Contract | Evidence / constraint |
 |---|---|---|
-|`ApplicationBoard` |`label/columns`;optional `onMove/announcement/emptyLabel` |Controlled status lanes;derived counts;explicit allowed moves;compact shared ApplicationCard;no drag/persistence;[contract](KANBAN.md) |
+|`ApplicationBoard` |`label/columns`;optional `onMove/announcement/emptyLabel` |Controlled status lanes;derived counts;explicit allowed moves;compact shared ApplicationCard;no drag/persistence;[contract](KANBAN.md). F3 NO_FIT for beUI `kanban` (registry slug 404) and `swipeable-list`: mobile swipe actions/refresh would add a different item contract and interaction model |
 
 `ApplicationCard purpose="kanban"`: named compact layout, small folio beside
 identity, options menu for supplied destinations; default purpose unchanged.
@@ -92,7 +92,7 @@ identity, options menu for supplied destinations; default purpose unchanged.
 |`TextLink` |`href`; optional `external/ariaLabel` |Text-level native link, shared hover/focus contract, underline from the border token; `external` adds a 12px up-right glyph and safe `rel`; no color/style overrides |
 |`BrandMark` |Optional accessible `label=Brand` |User-owned three18×4px bars,3px gaps,18×18 footprint; provider brand fill; A identity |
 |`ThemeToggle` |Optional `label/lightLabel/darkLabel` |Reads actual provider theme; invokes provider callback; disabled when callback absent; real theme control, unlike legacy fixture |
-|`AnimatedNumber` |`value` (`number \| null`), `format`; optional `fallback=—`, `duration=1.1`, `startOnView=false` |Tabular count-up to the true value. `null` or non-finite → renders `fallback`, never animates toward a fabricated number; reduced motion jumps straight to the final value; integer targets snap per frame. Not for evidence whose displayed text must stay stable, such as result scores. A adaptation of beUI `number` |
+|`AnimatedNumber` |`value` (`number \| null`), `format`; optional `fallback=—`, `duration=1.1`, `startOnView=false`, `initialValue` (known prior number) |Tabular count-up to the true value. The first ready frame uses the current value unless `initialValue` supplies a known prior frame; `null` or non-finite → renders `fallback` from the first frame and never paints a fabricated zero. `startOnView` delays motion while preserving the truthful ready frame; reduced motion jumps straight to the final value; integer targets snap per frame. Not for evidence whose displayed text must stay stable, such as result scores. A adaptation of beUI `number` |
 
 Icon registry additions: `House`, `MessageCircle`, `ChartColumn`, `UserRound`, `Briefcase`, `Coins`, `ScanText`, `Bookmark`, `CalendarDays`, `ChevronsUpDown`, `Play`, `Pause`, `ArrowLeft`, `ShieldCheck` (privileged/admin rows). Existing names remain accepted. Former `SourceIcon` paths are [historical text evidence](../../../packages/beds/evidence/marketer-source-icons.txt), not runtime components. Callers cannot provide SVG paths, stroke, color or pixel size. Registry entries do not create configurable styling.
 
@@ -142,7 +142,7 @@ Primary navigation reuses `NavItem` inside `SidebarSection purpose="primary"`:4p
 
 Welcome action context is a source-measured fixed button purpose:40px high,12px radius,14px horizontal padding,14/16px medium label. Connection action uses40px height/10px radius. These are not general size APIs; use each with its matching context.
 
-Button, IconButton, IconToggleButton, TextField, TextAreaField, SearchField, Checkbox, Switch, SegmentedControl and the activity/connection Tabs are migrated to Tailwind utilities + `motion/react` (F1, beUI-sourced, 2026-09-17): API and source-measured geometry preserved, legacy `.es-*` class hooks dropped for element/role/`data-purpose` selectors, interaction motion in the [motion contract](STATES.md). Checkbox/Switch keep a full-area invisible native input (`inset-0`, `opacity-0`) so the real element owns the >=44px coarse hit-target. The settings Tabs variant stays legacy CSS pending migration.
+Button, IconButton, IconToggleButton, TextField, TextAreaField, SearchField, Checkbox, Switch, SegmentedControl and all Tabs variants are migrated to Tailwind utilities + `motion/react` (F1/F2, beUI-sourced, 2026-09-19): API and source-measured geometry preserved, legacy `.es-*` class hooks dropped for element/role/`data-purpose` selectors, interaction motion in the [motion contract](STATES.md). Checkbox/Switch keep a full-area invisible native input (`inset-0`, `opacity-0`) so the real element owns the >=44px coarse hit-target. Settings keeps its measured scroll lane, RTL keyboard behavior, forced-colors indicator and 2px underline; the shared layout indicator is reduced-motion guarded.
 
 ## Overlays — 10
 
@@ -152,14 +152,14 @@ Button, IconButton, IconToggleButton, TextField, TextAreaField, SearchField, Che
 |`FilterSelect` |`label/value/options/onChange`;optional disabled/icon |Transparent toolbar selector;calendar default,up/down chevrons,r8,36px;controlled options,not a date-range engine |
 |`HelpLabel` |`label/description`;optional icon |Dotted explanation affordance;hover/focus/touch;noninteractive tooltip,Escape/outside dismissal;internal placement |
 |`DropdownMenu` |`label/open/onOpenChange/items/onSelect`; optional icon |Items id/label/icon?/disabled?/destructive?;160px period-style popup; keyboard and disabled handling |
-|`Tooltip` |`label`, one compatible library control child |Associates aria-describedby; keyboard/pointer; no arbitrary wrapper CSS; A behavior where source not audited |
+|`Tooltip` |`label`, one compatible library control child |Associates aria-describedby while open; keyboard/pointer/touch; fixed bottom-default placement with 8px anchor gap and internal viewport clamp; animated surfaces reserve a width-scaled overshoot margin while the public viewport guarantee stays >=8px; no arbitrary wrapper CSS; A adaptation of beUI `tooltip` |
 |`Dialog` |`open/onOpenChange/title`; optional children/description/actions/artwork; variant standard/welcome |Native modal; labelled content; focus recovery; standard geometry derived from command surface A; welcome geometry M; artwork only in welcome region |
-|`CommandPalette` |`open/onOpenChange/label/query/onQueryChange/items/onSelect`; optional emptyLabel |672px search/list surface; native modal; local filter; active-descendant choice; no network search |
+|`CommandPalette` |`open/onOpenChange/label/query/onQueryChange/items/onSelect`; optional emptyLabel |672px search/list surface; native modal; fuzzy cursor/active-descendant choice; reduced-motion-safe active-row motion; no network search or public upstream escape APIs |
 |`SearchDialog` |Controlled open/query/items/onSelect; optional categories, resultsLabel, state, filterMode and copy labels; `SearchResult` adds categoryId/keywords/identity |Rich discovery overlay with category buttons, identity/result/description rows, keyboard hints and recovery. Shared native modal mechanics; CommandPalette unchanged. [Search contract](SEARCH-DIALOG.md) |
-|`Drawer` |`open/onOpenChange/title/children`;optional description,headerActions,actions,closeLabel,contentLabel |Modal inline-end panel;full-height,independent body scroll,stable chrome,focus recovery;caller owns data/dismissal policy. [Drawer contract](DRAWER.md) |
+|`Drawer` |`open/onOpenChange/title/children`;optional description,headerActions,actions,closeLabel,contentLabel |Modal inline-end panel;full-height,independent body scroll,stable chrome,focus recovery;beUI `drawer` motion adapted without public escape hatches;caller owns data/dismissal policy. [Drawer contract](DRAWER.md) |
 |`DrawerSection` |`title/children` |Named H3 content group inside Drawer;fixed spacing,no nested card or visual props |
 
-Overlay placement is internally anchored/clamped/flipped, never consumer coordinates. Source account466px height is fixture-specific. A welcome dialog is480px wide,24px radius with200px artwork region and24px content padding (M); private source artwork is not reused. Standard dialog672px/14px is A, derived from a measured command surface rather than a measured general-dialog claim. Native Popover/Dialog platform support and actual browser QA remain explicit.
+Overlay placement is internally anchored/clamped/flipped, never consumer coordinates. Tooltip uses the beUI fixed portal/motion model but mounts inside the owning `.es-root` so fixed theme tokens resolve in both themes; its public BEDS API remains only `label` plus one compatible child. Source account466px height is fixture-specific. A welcome dialog is480px wide,24px radius with200px artwork region and24px content padding (M); private source artwork is not reused. Standard dialog672px/14px is A, derived from a measured command surface rather than a measured general-dialog claim. Native Popover/Dialog platform support and actual browser QA remain explicit.
 
 ## Settings and account — 8
 
@@ -183,24 +183,24 @@ Unlike the old prototype, portable AccountMenu exposes workspace and theme callb
 
 | Component | API | Evidence / constraint |
 |---|---|---|
-|`Badge` |`label`; tone neutral/success/warning/error/info; purpose tag(default)/status |Tag retains compact filled12/16px treatment and semantic inset. Status uses transparent12/18px regular secondary text,6px leading dot/gap; no border/shadow; complete labels wrap. Visible label carries meaning; no live-region or button semantics. Status is an A adaptation, preview in ApplicationCard catalog |
+|`Badge` |`label`; tone neutral/success/warning/error/info; purpose tag(default)/status |Tag retains compact filled12/16px treatment and semantic inset. Status uses transparent12/18px regular secondary text,6px leading dot/gap; no border/shadow; complete labels wrap. Visible label carries meaning; no live-region or button semantics. Status is an A adaptation; beUI `animated-badge` roll/layout motion is adopted with the BEDS API and reduced-motion fallback, preview in ApplicationCard catalog |
 |`StatusDot` |`label/status` |Named status shape; no color-only meaning |
 |`Notice` |`title`; optional description/tone/onDismiss |Status/alert semantics; source complete notice matrix U; local A |
 |`EmptyState` |`title`; optional description/icon/action |Observed empty-state pattern; action supplied, not inferred upsell |
 |`EmptyStateCard` |`title/description`;exactly one of `image:{src,alt,fallbackLabel?}` or `illustration:'empty-folder'`;optional `icon`, `headingLevel:2\|3`, `action:{label,onClick,disabled?,busy?}` |Message-first card;480px maximum,r24,p8;image15:7/r16 or built-in folder/flies with visible pause and static reduced motion;transparent;optional next-step action;compact EmptyState unchanged. [Contract](EMPTY-STATE.md) |
 |`Skeleton` |Purpose line/avatar/card |Fixed A placeholder; decorative; not proof source loading state audited |
-|`LoadingIndicator` |`label` |Named A status; no hidden async request |
-|`Toaster` + `toast` |Mount one `Toaster`; `toast(message|{id,message,tone,action,lifetime})`; `dismissToast(id)` |Fixed top-center notification stack; upsert by id; neutral/pending/success/warning/error/info; pending/error/warning/action notices persist; explicit close with translated dismissLabel and focus recovery; informational minimum5000ms,0 persists; hover/focus/hidden document pauses; scrollable queue retains every recovery; no position, motion or styling escape |
+|`LoadingIndicator` |`label` |Named status adapted from beUI `loader`; no hidden async request or fabricated progress; reduced-motion fallback |
+|`Toaster` + `toast` |Mount one `Toaster`; `toast(message|{id,message,tone,action,lifetime})`; `dismissToast(id)` |Fixed top-center notification stack adapted from beUI `animated-toast-stack`; upsert by id; neutral/pending/success/warning/error/info; pending/error/warning/action notices persist; explicit close with translated dismissLabel and focus recovery; informational minimum5000ms,0 persists; hover/focus/hidden document pauses; scrollable queue retains every recovery; no position, motion or styling escape |
 |`ProgressBar` |`label/value`; max100 default; tone neutral/brand |Native progress for available values; unavailable status; guarded finite bounds; A generic data primitive |
 |`SegmentedMeter` |`label/value`; max100 default; tone neutral/brand/success |28 vertical segments,16px high,2px gap/radius;shared internal anatomy with ApplicationCard;label/ARIA value authoritative;generic quantization nearest,score quantization floor |
-|`Metric` |`label/value`; optional description |Fixed contextual display; populated source analytics U; A |
+|`Metric` |`label/value`; optional `numericValue/formatValue` and description |Fixed contextual display; typed numeric animation only when the caller supplies both live value and formatter; never parses the display string |
 |`DataList` |`label/children` |Named grouping of library rows; not a source data-table implementation |
-|`DataTable` |`label/unavailableLabel/columns/rows/state` |Native table semantics; fixed 640px narrow scroll lane; its region joins Tab order only with horizontal overflow; caller controls data and recovery; no selection/sorting |
+|`DataTable` |`label/unavailableLabel/columns/rows/state` |Native table semantics; fixed 640px narrow scroll lane; its region joins Tab order only with horizontal overflow; caller controls data and recovery; no selection/sorting; beUI `table` is explicit F3 NO_FIT because virtualization,selection,resize/reorder,editing and menus would change this contract |
 |`HorizontalRail` |`label/children` |Fixed manual 272–320px card lane; touch, trackpad and native focused horizontal-key scroll only; no autoplay, pagination, card state or style escape |
 |`Carousel` |`label/children`;optional localized `interactionHint` |Continuous forward34px/s circular rail;no visible playback/arrows;native scroll;hover/focus pauses,touch/wheel resumes after1200ms idle;Space on focused region toggles persistent pause;offscreen/hidden/reduced-motion stops;no motion tuning |
 |`PagedCarousel` |`label/previousLabel/nextLabel/slideLabel({index,count})/children` |Finite manual gallery;one full-width slide per snap;drag/touch and adjacent buttons;Left/Right on focused region jump without animation;reduced motion makes button navigation instant;no autoplay,loop,plugins or visual escape hatch |
 |`ScrollableList` |`label/children` |Fixed 192px vertical list region; all children remain rendered; joins Tab order only when it overflows; no virtualization, ordering or data state |
-|`Pagination` |`label/page/pageCount/summary({page,pageCount})/previousLabel/nextLabel/onPageChange` |Controlled one-based adjacent navigation; bounds normalize non-finite/fractional values; summary receives the same normalized values; responsive stack; no request or route behavior |
+|`Pagination` |`label/page/pageCount/summary({page,pageCount})/previousLabel/nextLabel/onPageChange` |Controlled one-based adjacent navigation; bounds normalize non-finite/fractional values; summary receives the same normalized values; responsive stack; no request or route behavior; beUI `adaptive-stepper` is explicit F3 NO_FIT because quantity-stepper semantics and rolling numeric UI do not preserve page navigation |
 
 `value=0` is valid. Null/non-finite value or invalid max yields unavailable; finite out-of-range values clamp defensively. No arbitrary segment count, dimensions or score thresholds exposed. Before/after meaning and source data accuracy remain caller responsibilities.
 
@@ -245,7 +245,7 @@ Exact type exports and consumer examples: [Decision contract](DECISIONS.md).
 
 | Component | API | Evidence / constraint |
 |---|---|---|
-|`PricingCard` |`title/description/image/price/featuresLabel/features/action`;optional featured/actionNote/feedback/headingLevel |Transparent360px maximum,r24,p20;4:1 art;literal price and billing description;semantic benefit list;one full-width40/44px pill action;caller owns requests and outcomes |
+|`PricingCard` |`title/description/image/price/featuresLabel/features/action`;optional featured/actionNote/feedback/headingLevel |Transparent360px maximum,r24,p20;4:1 art;literal price and billing description;optional typed `price.amount` animates only a controlled real change;semantic benefit list;one full-width40/44px pill action;caller owns requests and outcomes |
 |`PricingSection` |`title/plans`;optional description/mark/headingLevel |Centered720px maximum;two columns when space permits,one below664px available width;named section and semantic heading hierarchy;only first explicitly featured plan gets brand emphasis |
 
 Full API,source adaptation and validation: [Pricing contract](PRICING.md).
@@ -296,7 +296,7 @@ Provide an owned/licensed image,prefer3:2 crop with no essential embedded instru
 |`LabelField` |`labels:readonly string[]`; optional `initialRows=3`; required `moreLabel(hidden)/lessLabel` |Passive wrap of inert labels disclosed by measured wrap rows; labels beyond the row budget collapse behind a real-count toggle; labels are never buttons; re-measured after fonts/resize/list change |
 |`DisclosedRecords` |`records`, `visibleCount`, `moreLabel(hidden)/lessLabel`, `render(visible)` |Count-based record disclosure: older records leave the document while collapsed (no hidden tab stops), real remaining count in the toggle; caller renders each slice |
 
-These primitives own measurement and disclosure semantics only; they never fetch or style consumer content. `DisclosureText`/`LabelField` keep full content present for assistive reading of the clamped state; `DisclosedRecords` removes collapsed records from the document by design. Both toggles expose `aria-expanded`/`aria-controls` through the shared `Button`.
+These primitives own measurement and disclosure semantics only; they never fetch or style consumer content. The beUI `bouncy-accordion` height/opacity/layout intent is adapted with reduced-motion fallback. `DisclosureText` keeps the full string mounted; `LabelField` keeps its hidden remainder mounted inert/aria-hidden; `DisclosedRecords` removes collapsed records from the document by design. Both toggles expose `aria-expanded`/`aria-controls` through the shared `Button`.
 
 Catalog:Library → **Card de apresentação** (`?view=feature-card`). [Controlled example](../../../apps/web/labs/espaco-library/FeatureCardExamples.tsx);local synthetic content,no real onboarding request.
 ## Application tracking

@@ -1,6 +1,8 @@
-import { createContext, useContext, useEffect, useId, useRef, useState, type ComponentProps, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useId, useRef, useState, useSyncExternalStore, type ComponentProps, type ReactNode } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
 import { Icon, Text } from './foundation';
 import { HelpLabel } from './overlays';
+import { SPRING_LAYOUT } from './lib/ease';
 import './layout.css';
 
 type IconName = ComponentProps<typeof Icon>['name'];
@@ -8,6 +10,23 @@ type NavigationAction = { href: string; onClick?: never } | { href?: never; onCl
 type LockedNavigation = { href?: never; onClick?: never };
 type ShellContextValue = { collapsed: boolean; onCollapsedChange: (collapsed: boolean) => void; mobile: boolean; mobileOpen: boolean; onMobileOpenChange: (open: boolean) => void };
 const ShellContext = createContext<ShellContextValue | null>(null);
+const NavMotionContext = createContext<string | null>(null);
+
+const APP_SHELL_MORPH = {
+  type: 'spring',
+  stiffness: 380,
+  damping: 35,
+  mass: 0.75,
+} as const;
+
+const MOBILE_QUERY = '(max-width: 767px)';
+function subscribeToMobile(onChange: () => void) {
+  const query = window.matchMedia(MOBILE_QUERY);
+  query.addEventListener('change', onChange);
+  return () => query.removeEventListener('change', onChange);
+}
+function getMobileSnapshot() { return window.matchMedia(MOBILE_QUERY).matches; }
+function getMobileServerSnapshot(): boolean | null { return null; }
 
 function trapTab(event: React.KeyboardEvent<HTMLElement>) {
   if (event.key !== 'Tab') return;
@@ -22,7 +41,7 @@ function trapTab(event: React.KeyboardEvent<HTMLElement>) {
 export function AppShell({ sidebar, header, children, collapsed, onCollapsedChange, mobileOpen, onMobileOpenChange, contentWidth = 'home', navigationLabel = 'Navigation', closeNavigationLabel, skipToContentLabel = 'Ir para o conteúdo' }: {
   sidebar: ReactNode; header?: ReactNode; children: ReactNode; collapsed: boolean; onCollapsedChange: (collapsed: boolean) => void; mobileOpen: boolean; onMobileOpenChange: (open: boolean) => void; contentWidth?: 'chat' | 'home' | 'dashboard' | 'full'; navigationLabel?: string; closeNavigationLabel?: string; skipToContentLabel?: string;
 }) {
-  const [mobile, setMobile] = useState(false);
+  const mobile = useSyncExternalStore(subscribeToMobile, getMobileSnapshot, getMobileServerSnapshot);
   const sidebarRef = useRef<HTMLElement>(null);
   const openRef = useRef<HTMLButtonElement>(null);
   const returnFocusTarget = useRef<HTMLElement | null>(null);
@@ -30,13 +49,7 @@ export function AppShell({ sidebar, header, children, collapsed, onCollapsedChan
   const sidebarId = useId();
   const contentId = useId();
   const contentRef = useRef<HTMLElement>(null);
-  useEffect(() => {
-    const query = window.matchMedia('(max-width: 767px)');
-    const update = () => setMobile(query.matches);
-    update();
-    query.addEventListener('change', update);
-    return () => query.removeEventListener('change', update);
-  }, []);
+  const reduce = useReducedMotion() ?? false;
   useEffect(() => {
     if (!mobile || !mobileOpen) return;
     if (returnFocusFrame.current !== null) {
@@ -56,10 +69,15 @@ export function AppShell({ sidebar, header, children, collapsed, onCollapsedChan
       });
     };
   }, [mobile, mobileOpen]);
-  const drawerOpen = mobile && mobileOpen;
+  const drawerOpen = mobile === true && mobileOpen;
 
-  return <ShellContext.Provider value={{ collapsed, onCollapsedChange, mobile, mobileOpen, onMobileOpenChange }}>
-    <div className={`es-app-shell${collapsed ? ' es-app-shell--collapsed' : ''}${drawerOpen ? ' es-app-shell--drawer-open' : ''}`}>
+  return <ShellContext.Provider value={{ collapsed, onCollapsedChange, mobile: mobile === true, mobileOpen, onMobileOpenChange }}>
+    <motion.div
+      className={`es-app-shell${collapsed ? ' es-app-shell--collapsed' : ''}${drawerOpen ? ' es-app-shell--drawer-open' : ''}`}
+      initial={false}
+      animate={mobile === null ? undefined : { gridTemplateColumns: mobile ? 'minmax(0,1fr)' : collapsed ? '62px minmax(0,1fr)' : '264px minmax(0,1fr)' }}
+      transition={reduce ? { duration: 0 } : APP_SHELL_MORPH}
+    >
       <a className="es-skip-link" href={`#${contentId}`} inert={drawerOpen} onClick={event => { event.preventDefault(); contentRef.current?.focus(); }}>{skipToContentLabel}</a>
       {drawerOpen && <button className="es-sidebar-backdrop" aria-label={closeNavigationLabel ?? `Close ${navigationLabel.toLowerCase()}`} tabIndex={-1} onClick={() => onMobileOpenChange(false)} />}
       <aside id={sidebarId} ref={sidebarRef} className="es-sidebar" aria-label={navigationLabel} role={drawerOpen ? 'dialog' : undefined} aria-modal={drawerOpen || undefined} onKeyDown={event => {
@@ -72,7 +90,7 @@ export function AppShell({ sidebar, header, children, collapsed, onCollapsedChan
         {header}
         <div className="es-page-outer"><div className={`es-page es-page--${contentWidth}`}>{children}</div></div>
       </main>
-    </div>
+    </motion.div>
   </ShellContext.Provider>;
 }
 
@@ -95,7 +113,7 @@ export function WorkspaceTrigger({ name, mark, onClick, expanded = false, menuLa
 
 export function SidebarSection({ label, children, purpose = 'default' }: { label?: string; children: ReactNode; purpose?: 'primary' | 'default' | 'history' }) {
   const id = useId();
-  return <section className={`es-sidebar-section es-sidebar-section--${purpose}`} aria-labelledby={label ? id : undefined}>{label && <h2 id={id}>{label}</h2>}<div className="es-sidebar-items">{children}</div></section>;
+  return <NavMotionContext.Provider value={id}><section className={`es-sidebar-section es-sidebar-section--${purpose}`} aria-labelledby={label ? id : undefined}>{label && <h2 id={id}>{label}</h2>}<div className="es-sidebar-items">{children}</div></section></NavMotionContext.Provider>;
 }
 
 /**
@@ -105,15 +123,20 @@ export function SidebarSection({ label, children, purpose = 'default' }: { label
  * (title) and assistive technology (label).
  */
 export function NavItem({ label, icon, active = false, badge, locked, href, onClick }: { label: string; icon: IconName; active?: boolean; badge?: string; locked?: string } & (NavigationAction | LockedNavigation)) {
-  const content = <><Icon name={icon} purpose="navigation" /><span className="es-nav-label">{label}</span>{badge && <span className="es-nav-badge">{badge}</span>}</>;
+  const reduce = useReducedMotion() ?? false;
+  const navMotionId = useContext(NavMotionContext) ?? 'es-nav-active';
+  const content = <span className="es-nav-content"><Icon name={icon} purpose="navigation" /><span className="es-nav-label">{label}</span>{badge && <span className="es-nav-badge">{badge}</span>}</span>;
+  const activeIndicator = locked ? null : active
+    ? <motion.span layoutId={`${navMotionId}-active`} initial={false} transition={reduce ? { duration: 0 } : SPRING_LAYOUT} className="es-nav-active-indicator" aria-hidden="true" />
+    : <span className="es-nav-active-indicator" aria-hidden="true" />;
   const shell = useContext(ShellContext);
   const common = { className: `es-nav-item${active ? ' es-nav-item--active' : ''}${locked ? ' es-nav-item--locked' : ''}`, title: locked ?? (shell?.collapsed ? label : undefined), 'aria-label': locked ? `${label}. ${locked}` : label, 'aria-current': active ? 'page' as const : undefined };
   if (locked) return <button {...common} type="button" disabled title={common.title}>{content}</button>;
-  if (href !== undefined) return <a {...common} href={href}>{content}</a>;
-  return <button {...common} type="button" onClick={onClick}>{content}</button>;
+  if (href !== undefined) return <a {...common} href={href}>{activeIndicator}{content}</a>;
+  return <button {...common} type="button" onClick={onClick}>{activeIndicator}{content}</button>;
 }
 
-export function SidebarFooter({ children }: { children: ReactNode }) { return <div className="es-sidebar-footer">{children}</div>; }
+export function SidebarFooter({ children }: { children: ReactNode }) { const id = useId(); return <NavMotionContext.Provider value={id}><div className="es-sidebar-footer">{children}</div></NavMotionContext.Provider>; }
 
 export function ContentHeader({ children, actions }: { children: ReactNode; actions?: ReactNode }) {
   return <header className="es-content-header"><div className="es-content-header-main">{children}</div>{actions && <div className="es-content-header-actions">{actions}</div>}</header>;

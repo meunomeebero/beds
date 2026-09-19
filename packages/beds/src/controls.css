@@ -13,7 +13,7 @@
 .es-root .es-tabs{min-width:0}
 .es-root .es-tabs[data-variant="activity"] .es-tabs-list{flex-wrap:wrap}
 .es-root .es-tabs[data-variant="activity"] .es-tabs-list>[role="tab"]{flex:0 0 auto;max-width:100%;white-space:normal;overflow-wrap:anywhere}
-.es-root .es-tab-panel{margin-top:16px;min-width:0}
+.es-root .es-tab-panel{min-width:0}
 .es-root :where(button[aria-pressed],button:not([aria-pressed]):not([aria-label]),.es-icon-button,.es-icon-toggle-button,.es-tabs-list>[role="tab"],.es-tab-panel):focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
 /* Fields now own their focus idiom via Tailwind utilities (border-ring + shadow-[0_0_0_3px_var(--es-focus-ring)]); forced-colors
    paints Highlight through the explicit `outline:transparent` set on focus. */
@@ -40,20 +40,10 @@
    so the dialog and other data-variant surfaces keep their token background. */
 .es-root[data-theme=dark] .es-segmented-control:not([data-variant=joined]){background:var(--es-control)}
 
-/* Settings navigation: intrinsic labels, quiet selection, one scrollable row. */
-
-/* Settings navigation: intrinsic labels, quiet selection, one scrollable row.
-   Settings tabs are a deferred migration — the layout, the inline label pill, the bottom
-   underline and the dark variant all live here until the settings variant is ported to Tailwind. */
-.es-root .es-tabs[data-variant="settings"] .es-tabs-list{display:flex;align-items:stretch;gap:var(--es-space-2);width:100%;min-width:0;padding:var(--es-space-2) var(--es-space-2) 0;border:0;border-bottom:1px solid var(--es-border);border-radius:0;background:transparent;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;scroll-padding-inline:var(--es-space-2)}
-.es-root .es-tabs[data-variant="settings"] .es-tabs-list>[role="tab"]{position:relative;flex:0 0 auto;min-height:48px;padding:var(--es-space-1) 0 var(--es-space-4);border-radius:var(--es-radius-6);background:transparent;box-shadow:none;font:400 13px/20px var(--es-font)}
-.es-root .es-tabs[data-variant="settings"] .es-settings-tab-label{display:block;padding:var(--es-space-2) var(--es-space-5);border-radius:var(--es-radius-6)}
 .es-root .es-tabs[data-variant="settings"] [aria-selected="true"] .es-settings-tab-label{background:var(--es-selected);color:var(--es-text)}
-.es-root .es-tabs[data-variant="settings"] [aria-selected="true"]::after{content:"";position:absolute;inset-inline:var(--es-space-1);inset-block-end:0;block-size:2px;border-radius:var(--es-radius-full);background:var(--es-text)}
+.es-root .es-tabs[data-variant="settings"] .es-settings-tab-indicator{position:absolute;inset-inline:var(--es-space-1);inset-block-end:0;block-size:2px;border-radius:var(--es-radius-full);background:var(--es-text);pointer-events:none}
 .es-root .es-tabs[data-variant="settings"] .es-tabs-list>[role="tab"]:focus-visible{outline-offset:-2px}
-.es-root .es-tabs[data-variant="settings"] .es-tab-panel{margin-top:var(--es-space-10)}
-.es-root .es-tabs[data-variant="settings"] button:not([aria-label]){min-height:36px}
 .es-root .es-tabs[data-variant="settings"] .es-switch{min-height:44px}
-@media(hover:hover){.es-root .es-tabs[data-variant="settings"] .es-tabs-list>[role="tab"]:not(:disabled):not([aria-selected="true"]):hover{background:transparent}.es-root .es-tabs[data-variant="settings"] [role="tab"]:not(:disabled):not([aria-selected="true"]):hover .es-settings-tab-label{background:var(--es-hover)}}
-@media(max-width:767px){.es-root .es-tabs[data-variant="settings"] button:not([aria-label]){min-height:44px}.es-root .es-tabs[data-variant="settings"] :where(input,select,textarea){font-size:16px}.es-root .es-tabs[data-variant="settings"] :where(.es-select-trigger,.es-theme-toggle>button){min-height:44px}.es-root .es-tabs[data-variant="settings"] .es-text-link{display:inline-flex;align-items:center;min-height:44px}}
-@media(forced-colors:active){.es-root .es-tabs[data-variant="settings"] [aria-selected="true"]::after{background:Highlight}.es-root .es-tabs[data-variant="settings"] [aria-selected="true"] .es-settings-tab-label{outline:1px solid Highlight}}
+@media(hover:hover){.es-root .es-tabs[data-variant="settings"] [role="tab"]:not(:disabled):not([aria-selected="true"]):hover{background:transparent}.es-root .es-tabs[data-variant="settings"] [role="tab"]:not(:disabled):not([aria-selected="true"]):hover .es-settings-tab-label{background:var(--es-hover)}}
+@media(max-width:767px){.es-root .es-tabs[data-variant="settings"] :where(input,select,textarea){font-size:16px}.es-root .es-tabs[data-variant="settings"] :where(.es-select-trigger,.es-theme-toggle>button){min-height:44px}.es-root .es-tabs[data-variant="settings"] .es-text-link{display:inline-flex;align-items:center;min-height:44px}}
+@media(forced-colors:active){.es-root .es-tabs[data-variant="settings"] .es-settings-tab-indicator{background:Highlight}.es-root .es-tabs[data-variant="settings"] [aria-selected="true"] .es-settings-tab-label{outline:1px solid Highlight}}

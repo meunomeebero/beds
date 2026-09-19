@@ -130,6 +130,8 @@ Wrap only explicitly migrated screens; never enclose legacy UI to simulate migra
 | [Landing-page skill](docs/design/espaco-library/LANDING-PAGE-SKILL.md) | Bundled Marc Lou adaptation, landing-only routing and consumer setup |
 | [External component sourcing](docs/design/espaco-library/EXTERNAL-COMPONENT-SOURCING.md) | beUI-first search before building a missing pattern; adapt-never-install contract and attribution |
 | [F2 migration tracking](docs/design/espaco-library/F2-MIGRATION-TRACKING.md) | Live checklist for the beUI-based overlay/feedback/navigation/data migration; restart point if a session ends mid-work |
+| [F3 migration decisions](docs/design/espaco-library/F3-MIGRATION-DECISIONS.md) | Typed numeric motion adoption and explicit no-fit provenance for data surfaces |
+| [F0–F4 migration closeout](docs/design/espaco-library/F0-F4-MIGRATION-TRACKING.md) | Canonical phase inventory, acceptance criteria, evidence boundary and closeout status |
 | [beUI opportunities audit](docs/design/espaco-library/BEUI-OPPORTUNITIES-2026-09-16.md) | Measured motion gap, replace/enhance/new candidates by intensity, and the decisions still owed |
 | [MCP/Profile review, 2026-09-15](docs/design/espaco-library/REVIEW-MCP-PROFILE-2026-09-15.md) | Six-domain preview audit; unresolved findings, not release approval |
 | [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.md) | Build/pack/import parity |

@@ -73,7 +73,9 @@ test('settings anatomy stays clean, legible and contained in both themes and nar
     await contrast(page);
     const tab = page.getByRole('tab', { name: 'Conta', exact: true });
     expect((await tab.boundingBox())!.height).toBeGreaterThanOrEqual(44);
-    expect(await tab.evaluate(el => getComputedStyle(el, '::after').height)).toBe('2px');
+    const indicator = tab.locator('[data-tabs-indicator]');
+    await expect(indicator).toBeVisible();
+    expect(await indicator.evaluate(el => getComputedStyle(el).height)).toBe('2px');
     expect(await page.getByRole('tabpanel', { name: 'Conta' }).getByRole('region', { name: 'Sua conta' }).evaluate(el => getComputedStyle(el).borderWidth)).toBe('0px');
     if (width < 768) {
       expect(await page.getByRole('textbox').evaluate(el => getComputedStyle(el).fontSize)).toBe('16px');
@@ -142,7 +144,7 @@ test('settings support high contrast, reduced motion, RTL and a 200 percent refl
   expect(await account.evaluate(el => parseFloat(getComputedStyle(el).outlineWidth))).toBeGreaterThan(0);
   await page.screenshot({ path: `apps/web/labs/espaco-library/evidence/settings/${info.project.name}-zoom-rtl.png`, fullPage: true });
   await page.emulateMedia({ forcedColors: 'active' });
-  expect(await account.evaluate(el => getComputedStyle(el, '::after').backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
+  expect(await account.locator('[data-tabs-indicator]').evaluate(el => getComputedStyle(el).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
   await page.keyboard.press('End');
   await expect(page.getByRole('tab', { name: 'Privacidade' })).toBeInViewport();
 });

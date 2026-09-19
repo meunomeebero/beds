@@ -1,8 +1,38 @@
 # Espaço library — validation record
 
-Canonical repository:`meunomeebero/beds`. Current release candidate:
-`beds@0.1.7-rc.16`,2026-09-15. Publication identity/hash belong to the immutable
-GitHub prerelease;this record describes source validation,not deployment.
+Canonical repository:`meunomeebero/beds`. Historical release candidate:
+`beds@0.1.7-rc.16`,2026-09-15. The current local candidate is
+`beds@0.1.7-rc.19`; current migration status is tracked in
+[F0–F4 migration closeout](F0-F4-MIGRATION-TRACKING.md). Publication identity/hash
+belong to an immutable GitHub prerelease;this record describes source validation,
+not deployment or release acceptance.
+
+## Current F0–F4 closeout checkpoint — September 19
+
+The canonical phase inventory and acceptance criteria are in
+[F0–F4 migration closeout](F0-F4-MIGRATION-TRACKING.md). Final technical
+freeze is `fd9f9c9`. `npm run verify` passed: 134 public components, 205
+declared tokens, 98 Markdown files/925 local targets, 33 consumer roots/39
+files with 0 violations, 39 guards, 4 quality-routing tests and extracted
+consumer smoke. Packed artifact SHA-256:
+`452231bafcf921eb1cff53227340e4ffda31ff01c152a72a559247d6221580bd`.
+Independent Sol review is `PASS_WITH_NOTES` with no technical blockers.
+
+Focused final evidence: Tabs/navigation 12 passes plus 4 intentional
+project-conditional skips; Hydration and AnimatedNumber 6/6; typed pricing
+motion 2/2; and Processing focused plus legacy coverage 26/26 across the
+desktop/mobile matrix. F2 component snapshots are in [F2 migration tracking](F2-MIGRATION-TRACKING.md),
+F3 decisions and no-fit rows are in [F3 migration decisions](F3-MIGRATION-DECISIONS.md),
+and the F4 source mapping is in [Processing](PROCESSING.md). Technical review
+does not grant aesthetic approval; physical assistive technology, non-Chromium
+engines, real browser zoom, performance profiling and owner visual acceptance
+remain separate gates.
+
+Commit boundary note: `ccefbe0` owns the F4 Processing implementation and
+focused spec; `03c3256` owns F3 and recorded the shared F4 provenance/license
+rows before that F4 code commit. The historical documentation order is mapped
+explicitly in the [F0–F4 tracker](F0-F4-MIGRATION-TRACKING.md) and does not
+attribute F4 implementation to `03c3256`.
 
 ## Local checkout — September16
 
@@ -95,6 +125,11 @@ long content,contrast≥4.5:1 sampled text,44px component controls,reduced motio
 forced colors and CSS200% zoom proxy. Existing meters retain role/value/bounds.
 Processing suite observed no external/mutating request or console error.
 36 processing screenshots;dark desktop/light320px,error and success inspected.
+F4 `processing-beui.spec.ts`:12/12 passed on the same single preview port across
+desktop/mobile and light/dark. Final ATS text/ARIA values stay static while the
+segmented fill reveals; pause/resume and reduced motion are covered. Lab and
+library static gates passed. This is technical evidence,not aesthetic approval;
+physical AT,non-Chromium and owner acceptance remain pending.
 Initial mobile timing failure during concurrent editing passed isolated and
 stable full reruns;assertions retained. Full catalog not rerun for this port.
 

@@ -17,7 +17,8 @@
 .es-root .es-processing-message[data-state=success] > svg { color:var(--es-badge-success-marker); }
 .es-root .es-processing-steps { display:grid; gap:var(--es-space-10); list-style:none; padding:0; margin:var(--es-space-11) 0; }
 .es-root .es-processing-steps > li { display:grid; grid-template-columns:28px minmax(0,1fr); gap:var(--es-space-6); }
-.es-root .es-processing-step-icon { display:grid; place-items:center; width:28px; height:28px; border:1px solid var(--es-border-strong); border-radius:var(--es-radius-8); color:var(--es-secondary); font:400 12px/18px var(--es-font); font-variant-numeric:tabular-nums; }
+.es-root .es-processing-step-icon { position:relative; display:grid; place-items:center; width:28px; height:28px; border:1px solid var(--es-border-strong); border-radius:var(--es-radius-8); color:var(--es-secondary); font:400 12px/18px var(--es-font); font-variant-numeric:tabular-nums; }
+.es-root .es-processing-step-icon > span { display:grid; place-items:center; }
 .es-root .es-processing-steps > li[data-state=active] .es-processing-step-icon { background:var(--es-brand); color:var(--es-on-brand); border-color:var(--es-brand); }
 .es-root .es-processing-steps > li[data-state=complete] .es-processing-step-icon { color:var(--es-badge-success-marker); }
 .es-root .es-processing-step-heading { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:var(--es-space-2) var(--es-space-4); }
