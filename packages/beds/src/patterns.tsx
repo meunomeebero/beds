@@ -1,8 +1,10 @@
-import { useId, useRef, type ComponentProps, type KeyboardEvent, type ReactNode } from 'react';
+import { useEffect, useId, useRef, useState, type ComponentProps, type KeyboardEvent, type ReactNode } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
 import { Icon } from './foundation';
 import { Button, SegmentedControl } from './controls';
 import { SegmentedMeter } from './feedback';
-import { useAnchoredPopup } from './overlays';
+import { useAnchoredPopup } from './lib/anchored-popup';
+import { EASE_OUT, SPRING_LAYOUT } from './lib/ease';
 import './patterns.css';
 
 type IconName = ComponentProps<typeof Icon>['name'];
@@ -48,6 +50,14 @@ function trapAccountTab(event: KeyboardEvent<HTMLDivElement>) {
   if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
 }
 
+function accountMenuControls(panel: HTMLDivElement) {
+  return [...panel.querySelectorAll<HTMLElement>('button:not(:disabled),a[href],input:not(:disabled),[tabindex="0"]')].filter(control => control.getClientRects().length > 0);
+}
+
+function accountMenuTypeaheadLabel(control: HTMLElement) {
+  return (control.closest('label')?.textContent ?? control.textContent ?? '').trim().toLocaleLowerCase();
+}
+
 export function AccountMenu({ open, onOpenChange, trigger, identity, actions, onAction, workspaces = [], activeWorkspace, onWorkspaceChange, theme, onThemeChange, allWorkspaces, footer, label = 'Account menu', appearanceLabel = 'Appearance', lightLabel = 'Light', darkLabel = 'Dark' }: {
   open: boolean; onOpenChange: (open: boolean) => void; trigger: ReactNode;
   identity: { name: string; description?: string; avatar?: ReactNode };
@@ -61,17 +71,60 @@ export function AccountMenu({ open, onOpenChange, trigger, identity, actions, on
   const anchor = useRef<HTMLDivElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const id = useId();
+  const reduce = useReducedMotion() ?? false;
+  const [activeItem, setActiveItem] = useState<string | null>(null);
+  const typeahead = useRef('');
+  const typeaheadTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useAnchoredPopup({ open, anchor, panel, onOpenChange, width: 280, initialFocus: 'first-control' });
 
+  useEffect(() => {
+    if (!open) {
+      setActiveItem(null);
+      typeahead.current = '';
+      if (typeaheadTimer.current) {
+        clearTimeout(typeaheadTimer.current);
+        typeaheadTimer.current = null;
+      }
+    }
+    return () => { if (typeaheadTimer.current) clearTimeout(typeaheadTimer.current); };
+  }, [open]);
+
+  function moveAccountFocus(event: KeyboardEvent<HTMLDivElement>) {
+    if (!panel.current) return;
+    if (event.key === 'Tab') { trapAccountTab(event); return; }
+    const controls = accountMenuControls(panel.current);
+    if (!controls.length) return;
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp' || event.key === 'Home' || event.key === 'End') {
+      event.preventDefault();
+      const current = controls.indexOf(event.target as HTMLElement);
+      const next = event.key === 'Home' ? 0 : event.key === 'End' ? controls.length - 1 : (current + (event.key === 'ArrowDown' ? 1 : -1) + controls.length) % controls.length;
+      controls[next]?.focus();
+      return;
+    }
+    if (event.key.length !== 1 || event.ctrlKey || event.metaKey || event.altKey) return;
+    typeahead.current += event.key.toLocaleLowerCase();
+    if (typeaheadTimer.current) clearTimeout(typeaheadTimer.current);
+    typeaheadTimer.current = setTimeout(() => { typeahead.current = ''; }, 500);
+    controls.find(control => accountMenuTypeaheadLabel(control).startsWith(typeahead.current))?.focus();
+  }
+
+  const activeBackground = (key: string) => activeItem === key ? <motion.span
+    layoutId={`${id}-active`}
+    aria-hidden="true"
+    className="es-account-active"
+    transition={reduce ? { duration: 0 } : SPRING_LAYOUT}
+  /> : null;
+
   function actionButton(action: (typeof actions)[number]) {
-    return <button key={action.id} type="button" className="es-account-action" disabled={action.disabled} onClick={() => { onOpenChange(false); onAction(action.id); }}><Icon name={action.icon} purpose="navigation" /><span>{action.label}</span></button>;
+    const key = `action:${action.id}`;
+    return <button key={action.id} type="button" className="es-account-action" disabled={action.disabled} onFocus={() => setActiveItem(key)} onPointerMove={event => { if (event.pointerType !== 'touch' && !action.disabled) setActiveItem(key); }} onClick={() => { onOpenChange(false); onAction(action.id); }}>{activeBackground(key)}<Icon name={action.icon} purpose="navigation" /><span>{action.label}</span></button>;
   }
 
   const signOutAction = actions.find(action => action.icon === 'LogOut');
   const primaryActions = actions.filter(action => action !== signOutAction);
   return <div className="es-account-anchor" ref={anchor}>
     {trigger}
-    <div ref={panel} id={id} className="es-account-menu" popover="manual" role="dialog" aria-label={label} onKeyDown={trapAccountTab}>
+    <motion.div ref={panel} id={id} className="es-account-menu" popover="manual" role="dialog" aria-label={label} initial={false} animate={open ? { opacity: 1 } : { opacity: 0 }} transition={reduce ? { duration: 0 } : { duration: 0.18, ease: EASE_OUT }} onFocusCapture={event => { if (!(event.target as HTMLElement).closest('.es-account-action')) setActiveItem(null); }} onKeyDown={moveAccountFocus}>
       <div className="es-account-identity"><span className="es-account-avatar" aria-hidden="true">{identity.avatar ?? identity.name.slice(0, 1)}</span><div><strong>{identity.name}</strong>{identity.description && <p>{identity.description}</p>}</div></div>
       <div className="es-account-group">
         {primaryActions.map(actionButton)}
@@ -79,10 +132,10 @@ export function AccountMenu({ open, onOpenChange, trigger, identity, actions, on
         {signOutAction && actionButton(signOutAction)}
       </div>
       {(workspaces.length > 0 || allWorkspaces) && <div className="es-account-group es-account-workspaces">
-        {workspaces.map(workspace => <button key={workspace.id} type="button" className="es-account-action" aria-pressed={workspace.id === activeWorkspace} onClick={() => { onOpenChange(false); onWorkspaceChange?.(workspace.id); }}><span className="es-account-workspace-mark" aria-hidden="true">{workspace.mark ?? workspace.label.slice(0, 1)}</span><span>{workspace.label}</span>{workspace.id === activeWorkspace && <Icon name="Check" purpose="navigation" />}</button>)}
-        {allWorkspaces && <button type="button" className="es-account-action es-account-action--all-workspaces" onClick={() => { onOpenChange(false); allWorkspaces.onClick(); }}><Icon name="MoreHorizontal" purpose="navigation" /><span>{allWorkspaces.label}</span></button>}
+        {workspaces.map(workspace => { const key = `workspace:${workspace.id}`; return <button key={workspace.id} type="button" className="es-account-action" aria-pressed={workspace.id === activeWorkspace} onFocus={() => setActiveItem(key)} onPointerMove={event => { if (event.pointerType !== 'touch') setActiveItem(key); }} onClick={() => { onOpenChange(false); onWorkspaceChange?.(workspace.id); }}>{activeBackground(key)}<span className="es-account-workspace-mark" aria-hidden="true">{workspace.mark ?? workspace.label.slice(0, 1)}</span><span>{workspace.label}</span>{workspace.id === activeWorkspace && <Icon name="Check" purpose="navigation" />}</button>; })}
+        {allWorkspaces && <button type="button" className="es-account-action es-account-action--all-workspaces" onFocus={() => setActiveItem('all-workspaces')} onPointerMove={event => { if (event.pointerType !== 'touch') setActiveItem('all-workspaces'); }} onClick={() => { onOpenChange(false); allWorkspaces.onClick(); }}>{activeBackground('all-workspaces')}<Icon name="MoreHorizontal" purpose="navigation" /><span>{allWorkspaces.label}</span></button>}
       </div>}
       {footer && <div className="es-account-footer">{footer}</div>}
-    </div>
+    </motion.div>
   </div>;
 }

@@ -34,8 +34,8 @@
 .es-root :where(.es-select-option,.es-menu-item,.es-command-option)[aria-disabled="true"]{opacity:.5;cursor:default}
 .es-root :where(.es-select-trigger,.es-select-popup,.es-menu-popup):focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
 
-.es-root .es-tooltip-anchor{display:inline-flex;max-width:100%}
-.es-root .es-tooltip{position:fixed;inset:auto;margin:0;padding:5px 8px;overflow-wrap:anywhere;border:1px solid var(--es-border);border-radius:6px;background:var(--es-inverse);color:var(--es-bg);box-shadow:var(--es-shadow-popup);font:400 12px/16px var(--es-font)}
+/* Tooltip: migrated to beUI logic + motion/react in overlays.tsx; portal surface uses compiled Tailwind tokens. */
+.es-root .es-drawer::backdrop{background:var(--es-overlay)}
 .es-root .es-dialog,.es-root .es-command{width:min(672px,calc(100vw - 32px));max-width:calc(100vw - 32px);max-height:calc(100dvh - 32px);padding:0;border:1px solid var(--es-border);border-radius:14px;overflow:auto;overscroll-behavior:contain;background:var(--es-surface);color:var(--es-text);box-shadow:var(--es-shadow-popup);font-family:var(--es-font)}
 .es-root .es-dialog::backdrop,.es-root .es-command::backdrop{background:var(--es-overlay)}
 .es-root .es-dialog-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px 24px 16px;border-bottom:1px solid var(--es-border-subtle)}
@@ -108,25 +108,4 @@
 @media(forced-colors:active){.es-root .es-search-result[data-active=true]{outline:2px solid Highlight;outline-offset:-2px}.es-root .es-search-categories button[aria-pressed=true]{border-color:Highlight}}
 
 /* Drawer: a viewport-edge panel, not a rounded card or a resizable window. */
-.es-root .es-drawer{position:fixed;inset-block:0;inset-inline:auto 0;width:min(var(--es-command-width),100%);max-width:100%;height:100%;max-height:100%;margin:0;padding:0;border:0;border-inline-start:1px solid var(--es-border);border-radius:0;background:var(--es-surface);color:var(--es-text);box-shadow:var(--es-shadow-dialog);font:400 14px/1.5 var(--es-font);overflow:hidden;overscroll-behavior:contain}
-.es-root .es-drawer[open]{display:flex;flex-direction:column}
 .es-root .es-drawer::backdrop{background:var(--es-overlay)}
-.es-root .es-drawer-header{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;column-gap:16px;flex:none;max-height:40%;padding:16px 24px;padding-top:max(16px,env(safe-area-inset-top));border-bottom:1px solid var(--es-border-subtle);overflow:auto}
-.es-root .es-drawer-heading{min-width:0;align-self:center;overflow-wrap:anywhere}
-.es-root .es-drawer-heading h2{margin:0;font:500 16px/1.5 var(--es-font);letter-spacing:-.15px;color:var(--es-heading);text-wrap:balance}
-.es-root .es-drawer-heading p{margin:4px 0 0;font:400 13px/1.5 var(--es-font);color:var(--es-secondary);text-wrap:pretty}
-.es-root .es-drawer-close{position:sticky;top:0;grid-column:2;grid-row:1;align-self:start}
-.es-root .es-drawer-close>button[aria-label]{min-width:40px;min-height:40px}
-.es-root .es-drawer-header-actions{grid-column:1/-1;display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:8px}
-.es-root .es-drawer-body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;scroll-padding-block:24px;padding:24px;padding-bottom:max(24px,env(safe-area-inset-bottom))}
-.es-root .es-drawer-body:focus-visible{outline:2px solid var(--es-focus);outline-offset:-4px}
-.es-root .es-drawer-content{min-width:0;overflow-wrap:anywhere}
-.es-root .es-drawer-section{min-width:0;margin-block-start:32px}
-.es-root .es-drawer-section:first-child{margin-block-start:0}
-.es-root .es-drawer-section>h3{margin:0 0 8px;font:500 13px/1.5 var(--es-font);color:var(--es-heading)}
-.es-root .es-drawer-section>div{min-width:0}
-.es-root .es-drawer-actions{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px;flex:none;max-height:35%;overflow:auto;padding:16px 24px;padding-bottom:max(16px,env(safe-area-inset-bottom));border-top:1px solid var(--es-border-subtle)}
-.es-root .es-drawer :where(button,.es-icon-toggle-button){min-height:40px}
-.es-root .es-drawer :where(button,.es-empty-state>button){max-width:100%;height:auto;white-space:normal;overflow-wrap:anywhere}
-.es-root .es-drawer button>span{min-width:0;white-space:normal;overflow-wrap:anywhere}
-@media(max-width:767px){.es-root .es-drawer{width:100%;border-inline-start:0}.es-root .es-drawer-header,.es-root .es-drawer-body,.es-root .es-drawer-actions{padding-inline:max(16px,env(safe-area-inset-left),env(safe-area-inset-right))}.es-root .es-drawer-close>button[aria-label],.es-root .es-drawer :where(button,.es-icon-button,.es-icon-toggle-button,.es-empty-state>button){min-height:44px;min-width:44px}}

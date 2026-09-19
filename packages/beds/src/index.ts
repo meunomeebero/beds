@@ -6,6 +6,7 @@ export { Button, IconButton, IconToggleButton, TextField, TextAreaField, SearchF
 export { RadioGroup, FileUploadField } from './form-fields';
 export type { RadioOption, RadioGroupProps, FileUploadFieldProps } from './form-fields';
 export { Select, FilterSelect, HelpLabel, DropdownMenu, Tooltip, Dialog, Drawer, DrawerSection, CommandPalette, SearchDialog } from './overlays';
+export type { FilterSelectProps, SelectOption, SelectProps } from './select';
 export type { SearchResult } from './overlays';
 export { Dock, DockItem, DockSeparator, type DockProps, type DockItemProps } from './dock';
 export { AppShell, SidebarHeader, WorkspaceTrigger, SidebarSection, NavItem, SidebarFooter, ContentHeader, PageContentHeader, Breadcrumbs, PageHeader, SectionHeader, Stack, Inline, ResponsiveGrid, Divider, Surface, CollectionCard, ActivityPanel } from './layout';

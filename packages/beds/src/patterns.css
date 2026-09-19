@@ -43,10 +43,12 @@
 .es-root .es-account-group{display:flex;flex-direction:column;gap:0;padding:6px 8px}
 .es-root .es-account-workspaces,.es-root .es-account-footer{border-top:1px solid var(--es-border)}
 .es-root .es-account-workspaces{padding:8px}
-.es-root .es-account-action{display:flex;align-items:center;gap:10px;width:100%;min-width:0;min-height:30px;padding:4px 8px;border:0;border-radius:6px;background:transparent;color:var(--es-text);font:400 13px/19.5px var(--es-font);text-align:left;cursor:pointer}
-.es-root .es-account-action>svg,.es-root .es-account-action>span:first-child{flex-shrink:0}
+.es-root .es-account-action{position:relative;isolation:isolate;display:flex;align-items:center;gap:10px;width:100%;min-width:0;min-height:30px;padding:4px 8px;border:0;border-radius:6px;background:transparent;color:var(--es-text);font:400 13px/19.5px var(--es-font);text-align:left;cursor:pointer}
+.es-root .es-account-action>.es-account-active{position:absolute;inset:0;z-index:0;border-radius:6px;background:var(--es-selected);pointer-events:none}
+.es-root .es-account-action>:not(.es-account-active){position:relative;z-index:1}
+.es-root .es-account-action>svg,.es-root .es-account-action>span:first-child:not(.es-account-active){flex-shrink:0}
 .es-root .es-account-action>svg,.es-root .es-account-appearance>span>svg{color:var(--es-secondary)}
-.es-root .es-account-action>span:not(.es-account-workspace-mark){min-width:0;overflow-wrap:anywhere}
+.es-root .es-account-action>span:not(.es-account-workspace-mark):not(.es-account-active){min-width:0;overflow-wrap:anywhere}
 .es-root .es-account-action>svg:last-child:not(:first-child){margin-left:auto}
 .es-root .es-account-action:disabled{opacity:.45;cursor:not-allowed}
 .es-root .es-account-workspace-mark{display:flex;align-items:center;justify-content:center;width:17px;height:17px;flex-shrink:0;overflow:hidden;border-radius:4px;background:var(--es-subtle);font-size:12px;line-height:16px}
