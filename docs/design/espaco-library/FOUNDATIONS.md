@@ -518,7 +518,7 @@ Unboxed groups use0 border/inset,16/24px medium headings,24px internal gaps.
 Settings-panel buttons36px minimum desktop,44px mobile;switch rows44px;mobile
 editable text16px,theme/select triggers and links44px. Defaults unchanged.
 No new motion;underline changes immediately. Existing reduced-motion behavior
-retained;forced colors adds a system-color selected boundary. The settings variant is still legacy CSS in `controls.css` pending Tailwind migration; the activity and connection Tabs variants are migrated (F1).
+retained;forced colors adds a system-color selected boundary. The settings variant is migrated through Tailwind utilities plus the beUI `tabs` indicator intent with `motion/react`; the activity and connection Tabs variants remain migrated (F1). The BEDS geometry, forced-colors boundary, RTL keyboard behavior and controlled API remain authoritative; no legacy settings migration is pending.
 
 ## Checkout presentation — September16 adaptation
 

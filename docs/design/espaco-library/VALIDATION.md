@@ -7,6 +7,24 @@ Canonical repository:`meunomeebero/beds`. Historical release candidate:
 belong to an immutable GitHub prerelease;this record describes source validation,
 not deployment or release acceptance.
 
+## Current F0–F4 closeout checkpoint — September 19
+
+The canonical phase inventory and acceptance criteria are in
+[F0–F4 migration closeout](F0-F4-MIGRATION-TRACKING.md). F0–F4 implementation
+work is present on the working branch, but this snapshot is not a final approval:
+Auditor Ultra and independent Sol review still require re-review of the committed
+SSR/hydration and reduced-motion first-frame corrections, followed by the
+integrated rerun on one SHA. The final desktop/mobile light/dark browser suite,
+`npm run verify` and artifact hash must be recorded after that re-review.
+
+The already-recorded focused results remain evidence, not a substitute for that
+closeout rerun: F2 component snapshots are in [F2 migration tracking](F2-MIGRATION-TRACKING.md),
+F3 decisions and no-fit rows are in [F3 migration decisions](F3-MIGRATION-DECISIONS.md),
+and the F4 source mapping is in [Processing](PROCESSING.md). Technical review
+does not grant aesthetic approval; physical assistive technology, non-Chromium
+engines, real browser zoom, performance profiling and owner visual acceptance
+remain separate gates.
+
 ## Local checkout — September16
 
 [Checkout contract and Revenue-Centric review](CHECKOUT.md):three reusable
