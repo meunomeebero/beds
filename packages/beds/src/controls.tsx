@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useId, useRef, type ForwardedRef, type InputHTML
 import { AnimatePresence, animate, LayoutGroup, motion, useReducedMotion } from 'motion/react';
 import { Icon, type IconName } from './foundation';
 import { cn } from './lib/utils';
-import { EASE_OUT, SPRING_LAYOUT } from './lib/ease';
+import { EASE_OUT, SPRING_LAYOUT, SPRING_PRESS } from './lib/ease';
 import { useHoverCapable } from './lib/hooks/use-hover-capable';
 import './controls.css';
 
@@ -280,17 +280,21 @@ type Choice = { id: string; label: string; disabled?: boolean };
 /** Pill: 22px span (24px container incl. padding) · 13px label · joined: 36px row · label maintained as radiogroup with Arrow nav.
  *  Legacy class hooks (.es-segmented-choice, .es-segmented-choice-span) preserved for theme CSS like
  *  patterns.css `.es-account-appearance .es-segmented-choice > span { min-height: 20px }`. */
-const SEGMENTED_PILL = 'box-border inline-flex items-stretch shrink-0 gap-0.5 max-w-full p-px rounded-full bg-subtle';
-const SEGMENTED_JOINED = 'box-border inline-flex items-stretch shrink-0 gap-0 max-w-full h-9 rounded-lg bg-transparent shadow-[inset_0_0_0_1px_var(--es-border)]';
+const SEGMENTED_PILL = 'box-border inline-flex items-stretch min-w-0 max-w-full overflow-x-auto overscroll-x-contain [scroll-padding-inline:4px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden gap-0.5 p-px rounded-full bg-subtle';
+const SEGMENTED_JOINED = 'box-border inline-flex items-stretch min-w-0 max-w-full overflow-x-auto overscroll-x-contain [scroll-padding-inline:4px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden gap-0 h-9 rounded-lg bg-transparent shadow-[inset_0_0_0_1px_var(--es-border)]';
 const SEGMENTED_CHOICE = 'es-segmented-choice relative min-w-0 flex-none cursor-pointer';
-const SEGMENTED_SPAN_PILL = 'es-segmented-choice-span flex items-center justify-center min-h-[22px] px-2 rounded-full text-muted-foreground text-xs leading-4 tracking-normal font-medium whitespace-nowrap transition-colors';
-const SEGMENTED_SPAN_JOINED = 'es-segmented-choice-span flex items-center justify-center h-9 rounded-none bg-sidebar text-xs leading-4 tracking-normal font-medium whitespace-nowrap first:rounded-l-lg last:rounded-r-lg';
-const SEGMENTED_SPAN_CHECKED = 'text-foreground bg-surface shadow-[0_1px_2px_var(--es-border)]';
+const SEGMENTED_SPAN_PILL = 'es-segmented-choice-span relative flex items-center justify-center min-h-[22px] px-2 rounded-full text-muted-foreground text-xs leading-4 tracking-normal font-medium whitespace-nowrap transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ring';
+const SEGMENTED_SPAN_JOINED = 'es-segmented-choice-span relative flex items-center justify-center h-9 rounded-none bg-sidebar text-xs leading-4 tracking-normal font-medium whitespace-nowrap first:rounded-l-lg last:rounded-r-lg peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ring';
+const SEGMENTED_SPAN_CHECKED = 'text-foreground';
+const SEGMENTED_INDICATOR = 'pointer-events-none absolute inset-0 rounded-[inherit] bg-surface shadow-[0_1px_2px_var(--es-border)]';
 
 export function SegmentedControl({ label, value, options, onChange, variant = 'pill' }: {
   label: string; value: string; options: Choice[]; onChange: (value: string) => void; variant?: 'pill' | 'joined';
 }) {
   const name = useId();
+  const reduce = useReducedMotion() ?? false;
+  const groupRef = useRef<HTMLDivElement>(null);
+  const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
   const navigate = (event: KeyboardEvent<HTMLInputElement>, current: string) => {
     const allowed = variant === 'pill' ? ['ArrowLeft', 'ArrowRight'] : ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'];
     if (!allowed.includes(event.key)) return;
@@ -302,10 +306,30 @@ export function SegmentedControl({ label, value, options, onChange, variant = 'p
     const next = enabled[nextIndex];
     if (!next) return;
     onChange(next.id);
+    const input = inputRefs.current[next.id];
+    input?.focus({ preventScroll: true });
+    const group = groupRef.current;
+    const choice = input?.parentElement;
+    if (group && choice) {
+      const groupRect = group.getBoundingClientRect();
+      const choiceRect = choice.getBoundingClientRect();
+      const padding = 4;
+      const delta = choiceRect.left < groupRect.left + padding
+        ? choiceRect.left - (groupRect.left + padding)
+        : choiceRect.right > groupRect.right - padding
+          ? choiceRect.right - (groupRect.right - padding)
+          : 0;
+      const maxScroll = Math.max(0, group.scrollWidth - group.clientWidth);
+      const nextScroll = Math.max(0, Math.min(maxScroll, group.scrollLeft + delta));
+      if (nextScroll !== group.scrollLeft) group.scrollTo({ left: nextScroll, behavior: reduce ? 'auto' : 'smooth' });
+    }
   };
   const listCls = variant === 'joined' ? SEGMENTED_JOINED : SEGMENTED_PILL;
   const spanCls = variant === 'joined' ? SEGMENTED_SPAN_JOINED : SEGMENTED_SPAN_PILL;
-  return <div className={cn('es-segmented-control', listCls)} data-variant={variant} role="radiogroup" aria-label={label}>{options.map(option => <label key={option.id} className={SEGMENTED_CHOICE}><input type="radio" name={name} value={option.id} checked={value === option.id} disabled={option.disabled} onChange={() => onChange(option.id)} onKeyDown={event => navigate(event, option.id)} className="absolute w-px h-px p-0 m-0 opacity-0 peer" /><span className={cn(spanCls, value === option.id && SEGMENTED_SPAN_CHECKED)}>{option.label}</span></label>)}</div>;
+  return <LayoutGroup id={`${name}-layout`}><div ref={groupRef} className={cn('es-segmented-control', listCls)} data-variant={variant} role="radiogroup" aria-label={label}>{options.map(option => {
+    const selected = value === option.id;
+    return <label key={option.id} className={SEGMENTED_CHOICE}><input ref={input => { inputRefs.current[option.id] = input; }} type="radio" name={name} value={option.id} checked={selected} disabled={option.disabled} onChange={() => onChange(option.id)} onKeyDown={event => navigate(event, option.id)} className="absolute w-px h-px p-0 m-0 opacity-0 peer" /><motion.span whileTap={reduce || option.disabled ? undefined : { scale: 0.92 }} transition={SPRING_PRESS} className={cn(spanCls, selected && SEGMENTED_SPAN_CHECKED)}>{selected && <motion.span layoutId={`${name}-indicator`} initial={false} transition={reduce ? { duration: 0 } : SPRING_LAYOUT} className={SEGMENTED_INDICATOR} aria-hidden="true" data-segmented-indicator /> }<span className="relative z-10">{option.label}</span></motion.span></label>;
+  })}</div></LayoutGroup>;
 }
 
 const TABS_LIST_ACTIVITY = 'inline-flex items-center gap-0.5 max-w-full min-h-[30px] p-0.5 border border-border-subtle rounded-lg bg-subtle pointer-coarse:min-h-11';
