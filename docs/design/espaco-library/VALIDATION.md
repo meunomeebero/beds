@@ -28,6 +28,12 @@ does not grant aesthetic approval; physical assistive technology, non-Chromium
 engines, real browser zoom, performance profiling and owner visual acceptance
 remain separate gates.
 
+Commit boundary note: `ccefbe0` owns the F4 Processing implementation and
+focused spec; `03c3256` owns F3 and recorded the shared F4 provenance/license
+rows before that F4 code commit. The historical documentation order is mapped
+explicitly in the [F0–F4 tracker](F0-F4-MIGRATION-TRACKING.md) and does not
+attribute F4 implementation to `03c3256`.
+
 ## Local checkout — September16
 
 [Checkout contract and Revenue-Centric review](CHECKOUT.md):three reusable

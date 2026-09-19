@@ -55,6 +55,16 @@ and extracted-artifact consumer smoke. The packed artifact SHA-256 is
 Independent Sol review is `PASS_WITH_NOTES` with no technical blockers. These
 are technical results, not aesthetic approval.
 
+## Commit and documentation boundary
+
+The historical commit order is intentional and is mapped explicitly here:
+`ccefbe0` owns the F4 Processing implementation and focused browser spec;
+`03c3256` owns the F3 numeric implementation and also recorded the shared F4
+beUI provenance/license entries in `PROVENANCE.md` and
+`THIRD-PARTY-NOTICES.md` before the F4 code commit. The provenance/notice rows
+are documentation snapshots, not a claim that F4 code shipped in `03c3256`.
+The F4 implementation and its review remain owned by `ccefbe0` and `31a8eab`.
+
 ## Explicit no-fit and deferred decisions
 
 These are completed decisions and must not be represented as pending work:
