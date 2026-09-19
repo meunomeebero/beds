@@ -28,9 +28,11 @@ import LandingPage from './LandingPage';
 import ProcessingPage from './ProcessingPage';
 import ResultsPage from './ResultsPage';
 import CheckoutPage from './CheckoutPage';
+import AnimatedNumberPage from './AnimatedNumberPage';
 const params = new URLSearchParams(location.search);
 const pages: Record<string, React.ComponentType> = {
   checkout: CheckoutPage,
+  'animated-number': AnimatedNumberPage,
   'analysis-result': () => <ResultsPage mode="analysis" />,
   'optimization-result': () => <ResultsPage mode="optimization" />,
   'analysis-loading': ProcessingPage,
