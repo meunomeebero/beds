@@ -28,11 +28,31 @@ for (const theme of ['light', 'dark'] as const) {
       if (listId === null) throw new Error('Command list must expose an id for aria-controls.');
       await expect(input).toHaveAttribute('aria-controls', listId);
 
+      await input.fill('Fund');
+      const isMac = await page.evaluate(() => navigator.platform.includes('Mac'));
+      await input.press('ArrowLeft');
+      await expect(input).toHaveJSProperty('selectionStart', 3);
+      await expect(input).toHaveJSProperty('selectionEnd', 3);
       await input.press('End');
-      await expect(dialog.locator('[data-active="true"]')).toContainText('Configurações');
-      await expect(input).toHaveAttribute('aria-activedescendant', /option/);
-      await input.press('Home');
+      if (isMac) {
+        await expect(input).toHaveJSProperty('selectionStart', 3);
+        await expect(input).toHaveJSProperty('selectionEnd', 3);
+        await input.press('Meta+ArrowRight');
+      }
+      await expect(input).toHaveJSProperty('selectionStart', 4);
+      await expect(input).toHaveJSProperty('selectionEnd', 4);
       await expect(dialog.locator('[data-active="true"]')).toContainText('Fundamentos');
+      await input.press('Home');
+      if (isMac) {
+        // macOS keeps Home as native document scrolling; Meta+ArrowLeft is its caret-start equivalent.
+        await expect(input).toHaveJSProperty('selectionStart', 4);
+        await expect(input).toHaveJSProperty('selectionEnd', 4);
+        await input.press('Meta+ArrowLeft');
+      }
+      await expect(input).toHaveJSProperty('selectionStart', 0);
+      await expect(input).toHaveJSProperty('selectionEnd', 0);
+      await expect(dialog.locator('[data-active="true"]')).toContainText('Fundamentos');
+      await input.fill('');
       await input.press('ArrowUp');
       await expect(dialog.locator('[data-active="true"]')).toContainText('Configurações');
 
