@@ -145,6 +145,53 @@ for (const theme of ['light', 'dark'] as const) {
     await sidebar.getByRole('button', { name: 'Close navigation', exact: true }).click();
     await expect(sidebar).not.toBeVisible();
     await expect(trigger).toBeFocused();
+    await trigger.click();
+    await expect(sidebar).toBeVisible();
+    await page.mouse.click(380, 420);
+    await expect(sidebar).not.toBeVisible();
+    await expect(trigger).toBeFocused();
+    await trigger.click();
+    await expect(sidebar).toBeVisible();
+    await page.keyboard.press('Escape');
+    await trigger.press('Enter');
+    await expect(sidebar).toBeVisible();
+    await expect(sidebar).toHaveCSS('width', '264px');
+    await sidebar.getByRole('button', { name: 'Close navigation', exact: true }).click();
+    await expect(trigger).toBeFocused();
+  });
+
+  test(`shell follows live viewport changes without losing ${theme} drawer isolation`, async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop', 'Live breakpoint changes are exercised from the desktop project.');
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(`/?view=chat&theme=${theme}`);
+    await page.getByRole('heading', { name: 'How can I help you today?' }).waitFor();
+    const sidebar = page.locator('.es-sidebar');
+    const main = page.locator('.es-app-main');
+    await expect(sidebar).toHaveCSS('width', '264px');
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(page.locator('.es-mobile-bar')).toBeVisible();
+    await expect(sidebar).not.toBeVisible();
+    await expect(main).not.toHaveAttribute('inert');
+    await page.setViewportSize({ width: 1024, height: 844 });
+    await expect(page.locator('.es-mobile-bar')).not.toBeVisible();
+    await expect(sidebar).toHaveCSS('width', '264px');
+    await expect(main).not.toHaveAttribute('inert');
+    await page.getByRole('button', { name: 'Collapse sidebar', exact: true }).click();
+    await expect.poll(() => page.locator('.es-app-shell').evaluate(element => element.getAnimations().length)).toBe(0);
+    await expect(sidebar).toHaveCSS('width', '62px');
+    await page.getByRole('button', { name: 'Expand sidebar', exact: true }).click();
+    await expect.poll(() => page.locator('.es-app-shell').evaluate(element => element.getAnimations().length)).toBe(0);
+    await expect(sidebar).toHaveCSS('width', '264px');
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(page.locator('.es-mobile-bar')).toBeVisible();
+    await expect(sidebar).not.toBeVisible();
+    await page.setViewportSize({ width: 320, height: 844 });
+    await expect(page.locator('.es-mobile-bar')).toBeVisible();
+    await page.evaluate(() => { document.documentElement.style.zoom = '2'; });
+    const zoomBounds = await page.evaluate(() => ({ viewport: innerWidth, body: document.body.scrollWidth }));
+    expect(zoomBounds.body, `CSS zoom proxy should stay within the logical viewport: ${JSON.stringify(zoomBounds)}`).toBeLessThanOrEqual(zoomBounds.viewport);
+    await page.evaluate(() => { document.documentElement.style.zoom = ''; });
+    await expectNoOverflow(page);
   });
 
   test(`secondary text roles meet contrast on every ${theme} surface`, async ({ page }) => {
