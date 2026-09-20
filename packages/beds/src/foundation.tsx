@@ -107,12 +107,12 @@ export function Text({ children, variant = 'body-small', tone = 'default' }: {
  */
 export function Avatar({ name, src, purpose = 'account' }: { name: string; src?: string; purpose?: 'account' | 'workspace' | 'profile' | 'forum' }) {
   const initials = name.trim().split(/\s+/).slice(0, 2).map(word => word[0]).join('').toUpperCase();
-  // Error state is keyed to the exact failed URL: a new src retries once,
-  // a failed URL never re-requests during the same mount.
-  const [failedSrc, setFailedSrc] = useState<string | null>(null);
-  const showImage = src !== undefined && src !== failedSrc;
+  // Error state remembers every exact failed URL: a new src retries once,
+  // but a previously failed URL never re-requests during the same mount.
+  const [failedSrc, setFailedSrc] = useState<Set<string>>(() => new Set());
+  const showImage = src !== undefined && !failedSrc.has(src);
   return <span className={`es-avatar es-avatar--${purpose}`} role="img" aria-label={name}>{showImage
-    ? <img src={src} alt="" onError={() => setFailedSrc(src)} />
+    ? <img src={src} alt="" onError={() => setFailedSrc(previous => previous.has(src) ? previous : new Set(previous).add(src))} />
     : initials || '?'}</span>;
 }
 
