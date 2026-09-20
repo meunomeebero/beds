@@ -1,9 +1,10 @@
-import { forwardRef, useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type ForwardedRef, type InputHTMLAttributes, type KeyboardEvent, type ReactNode } from 'react';
+import { forwardRef, useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type ForwardedRef, type InputHTMLAttributes, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react';
 import { AnimatePresence, animate, LayoutGroup, motion, useReducedMotion } from 'motion/react';
 import { Icon, type IconName } from './foundation';
 import { cn } from './lib/utils';
 import { EASE_OUT, SPRING_LAYOUT, SPRING_PRESS } from './lib/ease';
 import { useHoverCapable } from './lib/hooks/use-hover-capable';
+import { useReducedMotionPreference } from './lib/hooks/use-reduced-motion';
 import './controls.css';
 
 type ButtonProps = {
@@ -21,14 +22,14 @@ const BUTTON_VARIANT: Record<NonNullable<ButtonProps['variant']>, string> = {
   destructive: 'bg-destructive text-destructive-foreground',
 };
 
-/** Geometry is owned by BEDS: 32px default / 28px compact / 40px welcome / 40px connection (preserved on touch).
+/** Geometry is owned by BEDS: 32px default / 28px compact / 40px welcome / 40px connection on fine pointers.
  *  `box-border` + `h-*` (exact height, not min-height) — matches the legacy CSS where the visible button height was 40px regardless of text content.
- *  Pointer-coarse (mobile) bumps the default size to 44px while keeping welcome/connection at 40px per FOUNDATIONS. */
+ *  Pointer-coarse (mobile) bumps every button purpose to a 44px target. */
 const BUTTON_SIZE: Record<'compact' | 'default' | 'welcome' | 'connection', string> = {
   compact: 'min-h-7 rounded-md px-2.5',
   default: 'min-h-8 min-w-0 rounded-lg px-2.5 pointer-coarse:min-h-11',
-  welcome: 'min-h-[40px] rounded-[12px] px-3.5', // arbitrary radius: BEDS welcome has r=12px (no token match); preserved on touch (FOUNDATIONS)
-  connection: 'min-h-[40px] rounded-xl px-4', // connection keeps 40px on touch (FOUNDATIONS)
+  welcome: 'min-h-[40px] rounded-[12px] px-3.5', // arbitrary radius: BEDS welcome has r=12px (no token match)
+  connection: 'min-h-[40px] rounded-xl px-4',
 };
 
 const BUTTON_GAP: Record<string, string> = {
@@ -38,12 +39,28 @@ const BUTTON_GAP: Record<string, string> = {
   connection: 'gap-1.5',
 };
 
-// Press feedback lives on an inert child: the measured button box never scales (BEDS owns geometry; keyboard Enter also triggers whileTap).
-const TAP_PRESS = { tap: { scale: 0.97 } };
+// Press feedback lives on an inert child: the measured button box never scales and keyboard activation stays instant.
+function usePointerPress() {
+  const [pointerPressed, setPointerPressed] = useState(false);
+  const stop = () => setPointerPressed(false);
+  const start = (event: PointerEvent<HTMLButtonElement>) => {
+    setPointerPressed(true);
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+  return {
+    pointerPressed,
+    'data-pointer-pressed': pointerPressed || undefined,
+    onPointerDown: start,
+    onPointerUp: stop,
+    onPointerCancel: stop,
+    onLostPointerCapture: stop,
+  };
+}
 
 export function Button({ label, onClick, type = 'button', variant = 'secondary', compact = false, purpose = 'default', icon, disabled, busy, 'aria-describedby': describedBy, 'aria-expanded': ariaExpanded, 'aria-controls': ariaControls }: ButtonProps) {
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionPreference();
   const canHover = useHoverCapable();
+  const { pointerPressed, ...pointerPress } = usePointerPress();
   const sizeKey = purpose === 'default' && compact ? 'compact' : purpose;
   // hover stays non-geometric (BEDS owns the measured box): filled variants lift via brightness, ghost keeps its hover:bg-accent token veil
   const hover = variant === 'ghost' ? undefined : { filter: 'brightness(1.06)' };
@@ -51,6 +68,7 @@ export function Button({ label, onClick, type = 'button', variant = 'secondary',
     type={type}
     onClick={onClick}
     disabled={disabled || busy}
+    {...pointerPress}
     aria-busy={busy || undefined}
     aria-describedby={describedBy}
     aria-expanded={ariaExpanded}
@@ -58,7 +76,6 @@ export function Button({ label, onClick, type = 'button', variant = 'secondary',
     data-variant={variant}
     data-purpose={purpose}
     data-compact={purpose === 'default' && compact || undefined}
-    whileTap={reduce || disabled || busy ? undefined : 'tap'}
     whileHover={reduce || !canHover || disabled || busy ? undefined : hover}
     transition={{ duration: 0.12, ease: EASE_OUT }}
     className={cn(
@@ -69,7 +86,7 @@ export function Button({ label, onClick, type = 'button', variant = 'secondary',
       BUTTON_SIZE[sizeKey],
     )}
   >
-    <motion.span className={cn('inline-flex items-center justify-center max-w-full', BUTTON_GAP[sizeKey])} variants={TAP_PRESS} transition={{ duration: 0.12, ease: EASE_OUT }}>
+    <motion.span className={cn('inline-flex items-center justify-center max-w-full', BUTTON_GAP[sizeKey])} animate={{ scale: pointerPressed && !reduce ? 0.97 : 1 }} transition={{ duration: reduce ? 0 : 0.12, ease: EASE_OUT }}>
       {(busy || icon) && <motion.span aria-hidden className="inline-flex shrink-0" animate={busy && !reduce ? { rotate: 360 } : undefined} transition={busy && !reduce ? { repeat: Infinity, duration: 0.9, ease: 'linear' } : undefined}><Icon name={busy ? 'Loader2' : icon!} purpose="action" /></motion.span>}
       <span className="min-w-0 break-words">{label}</span>
     </motion.span>
@@ -79,14 +96,15 @@ export function Button({ label, onClick, type = 'button', variant = 'secondary',
 export function IconButton({ label, icon, onClick, disabled, 'aria-describedby': describedBy }: {
   label: string; icon: IconName; onClick: () => void; disabled?: boolean; 'aria-describedby'?: string;
 }) {
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionPreference();
+  const { pointerPressed, ...pointerPress } = usePointerPress();
   return <motion.button
     type="button"
     aria-label={label}
     aria-describedby={describedBy}
     onClick={onClick}
     disabled={disabled}
-    whileTap={reduce || disabled ? undefined : 'tap'}
+    {...pointerPress}
     transition={{ duration: 0.12, ease: EASE_OUT }}
     className={cn(
       'es-icon-button box-border inline-flex items-center justify-center shrink-0 border-0',
@@ -96,14 +114,15 @@ export function IconButton({ label, icon, onClick, disabled, 'aria-describedby':
       'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
       'pointer-coarse:min-h-11 pointer-coarse:min-w-11',
     )}
-  ><motion.span className="inline-flex" variants={TAP_PRESS} transition={{ duration: 0.12, ease: EASE_OUT }}><Icon name={icon} purpose="action" /></motion.span></motion.button>;
+  ><motion.span className="inline-flex" animate={{ scale: pointerPressed && !reduce ? 0.97 : 1 }} transition={{ duration: reduce ? 0 : 0.12, ease: EASE_OUT }}><Icon name={icon} purpose="action" /></motion.span></motion.button>;
 }
 
 /** Controlled compact toggle with a native pressed state and persistent accessible name. */
 export function IconToggleButton({ label, icon, pressed, onPressedChange, disabled, 'aria-describedby': describedBy }: {
   label: string; icon: IconName; pressed: boolean; onPressedChange: (pressed: boolean) => void; disabled?: boolean; 'aria-describedby'?: string;
 }) {
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionPreference();
+  const { pointerPressed, ...pointerPress } = usePointerPress();
   return <motion.button
     type="button"
     aria-label={label}
@@ -111,7 +130,7 @@ export function IconToggleButton({ label, icon, pressed, onPressedChange, disabl
     aria-describedby={describedBy}
     onClick={() => onPressedChange(!pressed)}
     disabled={disabled}
-    whileTap={reduce || disabled ? undefined : 'tap'}
+    {...pointerPress}
     transition={{ duration: 0.12, ease: EASE_OUT }}
     className={cn(
       'es-icon-toggle-button box-border inline-flex items-center justify-center shrink-0 border-0',
@@ -122,7 +141,7 @@ export function IconToggleButton({ label, icon, pressed, onPressedChange, disabl
       'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
       'pointer-coarse:min-h-11 pointer-coarse:min-w-11',
     )}
-  ><motion.span className="inline-flex" variants={TAP_PRESS} transition={{ duration: 0.12, ease: EASE_OUT }}><Icon name={icon} purpose="action" /></motion.span></motion.button>;
+  ><motion.span className="inline-flex" animate={{ scale: pointerPressed && !reduce ? 0.97 : 1 }} transition={{ duration: reduce ? 0 : 0.12, ease: EASE_OUT }}><Icon name={icon} purpose="action" /></motion.span></motion.button>;
 }
 
 type FieldProps = {
