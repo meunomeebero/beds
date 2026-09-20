@@ -1,5 +1,8 @@
 import { expect, test, type Page } from '@playwright/test';
 import { createServer, type ViteDevServer } from 'vite';
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
@@ -13,8 +16,6 @@ declare global {
 
 const viteConfig = fileURLToPath(new URL('./vite.config.ts', import.meta.url));
 const repoRoot = fileURLToPath(new URL('../../../../', import.meta.url));
-
-test.describe.configure({ mode: 'serial' });
 
 function serverProbeProps() {
   return {
@@ -53,6 +54,7 @@ function createProbeElement(feedback: Record<string, any>, value = 1.5) {
 }
 
 async function openProbe(page: Page, ssrMarkup?: string) {
+  const cacheDir = await mkdtemp(join(tmpdir(), 'beds-ber57-'));
   const source = `
     import React, { useEffect, useState } from 'react';
     import { createRoot, hydrateRoot } from 'react-dom/client';
@@ -116,6 +118,7 @@ async function openProbe(page: Page, ssrMarkup?: string) {
         });
       },
     }],
+    cacheDir,
     server: { host: '127.0.0.1', port: 0, strictPort: false },
   });
   await server.listen();
@@ -129,11 +132,11 @@ async function openProbe(page: Page, ssrMarkup?: string) {
   await page.goto(`http://127.0.0.1:${address.port}/progress-data-list.html`);
   await expect(page.locator('#progress-data-list-probe')).toBeVisible({ timeout: 30000 });
   await page.waitForFunction(() => window.__bedsHydrationComplete === true, undefined, { timeout: 30000 });
-  return server;
+  return { server, cacheDir };
 }
 
 test('ProgressBar uses one exact normalized value for visible and native semantics', async ({ page }) => {
-  const server = await openProbe(page);
+  const probe = await openProbe(page);
   try {
     const bars = page.locator('.es-progress');
     await expect(bars).toHaveCount(9);
@@ -149,7 +152,8 @@ test('ProgressBar uses one exact normalized value for visible and native semanti
       await expect(bar.locator('progress')).toHaveCount(0);
     }
   } finally {
-    await server.close();
+    await probe.server.close();
+    await rm(probe.cacheDir, { recursive: true, force: true });
   }
 });
 
@@ -157,7 +161,7 @@ test('controlled updates, two instances, DataList order, and hydration remain st
   const errors: string[] = [];
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
   page.on('pageerror', error => errors.push(error.message));
-  const server = await openProbe(page, 'generate');
+  const probe = await openProbe(page, 'generate');
   try {
     await page.locator('#reject-update').click();
     await expect(page.locator('#updates .es-meter-label')).toContainText('1.5 / 3');
@@ -186,12 +190,14 @@ test('controlled updates, two instances, DataList order, and hydration remain st
     await page.waitForFunction(() => window.__bedsHydrationComplete === true);
     expect(errors.filter(error => /hydration|mismatch/i.test(error))).toEqual([]);
   } finally {
-    await server.close();
+    await probe.server.close();
+    await rm(probe.cacheDir, { recursive: true, force: true });
   }
 });
 
 test('SSR preserves exact fractional markup and unique DataList heading associations', async () => {
-  const server = await createServer({ root: repoRoot, configFile: viteConfig, server: { host: '127.0.0.1', port: 0, strictPort: false } });
+  const cacheDir = await mkdtemp(join(tmpdir(), 'beds-ber57-'));
+  const server = await createServer({ root: repoRoot, configFile: viteConfig, cacheDir, server: { host: '127.0.0.1', port: 0, strictPort: false } });
   await server.listen();
   try {
     const beds = await server.ssrLoadModule('/packages/beds/src/index.ts') as Record<string, any>;
@@ -206,5 +212,6 @@ test('SSR preserves exact fractional markup and unique DataList heading associat
     expect(ids.every(id => markup.includes(`aria-labelledby="${id}"`))).toBe(true);
   } finally {
     await (server as ViteDevServer).close();
+    await rm(cacheDir, { recursive: true, force: true });
   }
 });
