@@ -50,6 +50,114 @@ test('real catalog entry: three quiet cards, passive badges and unchanged compac
   expect(errors).toEqual([]);
 });
 
+test('BER-30 keeps native groups controlled through lag/rejection and instance-scoped names', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/?view=decisions&theme=light');
+  const fixture = page.getByRole('heading', { name: 'RadioGroup controlado', exact: true }).locator('..');
+  const explicit = fixture.getByRole('group', { name: 'Preferência controlada com nome explícito', exact: true });
+  const generated = fixture.getByRole('group', { name: 'Segunda instância com nome gerado', exact: true });
+  const explicitInputs = explicit.locator('input[type="radio"]');
+  const generatedInputs = generated.locator('input[type="radio"]');
+  await expect(explicitInputs.first()).toHaveAttribute('name', 'ber30-custom-name');
+  await expect(generatedInputs.first()).not.toHaveAttribute('name', 'ber30-custom-name');
+  expect(await explicitInputs.first().getAttribute('name')).not.toBe(await generatedInputs.first().getAttribute('name'));
+
+  const remote = explicit.getByRole('radio', { name: 'Remoto', exact: true });
+  const hybrid = explicit.getByRole('radio', { name: 'Híbrido', exact: true });
+  const office = explicit.getByRole('radio', { name: 'Presencial', exact: true });
+  const attempts = fixture.getByRole('status');
+  await hybrid.click();
+  await expect(hybrid).toBeChecked();
+  await expect(attempts).toContainText('Tentativas de callback: 1.');
+  await fixture.getByRole('button', { name: 'Rejeitar escolha', exact: true }).click();
+  await remote.click();
+  await expect(hybrid).toBeChecked();
+  await expect(remote).not.toBeChecked();
+  await expect(attempts).toContainText('Tentativas de callback: 2.');
+  await fixture.getByRole('button', { name: 'Definir presencial externamente', exact: true }).click();
+  await expect(office).toBeChecked();
+  await expect(attempts).toContainText('Tentativas de callback: 2.');
+  await fixture.getByRole('button', { name: 'Atrasar escolha', exact: true }).click();
+  await remote.click();
+  await expect(office).toBeChecked();
+  await expect(remote).not.toBeChecked();
+  await expect(attempts).toContainText('Tentativas de callback: 3.');
+  await expect.poll(() => remote.isChecked()).toBe(true);
+  await expect(generated.getByRole('radio', { name: 'Remoto', exact: true })).toBeChecked();
+  await remote.click();
+  await expect(attempts).toContainText('Tentativas de callback: 3.');
+
+  await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
+  await remote.focus();
+  await remote.press('ArrowRight');
+  await expect(hybrid).toBeChecked();
+  await hybrid.press('ArrowLeft');
+  await expect(remote).toBeChecked();
+  await remote.press('End');
+  await expect(office).toBeChecked();
+  await remote.press('Home');
+  await expect(remote).toBeChecked();
+  await remote.press('Enter');
+  await expect(attempts).toContainText('Tentativas de callback: 7.');
+  await expect(explicit.getByRole('radio', { name: 'A definir — indisponível neste exemplo', exact: true })).toBeDisabled();
+});
+
+test('BER-30 keeps question rows static for keyboard selection and paints focus in forced colors', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/?view=decisions&theme=dark');
+  const question = card(page, questionTitle);
+  const group = question.getByRole('group', { name: questionTitle, exact: true });
+  const remote = group.getByRole('radio', { name: 'Remoto', exact: true });
+  const hybrid = group.getByRole('radio', { name: 'Híbrido', exact: true });
+  await remote.focus();
+  await remote.press('Space');
+  await remote.press('ArrowDown');
+  await expect(hybrid).toBeChecked();
+  const transforms = await question.locator('.es-radio-option, .es-radio-number').evaluateAll(elements => elements.map(element => getComputedStyle(element).transform));
+  expect(transforms.every(transform => transform === 'none')).toBe(true);
+  await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
+  await hybrid.focus();
+  const hybridOption = question.locator('.es-radio-option').filter({ hasText: 'Híbrido' });
+  await expect(hybridOption).toHaveCSS('outline-style', 'solid');
+  await expect(hybridOption.locator('.es-radio-number')).toHaveCSS('outline-style', 'solid');
+});
+
+test('BER-30 glides only accepted pointer dots and drops stale rejected targets', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/?view=decisions&theme=light');
+  const fixture = page.getByRole('heading', { name: 'RadioGroup controlado', exact: true }).locator('..');
+  const group = fixture.getByRole('group', { name: 'Preferência controlada com nome explícito', exact: true });
+  const remote = group.getByRole('radio', { name: 'Remoto', exact: true });
+  const hybrid = group.getByRole('radio', { name: 'Híbrido', exact: true });
+  const office = group.getByRole('radio', { name: 'Presencial', exact: true });
+  const dot = (value: string) => group.locator(`input[value="${value}"]:checked + .es-radio-indicator .es-radio-dot`);
+  await remote.scrollIntoViewIfNeeded();
+  const source = await dot('remote').boundingBox();
+  const destination = await hybrid.locator('..').locator('.es-radio-indicator').boundingBox();
+  expect(source).not.toBeNull();
+  expect(destination).not.toBeNull();
+  await hybrid.click();
+  await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => resolve())));
+  const intermediate = await dot('hybrid').boundingBox();
+  expect(intermediate).not.toBeNull();
+  expect(intermediate!.y).toBeGreaterThan(source!.y + 0.5);
+  expect(intermediate!.y).toBeLessThan(destination!.y - 0.5);
+  await expect(hybrid).toBeChecked();
+
+  await fixture.getByRole('button', { name: 'Rejeitar escolha', exact: true }).click();
+  await remote.click();
+  await expect(hybrid).toBeChecked();
+  await fixture.getByRole('button', { name: 'Definir presencial externamente', exact: true }).click();
+  await expect(office).toBeChecked();
+  await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => resolve())));
+  expect(await dot('office').getAttribute('style')).not.toContain('translate3d');
+
+  await fixture.getByRole('button', { name: 'Atrasar escolha', exact: true }).click();
+  await remote.click();
+  await expect.poll(() => remote.isChecked()).toBe(true);
+  await expect.poll(() => dot('remote').getAttribute('style')).toMatch(/translate3d/);
+});
+
 test('approval is explicit; processing locks choices, failure recovers, skip and deny stay distinct', async ({ page }) => {
   await page.goto('/?view=decisions&theme=dark');
   const access = card(page, accessTitle);

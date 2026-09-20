@@ -4,13 +4,8 @@
 .es-root .es-radio-option{display:flex;position:relative;align-items:center;gap:8px;min-width:0;color:var(--es-text);font:400 13px/16px var(--es-font);cursor:pointer;overflow-wrap:anywhere}
 .es-root .es-radio-option>input{position:absolute;width:1px;height:1px;padding:0;margin:0;opacity:0}
 .es-root .es-radio-indicator{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:16px;height:16px;border:1px solid var(--es-control-border);border-radius:50%;background:var(--es-surface)}
-.es-root .es-radio-indicator>span{width:6px;height:6px;border-radius:50%;background:transparent;transform:scale(0)}
+.es-root .es-radio-indicator>span{display:block;width:6px;height:6px;border-radius:50%;background:var(--es-info)}
 .es-root .es-radio-option>input:checked+.es-radio-indicator{border-color:var(--es-info)}
-.es-root .es-radio-option>input:checked+.es-radio-indicator>span{background:var(--es-info);transform:scale(1)}
-/* The dot grows into place; unchecked it is scaled to zero and already transparent, so nothing new is painted. */
-.es-root .es-radio-indicator{transition:border-color 140ms ease-out}
-.es-root .es-radio-indicator>span{transition:transform 160ms cubic-bezier(.16,1,.3,1),background-color 140ms ease-out}
-@media(prefers-reduced-motion:reduce){.es-root :where(.es-radio-indicator,.es-radio-indicator>span){transition:none}}
 .es-root .es-radio-option>input:focus-visible+.es-radio-indicator{outline:2px solid var(--es-focus);outline-offset:3px}
 .es-root .es-radio-option[data-disabled]{opacity:.5;cursor:default}
 .es-root .es-question-form .es-radio-group[data-purpose=question] > legend{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
@@ -24,7 +19,7 @@
 .es-root .es-radio-group[data-purpose=question] input:checked + .es-radio-number{background:var(--es-primary);color:var(--es-on-primary)}
 .es-root .es-radio-group[data-purpose=question] .es-radio-option:has(input:focus-visible){outline:2px solid var(--es-focus);outline-offset:2px;z-index:1}
 @media(hover:hover) and (pointer:fine){.es-root .es-radio-group[data-purpose=question] .es-radio-option:not([data-disabled]):not(:has(input:checked)):hover{background:var(--es-hover)}}
-@media(forced-colors:active){.es-root .es-radio-group[data-purpose=question] input:checked + .es-radio-number{outline:1px solid Highlight}}
+@media(forced-colors:active){.es-root .es-radio-option>input:focus-visible+.es-radio-indicator{outline-color:Highlight}.es-root .es-radio-group[data-purpose=question] input:checked + .es-radio-number{outline:1px solid Highlight}.es-root .es-radio-group[data-purpose=question] .es-radio-option:has(input:focus-visible){outline-color:Highlight}}
 .es-root .es-file-upload{display:grid;min-width:0;gap:8px}
 .es-root .es-file-dropzone{display:grid;justify-items:center;gap:8px;min-width:0;padding:16px;border:1px dashed var(--es-control-border);border-radius:8px;background:var(--es-field);color:var(--es-secondary);text-align:center}
 .es-root .es-file-dropzone[data-dragging]{border-color:var(--es-focus);background:var(--es-subtle);color:var(--es-text)}
