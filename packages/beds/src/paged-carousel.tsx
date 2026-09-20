@@ -17,6 +17,7 @@ export type PagedCarouselProps = {
  */
 export function PagedCarousel({ label, previousLabel, nextLabel, slideLabel, children }: PagedCarouselProps) {
   const slides = Children.toArray(children);
+  const isInteractive = slides.length > 1;
   const [viewportRef, api] = useEmblaCarousel({ align: 'start', loop: false });
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [canScrollPrevious, setCanScrollPrevious] = useState(false);
@@ -43,17 +44,18 @@ export function PagedCarousel({ label, previousLabel, nextLabel, slideLabel, chi
   const next = (jump = shouldJump()) => api?.scrollNext(jump);
   const onKeyDown = (event: KeyboardEvent<HTMLElement>) => {
     if (event.target !== event.currentTarget) return;
+    const isRtl = getComputedStyle(event.currentTarget).direction === 'rtl';
     if (event.key === 'ArrowLeft') {
       event.preventDefault();
-      previous(true);
+      (isRtl ? next : previous)(true);
     }
     if (event.key === 'ArrowRight') {
       event.preventDefault();
-      next(true);
+      (isRtl ? previous : next)(true);
     }
   };
 
-  return <section className="es-paged-carousel" role="region" aria-roledescription="carousel" aria-label={label} tabIndex={0} onKeyDown={onKeyDown}>
+  return <section className="es-paged-carousel" role="region" aria-roledescription="carousel" aria-label={label} tabIndex={isInteractive ? 0 : -1} onKeyDown={onKeyDown}>
     <div className="es-paged-carousel-viewport" ref={viewportRef}>
       <div className="es-paged-carousel-track">
         {slides.map((slide, index) => <div
@@ -70,6 +72,6 @@ export function PagedCarousel({ label, previousLabel, nextLabel, slideLabel, chi
       <button type="button" className="es-paged-carousel-control" aria-label={previousLabel} disabled={!canScrollPrevious} onClick={() => previous()}><Icon name="ArrowLeft" purpose="small" /></button>
       <button type="button" className="es-paged-carousel-control" aria-label={nextLabel} disabled={!canScrollNext} onClick={() => next()}><Icon name="ArrowRight" purpose="small" /></button>
     </div>}
-    {slides.length > 0 && <span className="es-sr-only" aria-live="polite">{slideLabel({ index: selectedIndex + 1, count: slides.length })}</span>}
+    {isInteractive && <span className="es-sr-only" aria-live="polite">{slideLabel({ index: selectedIndex + 1, count: slides.length })}</span>}
   </section>;
 }
