@@ -25,6 +25,15 @@ for (const theme of ['light', 'dark'] as const) {
       await expect(list).toBeFocused();
       await expect(list).toHaveCSS('width', '260px');
       await expect(list.locator('[data-active="true"]')).toContainText('Auto');
+      await list.press('r');
+      await expect(list.locator('[data-active="true"]')).toContainText('Review');
+      await list.press('r');
+      await expect(list.locator('[data-active="true"]')).toContainText('Review a project with a deliberately long name');
+      await list.press('u');
+      await expect(list.locator('[data-active="true"]')).toContainText('Review a project with a deliberately long name');
+      await page.waitForTimeout(550);
+      await list.press('a');
+      await expect(list.locator('[data-active="true"]')).toContainText('Auto');
       await list.press('End');
       await expect(list.locator('[data-active="true"]')).toContainText('Review a project with a deliberately long name');
       await list.press('ArrowDown');

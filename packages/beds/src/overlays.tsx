@@ -18,6 +18,11 @@ export { FilterSelect, Select } from './select';
 export type { FilterSelectProps, SelectOption, SelectProps } from './select';
 
 type Option = { id: string; label: string; description?: string; icon?: IconName; disabled?: boolean };
+const MENU_TYPEAHEAD_TIMEOUT = 500;
+
+function normalizeMenuTypeahead(value: string) {
+  return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase();
+}
 
 /** Dotted explanation affordance; hover, keyboard and explicit touch toggle share one popup. */
 export function HelpLabel({ label, description, icon }: { label: string; description: string; icon?: IconName }) {
@@ -66,15 +71,35 @@ export function DropdownMenu({ label, icon = 'MoreHorizontal', open, onOpenChang
   const anchor = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const typeahead = useRef({ value: '', at: 0 });
   const active = items.find(item => item.id === activeId && !item.disabled) ?? items.find(item => !item.disabled);
   useAnchoredPopup({ open, anchor, panel, onOpenChange, width: 160 });
   useLayoutEffect(() => { if (open) panel.current?.querySelector('[data-active="true"]')?.scrollIntoView({ block: 'nearest' }); }, [open, active?.id]);
-  const choose = (item: typeof items[number]) => { if (!item.disabled) { onSelect(item.id); onOpenChange(false); } };
-  return <div className="es-dropdown"><button ref={anchor} type="button" className="es-icon-button" aria-label={label} aria-haspopup="menu" aria-expanded={open} aria-controls={open ? id : undefined} onClick={() => { setActiveId(null); onOpenChange(!open); }} onKeyDown={event => { if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); setActiveId(nextOption(items, undefined, event.key === 'ArrowUp' ? 'End' : 'Home')); onOpenChange(true); } }}><Icon name={icon} purpose="action" /></button>
+  const resetTypeahead = () => { typeahead.current = { value: '', at: 0 }; };
+  const moveByTypeahead = (key: string) => {
+    const character = normalizeMenuTypeahead(key);
+    if (!character) return;
+    const now = Date.now();
+    const previous = typeahead.current;
+    const timedOut = now - previous.at > MENU_TYPEAHEAD_TIMEOUT;
+    const repeated = !timedOut && previous.value.length > 0 && previous.value === character.repeat(previous.value.length);
+    const query = repeated || timedOut ? character : `${previous.value}${character}`;
+    const enabled = items.filter(item => !item.disabled);
+    const currentIndex = enabled.findIndex(item => item.id === active?.id);
+    const start = repeated ? currentIndex + 1 : 0;
+    const match = [...enabled.slice(start), ...enabled.slice(0, start)]
+      .find(item => normalizeMenuTypeahead(item.label).startsWith(query))
+      ?? (query.length > 1 ? enabled.find(item => normalizeMenuTypeahead(item.label).startsWith(character)) : undefined);
+    typeahead.current = { value: query, at: now };
+    if (match) setActiveId(match.id);
+  };
+  const choose = (item: typeof items[number]) => { if (!item.disabled) { onSelect(item.id); resetTypeahead(); onOpenChange(false); } };
+  return <div className="es-dropdown"><button ref={anchor} type="button" className="es-icon-button" aria-label={label} aria-haspopup="menu" aria-expanded={open} aria-controls={open ? id : undefined} onClick={() => { resetTypeahead(); setActiveId(null); onOpenChange(!open); }} onKeyDown={event => { if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); resetTypeahead(); setActiveId(nextOption(items, undefined, event.key === 'ArrowUp' ? 'End' : 'Home')); onOpenChange(true); } }}><Icon name={icon} purpose="action" /></button>
     {open && <div id={id} ref={panel} popover="manual" className="es-menu-popup" role="menu" aria-label={label} aria-activedescendant={active ? `${id}-${items.indexOf(active)}` : undefined} tabIndex={-1} onKeyDown={event => {
       if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) { event.preventDefault(); setActiveId(nextOption(items, active?.id, event.key)); }
       else if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); if (active) choose(active); }
-      else if (event.key === 'Tab') { anchor.current?.focus({ preventScroll: true }); onOpenChange(false); }
+      else if (event.key === 'Tab') { anchor.current?.focus({ preventScroll: true }); resetTypeahead(); onOpenChange(false); }
+      else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey && !event.nativeEvent.isComposing) { event.preventDefault(); moveByTypeahead(event.key); }
     }}>{items.map((item, index) => <div key={item.id} id={`${id}-${index}`} role="menuitem" className="es-menu-item" aria-disabled={item.disabled || undefined} data-active={active?.id === item.id} data-destructive={item.destructive || undefined} onPointerMove={() => { if (!item.disabled) setActiveId(item.id); }} onClick={() => choose(item)}>{item.icon && <Icon name={item.icon} purpose="navigation" />}<span>{item.label}</span></div>)}</div>}
   </div>;
 }

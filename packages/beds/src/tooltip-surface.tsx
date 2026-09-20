@@ -1,6 +1,7 @@
-import { motion, useReducedMotion, type Variants } from 'motion/react';
+import { motion, type Variants } from 'motion/react';
 import { useMemo, type CSSProperties, type ReactNode, type Ref } from 'react';
 import { EASE_OUT } from './lib/ease';
+import { useReducedMotionPreference } from './lib/hooks/use-reduced-motion';
 
 export type TooltipSide = 'top' | 'right' | 'bottom' | 'left';
 
@@ -45,6 +46,14 @@ const REDUCED_VARIANTS: Variants = {
   animate: { opacity: 1, transition: { duration: 0.14, ease: EASE_OUT } },
   exit: { opacity: 0, transition: { duration: 0.1, ease: EASE_OUT } },
 };
+const REDUCED_ANIMATE = {
+  opacity: 1,
+  scale: 1,
+  filter: 'none',
+  x: 0,
+  y: 0,
+  transition: { duration: 0 },
+} as const;
 
 /** Internal surface; positioning and public API remain owned by overlays.tsx. */
 export function TooltipSurface({
@@ -64,17 +73,17 @@ export function TooltipSurface({
   style?: CSSProperties;
   ref?: Ref<HTMLSpanElement>;
 }) {
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionPreference();
   const variants = useMemo(() => reduce ? REDUCED_VARIANTS : buildVariants(side), [reduce, side]);
   return <motion.span
     ref={ref}
     id={id}
-    style={style}
+    style={{ ...style, ...(reduce ? { filter: 'none' } : {}) }}
     role="tooltip"
     data-side={side}
     variants={variants}
     initial="initial"
-    animate="animate"
+    animate={reduce ? REDUCED_ANIMATE : 'animate'}
     exit="exit"
     className={`block rounded-lg border border-border bg-popover px-2.5 py-1 text-xs font-medium text-popover-foreground shadow-[var(--es-shadow-popup)] ${interactive ? 'pointer-events-auto max-w-[calc(100vw-16px)] whitespace-normal' : 'whitespace-nowrap'} ${className}`}
   >{children}</motion.span>;
