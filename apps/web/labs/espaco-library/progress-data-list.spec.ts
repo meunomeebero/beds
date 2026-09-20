@@ -14,6 +14,8 @@ declare global {
 const viteConfig = fileURLToPath(new URL('./vite.config.ts', import.meta.url));
 const repoRoot = fileURLToPath(new URL('../../../../', import.meta.url));
 
+test.describe.configure({ mode: 'serial' });
+
 function serverProbeProps() {
   return {
     value: 1.5,
@@ -52,13 +54,14 @@ function createProbeElement(feedback: Record<string, any>, value = 1.5) {
 
 async function openProbe(page: Page, ssrMarkup?: string) {
   const source = `
-    import React, { useState } from 'react';
+    import React, { useEffect, useState } from 'react';
     import { createRoot, hydrateRoot } from 'react-dom/client';
     import 'beds/styles.css';
     import { DataList, DesignSystemProvider, ProgressBar } from 'beds';
     function Probe() {
       const [value, setValue] = useState(1.5);
       const [pending, setPending] = useState(null);
+      useEffect(() => { window.__bedsHydrationComplete = true; }, []);
       return <main id="progress-data-list-probe">
         <DesignSystemProvider theme="light">
           <div id="progress-cases">
@@ -90,7 +93,6 @@ async function openProbe(page: Page, ssrMarkup?: string) {
       if (!root) return;
       if (window.__bedsMarkupReady) hydrateRoot(root, <Probe />);
       else createRoot(root).render(<Probe />);
-      window.__bedsHydrationComplete = true;
     };
     if (window.__bedsMarkupReady) mount();
     else {
@@ -108,8 +110,8 @@ async function openProbe(page: Page, ssrMarkup?: string) {
       configureServer(vite) {
         vite.middlewares.use('/progress-data-list.html', async (request, response) => {
           response.setHeader('Content-Type', 'text/html; charset=utf-8');
-          const ready = ssrMarkup ? '<script>window.__bedsMarkupReady = true;</script>' : '';
-          const html = `<!doctype html><html><body>${ready}<div id="progress-data-list-root">${ssrMarkup ?? ''}</div><script type="module" src="/progress-data-list-probe.tsx"></script></body></html>`;
+          const ready = resolvedMarkup ? '<script>window.__bedsMarkupReady = true;</script>' : '';
+          const html = `<!doctype html><html><body>${ready}<div id="progress-data-list-root">${resolvedMarkup && resolvedMarkup !== 'generate' ? resolvedMarkup : ''}</div><script type="module" src="/progress-data-list-probe.tsx"></script></body></html>`;
           response.end(await vite.transformIndexHtml(request.url ?? '/progress-data-list.html', html));
         });
       },
@@ -117,10 +119,16 @@ async function openProbe(page: Page, ssrMarkup?: string) {
     server: { host: '127.0.0.1', port: 0, strictPort: false },
   });
   await server.listen();
+  let resolvedMarkup = ssrMarkup;
+  if (ssrMarkup === 'generate') {
+    const beds = await server.ssrLoadModule('/packages/beds/src/index.ts') as Record<string, any>;
+    resolvedMarkup = renderToString(createProbeElement(beds, serverProbeProps().value));
+  }
   const address = server.httpServer?.address();
   if (!address || typeof address === 'string') throw new Error('Expected the evidence server to expose a TCP address.');
   await page.goto(`http://127.0.0.1:${address.port}/progress-data-list.html`);
-  await expect(page.locator('#progress-data-list-probe')).toBeVisible();
+  await expect(page.locator('#progress-data-list-probe')).toBeVisible({ timeout: 30000 });
+  await page.waitForFunction(() => window.__bedsHydrationComplete === true, undefined, { timeout: 30000 });
   return server;
 }
 
@@ -149,12 +157,7 @@ test('controlled updates, two instances, DataList order, and hydration remain st
   const errors: string[] = [];
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
   page.on('pageerror', error => errors.push(error.message));
-  const ssrServer = await createServer({ root: repoRoot, configFile: viteConfig, server: { host: '127.0.0.1', port: 0, strictPort: false } });
-  await ssrServer.listen();
-  const beds = await ssrServer.ssrLoadModule('/packages/beds/src/index.ts') as Record<string, any>;
-  const ssrMarkup = renderToString(createProbeElement(beds, serverProbeProps().value));
-  await (ssrServer as ViteDevServer).close();
-  const server = await openProbe(page, ssrMarkup);
+  const server = await openProbe(page, 'generate');
   try {
     await page.locator('#reject-update').click();
     await expect(page.locator('#updates .es-meter-label')).toContainText('1.5 / 3');
