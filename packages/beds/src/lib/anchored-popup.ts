@@ -1,5 +1,14 @@
 import { useLayoutEffect, useRef, type RefObject } from 'react';
 
+function effectiveCssZoom(element: HTMLElement) {
+  let zoom = 1;
+  for (let current: HTMLElement | null = element; current; current = current.parentElement) {
+    const value = Number.parseFloat(getComputedStyle(current).zoom);
+    if (Number.isFinite(value) && value > 0) zoom *= value;
+  }
+  return zoom;
+}
+
 /** Internal positioning/focus primitive. Public components expose no geometry override. */
 export function useAnchoredPopup({ open, anchor, panel, onOpenChange, width = 260, initialFocus = 'panel', placement = 'below' }: {
   open: boolean; anchor: RefObject<HTMLElement | null>; panel: RefObject<HTMLElement | null>;
@@ -16,22 +25,28 @@ export function useAnchoredPopup({ open, anchor, panel, onOpenChange, width = 26
     element.showPopover();
     const position = () => {
       const bounds = trigger.getBoundingClientRect();
+      const zoom = effectiveCssZoom(trigger);
       const viewport = window.visualViewport;
-      const left = viewport?.offsetLeft ?? 0;
-      const top = viewport?.offsetTop ?? 0;
-      const viewportWidth = viewport?.width ?? innerWidth;
-      const viewportHeight = viewport?.height ?? innerHeight;
+      const left = (viewport?.offsetLeft ?? 0) / zoom;
+      const top = (viewport?.offsetTop ?? 0) / zoom;
+      const viewportWidth = (viewport?.width ?? innerWidth) / zoom;
+      const viewportHeight = (viewport?.height ?? innerHeight) / zoom;
+      const anchorLeft = bounds.left / zoom;
+      const anchorTop = bounds.top / zoom;
+      const anchorBottom = bounds.bottom / zoom;
       const inset = 16;
       element.style.width = width === 'content' ? 'max-content' : `${Math.min(width, Math.max(0, viewportWidth - inset * 2))}px`;
       element.style.maxWidth = `${Math.max(0, viewportWidth - inset * 2)}px`;
       element.style.maxHeight = `${Math.max(0, viewportHeight - inset * 2)}px`;
       const size = element.getBoundingClientRect();
-      const below = bounds.bottom + 4;
-      const above = bounds.top - size.height - 4;
+      const popupWidth = size.width / zoom;
+      const popupHeight = size.height / zoom;
+      const below = anchorBottom + 4;
+      const above = anchorTop - popupHeight - 4;
       const preferAbove = placement === 'above' && above >= top + inset;
-      const preferredTop = preferAbove ? above : below + size.height <= top + viewportHeight - inset ? below : above;
-      element.style.left = `${Math.max(left + inset, Math.min(bounds.left, left + viewportWidth - size.width - inset))}px`;
-      element.style.top = `${Math.max(top + inset, Math.min(preferredTop, top + viewportHeight - size.height - inset))}px`;
+      const preferredTop = preferAbove ? above : below + popupHeight <= top + viewportHeight - inset ? below : above;
+      element.style.left = `${Math.max(left + inset, Math.min(anchorLeft, left + viewportWidth - popupWidth - inset))}px`;
+      element.style.top = `${Math.max(top + inset, Math.min(preferredTop, top + viewportHeight - popupHeight - inset))}px`;
     };
     position();
     if (initialFocus === 'first-control') element.querySelector<HTMLElement>('button:not(:disabled),input:not(:disabled),a[href],[tabindex="0"]')?.focus({ preventScroll: true });
