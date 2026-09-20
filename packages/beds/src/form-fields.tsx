@@ -1,5 +1,8 @@
-import { useId, useRef, useState, type ChangeEvent, type DragEvent } from 'react';
+import { motion } from 'motion/react';
+import { useEffect, useId, useRef, useState, type ChangeEvent, type DragEvent, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { Icon } from './foundation';
+import { SPRING_LAYOUT, SPRING_PRESS } from './lib/ease';
+import { useReducedMotionPreference } from './lib/hooks/use-reduced-motion';
 import './form-fields.css';
 
 export type RadioOption = {
@@ -44,22 +47,147 @@ function FieldSupport({ id, description, error }: { id: string; description?: st
   return <>{description && <p id={`${id}-description`} className="es-field-description">{description}</p>}{error && <p id={`${id}-error`} className="es-field-error" role="alert"><Icon name="AlertCircle" purpose="small" />{error}</p>}</>;
 }
 
+type RadioActivation = 'pointer' | 'keyboard' | null;
+
+function enabledOptions(options: readonly RadioOption[], disabled?: boolean) {
+  return disabled ? [] : options.filter(option => !option.disabled);
+}
+
+function nextRadioId(options: readonly RadioOption[], current: string, key: string, disabled?: boolean) {
+  const enabled = enabledOptions(options, disabled);
+  if (enabled.length === 0) return null;
+  const currentIndex = enabled.findIndex(option => option.id === current);
+  if (key === 'Home') return enabled[0]?.id ?? null;
+  if (key === 'End') return enabled.at(-1)?.id ?? null;
+  const step = key === 'ArrowRight' || key === 'ArrowDown' ? 1 : -1;
+  const nextIndex = (Math.max(currentIndex, -1) + step + enabled.length) % enabled.length;
+  return enabled[nextIndex]?.id ?? null;
+}
+
+function isRadioNavigationKey(key: string) {
+  return key === 'ArrowRight' || key === 'ArrowLeft' || key === 'ArrowDown' || key === 'ArrowUp' || key === 'Home' || key === 'End';
+}
+
 export function RadioGroup({ label, value, options, onChange, description, error, disabled, name, purpose = 'default' }: RadioGroupProps) {
   const id = useId();
-  const generatedName = useId();
+  const generatedName = `${id}-options`;
   const describedBy = [description && `${id}-description`, error && `${id}-error`].filter(Boolean).join(' ') || undefined;
+  const reduceMotion = useReducedMotionPreference();
+  const groupId = `${id}-layout`;
+  const activation = useRef<RadioActivation>(null);
+  const pendingPointerValue = useRef<string | null>(null);
+  const [pointerTarget, setPointerTarget] = useState<string | null>(null);
+  const enabled = enabledOptions(options, disabled);
+  const tabStopId = options.some(option => !option.disabled && option.id === value) ? value : enabled[0]?.id;
 
-  return <fieldset className="es-radio-group" data-purpose={purpose} disabled={disabled} aria-describedby={describedBy} aria-invalid={Boolean(error) || undefined}>
-    <legend>{label}</legend>
-    <div className="es-radio-options">
-      {options.map((option, index) => <label key={option.id} className="es-radio-option" data-disabled={option.disabled || purpose === 'question' && disabled || undefined}>
-        <input type="radio" name={name ?? generatedName} value={option.id} checked={value === option.id} disabled={option.disabled} onChange={() => onChange(option.id)} />
-        {purpose === 'question' ? <span className="es-radio-number" aria-hidden="true">{value === option.id ? <Icon name="Check" purpose="small" /> : index + 1}</span> : <span className="es-radio-indicator" aria-hidden="true"><span /></span>}
+  useEffect(() => {
+    const target = pendingPointerValue.current;
+    if (target === null) return;
+    if (target !== value) {
+      pendingPointerValue.current = null;
+      setPointerTarget(current => current === target ? null : current);
+      return;
+    }
+    const frame = window.requestAnimationFrame(() => {
+      if (pendingPointerValue.current !== target) return;
+      pendingPointerValue.current = null;
+      setPointerTarget(current => current === target ? null : current);
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [value]);
+
+  const clearPointerActivation = () => {
+    window.requestAnimationFrame(() => {
+      if (activation.current === 'pointer') activation.current = null;
+    });
+  };
+
+  const markPointer = (option: RadioOption) => {
+    if (!disabled && !option.disabled) activation.current = 'pointer';
+  };
+
+  const handleKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>, option: RadioOption) => {
+    if (disabled || option.disabled) return;
+    if (event.key === ' ' || event.key === 'Spacebar') {
+      activation.current = 'keyboard';
+      return;
+    }
+    if (!isRadioNavigationKey(event.key)) return;
+    event.preventDefault();
+    activation.current = 'keyboard';
+    const nextId = nextRadioId(options, option.id, event.key, disabled);
+    if (!nextId || (nextId === option.id && value === option.id)) return;
+    const candidates = options
+      .map(candidate => document.getElementById(`${id}-${candidate.id}`))
+      .filter((element): element is HTMLInputElement => element instanceof HTMLInputElement);
+    const target = candidates.find(input => input.value === nextId);
+    target?.focus({ preventScroll: true });
+    target?.click();
+  };
+
+  const renderOption = (option: RadioOption, index: number) => {
+    const inputId = `${id}-${option.id}`;
+    const selected = value === option.id;
+    const optionDisabled = Boolean(disabled || option.disabled);
+    const input = <input
+      id={inputId}
+      type="radio"
+      name={name ?? generatedName}
+      value={option.id}
+      checked={selected}
+      disabled={optionDisabled}
+      tabIndex={optionDisabled ? -1 : tabStopId === option.id ? 0 : -1}
+      onKeyDown={event => handleKeyDown(event, option)}
+      onChange={() => {
+        const source = activation.current ?? 'keyboard';
+        activation.current = null;
+        if (source === 'pointer' && purpose === 'default' && !reduceMotion) {
+          pendingPointerValue.current = option.id;
+          setPointerTarget(option.id);
+        } else {
+          pendingPointerValue.current = null;
+          setPointerTarget(null);
+        }
+        onChange(option.id);
+      }}
+    />;
+
+    if (purpose === 'question') {
+      return <label key={option.id} className="es-radio-option" data-disabled={optionDisabled || undefined} onPointerDown={() => markPointer(option)} onPointerUp={clearPointerActivation} onPointerCancel={() => { activation.current = null; }} onBlur={clearPointerActivation}>
+        {input}
+        <span className="es-radio-number" aria-hidden="true">{selected ? <Icon name="Check" purpose="small" /> : index + 1}</span>
         <span>{option.label}</span>
-      </label>)}
-    </div>
+      </label>;
+    }
+
+    return <motion.label
+      key={option.id}
+      className="es-radio-option"
+      data-disabled={optionDisabled || undefined}
+      onPointerDown={() => markPointer(option)}
+      onPointerUp={clearPointerActivation}
+      onPointerCancel={() => { activation.current = null; }}
+      onBlur={clearPointerActivation}
+      whileTap={reduceMotion || optionDisabled ? undefined : { scale: 0.92 }}
+      transition={SPRING_PRESS}
+    >
+      {input}
+      <span className="es-radio-indicator" aria-hidden="true">
+        {selected && <motion.span className="es-radio-dot" layoutId={`${groupId}-selected-dot`} transition={reduceMotion || pointerTarget !== value ? { duration: 0 } : SPRING_LAYOUT} />}
+      </span>
+      <span>{option.label}</span>
+    </motion.label>;
+  };
+
+  const optionsMarkup = options.map(renderOption);
+
+  const fieldset = <fieldset className="es-radio-group" data-purpose={purpose} disabled={disabled} aria-describedby={describedBy} aria-invalid={Boolean(error) || undefined}>
+    <legend>{label}</legend>
+    <div className="es-radio-options">{optionsMarkup}</div>
     <FieldSupport id={id} description={description} error={error} />
   </fieldset>;
+
+  return fieldset;
 }
 
 function getSelectedFiles(files: FileList | readonly File[], multiple: boolean) {
