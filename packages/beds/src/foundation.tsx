@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from 'react';
-import { animate, useInView, useReducedMotion } from 'motion/react';
+import { animate, useInView } from 'motion/react';
 import { Inbox } from 'lucide-react';
 import { Home, Activity, BarChart3, Plug, Folder, MessageSquare, Plus, Search, PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, Check, X, Settings2, CircleHelp, Sun, Moon, LogOut, MoreHorizontal, ArrowUp, ArrowRight, ArrowUpRight, Paperclip, Command, FileText, CheckCircle2, AlertCircle, Info, Loader2, User, Sparkles, Globe, Bell, Copy, CreditCard, House, MessageCircle, ChartColumn, UserRound, Briefcase, Coins, ScanText, Bookmark, CalendarDays, ChevronsUpDown, Play, Pause, ArrowLeft, ShieldCheck, Image, Table2 } from 'lucide-react';
+import { useReducedMotionPreference } from './lib/hooks/use-reduced-motion';
 
 const icons = { Home, Activity, BarChart3, Plug, Folder, MessageSquare, Plus, Search, PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, Check, X, Settings2, CircleHelp, Sun, Moon, LogOut, MoreHorizontal, ArrowUp, ArrowRight, ArrowUpRight, Paperclip, Command, FileText, CheckCircle2, AlertCircle, Info, Loader2, User, Sparkles, Globe, Bell, Copy, CreditCard, House, MessageCircle, ChartColumn, UserRound, Briefcase, Coins, ScanText, Bookmark, CalendarDays, ChevronsUpDown, Play, Pause, ArrowLeft, ShieldCheck, Inbox, Image, Table2 };
 export type IconName = keyof typeof icons;
@@ -49,7 +50,7 @@ export function AnimatedNumber({ value, format, fallback = '—', duration = 1.1
 }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, amount: .6 });
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useReducedMotionPreference();
   const animationStart = value !== null && Number.isFinite(value)
     ? typeof initialValue === 'number' && Number.isFinite(initialValue) ? initialValue : value
     : null;
