@@ -1,9 +1,49 @@
-import { expect, test, type Page } from '@playwright/test';
+import { createServer, type ViteDevServer } from 'vite';
+import react from '@vitejs/plugin-react';
+import { mkdtemp, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { expect, test, type Page } from '@playwright/test';
 
 const evidence = fileURLToPath(new URL('./evidence/date-item/', import.meta.url));
+const repoRoot = fileURLToPath(new URL('../../../../', import.meta.url));
 const title = 'Conversa com a equipe de produto';
 const list = (page: Page) => page.getByRole('list', { name: 'Exemplos de compromissos' });
+
+async function renderEmptyList() {
+  const cacheDir = await mkdtemp(join(tmpdir(), 'beds-ber52-date-'));
+  let server: ViteDevServer | undefined;
+  try {
+    let cssModuleId = 0;
+    server = await createServer({
+      root: repoRoot,
+      configFile: false,
+      cacheDir,
+      plugins: [react(), {
+        name: 'ber52-date-css-stub',
+        enforce: 'pre',
+        resolveId(source) { return source.endsWith('.css') ? `\0ber52-date-css-${cssModuleId++}` : undefined; },
+        load(id) { return id.startsWith('\0ber52-date-css-') ? 'export default {};' : undefined; },
+      }],
+      resolve: { dedupe: ['react', 'react-dom'] },
+    });
+    const module = await server.ssrLoadModule('/packages/beds/src/index.ts') as Record<string, any>;
+    return renderToStaticMarkup(React.createElement(module.DateItemList, { label: 'Datas vazias' }));
+  } finally {
+    if (server) await server.close();
+    await rm(cacheDir, { recursive: true, force: true });
+  }
+}
+
+async function assertListContract(page: Page, expectedInteractiveCounts: number[]) {
+  const items = list(page);
+  await expect(items.locator(':scope > li')).toHaveCount(expectedInteractiveCounts.length);
+  expect(await items.locator(':scope > li').evaluateAll(elements => elements.map(item => item.querySelectorAll('a,button,input,select,textarea,[tabindex]:not([tabindex="-1"])').length))).toEqual(expectedInteractiveCounts);
+  await expect(items.locator('a a,a button,button a,button button')).toHaveCount(0);
+}
 
 async function measureContrast(page: Page) {
   return page.locator('.es-date-item-title,.es-date-item-month,.es-date-item-day,.es-date-item-description,.es-date-item-status .es-badge').evaluateAll(elements => elements.map(element => {
@@ -18,15 +58,24 @@ async function measureContrast(page: Page) {
   }));
 }
 
+test('SSR keeps an empty public list named with no list items', async () => {
+  const markup = await renderEmptyList();
+  expect(markup).toContain('<ul');
+  expect(markup).toContain('aria-label="Datas vazias"');
+  expect(markup.match(/<li\b/g) ?? []).toHaveLength(0);
+});
+
 test('catalog entry, calendar anatomy, keyboard detail and native destinations in both themes', async ({ page }, info) => {
   const errors: string[] = [];
+  const consoleMessages: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
+  page.on('console', message => { if (message.type() === 'warning' || message.type() === 'error') consoleMessages.push(message.text()); });
   for (const theme of ['light', 'dark']) {
     await page.goto('/?view=chat&theme=' + theme);
     if (info.project.name === 'mobile') await page.getByRole('button', { name: 'Navigation', exact: true }).click();
     await page.getByRole('link', { name: 'Itens com data', exact: true }).click();
     await expect(page.getByRole('heading', { name: 'Compromissos', exact: true })).toBeVisible();
-    await expect(list(page).getByRole('listitem')).toHaveCount(4);
+    await assertListContract(page, [1, 1, 0, 0]);
     const button = list(page).getByRole('button', { name: title, exact: true });
     await expect(button).toHaveAccessibleDescription('22 de outubro de 2026 Em breve');
     await expect(button.locator('time')).toHaveAttribute('datetime', '2026-10-22');
@@ -67,6 +116,7 @@ test('catalog entry, calendar anatomy, keyboard detail and native destinations i
     await expect(page.getByRole('dialog', { name: 'Revisão de portfólio' })).toBeVisible();
   }
   expect(errors).toEqual([]);
+  expect(consoleMessages).toEqual([]);
 });
 
 test('long labels, 320px reflow, RTL, zoom stress and system preferences', async ({ page }, info) => {
