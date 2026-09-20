@@ -12,12 +12,13 @@ async function openCatalog(page: Page, theme: 'light' | 'dark') {
 
 test.describe('LoadingIndicator · beUI loader adaptation', () => {
   for (const theme of ['light', 'dark'] as const) {
-    test(`${theme} preserves the status name, label and spinner geometry`, async ({ page }) => {
+    test(`${theme} preserves the status name, visible label and spinner geometry`, async ({ page }) => {
       await page.emulateMedia({ reducedMotion: 'no-preference' });
       const loading = await openCatalog(page, theme);
 
       await expect(loading).toHaveAttribute('role', 'status');
-      await expect(loading).toHaveAttribute('aria-label', label);
+      await expect(loading).toHaveAttribute('aria-labelledby', /.+/);
+      await expect(loading).not.toHaveAttribute('aria-label', /.+/);
       await expect(loading).toHaveText(label);
       await expect(loading.locator('svg')).toHaveAttribute('aria-hidden', 'true');
       await expect(loading.locator('svg')).toHaveAttribute('width', '16');
@@ -41,7 +42,8 @@ test.describe('LoadingIndicator · beUI loader adaptation', () => {
     const loading = await openCatalog(page, 'dark');
     const spinner = loading.locator('svg');
     await expect(spinner).toBeVisible();
-    await expect(loading).toHaveAttribute('aria-label', label);
+    await expect(loading).toHaveAttribute('aria-labelledby', /.+/);
+    await expect(loading).not.toHaveAttribute('aria-label', /.+/);
     expect(await spinner.evaluate(element => getComputedStyle(element).transform)).toBe('none');
   });
 });
