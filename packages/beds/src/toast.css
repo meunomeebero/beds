@@ -17,3 +17,4 @@
 @media(hover:hover) and (pointer:fine){.es-root .es-toast-action:hover{border-color:var(--es-border-strong);background:var(--es-hover)}}
 @media(max-width:767px){.es-root .es-toast-region{top:12px;width:calc(100vw - 24px)}.es-root .es-toast{border-radius:16px;flex-wrap:wrap}.es-root .es-toast-message{flex:1 1 120px}.es-root .es-toast-action{min-height:44px}.es-root .es-toast-dismiss{width:44px;height:44px}}
 @media(prefers-reduced-motion:reduce){.es-root .es-toast{touch-action:auto}}
+@media(forced-colors:active){.es-root .es-toast{border-color:CanvasText}.es-root .es-toast-action{border-color:CanvasText;background:Canvas;color:CanvasText}.es-root .es-toast-dismiss:focus-visible,.es-root .es-toast-action:focus-visible{outline-color:Highlight}}

@@ -139,7 +139,7 @@ const ToastItem = memo(function ToastItem({
         >{note.message}</motion.span>
       </AnimatePresence>
     </div>
-    {hasAction && <button type="button" className="es-toast-action" onClick={() => { note.action?.onClick(); onDismiss(note.id); }}>{note.action?.label}</button>}
+    {hasAction && <button type="button" className="es-toast-action" onClick={() => { try { note.action?.onClick(); } finally { onDismiss(note.id); } }}>{note.action?.label}</button>}
     <button type="button" className="es-toast-dismiss" aria-label={`${dismissLabel}: ${note.message}`} onClick={() => onDismiss(note.id)}><Icon name="X" purpose="small" /></button>
   </motion.div>;
 });
@@ -230,7 +230,7 @@ export function Toaster({ label = 'Notificações', dismissLabel = 'Fechar notif
     return () => window.clearTimeout(timer);
   }, [notes, paused, remove]);
 
-  return <section ref={region} className="es-toast-region" aria-label={label} aria-live="polite" aria-relevant="additions text"
+  return <section ref={region} className="es-toast-region" aria-label={label}
     onPointerEnter={() => setHovered(true)} onPointerLeave={() => setHovered(false)}
     onFocusCapture={() => setFocused(true)} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }}>
     <AnimatePresence initial={false} mode="popLayout">
