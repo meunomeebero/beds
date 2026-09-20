@@ -1,5 +1,5 @@
 import { useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
-import { AnimatePresence, motion, useReducedMotion, type Variants } from 'motion/react';
+import { AnimatePresence, motion, type Variants } from 'motion/react';
 import { AnimatedNumber, Icon, type IconName } from './foundation';
 import { MeterSegments, meterFraction as fraction } from './meter-segments';
 import { EASE_OUT } from './lib/ease';
@@ -32,7 +32,7 @@ const BADGE_ROLL_VARIANTS: Variants = {
 const BADGE_REDUCED = { opacity: 1, y: 0, filter: 'none' };
 
 export function Badge({ label, tone = 'neutral', purpose = 'tag' }: { label: string; tone?: Tone; purpose?: 'tag' | 'status' }) {
-  const reduce = useReducedMotion() ?? false;
+  const reduce = useReducedMotionPreference();
   const labelKey = `${tone}:${label}`;
 
   return <motion.span
