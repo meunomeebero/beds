@@ -25,7 +25,9 @@ test('AppShell hydrates on a mobile matchMedia snapshot without mismatch errors'
       window.dispatchEvent(new Event('beds-hydration-markup-ready'));
     }, module.renderHydrationProbe());
     await page.waitForFunction(() => (window as Window & { __bedsHydrationComplete?: boolean }).__bedsHydrationComplete === true);
-    const firstFrame = await page.locator('.es-app-shell').evaluate(element => ({
+    const shells = page.locator('.es-app-shell');
+    await expect(shells).toHaveCount(2);
+    const firstFrame = await shells.first().evaluate(element => ({
       grid: getComputedStyle(element).gridTemplateColumns,
       documentWidth: document.documentElement.scrollWidth,
       viewportWidth: innerWidth,
@@ -43,6 +45,18 @@ test('AppShell hydrates on a mobile matchMedia snapshot without mismatch errors'
     await expect(segmented.nth(1).getByRole('radio', { name: 'Allow', exact: true })).toBeChecked();
     await expect(segmented.nth(0).locator('[data-segmented-indicator]')).toHaveCount(1);
     await expect(segmented.nth(1).locator('[data-segmented-indicator]')).toHaveCount(1);
+    const shellIds = await page.locator('.es-app-shell aside').evaluateAll(asides => asides.map(aside => aside.id));
+    expect(new Set(shellIds).size).toBe(2);
+    const activeDock = page.getByRole('button', { name: 'Active dock action', exact: true });
+    const disabledDock = page.getByRole('button', { name: 'Disabled dock action', exact: true });
+    await expect(activeDock).toHaveAttribute('aria-pressed', 'true');
+    await expect(disabledDock).toBeDisabled();
+    await expect(disabledDock).toHaveAttribute('aria-label', 'Disabled dock action');
+    const dockBounds = await activeDock.boundingBox();
+    expect(dockBounds?.width).toBe(44);
+    expect(dockBounds?.height).toBe(44);
+    await page.getByRole('link', { name: 'Dock link', exact: true }).click();
+    await expect(page).toHaveURL(/#dock-link$/);
     expect(errors.filter(error => /hydration|mismatch/i.test(error))).toEqual([]);
   } finally {
     await (server as ViteDevServer).close();

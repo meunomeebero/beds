@@ -40,6 +40,8 @@ export interface DockItemProps {
   children: ReactNode;
   /** When set, the item renders as a <button>. Omit when children carry their own link or button. */
   onClick?: () => void;
+  /** Disables the native action button while preserving its accessible label and 44px target. */
+  disabled?: boolean;
   active?: boolean;
   "aria-label"?: string;
 }
@@ -47,6 +49,7 @@ export interface DockItemProps {
 export function DockItem({
   children,
   onClick,
+  disabled = false,
   active,
   ...rest
 }: DockItemProps) {
@@ -59,7 +62,7 @@ export function DockItem({
     <motion.span
       layoutId={pillLayoutId}
       transition={reduce ? { duration: 0 } : SPRING_LAYOUT}
-      className="absolute inset-0.5 -z-10 rounded-xl bg-primary/5"
+      className="pointer-events-none absolute inset-0.5 -z-10 rounded-xl bg-primary/5"
     />
   ) : null;
   const sharedStyle = { width: size, height: size };
@@ -72,12 +75,14 @@ export function DockItem({
       <button
         type="button"
         onClick={onClick}
+        disabled={disabled}
         aria-label={rest["aria-label"]}
         aria-pressed={active}
         style={sharedStyle}
         className={cn(
           sharedClass,
           "cursor-pointer border-0 bg-transparent p-0 outline-none",
+          "disabled:cursor-not-allowed disabled:opacity-60",
           "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         )}
       >
