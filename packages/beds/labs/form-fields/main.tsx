@@ -11,11 +11,20 @@ function FormFieldsLab() {
   const [formatError, setFormatError] = useState('');
   const [files, setFiles] = useState<File[]>([]);
   const [fileError, setFileError] = useState('');
+  const removalMode = params.get('removal');
   const chooseFormat = (value: string) => {
     setFormat(value);
     setFormatError('');
   };
   const chooseFiles = (nextFiles: File[]) => {
+    if (nextFiles.length < files.length && removalMode === 'reject') return;
+    if (nextFiles.length < files.length && removalMode === 'lag') {
+      window.setTimeout(() => {
+        setFiles(nextFiles);
+        setFileError('');
+      }, 250);
+      return;
+    }
     setFiles(nextFiles);
     setFileError('');
   };
@@ -37,7 +46,7 @@ function FormFieldsLab() {
         <form aria-label="Contrato callback-only FileUploadField" onSubmit={event => event.preventDefault()}>
           <section aria-label="FileUploadField">
             <Text variant="section-title">FileUploadField</Text>
-            <FileUploadField label="Arquivo de currículo" files={files} onFilesChange={chooseFiles} dropLabel="Solte um arquivo aqui" browseLabel="Escolher arquivo" removeLabel="Remover arquivo" accept=".pdf,.doc,.docx" description="Seleção local; o envio pertence ao aplicativo." error={fileError} />
+            <FileUploadField label="Arquivo de currículo" files={files} onFilesChange={chooseFiles} multiple dropLabel="Solte um arquivo aqui" browseLabel="Escolher arquivo" removeLabel="Remover arquivo" accept=".pdf,.doc,.docx" description="Seleção local; o envio pertence ao aplicativo." error={fileError} />
             <Button label="Validar arquivo" onClick={() => { if (files.length === 0) setFileError('Selecione um arquivo para continuar.'); }} />
           </section>
         </form>
