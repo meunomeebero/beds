@@ -55,11 +55,12 @@ function TabsRegressionFixture() {
   const [delayed, setDelayed] = useState('first');
   const [rejected, setRejected] = useState('first');
   const [rejectNext, setRejectNext] = useState(true);
+  const [rejectionCalls, setRejectionCalls] = useState(0);
   const [extra, setExtra] = useState(false);
   const items = [{ id: 'first', label: 'First', content: <Text>First panel content.</Text> }, { id: 'second', label: 'Second', content: <Text>Second panel content.</Text> }, { id: 'blocked', label: 'Blocked', disabled: true, content: <Text>Blocked panel content.</Text> }, ...(extra ? [{ id: 'expanded', label: 'Expanded', content: <Text>Expanded panel content.</Text> }] : [])];
   const acceptLater = (next: string) => { window.setTimeout(() => setDelayed(next), 180); };
-  const rejectOnceThenAccept = (next: string) => { if (rejectNext) { setRejectNext(false); return; } setRejected(next); };
-  return <div className="w-[calc(100vw-32px)] min-w-0 max-w-full" role="region" aria-label="BER-11 regression fixtures" data-testid="ber11-fixture"><Text variant="section-title">BER-11 regression fixtures</Text><Text tone="secondary">Synthetic controlled, rejection and motion states.</Text><Button label={extra ? 'Remover aba de teste' : 'Adicionar aba de teste'} compact onClick={() => setExtra(current => !current)} /><Tabs label="BER-11 pointer motion" value={pointer} items={items} onChange={setPointer} /><Tabs label="BER-11 delayed acceptance" value={delayed} items={items} onChange={acceptLater} /><Tabs label="BER-11 rejection" value={rejected} items={items} onChange={rejectOnceThenAccept} /><Tabs label="BER-11 sibling instance" value="first" items={items} onChange={() => undefined} /></div>;
+  const rejectOnceThenAccept = (next: string) => { setRejectionCalls(current => current + 1); if (rejectNext) { setRejectNext(false); return; } setRejected(next); };
+  return <div className="w-[calc(100vw-32px)] min-w-0 max-w-full" role="region" aria-label="BER-11 regression fixtures" data-testid="ber11-fixture"><Text variant="section-title">BER-11 regression fixtures</Text><Text tone="secondary">Synthetic controlled, rejection and motion states.</Text><Button label={extra ? 'Remover aba de teste' : 'Adicionar aba de teste'} compact onClick={() => setExtra(current => !current)} /><span data-testid="ber11-rejection-calls">{rejectionCalls}</span><Tabs label="BER-11 pointer motion" value={pointer} items={items} onChange={setPointer} /><Tabs label="BER-11 delayed acceptance" value={delayed} items={items} onChange={acceptLater} /><Tabs label="BER-11 rejection" value={rejected} items={items} onChange={rejectOnceThenAccept} /><Tabs label="BER-11 sibling instance" value="first" items={items} onChange={() => undefined} /></div>;
 }
 
 function ComponentsView({ announce, ber10, ber11 }: { announce: (message: string) => void; ber10?: boolean; ber11?: boolean }) {

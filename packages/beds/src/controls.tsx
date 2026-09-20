@@ -382,7 +382,7 @@ const TABS_TAB_ACTIVITY = 'flex-1 min-w-0 min-h-6 px-2 border-0 rounded-md bg-tr
 const TABS_TAB_CONNECTION = 'min-h-7 px-2 border border-transparent rounded-lg text-sm leading-4 transition-colors motion-reduce:transition-none';
 const TABS_TAB_SELECTED = 'relative text-foreground';
 const TABS_PANEL_TRANSITION = { duration: 0.18, ease: EASE_OUT } as const;
-const TABS_EDGE_SIZE = 36;
+const TABS_EDGE_SIZE = 44;
 
 export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
   label: string; value: string; items: (Choice & { content: ReactNode })[]; onChange: (value: string) => void; variant?: 'activity' | 'connection' | 'settings';
@@ -396,7 +396,7 @@ export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
   const [keyboardTarget, setKeyboardTarget] = useState<string | null>(null);
   const keyboardTargetRef = useRef<string | null>(null);
   const pendingKeyboardCommit = useRef<string | null>(null);
-  const lastKeyboardProposal = useRef<string | null>(null);
+  const keyboardActivation = useRef<string | null>(null);
   const selected = items.find(item => item.id === value && !item.disabled) ?? items.find(item => !item.disabled);
   const selectedId = selected?.id;
   const keyboardInstant = reduce || keyboardTarget === value;
@@ -404,7 +404,7 @@ export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
   const clearKeyboardTarget = useCallback(() => {
     keyboardTargetRef.current = null;
     pendingKeyboardCommit.current = null;
-    lastKeyboardProposal.current = null;
+    keyboardActivation.current = null;
     setKeyboardTarget(null);
   }, []);
 
@@ -480,8 +480,6 @@ export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
     if (!item || item.disabled) return;
     if (keyboard) {
       markKeyboardTarget(target);
-      if (target === value || lastKeyboardProposal.current === target) return;
-      lastKeyboardProposal.current = target;
     } else {
       clearKeyboardTarget();
     }
@@ -490,7 +488,9 @@ export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
 
   const navigate = (event: KeyboardEvent<HTMLButtonElement>, current: string) => {
     if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar' || event.key === 'Space') {
-      markKeyboardTarget(current);
+      event.preventDefault();
+      keyboardActivation.current = current;
+      propose(current, true);
       return;
     }
     if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
@@ -517,13 +517,13 @@ export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
     const tabId = `${id}-tab-${item.id}`;
     const panelId = `${id}-panel-${item.id}`;
     const indicator = active && <motion.span layoutId={`${id}-${variant}-indicator`} initial={false} transition={keyboardInstant ? { duration: 0 } : SPRING_LAYOUT} className="es-tabs-indicator pointer-events-none absolute inset-0 rounded-[inherit] bg-surface shadow-[0_1px_2px_var(--es-border)]" data-tabs-indicator aria-hidden="true" />;
-    return <button key={item.id} ref={button => { tabRefs.current[item.id] = button; }} id={tabId} type="button" role="tab" aria-controls={panelId} aria-selected={active} tabIndex={active ? 0 : -1} disabled={item.disabled} onClick={event => propose(item.id, event.detail === 0)} onKeyDown={event => navigate(event, item.id)} className={cn(variant === 'connection' && TABS_TAB_CONNECTION, variant === 'activity' && TABS_TAB_ACTIVITY, variant === 'settings' && 'es-settings-tab relative flex-none min-h-12 border-none px-0 pb-2 pt-0.5 rounded-md bg-transparent shadow-none text-sm leading-5 font-normal', active && (variant !== 'settings') && TABS_TAB_SELECTED)}>{variant === 'settings' ? <><span className="es-settings-tab-label relative z-10 block px-2.5 py-2 rounded-md">{item.label}</span>{active && <motion.span layoutId={`${id}-settings-indicator`} initial={false} transition={keyboardInstant ? { duration: 0 } : SPRING_LAYOUT} className="es-settings-tab-indicator" data-tabs-indicator aria-hidden="true" />}</> : <>{indicator}<span className="relative z-10">{item.label}</span></>}</button>;
+    return <button key={item.id} ref={button => { tabRefs.current[item.id] = button; }} id={tabId} type="button" role="tab" aria-controls={panelId} aria-selected={active} tabIndex={active ? 0 : -1} disabled={item.disabled} onClick={event => { if (event.detail === 0) { if (keyboardActivation.current === item.id) { keyboardActivation.current = null; return; } propose(item.id, true); return; } propose(item.id, false); }} onKeyDown={event => navigate(event, item.id)} className={cn(variant === 'connection' && TABS_TAB_CONNECTION, variant === 'activity' && TABS_TAB_ACTIVITY, variant === 'settings' && 'es-settings-tab relative flex-none min-h-12 border-none px-0 pb-2 pt-0.5 rounded-md bg-transparent shadow-none text-sm leading-5 font-normal', active && (variant !== 'settings') && TABS_TAB_SELECTED)}>{variant === 'settings' ? <><span className="es-settings-tab-label relative z-10 block px-2.5 py-2 rounded-md">{item.label}</span>{active && <motion.span layoutId={`${id}-settings-indicator`} initial={false} transition={keyboardInstant ? { duration: 0 } : SPRING_LAYOUT} className="es-settings-tab-indicator" data-tabs-indicator aria-hidden="true" />}</> : <>{indicator}<span className="relative z-10">{item.label}</span></>}</button>;
   });
   const tabList = <div ref={list} id={`${id}-list`} className={cn('es-tabs-list', variant === 'connection' && 'w-full min-w-0 min-h-9 p-1 border-0 rounded-xl bg-subtle overflow-x-auto overscroll-x-contain [scrollbar-width:thin] [scroll-padding-inline:36px]', variant === 'activity' && TABS_LIST_ACTIVITY, variant === 'settings' && 'flex items-stretch gap-1 w-full min-w-0 px-1 pt-1 pb-0 border-0 border-b border-border rounded-none bg-transparent overflow-x-auto overscroll-x-contain [scrollbar-width:thin] [scroll-padding-inline:36px]')} role="tablist" aria-label={label} onFocusCapture={event => { if (event.target instanceof HTMLElement && event.target.getAttribute('role') === 'tab') reveal(event.target, reduce || keyboardTarget !== null); }}>{variant === 'connection' ? <div className="grid items-center gap-0 min-w-0" style={connectionListStyle}>{tabButtons}</div> : tabButtons}</div>;
   // `rounded-[16px]` is an arbitrary value: BEDS tokens only ship --radius (8px) and the Tailwind scale
   // (rounded-xl = 10px, rounded-2xl = 14px). 16px has no token, so the connection Tabs radius stays as an
   // explicit arbitrary value. Same convention as `rounded-[12px]` on the welcome variant.
-  return <LayoutGroup id={id}><div ref={root} className={cn('es-tabs min-w-0', variant === 'connection' && 'rounded-[16px] overflow-hidden border border-border-subtle shadow-[0_1px_2px_var(--es-border-subtle)]')} data-variant={variant} onPointerDown={clearKeyboardTarget} onBlurCapture={event => { if (!root.current?.contains(event.relatedTarget as Node | null)) clearKeyboardTarget(); }}>{variant === 'connection' ? <div className="es-tabs-connection-strip contain-inline-size w-full max-w-full min-w-0 overflow-visible p-2 border-b border-border-subtle"><div className="es-tabs-list-shell" data-variant={variant} data-overflow={edges.overflow} data-edge-left={edges.left} data-edge-right={edges.right}>{edges.overflow && <><span className="es-tabs-edge-fade" data-edge="left" aria-hidden="true" /><span className="es-tabs-edge-fade" data-edge="right" aria-hidden="true" /></>}{edges.overflow && <button type="button" className="es-tabs-edge-button" data-edge="left" aria-label="Rolar abas para a esquerda" aria-controls={list.current?.id} disabled={!edges.left} onClick={() => scroll(-1)}><Icon name="ArrowLeft" purpose="small" /></button>}{tabList}{edges.overflow && <button type="button" className="es-tabs-edge-button" data-edge="right" aria-label="Rolar abas para a direita" aria-controls={list.current?.id} disabled={!edges.right} onClick={() => scroll(1)}><Icon name="ArrowRight" purpose="small" /></button>}</div></div> : <div className="es-tabs-list-shell" data-variant={variant} data-overflow={edges.overflow} data-edge-left={edges.left} data-edge-right={edges.right}>{edges.overflow && <><span className="es-tabs-edge-fade" data-edge="left" aria-hidden="true" /><span className="es-tabs-edge-fade" data-edge="right" aria-hidden="true" /></>}{edges.overflow && <button type="button" className="es-tabs-edge-button" data-edge="left" aria-label="Rolar abas para a esquerda" aria-controls={list.current?.id} disabled={!edges.left} onClick={() => scroll(-1)}><Icon name="ArrowLeft" purpose="small" /></button>}{tabList}{edges.overflow && <button type="button" className="es-tabs-edge-button" data-edge="right" aria-label="Rolar abas para a direita" aria-controls={list.current?.id} disabled={!edges.right} onClick={() => scroll(1)}><Icon name="ArrowRight" purpose="small" /></button>}</div>}{items.map(item => {
+  return <LayoutGroup id={id}><div ref={root} className={cn('es-tabs min-w-0', variant === 'connection' && 'rounded-[16px] overflow-hidden border border-border-subtle shadow-[0_1px_2px_var(--es-border-subtle)]')} data-variant={variant} onPointerDown={clearKeyboardTarget} onBlurCapture={event => { if (!root.current?.contains(event.relatedTarget as Node | null)) clearKeyboardTarget(); }}>{variant === 'connection' ? <div className="es-tabs-connection-strip contain-inline-size w-full max-w-full min-w-0 overflow-visible p-2 border-b border-border-subtle"><div className="es-tabs-list-shell" data-variant={variant} data-overflow={edges.overflow} data-edge-left={edges.left} data-edge-right={edges.right}>{edges.left && <span className="es-tabs-edge-fade" data-edge="left" aria-hidden="true" />}{edges.right && <span className="es-tabs-edge-fade" data-edge="right" aria-hidden="true" />}{edges.overflow && <button type="button" className="es-tabs-edge-button" data-edge="left" aria-label="Rolar abas para a esquerda" aria-controls={list.current?.id} disabled={!edges.left} onClick={() => scroll(-1)}><Icon name="ArrowLeft" purpose="small" /></button>}{tabList}{edges.overflow && <button type="button" className="es-tabs-edge-button" data-edge="right" aria-label="Rolar abas para a direita" aria-controls={list.current?.id} disabled={!edges.right} onClick={() => scroll(1)}><Icon name="ArrowRight" purpose="small" /></button>}</div></div> : <div className="es-tabs-list-shell" data-variant={variant} data-overflow={edges.overflow} data-edge-left={edges.left} data-edge-right={edges.right}>{edges.left && <span className="es-tabs-edge-fade" data-edge="left" aria-hidden="true" />}{edges.right && <span className="es-tabs-edge-fade" data-edge="right" aria-hidden="true" />}{edges.overflow && <button type="button" className="es-tabs-edge-button" data-edge="left" aria-label="Rolar abas para a esquerda" aria-controls={list.current?.id} disabled={!edges.left} onClick={() => scroll(-1)}><Icon name="ArrowLeft" purpose="small" /></button>}{tabList}{edges.overflow && <button type="button" className="es-tabs-edge-button" data-edge="right" aria-label="Rolar abas para a direita" aria-controls={list.current?.id} disabled={!edges.right} onClick={() => scroll(1)}><Icon name="ArrowRight" purpose="small" /></button>}</div>}{items.map(item => {
     const active = selected?.id === item.id;
     const panelId = `${id}-panel-${item.id}`;
     const panelTransition = variant === 'settings' || keyboardInstant ? { duration: 0 } : TABS_PANEL_TRANSITION;

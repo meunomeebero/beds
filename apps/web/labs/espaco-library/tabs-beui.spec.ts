@@ -74,10 +74,14 @@ for (const theme of ['light', 'dark'] as const) {
       await expect(first).toHaveAttribute('aria-selected', 'true');
       await page.waitForTimeout(220);
       await expect(first).toHaveAttribute('aria-selected', 'true');
-      await second.click();
+      await second.press('Enter');
       await expect(second).toHaveAttribute('aria-selected', 'true');
+      await expect(page.getByTestId('ber11-rejection-calls')).toHaveText('2');
+      await first.click();
       await page.waitForTimeout(50);
       expect(await indicator.evaluate(element => getComputedStyle(element).transform)).not.toBe('none');
+      await first.press('ArrowRight');
+      await expect(second).toBeFocused();
       await second.press('ArrowRight');
       await expect(first).toBeFocused();
       await expect(first).toHaveAttribute('aria-selected', 'true');

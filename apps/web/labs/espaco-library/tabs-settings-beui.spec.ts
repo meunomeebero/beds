@@ -23,18 +23,34 @@ for (const theme of ['light', 'dark'] as const) {
     expect(await tablist.evaluate(element => element.scrollWidth > element.clientWidth)).toBe(width === 320);
     const edgeLeft = page.getByRole('button', { name: 'Rolar abas para a esquerda', exact: true });
     const edgeRight = page.getByRole('button', { name: 'Rolar abas para a direita', exact: true });
+    const expectTabClearOfEnabledEdge = async (target: typeof tab) => {
+      const targetBox = await target.boundingBox();
+      for (const edge of [edgeLeft, edgeRight]) {
+        if (await edge.count() === 0 || await edge.isDisabled()) continue;
+        const edgeBox = await edge.boundingBox();
+        expect(targetBox!.x + targetBox!.width <= edgeBox!.x || edgeBox!.x + edgeBox!.width <= targetBox!.x).toBe(true);
+      }
+    };
     if (width === 320) {
       await expect(edgeLeft).toBeVisible();
       await expect(edgeRight).toBeVisible();
       await expect(edgeLeft).toBeDisabled();
       await expect(edgeRight).toBeEnabled();
+      const leftBox = await edgeLeft.boundingBox();
+      const rightBox = await edgeRight.boundingBox();
+      expect(leftBox!.x).toBeLessThan(rightBox!.x);
+      await expect(page.locator('.es-tabs-edge-fade[data-edge="left"]')).toHaveCount(0);
+      await expect(page.locator('.es-tabs-edge-fade[data-edge="right"]')).toHaveCount(1);
     } else {
       await expect(edgeLeft).toHaveCount(0);
       await expect(edgeRight).toHaveCount(0);
     }
     await tab.focus();
+    await expectTabClearOfEnabledEdge(tab);
     await tab.press('ArrowRight');
-    await expect(page.getByRole('tab', { name: 'Preferências', exact: true })).toBeFocused();
+    const middleTab = page.getByRole('tab', { name: 'Preferências', exact: true });
+    await expect(middleTab).toBeFocused();
+    await expectTabClearOfEnabledEdge(middleTab);
     await page.getByRole('tab', { name: 'Conta', exact: true }).focus();
     await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
     await page.getByRole('tab', { name: 'Conta', exact: true }).press('ArrowLeft');
@@ -42,7 +58,25 @@ for (const theme of ['light', 'dark'] as const) {
     if (width === 320) {
       const before = await tablist.evaluate(element => element.scrollLeft);
       await page.getByRole('tab', { name: 'Preferências', exact: true }).press('End');
-      await expect(page.getByRole('tab', { name: 'Privacidade', exact: true })).toBeFocused();
+      const endTab = page.getByRole('tab', { name: 'Privacidade', exact: true });
+      await expect(endTab).toBeFocused();
+      const rtlLeftBox = await edgeLeft.boundingBox();
+      const rtlRightBox = await edgeRight.boundingBox();
+      expect(rtlLeftBox!.x).toBeLessThan(rtlRightBox!.x);
+      await expectTabClearOfEnabledEdge(endTab);
+      const leftFade = page.locator('.es-tabs-edge-fade[data-edge="left"]');
+      const rightFade = page.locator('.es-tabs-edge-fade[data-edge="right"]');
+      expect(await leftFade.count() + await rightFade.count()).toBe(1);
+      const activeEdgeKind = await edgeLeft.isEnabled() ? 'left' : 'right';
+      const activeEdge = activeEdgeKind === 'left' ? edgeLeft : edgeRight;
+      const beforeTabBox = await endTab.boundingBox();
+      await activeEdge.click();
+      await expect.poll(async () => endTab.boundingBox()).not.toEqual(beforeTabBox);
+      const afterTabBox = await endTab.boundingBox();
+      if (activeEdgeKind === 'left') expect(afterTabBox!.x).toBeGreaterThan(beforeTabBox!.x);
+      else expect(afterTabBox!.x).toBeLessThan(beforeTabBox!.x);
+      await expect(activeEdge).toBeDisabled();
+      await expect(page.locator(`.es-tabs-edge-fade[data-edge="${activeEdgeKind}"]`)).toHaveCount(0);
       const after = await tablist.evaluate(element => element.scrollLeft);
       await page.waitForTimeout(60);
       await expect.poll(async () => tablist.evaluate(element => element.scrollLeft)).toBe(after);
