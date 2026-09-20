@@ -18,6 +18,11 @@ const ITEM_VARIANTS: Variants = {
   hidden: { opacity: 0, y: -6, filter: "blur(3px)" },
   show: { opacity: 1, y: 0, filter: "blur(0px)" },
 };
+const TYPEAHEAD_TIMEOUT = 500;
+
+function normalizeTypeahead(value: string) {
+  return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase();
+}
 
 export type SelectOption = {
   id: string;
@@ -48,6 +53,7 @@ export function Select({ label, value, options, onChange, disabled, icon, varian
   const panel = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const typeahead = useRef({ value: "", at: 0 });
   const reduce = useReducedMotion() ?? false;
   const selected = options.find(option => option.id === value);
   const active = options.find(option => option.id === activeId && !option.disabled)
@@ -61,7 +67,27 @@ export function Select({ label, value, options, onChange, disabled, icon, varian
     if (open) panel.current?.querySelector('[data-active="true"]')?.scrollIntoView({ block: "nearest" });
   }, [open, active?.id]);
 
+  const resetTypeahead = () => { typeahead.current = { value: "", at: 0 }; };
+  const moveByTypeahead = (key: string) => {
+    const character = normalizeTypeahead(key);
+    if (!character) return;
+    const now = Date.now();
+    const previous = typeahead.current;
+    const timedOut = now - previous.at > TYPEAHEAD_TIMEOUT;
+    const repeated = !timedOut && previous.value.length > 0 && previous.value === character.repeat(previous.value.length);
+    const query = repeated || timedOut ? character : `${previous.value}${character}`;
+    const enabled = options.filter(option => !option.disabled);
+    const currentIndex = enabled.findIndex(option => option.id === active?.id);
+    const start = repeated ? currentIndex + 1 : 0;
+    const match = [...enabled.slice(start), ...enabled.slice(0, start)]
+      .find(option => normalizeTypeahead(option.label).startsWith(query))
+      ?? (query.length > 1 ? enabled.find(option => normalizeTypeahead(option.label).startsWith(character)) : undefined);
+    typeahead.current = { value: query, at: now };
+    if (match) setActiveId(match.id);
+  };
+
   const show = (fromEnd = false) => {
+    resetTypeahead();
     setActiveId(options.find(option => option.id === value && !option.disabled)?.id
       ?? nextOption(options, undefined, fromEnd ? "End" : "Home"));
     setOpen(true);
@@ -69,6 +95,7 @@ export function Select({ label, value, options, onChange, disabled, icon, varian
   const choose = (option: SelectOption) => {
     if (!option.disabled) {
       onChange(option.id);
+      resetTypeahead();
       setOpen(false);
     }
   };
@@ -81,7 +108,11 @@ export function Select({ label, value, options, onChange, disabled, icon, varian
       if (active) choose(active);
     } else if (event.key === "Tab") {
       anchor.current?.focus({ preventScroll: true });
+      resetTypeahead();
       setOpen(false);
+    } else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey && !event.nativeEvent.isComposing) {
+      event.preventDefault();
+      moveByTypeahead(event.key);
     }
   };
 
@@ -95,7 +126,7 @@ export function Select({ label, value, options, onChange, disabled, icon, varian
       aria-expanded={open && !disabled}
       aria-controls={open && !disabled ? id : undefined}
       disabled={disabled}
-      onClick={() => open ? setOpen(false) : show()}
+      onClick={() => { if (open) { resetTypeahead(); setOpen(false); } else show(); }}
       onKeyDown={event => {
         if (event.key === "ArrowDown" || event.key === "ArrowUp") {
           event.preventDefault();
