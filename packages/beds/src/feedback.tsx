@@ -117,8 +117,10 @@ export function LoadingIndicator({ label }: { label: string }) {
   </span>;
 }
 export function ProgressBar({ label, value, max = 100, tone = 'neutral' }: { label: string; value: number | null; max?: number; tone?: 'neutral' | 'brand' }) {
-  const ratio = fraction(value, max);
-  return <div className="es-progress" data-tone={tone}>{ratio === null ? <span className="es-progress-unavailable" role="status">{label} — unavailable</span> : <><div className="es-meter-label"><span>{label}</span><span>{Math.round(ratio * max)} / {max}</span></div><progress aria-label={label} max={max} value={ratio * max} /></>}</div>;
+  const normalizedValue = value !== null && Number.isFinite(value) && Number.isFinite(max) && max > 0
+    ? Math.min(max, Math.max(0, value))
+    : null;
+  return <div className="es-progress" data-tone={tone}>{normalizedValue === null ? <span className="es-progress-unavailable" role="status">{label} — unavailable</span> : <><div className="es-meter-label"><span>{label}</span><span>{normalizedValue} / {max}</span></div><progress aria-label={label} max={max} value={normalizedValue} /></>}</div>;
 }
 export function SegmentedMeter({ label, value, max = 100, tone = 'neutral' }: { label: string; value: number | null; max?: number; tone?: 'neutral' | 'brand' | 'success' }) {
   const ratio = fraction(value, max);
