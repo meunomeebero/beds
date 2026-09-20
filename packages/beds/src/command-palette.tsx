@@ -74,14 +74,10 @@ export function CommandPalette({ open, onOpenChange, label, query, onQueryChange
 
   const navigate = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.nativeEvent.isComposing) return;
-    if (event.key === "ArrowDown" || event.key === "ArrowUp" || event.key === "Home" || event.key === "End") {
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
       if (enabled.length === 0) return;
-      const nextIndex = event.key === "Home"
-        ? 0
-        : event.key === "End"
-          ? enabled.length - 1
-          : (activeIndex + (event.key === "ArrowDown" ? 1 : -1) + enabled.length) % enabled.length;
+      const nextIndex = (activeIndex + (event.key === "ArrowDown" ? 1 : -1) + enabled.length) % enabled.length;
       moveTo(enabled[nextIndex]?.id ?? null);
     } else if (event.key === "Enter") {
       event.preventDefault();
