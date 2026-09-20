@@ -1,0 +1,31 @@
+{
+  "scope": "Catalog routing, query context and responsive technical evidence",
+  "browser": "Chromium via Playwright",
+  "route": "?view=components&theme={light|dark}&brand={reference|curriculol}&ber10=1&ber11=1",
+  "viewportMatrix": [
+    { "width": 1440, "height": 1000 },
+    { "width": 768, "height": 1000 },
+    { "width": 390, "height": 1000 },
+    { "width": 320, "height": 1000 }
+  ],
+  "modes": ["light", "dark", "rtl", "forced-colors", "reduced-motion"],
+  "results": {
+    "catalogSpec": "3 passed, 1 intentional mobile skip",
+    "shellSpec": "22 passed, 6 expected project skips",
+    "typecheck": "passed",
+    "consumerGuard": "33 roots, 39 files, 0 violations"
+  },
+  "visualEvidence": [
+    "components-light-1440.png",
+    "components-dark-1440.png",
+    "components-light-390.png",
+    "components-dark-390.png",
+    "components-light-320.png",
+    "components-dark-320.png"
+  ],
+  "limitations": [
+    "The 200% document.style.zoom stress proxy is diagnostic-only; at 640 CSS px it measured scrollWidth 1248 and is not browser zoom approval.",
+    "Chromium DOM checks do not establish physical assistive-technology, non-Chromium, or independent aesthetic approval."
+  ],
+  "visualReview": "pending independent aesthetic approval"
+}
