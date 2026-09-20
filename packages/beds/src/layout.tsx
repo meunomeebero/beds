@@ -136,7 +136,7 @@ export function NavItem({ label, icon, active = false, badge, locked, href, onCl
   return <button {...common} type="button" onClick={onClick}>{activeIndicator}{content}</button>;
 }
 
-export function SidebarFooter({ children }: { children: ReactNode }) { const id = useId(); return <NavMotionContext.Provider value={id}><div className="es-sidebar-footer">{children}</div></NavMotionContext.Provider>; }
+export function SidebarFooter({ children }: { children: ReactNode }) { const id = useId(); return <NavMotionContext.Provider value={id}><footer className="es-sidebar-footer">{children}</footer></NavMotionContext.Provider>; }
 
 export function ContentHeader({ children, actions }: { children: ReactNode; actions?: ReactNode }) {
   return <header className="es-content-header"><div className="es-content-header-main">{children}</div>{actions && <div className="es-content-header-actions">{actions}</div>}</header>;

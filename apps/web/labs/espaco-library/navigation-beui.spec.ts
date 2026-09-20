@@ -88,4 +88,25 @@ for (const theme of ['light', 'dark'] as const) {
     await expect(sidebar).not.toBeVisible();
     await expect(trigger).toBeFocused();
   });
+
+  test(`navigation landmarks and forced-colors focus remain explicit in ${theme}`, async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop', 'The desktop rail and forced-colors landmark proof run at desktop width.');
+    await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
+    await page.goto(`/?view=components&theme=${theme}`);
+    await expect(page.getByRole('heading', { name: 'Componentes', exact: true })).toBeVisible();
+    const footer = page.locator('aside footer.es-sidebar-footer');
+    await expect(footer).toHaveCount(1);
+    await expect(footer).toHaveJSProperty('tagName', 'FOOTER');
+    await expect(footer.getByRole('button', { name: 'Sobre esta demonstração', exact: true })).toBeVisible();
+    const active = page.locator('.es-nav-item--active').first();
+    await active.focus();
+    await expect.poll(() => active.evaluate(element => {
+      const style = getComputedStyle(element);
+      return { outlineStyle: style.outlineStyle, outlineWidth: style.outlineWidth, transitionDuration: style.transitionDuration };
+    })).toEqual({ outlineStyle: 'solid', outlineWidth: '1px', transitionDuration: '0s' });
+    const skip = page.getByRole('link', { name: 'Ir para o conteúdo', exact: true });
+    await skip.focus();
+    await expect(skip).toHaveCSS('outline-style', 'solid');
+    await expect(skip).toHaveCSS('outline-width', '2px');
+  });
 }
