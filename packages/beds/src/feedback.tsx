@@ -122,9 +122,9 @@ export function ProgressBar({ label, value, max = 100, tone = 'neutral' }: { lab
     : null;
   return <div className="es-progress" data-tone={tone}>{normalizedValue === null ? <span className="es-progress-unavailable" role="status">{label} — unavailable</span> : <><div className="es-meter-label"><span>{label}</span><span>{normalizedValue} / {max}</span></div><progress aria-label={label} max={max} value={normalizedValue} /></>}</div>;
 }
-export function SegmentedMeter({ label, value, max = 100, tone = 'neutral' }: { label: string; value: number | null; max?: number; tone?: 'neutral' | 'brand' | 'success' }) {
+export function SegmentedMeter({ label, value, max = 100, tone = 'neutral', valueText }: { label: string; value: number | null; max?: number; tone?: 'neutral' | 'brand' | 'success'; valueText?: string }) {
   const ratio = fraction(value, max);
-  return <div className="es-segmented-meter" data-tone={tone}><div className="es-meter-label"><span>{label}</span><span>{ratio === null ? '—' : Math.round(ratio * max)}</span></div><MeterSegments label={label} value={value} max={max} tone={tone} /></div>;
+  return <div className="es-segmented-meter" data-tone={tone}><div className="es-meter-label"><span>{label}</span><span>{ratio === null ? '—' : Math.round(ratio * max)}</span></div><MeterSegments label={label} value={value} max={max} tone={tone} valueText={ratio === null ? undefined : valueText} /></div>;
 }
 export type MetricProps = {
   label: string;

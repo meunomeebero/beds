@@ -49,7 +49,9 @@ export function NumberTicker({
     if (startOnView && inView) setArmed(true);
   }, [startOnView, inView]);
 
+  const finite = Number.isFinite(value);
   const text = useMemo(() => {
+    if (!finite) return '—';
     const rounded = Math.round(value);
     const formatted = format
       ? format(rounded)
@@ -57,20 +59,25 @@ export function NumberTicker({
         ? rounded.toLocaleString()
         : rounded.toString();
     return pad ? formatted.padStart(pad, "0") : formatted;
-  }, [value, pad, format, locale]);
+  }, [finite, value, pad, format, locale]);
   const glyphs = useMemo(() => {
+    if (!finite) return [];
     const chars = text.split("");
     return chars.map((char, i) => ({ char, id: `g-${chars.length - 1 - i}` }));
-  }, [text]);
-  const readableText = `${prefix ?? ""}${text}${suffix ?? ""}`;
+  }, [finite, text]);
+  const readableText = finite ? `${prefix ?? ""}${text}${suffix ?? ""}` : '—';
 
   const [entered, setEntered] = useState(false);
   useEffect(() => {
-    if (!armed || entered) return;
+    if (!finite || !armed || entered) return;
     const total = (duration + glyphs.length * stagger) * 1000;
     const t = window.setTimeout(() => setEntered(true), total);
     return () => window.clearTimeout(t);
-  }, [armed, entered, duration, stagger, glyphs.length]);
+  }, [finite, armed, entered, duration, stagger, glyphs.length]);
+
+  if (!finite) {
+    return <span ref={containerRef} className="inline-flex items-center tabular-nums">—</span>;
+  }
 
   return (
     <span
