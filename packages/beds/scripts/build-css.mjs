@@ -31,11 +31,27 @@ try {
  hasSourceDocs = false;
 }
 
+async function sourceDocumentFiles(directory, prefix = '') {
+ const files = [];
+ for (const entry of await readdir(directory, { withFileTypes:true })) {
+  const relative = prefix ? `${prefix}/${entry.name}` : entry.name;
+  if (entry.isDirectory()) files.push(...await sourceDocumentFiles(directory + entry.name + '/', relative));
+  else if (/\.(md|json)$/.test(entry.name)) files.push(relative);
+ }
+ return files;
+}
+
 if (hasSourceDocs) {
  await mkdir(root + 'docs', { recursive:true });
- for (const name of await readdir(sourceDocs)) {
-  if (!name.endsWith('.md')) continue;
-  let body = (await readFile(sourceDocs + name,'utf8'))
+ for (const relative of await sourceDocumentFiles(sourceDocs)) {
+  const name = relative.split('/').pop();
+  const destination = root + 'docs/' + relative;
+  await mkdir(destination.slice(0, destination.lastIndexOf('/')), { recursive:true });
+  if (!name.endsWith('.md')) {
+   await copyFile(sourceDocs + relative, destination);
+   continue;
+  }
+  let body = (await readFile(sourceDocs + relative,'utf8'))
    .replaceAll('../../../packages/beds/', '../')
    .replaceAll('../espaco-system/MARKETER-REFERENCE.md', 'PROVENANCE.md');
   // Keep linked application examples/evidence readable in the standalone package.
@@ -54,7 +70,7 @@ if (hasSourceDocs) {
    await copyFile(sourceAsset, root + destination);
    body = body.replaceAll(labPrefix + relative, '../' + destination);
   }
-  await writeFile(root + 'docs/' + name, body);
+  await writeFile(destination, body);
  }
 }
 // ESM exports must resolve in Node and bundlers; preserve React/lucide peer imports.

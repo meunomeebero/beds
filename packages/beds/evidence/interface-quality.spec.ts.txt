@@ -17,7 +17,7 @@ for (const theme of ['light', 'dark']) {
   test(`shared boundaries and validation remain legible in ${theme}`, async ({ page }, info) => {
     await page.goto(`/?view=components&theme=${theme}`);
     const measures: Record<string, number> = {};
-    for (const selector of ['.es-text-input:not(:disabled)', '.es-text-area', '.es-search-field', '.es-checkbox-box', '.es-switch-track']) {
+    for (const selector of ['input[data-purpose]:not([disabled])', 'textarea', 'label:has(> input[type="search"])', '.es-checkbox-box', '[role="switch"] + span']) {
       const element = page.locator(selector).first();
       if (selector === '.es-checkbox-box') await page.getByRole('checkbox', { name: /^Incluir detalhes/ }).uncheck();
       measures[selector] = await contrast(element, 'borderTopColor');
@@ -25,7 +25,7 @@ for (const theme of ['light', 'dark']) {
     }
     const toggle = page.getByRole('switch', { name: 'Notificações do exemplo' });
     await toggle.check();
-    expect(await contrast(page.locator('.es-switch-track').first(), 'borderTopColor')).toBeGreaterThanOrEqual(3);
+    expect(await contrast(page.locator('[role="switch"] + span').first(), 'borderTopColor')).toBeGreaterThanOrEqual(3);
     await page.goto(`/?view=decisions&theme=${theme}`);
     measures.radio = await contrast(page.locator('.es-radio-indicator').last(), 'borderTopColor');
     expect(measures.radio).toBeGreaterThanOrEqual(3);
@@ -34,7 +34,7 @@ for (const theme of ['light', 'dark']) {
     await field.fill('!');
     await field.press('Enter');
     await expect(field).toHaveAttribute('aria-invalid', 'true');
-    measures.errorText = await contrast(page.locator('.es-field-error'), 'color');
+    measures.errorText = await contrast(page.locator('[role="alert"]'), 'color');
     expect(measures.errorText).toBeGreaterThanOrEqual(4.5);
     await page.screenshot({ path: `apps/web/labs/espaco-library/evidence/settings/quality-${theme}-${info.project.name}.png`, fullPage: true });
     await info.attach('rendered-contrast', { body: JSON.stringify(measures, null, 2), contentType: 'application/json' });
