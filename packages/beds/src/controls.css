@@ -13,6 +13,18 @@
 .es-root .es-tabs{min-width:0}
 .es-root .es-tabs[data-variant="activity"] .es-tabs-list{flex-wrap:wrap}
 .es-root .es-tabs[data-variant="activity"] .es-tabs-list>[role="tab"]{flex:0 0 auto;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.es-root .es-tabs-list-shell{position:relative;display:flex;align-items:center;width:100%;max-width:100%;min-width:0}
+.es-root .es-tabs-list-shell[data-variant="activity"]{--es-tabs-fade:var(--es-subtle);width:max-content}
+.es-root .es-tabs-list-shell[data-variant="connection"]{--es-tabs-fade:var(--es-subtle)}
+.es-root .es-tabs-list-shell[data-variant="settings"]{--es-tabs-fade:var(--es-bg)}
+.es-root .es-tabs-edge-fade{position:absolute;inset-block:0;z-index:10;width:36px;pointer-events:none}
+.es-root .es-tabs-edge-fade[data-edge="left"]{inset-inline-start:0;background:linear-gradient(to right,var(--es-tabs-fade),transparent)}
+.es-root .es-tabs-edge-fade[data-edge="right"]{inset-inline-end:0;background:linear-gradient(to left,var(--es-tabs-fade),transparent)}
+.es-root .es-tabs-edge-button{position:absolute;inset-block:0;z-index:20;display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0;border:0;border-radius:var(--es-radius-8);background:transparent;color:var(--es-text);cursor:pointer}
+.es-root .es-tabs-edge-button[data-edge="left"]{inset-inline-start:0}
+.es-root .es-tabs-edge-button[data-edge="right"]{inset-inline-end:0}
+.es-root .es-tabs-edge-button:disabled{pointer-events:none;opacity:0}
+.es-root .es-tabs-edge-button:focus-visible{outline:2px solid var(--es-focus);outline-offset:-2px}
 .es-root .es-tab-panel{min-width:0}
 .es-root :where(button[aria-pressed],button:not([aria-pressed]):not([aria-label]),.es-icon-button,.es-icon-toggle-button,.es-tabs-list>[role="tab"],.es-tab-panel):focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
 /* Fields now own their focus idiom via Tailwind utilities (border-ring + shadow-[0_0_0_3px_var(--es-focus-ring)]); forced-colors

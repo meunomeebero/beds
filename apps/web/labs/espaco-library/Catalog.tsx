@@ -50,7 +50,19 @@ function SegmentedControlRegressionFixture() {
   return <div className="w-[calc(100vw-32px)] min-w-0 max-w-full" role="region" aria-label="BER-10 regression fixtures" data-testid="ber10-fixture"><Text variant="section-title">BER-10 regression fixtures</Text><Text tone="secondary">Synthetic states.</Text><SegmentedControl label="BER-10 disabled skip" value={regular} options={[{ id: 'first', label: 'First' }, { id: 'blocked', label: 'Blocked', disabled: true }, { id: 'last', label: 'Last' }]} onChange={setRegular} /><SegmentedControl label="BER-10 delayed acceptance" value={delayed} options={[{ id: 'first', label: 'First' }, { id: 'second', label: 'Second' }]} onChange={acceptLater} /><SegmentedControl label="BER-10 rejection" value={rejected} options={[{ id: 'first', label: 'First' }, { id: 'second', label: 'Second' }]} onChange={() => setRejected('first')} /><SegmentedControl label="BER-10 rejected keyboard then pointer" value={rejectedThenPointer} options={[{ id: 'first', label: 'First' }, { id: 'second', label: 'Second' }]} onChange={rejectOnceThenAccept} /><SegmentedControl label="BER-10 sibling instance" value={sibling} options={[{ id: 'first', label: 'First' }, { id: 'second', label: 'Second' }]} onChange={setSibling} /><SegmentedControl label="BER-10 long labels" variant="joined" value={longLabel} options={[{ id: 'short', label: 'Short' }, { id: 'middle', label: 'Long localized choice' }, { id: 'long', label: 'Another localized choice' }]} onChange={setLongLabel} /><SegmentedControl label="BER-10 oversized label" value={oversizedLabel} options={[{ id: 'short', label: 'Short' }, { id: 'long', label: 'An intentionally oversized localized label wider than the narrow lane' }]} onChange={setOversizedLabel} /></div>;
 }
 
-function ComponentsView({ announce, ber10 }: { announce: (message: string) => void; ber10?: boolean }) {
+function TabsRegressionFixture() {
+  const [pointer, setPointer] = useState('first');
+  const [delayed, setDelayed] = useState('first');
+  const [rejected, setRejected] = useState('first');
+  const [rejectNext, setRejectNext] = useState(true);
+  const [extra, setExtra] = useState(false);
+  const items = [{ id: 'first', label: 'First', content: <Text>First panel content.</Text> }, { id: 'second', label: 'Second', content: <Text>Second panel content.</Text> }, { id: 'blocked', label: 'Blocked', disabled: true, content: <Text>Blocked panel content.</Text> }, ...(extra ? [{ id: 'expanded', label: 'Expanded', content: <Text>Expanded panel content.</Text> }] : [])];
+  const acceptLater = (next: string) => { window.setTimeout(() => setDelayed(next), 180); };
+  const rejectOnceThenAccept = (next: string) => { if (rejectNext) { setRejectNext(false); return; } setRejected(next); };
+  return <div className="w-[calc(100vw-32px)] min-w-0 max-w-full" role="region" aria-label="BER-11 regression fixtures" data-testid="ber11-fixture"><Text variant="section-title">BER-11 regression fixtures</Text><Text tone="secondary">Synthetic controlled, rejection and motion states.</Text><Button label={extra ? 'Remover aba de teste' : 'Adicionar aba de teste'} compact onClick={() => setExtra(current => !current)} /><Tabs label="BER-11 pointer motion" value={pointer} items={items} onChange={setPointer} /><Tabs label="BER-11 delayed acceptance" value={delayed} items={items} onChange={acceptLater} /><Tabs label="BER-11 rejection" value={rejected} items={items} onChange={rejectOnceThenAccept} /><Tabs label="BER-11 sibling instance" value="first" items={items} onChange={() => undefined} /></div>;
+}
+
+function ComponentsView({ announce, ber10, ber11 }: { announce: (message: string) => void; ber10?: boolean; ber11?: boolean }) {
   const [name, setName] = useState('Projeto exemplo');
   const [notes, setNotes] = useState('Um exemplo local, sem dados da conta de referência.');
   const [query, setQuery] = useState('');
@@ -83,6 +95,7 @@ function ComponentsView({ announce, ber10 }: { announce: (message: string) => vo
   return <div className="esl-document"><Stack gap="section">
     <PageHeader title="Componentes" description="Peças reutilizáveis, com dimensões fixas e estados que você pode conferir. Ações e dados desta página são demonstrativos." />
     {ber10 && <SegmentedControlRegressionFixture />}
+    {ber11 && <TabsRegressionFixture />}
     <section><Stack><SectionHeader title="Fundação e estrutura" description="Inter, hierarquia compacta, ícones por função e uma única cor de marca configurável." />
       <div className="esl-demo-grid">
         <Demo title="Text"><Stack gap="tight">{textExamples.map(item => <Text key={item.variant} variant={item.variant}>{item.label}</Text>)}</Stack></Demo>
@@ -151,6 +164,7 @@ export default function Catalog() {
   const initial = new URLSearchParams(window.location.search);
   const initialView = initial.get('view');
   const ber10 = initial.get('ber10') === '1';
+  const ber11 = initial.get('ber11') === '1';
   const [view, setView] = useState<View>(initialView === 'components' || initialView === 'tokens' || initialView === 'feature-card' || initialView === 'empty-state' || initialView === 'decisions' || initialView === 'pricing' || initialView === 'records' ? initialView : 'chat');
   const [theme, setTheme] = useState<Theme>(initial.get('theme') === 'light' ? 'light' : 'dark');
   const [brand, setBrand] = useState<'reference' | 'curriculol'>(initial.get('brand') === 'curriculol' ? 'curriculol' : 'reference');
@@ -214,7 +228,7 @@ export default function Catalog() {
         {view === 'chat' && <ChatLayout title="How can I help you today?" mark={<BrandMark />} suggestions={<><SuggestionRow icon="Search" title="Research" description="Research competitors’ ads" onClick={() => setMessage('Research competitors’ ads')} /><SuggestionRow icon="Sparkles" title="Optimize" description="Find & fix wasted budget" onClick={() => setMessage('Find & fix wasted budget')} /><SuggestionRow icon="Globe" title="Plan" description="Draft a campaign plan" onClick={() => setMessage('Draft a campaign plan')} /></>} recent={<Stack gap="section"><SectionHeader title="Recent tasks" actions={<Button label="View more" variant="ghost" compact onClick={() => setStatus('Nenhuma tarefa real foi consultada; esta é uma composição de referência.')} />} />{messages.length ? <RecentItem title="Local conversation" description="A conversa desta demonstração." onClick={() => setStatus('Você está na conversa local mais recente.')} /> : <Text tone="secondary">No recent agent tasks yet.</Text>}</Stack>}>
           <Stack>{messages.map((sent, index) => <ChatMessage key={`${index}-${sent}`} role="user" status="sent">{sent}</ChatMessage>)}{messages.length > 0 && <ChatMessage role="assistant">Mensagem recebida nesta demonstração local. Nenhum serviço de IA foi acionado.</ChatMessage>}<ChatComposer label="Chat message" value={message} onChange={setMessage} onSubmit={() => { if (message.trim()) { setMessages(previous => [...previous, message]); setMessage(''); } }} placeholder="Ask anything or @ to add context" context={<Inline gap="tight"><Select label="Working mode" variant="context" value={chatMode} options={workModes} onChange={setChatMode} />{context && <Badge label="Example context" />}</Inline>} tools={<Select label="Example model" value={model} options={[{ id: 'example', label: 'Example model' }, { id: 'alternate', label: 'Alternate example' }]} onChange={setModel} />} onAttach={() => setContext(!context)} /></Stack>
         </ChatLayout>}
-        {view === 'components' && <ComponentsView announce={setStatus} ber10={ber10} />}
+        {view === 'components' && <ComponentsView announce={setStatus} ber10={ber10} ber11={ber11} />}
         {view === 'tokens' && <TokensView theme={theme} />}
         {view === 'feature-card' && <FeatureCardExamples />}
         {view === 'empty-state' && <EmptyStateExamples />}

@@ -80,6 +80,7 @@ Interaction motion (state changes, enter/exit, gestures, feedback) is expressed 
 
 - Easing: BEDS curve `[.16,1,.3,1]` (`--ease-out-expo` in `@theme`); durations per component evidence.
 - `useReducedMotion` mandatory on every `motion/react` usage; reduced motion jumps to the final state.
+- Tabs use the beUI layout indicator and `EASE_OUT` panel reveal for pointer/edge changes in activity and connection (`opacity + translateY(4px)`, 180ms); settings panels are instant. Arrow/Home/End and Enter/Space proposals keep indicator and panel transforms at zero duration once the controlled value accepts them, including delayed or rejected control; ResizeObserver/font-ready/item remeasurement and bounded edge reveal remain internal.
 - CSS `transition`/`@keyframes` allowed only for trivial color hover and only inside the shrinking allowlist of unmigrated stylesheets in `check-library.mjs`; new interaction keyframes fail the build.
 - Motion never replaces the non-animated state signal (color, text, ARIA).
 - Tooltip entry uses the beUI spring/scale/blur expression with `useReducedMotion`; its label and `aria-describedby` remain the non-animated signal.

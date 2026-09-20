@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useId, useRef, useState, type ForwardedRef, type InputHTMLAttributes, type KeyboardEvent, type ReactNode } from 'react';
+import { forwardRef, useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type ForwardedRef, type InputHTMLAttributes, type KeyboardEvent, type ReactNode } from 'react';
 import { AnimatePresence, animate, LayoutGroup, motion, useReducedMotion } from 'motion/react';
 import { Icon, type IconName } from './foundation';
 import { cn } from './lib/utils';
@@ -380,16 +380,119 @@ export function SegmentedControl({ label, value, options, onChange, variant = 'p
 const TABS_LIST_ACTIVITY = 'inline-flex items-center gap-0.5 max-w-full min-h-[30px] p-0.5 border border-border-subtle rounded-lg bg-subtle pointer-coarse:min-h-11';
 const TABS_TAB_ACTIVITY = 'flex-1 min-w-0 min-h-6 px-2 border-0 rounded-md bg-transparent text-secondary text-xs leading-4 font-medium whitespace-nowrap cursor-pointer pointer-coarse:min-h-11 transition-colors motion-reduce:transition-none';
 const TABS_TAB_CONNECTION = 'min-h-7 px-2 border border-transparent rounded-lg text-sm leading-4 transition-colors motion-reduce:transition-none';
-const TABS_TAB_SELECTED = 'bg-surface text-foreground shadow-[0_1px_2px_var(--es-border)]';
+const TABS_TAB_SELECTED = 'relative text-foreground';
+const TABS_PANEL_TRANSITION = { duration: 0.18, ease: EASE_OUT } as const;
+const TABS_EDGE_SIZE = 36;
 
 export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
   label: string; value: string; items: (Choice & { content: ReactNode })[]; onChange: (value: string) => void; variant?: 'activity' | 'connection' | 'settings';
 }) {
   const id = useId();
+  const root = useRef<HTMLDivElement>(null);
   const list = useRef<HTMLDivElement>(null);
+  const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const reduce = useReducedMotion() ?? false;
+  const [edges, setEdges] = useState({ overflow: false, left: false, right: false });
+  const [keyboardTarget, setKeyboardTarget] = useState<string | null>(null);
+  const keyboardTargetRef = useRef<string | null>(null);
+  const pendingKeyboardCommit = useRef<string | null>(null);
+  const lastKeyboardProposal = useRef<string | null>(null);
   const selected = items.find(item => item.id === value && !item.disabled) ?? items.find(item => !item.disabled);
+  const selectedId = selected?.id;
+  const keyboardInstant = reduce || keyboardTarget === value;
+
+  const clearKeyboardTarget = useCallback(() => {
+    keyboardTargetRef.current = null;
+    pendingKeyboardCommit.current = null;
+    lastKeyboardProposal.current = null;
+    setKeyboardTarget(null);
+  }, []);
+
+  const markKeyboardTarget = useCallback((target: string) => {
+    if (target === value) {
+      clearKeyboardTarget();
+      return;
+    }
+    keyboardTargetRef.current = target;
+    pendingKeyboardCommit.current = target;
+    setKeyboardTarget(target);
+  }, [clearKeyboardTarget, value]);
+
+  useEffect(() => {
+    if (!keyboardTarget || pendingKeyboardCommit.current !== keyboardTarget || value !== keyboardTarget) return;
+    const acceptedTarget = keyboardTarget;
+    const frame = window.requestAnimationFrame(() => {
+      if (keyboardTargetRef.current === acceptedTarget && pendingKeyboardCommit.current === acceptedTarget) clearKeyboardTarget();
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [clearKeyboardTarget, keyboardTarget, value]);
+
+  const measure = useCallback(() => {
+    const viewport = list.current;
+    if (!viewport) return;
+    const viewportRect = viewport.getBoundingClientRect();
+    const tabs = Array.from(viewport.querySelectorAll<HTMLElement>('[role="tab"]'));
+    const overflow = viewport.scrollWidth > viewport.clientWidth + 1;
+    const left = overflow && tabs.some(tab => tab.getBoundingClientRect().left < viewportRect.left - 1);
+    const right = overflow && tabs.some(tab => tab.getBoundingClientRect().right > viewportRect.right + 1);
+    setEdges(previous => previous.overflow === overflow && previous.left === left && previous.right === right ? previous : { overflow, left, right });
+  }, []);
+
+  const reveal = useCallback((tab: HTMLElement | null, instant = false) => {
+    const viewport = list.current;
+    if (!viewport || !tab) return;
+    const viewportRect = viewport.getBoundingClientRect();
+    const tabs = Array.from(viewport.querySelectorAll<HTMLElement>('[role="tab"]'));
+    const overflow = viewport.scrollWidth > viewport.clientWidth + 1;
+    const left = overflow && tabs.some(item => item.getBoundingClientRect().left < viewportRect.left - 1);
+    const right = overflow && tabs.some(item => item.getBoundingClientRect().right > viewportRect.right + 1);
+    const leftBound = viewportRect.left + (left ? TABS_EDGE_SIZE : 0);
+    const rightBound = viewportRect.right - (right ? TABS_EDGE_SIZE : 0);
+    const tabRect = tab.getBoundingClientRect();
+    const delta = tabRect.left < leftBound ? tabRect.left - leftBound : tabRect.right > rightBound ? tabRect.right - rightBound : 0;
+    if (delta) viewport.scrollBy({ left: delta, behavior: reduce || instant ? 'auto' : 'smooth' });
+  }, [reduce]);
+
+  useLayoutEffect(() => {
+    const viewport = list.current;
+    const container = root.current;
+    if (!viewport || !container) return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(container);
+    observer.observe(viewport);
+    viewport.addEventListener('scroll', measure, { passive: true });
+    const fontsReady = document.fonts?.ready.then(measure);
+    measure();
+    return () => {
+      observer.disconnect();
+      viewport.removeEventListener('scroll', measure);
+      void fontsReady;
+    };
+  }, [measure]);
+
+  useLayoutEffect(() => {
+    measure();
+    reveal(selectedId ? tabRefs.current[selectedId] : null, reduce || keyboardTarget !== null);
+  }, [items, keyboardTarget, measure, reduce, reveal, selectedId, value, variant]);
+
+  const propose = useCallback((target: string, keyboard: boolean) => {
+    const item = items.find(option => option.id === target);
+    if (!item || item.disabled) return;
+    if (keyboard) {
+      markKeyboardTarget(target);
+      if (target === value || lastKeyboardProposal.current === target) return;
+      lastKeyboardProposal.current = target;
+    } else {
+      clearKeyboardTarget();
+    }
+    if (target !== value) onChange(target);
+  }, [clearKeyboardTarget, items, markKeyboardTarget, onChange, value]);
+
   const navigate = (event: KeyboardEvent<HTMLButtonElement>, current: string) => {
+    if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar' || event.key === 'Space') {
+      markKeyboardTarget(current);
+      return;
+    }
     if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
     event.preventDefault();
     const enabled = items.filter(item => !item.disabled);
@@ -399,16 +502,31 @@ export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
     const nextIndex = event.key === 'Home' ? 0 : event.key === 'End' ? enabled.length - 1 : (index + direction + enabled.length) % enabled.length;
     const next = enabled[nextIndex];
     if (!next) return;
-    onChange(next.id);
-    list.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[items.indexOf(next)]?.focus();
+    propose(next.id, true);
+    const input = tabRefs.current[next.id];
+    input?.focus({ preventScroll: true });
+    reveal(input, true);
   };
   const connectionListStyle = variant === 'connection' ? { gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))`, minWidth: '560px' } : undefined;
-  const tabList = <div ref={list} className={cn(variant === 'connection' && 'grid items-center gap-0 w-full min-h-9 p-1 border-0 rounded-xl bg-subtle', variant === 'activity' && TABS_LIST_ACTIVITY, variant === 'settings' && 'es-tabs-list flex items-stretch gap-1 w-full min-w-0 px-1 pt-1 pb-0 border-0 border-b border-border rounded-none bg-transparent overflow-x-auto overscroll-x-contain [scrollbar-width:thin] [scroll-padding-inline:4px]')} role="tablist" aria-label={label} style={connectionListStyle}>{items.map((item, index) => {
+  const scroll = (direction: number) => {
+    const viewport = list.current;
+    if (viewport) viewport.scrollBy({ left: direction * Math.max(viewport.clientWidth * 0.8, 80), behavior: reduce ? 'auto' : 'smooth' });
+  };
+  const tabButtons = items.map(item => {
     const active = selected?.id === item.id;
-    return <button key={item.id} id={`${id}-tab-${index}`} type="button" role="tab" aria-controls={`${id}-panel-${index}`} aria-selected={active} tabIndex={active ? 0 : -1} disabled={item.disabled} onClick={() => onChange(item.id)} onKeyDown={event => navigate(event, item.id)} className={cn(variant === 'connection' && TABS_TAB_CONNECTION, variant === 'activity' && TABS_TAB_ACTIVITY, variant === 'settings' && 'es-settings-tab relative flex-none min-h-12 border-none px-0 pb-2 pt-0.5 rounded-md bg-transparent shadow-none text-sm leading-5 font-normal', active && (variant !== 'settings') && TABS_TAB_SELECTED)}>{variant === 'settings' ? <><span className="es-settings-tab-label block px-2.5 py-2 rounded-md">{item.label}</span>{active && <motion.span layoutId={`${id}-settings-indicator`} initial={false} transition={reduce ? { duration: 0 } : SPRING_LAYOUT} className="es-settings-tab-indicator" data-tabs-indicator aria-hidden="true" />}</> : item.label}</button>;
-  })}</div>;
+    const tabId = `${id}-tab-${item.id}`;
+    const panelId = `${id}-panel-${item.id}`;
+    const indicator = active && <motion.span layoutId={`${id}-${variant}-indicator`} initial={false} transition={keyboardInstant ? { duration: 0 } : SPRING_LAYOUT} className="es-tabs-indicator pointer-events-none absolute inset-0 rounded-[inherit] bg-surface shadow-[0_1px_2px_var(--es-border)]" data-tabs-indicator aria-hidden="true" />;
+    return <button key={item.id} ref={button => { tabRefs.current[item.id] = button; }} id={tabId} type="button" role="tab" aria-controls={panelId} aria-selected={active} tabIndex={active ? 0 : -1} disabled={item.disabled} onClick={event => propose(item.id, event.detail === 0)} onKeyDown={event => navigate(event, item.id)} className={cn(variant === 'connection' && TABS_TAB_CONNECTION, variant === 'activity' && TABS_TAB_ACTIVITY, variant === 'settings' && 'es-settings-tab relative flex-none min-h-12 border-none px-0 pb-2 pt-0.5 rounded-md bg-transparent shadow-none text-sm leading-5 font-normal', active && (variant !== 'settings') && TABS_TAB_SELECTED)}>{variant === 'settings' ? <><span className="es-settings-tab-label relative z-10 block px-2.5 py-2 rounded-md">{item.label}</span>{active && <motion.span layoutId={`${id}-settings-indicator`} initial={false} transition={keyboardInstant ? { duration: 0 } : SPRING_LAYOUT} className="es-settings-tab-indicator" data-tabs-indicator aria-hidden="true" />}</> : <>{indicator}<span className="relative z-10">{item.label}</span></>}</button>;
+  });
+  const tabList = <div ref={list} id={`${id}-list`} className={cn('es-tabs-list', variant === 'connection' && 'w-full min-w-0 min-h-9 p-1 border-0 rounded-xl bg-subtle overflow-x-auto overscroll-x-contain [scrollbar-width:thin] [scroll-padding-inline:36px]', variant === 'activity' && TABS_LIST_ACTIVITY, variant === 'settings' && 'flex items-stretch gap-1 w-full min-w-0 px-1 pt-1 pb-0 border-0 border-b border-border rounded-none bg-transparent overflow-x-auto overscroll-x-contain [scrollbar-width:thin] [scroll-padding-inline:36px]')} role="tablist" aria-label={label} onFocusCapture={event => { if (event.target instanceof HTMLElement && event.target.getAttribute('role') === 'tab') reveal(event.target, reduce || keyboardTarget !== null); }}>{variant === 'connection' ? <div className="grid items-center gap-0 min-w-0" style={connectionListStyle}>{tabButtons}</div> : tabButtons}</div>;
   // `rounded-[16px]` is an arbitrary value: BEDS tokens only ship --radius (8px) and the Tailwind scale
   // (rounded-xl = 10px, rounded-2xl = 14px). 16px has no token, so the connection Tabs radius stays as an
   // explicit arbitrary value. Same convention as `rounded-[12px]` on the welcome variant.
-  return <LayoutGroup id={id}><div className={cn('es-tabs min-w-0', variant === 'connection' && 'rounded-[16px] overflow-hidden border border-border-subtle shadow-[0_1px_2px_var(--es-border-subtle)]')} data-variant={variant}>{variant === 'connection' ? <div className="es-tabs-connection-strip contain-inline-size w-full max-w-full min-w-0 overflow-x-auto p-2 border-b border-border-subtle">{tabList}</div> : tabList}{items.map((item, index) => <div key={item.id} id={`${id}-panel-${index}`} className={cn(variant === 'connection' ? 'es-tab-panel m-0 px-8 pt-4 pb-8 border-0 min-w-0' : variant === 'settings' ? 'mt-6 min-w-0' : 'mt-4 min-w-0', variant !== 'connection' && 'es-tab-panel')} role="tabpanel" aria-labelledby={`${id}-tab-${index}`} hidden={selected?.id !== item.id} tabIndex={0}>{item.content}</div>)}</div></LayoutGroup>;
+  return <LayoutGroup id={id}><div ref={root} className={cn('es-tabs min-w-0', variant === 'connection' && 'rounded-[16px] overflow-hidden border border-border-subtle shadow-[0_1px_2px_var(--es-border-subtle)]')} data-variant={variant} onPointerDown={clearKeyboardTarget} onBlurCapture={event => { if (!root.current?.contains(event.relatedTarget as Node | null)) clearKeyboardTarget(); }}>{variant === 'connection' ? <div className="es-tabs-connection-strip contain-inline-size w-full max-w-full min-w-0 overflow-visible p-2 border-b border-border-subtle"><div className="es-tabs-list-shell" data-variant={variant} data-overflow={edges.overflow} data-edge-left={edges.left} data-edge-right={edges.right}>{edges.overflow && <><span className="es-tabs-edge-fade" data-edge="left" aria-hidden="true" /><span className="es-tabs-edge-fade" data-edge="right" aria-hidden="true" /></>}{edges.overflow && <button type="button" className="es-tabs-edge-button" data-edge="left" aria-label="Rolar abas para a esquerda" aria-controls={list.current?.id} disabled={!edges.left} onClick={() => scroll(-1)}><Icon name="ArrowLeft" purpose="small" /></button>}{tabList}{edges.overflow && <button type="button" className="es-tabs-edge-button" data-edge="right" aria-label="Rolar abas para a direita" aria-controls={list.current?.id} disabled={!edges.right} onClick={() => scroll(1)}><Icon name="ArrowRight" purpose="small" /></button>}</div></div> : <div className="es-tabs-list-shell" data-variant={variant} data-overflow={edges.overflow} data-edge-left={edges.left} data-edge-right={edges.right}>{edges.overflow && <><span className="es-tabs-edge-fade" data-edge="left" aria-hidden="true" /><span className="es-tabs-edge-fade" data-edge="right" aria-hidden="true" /></>}{edges.overflow && <button type="button" className="es-tabs-edge-button" data-edge="left" aria-label="Rolar abas para a esquerda" aria-controls={list.current?.id} disabled={!edges.left} onClick={() => scroll(-1)}><Icon name="ArrowLeft" purpose="small" /></button>}{tabList}{edges.overflow && <button type="button" className="es-tabs-edge-button" data-edge="right" aria-label="Rolar abas para a direita" aria-controls={list.current?.id} disabled={!edges.right} onClick={() => scroll(1)}><Icon name="ArrowRight" purpose="small" /></button>}</div>}{items.map(item => {
+    const active = selected?.id === item.id;
+    const panelId = `${id}-panel-${item.id}`;
+    const panelTransition = variant === 'settings' || keyboardInstant ? { duration: 0 } : TABS_PANEL_TRANSITION;
+    return <motion.div key={item.id} id={panelId} className={cn(variant === 'connection' ? 'es-tab-panel m-0 px-8 pt-4 pb-8 border-0 min-w-0' : variant === 'settings' ? 'mt-6 min-w-0' : 'mt-4 min-w-0', variant !== 'connection' && 'es-tab-panel')} role="tabpanel" aria-labelledby={`${id}-tab-${item.id}`} hidden={!active} tabIndex={active ? 0 : -1} initial={false} animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: 4 }} transition={panelTransition}>{item.content}</motion.div>;
+  })}</div></LayoutGroup>;
 }

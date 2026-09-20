@@ -21,6 +21,17 @@ for (const theme of ['light', 'dark'] as const) {
     expect(await tab.locator('[data-tabs-indicator]').evaluate(element => getComputedStyle(element).height)).toBe('2px');
     expect(await panel.evaluate(element => getComputedStyle(element).marginTop)).toBe('24px');
     expect(await tablist.evaluate(element => element.scrollWidth > element.clientWidth)).toBe(width === 320);
+    const edgeLeft = page.getByRole('button', { name: 'Rolar abas para a esquerda', exact: true });
+    const edgeRight = page.getByRole('button', { name: 'Rolar abas para a direita', exact: true });
+    if (width === 320) {
+      await expect(edgeLeft).toBeVisible();
+      await expect(edgeRight).toBeVisible();
+      await expect(edgeLeft).toBeDisabled();
+      await expect(edgeRight).toBeEnabled();
+    } else {
+      await expect(edgeLeft).toHaveCount(0);
+      await expect(edgeRight).toHaveCount(0);
+    }
     await tab.focus();
     await tab.press('ArrowRight');
     await expect(page.getByRole('tab', { name: 'Preferências', exact: true })).toBeFocused();
@@ -28,6 +39,15 @@ for (const theme of ['light', 'dark'] as const) {
     await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
     await page.getByRole('tab', { name: 'Conta', exact: true }).press('ArrowLeft');
     await expect(page.getByRole('tab', { name: 'Preferências', exact: true })).toBeFocused();
+    if (width === 320) {
+      const before = await tablist.evaluate(element => element.scrollLeft);
+      await page.getByRole('tab', { name: 'Preferências', exact: true }).press('End');
+      await expect(page.getByRole('tab', { name: 'Privacidade', exact: true })).toBeFocused();
+      const after = await tablist.evaluate(element => element.scrollLeft);
+      await page.waitForTimeout(60);
+      await expect.poll(async () => tablist.evaluate(element => element.scrollLeft)).toBe(after);
+      expect(after).not.toBe(before);
+    }
   });
 
   test(`settings tabs preserve reduced-motion and forced-colors affordances in ${theme}`, async ({ page }) => {
@@ -43,5 +63,16 @@ for (const theme of ['light', 'dark'] as const) {
     expect(await nextIndicator.evaluate(element => ({ animations: element.getAnimations().length, transform: getComputedStyle(element).transform }))).toEqual({ animations: 0, transform: 'none' });
     await page.emulateMedia({ forcedColors: 'active' });
     expect(await nextIndicator.evaluate(element => getComputedStyle(element).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
+  });
+
+  test(`settings tabs stay bounded under the 200% zoom proxy in ${theme}`, async ({ page }) => {
+    await page.setViewportSize({ width: 640, height: 1000 });
+    await page.goto(`/?view=settings&theme=${theme}`);
+    await page.evaluate(() => { document.documentElement.style.zoom = '2'; document.documentElement.dir = 'rtl'; });
+    await expect(page.getByRole('tablist')).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+    await page.getByRole('tab', { name: 'Conta', exact: true }).focus();
+    await page.getByRole('tab', { name: 'Conta', exact: true }).press('ArrowLeft');
+    await expect(page.getByRole('tab', { name: 'Preferências', exact: true })).toBeFocused();
   });
 }
