@@ -87,6 +87,20 @@ for (const theme of ['light', 'dark'] as const) {
       await expect(first).toHaveAttribute('aria-selected', 'true');
     });
 
+    test('expires a rejected Space guard before a deliberate detail-zero click', async ({ page }) => {
+      const tabs = page.getByRole('tablist', { name: 'BER-11 detail-zero rejection' });
+      const first = tabs.getByRole('tab', { name: 'First', exact: true });
+      const second = tabs.getByRole('tab', { name: 'Second', exact: true });
+      await second.focus();
+      await second.press('Space');
+      await expect(first).toHaveAttribute('aria-selected', 'true');
+      await expect(page.getByTestId('ber11-detail-zero-calls')).toHaveText('1');
+      await page.waitForTimeout(50);
+      await second.dispatchEvent('click', { detail: 0 });
+      await expect(second).toHaveAttribute('aria-selected', 'true');
+      await expect(page.getByTestId('ber11-detail-zero-calls')).toHaveText('2');
+    });
+
     test('isolates tab and panel ids across instances without document overflow', async ({ page }) => {
       const state = await page.getByTestId('ber11-fixture').evaluate(element => {
         const tabs = Array.from(element.querySelectorAll('[role="tab"]'));
