@@ -1,5 +1,5 @@
 /* Button / IconButton / IconToggleButton: migrated to Tailwind + motion in controls.tsx (Fable F1 — beUI `button`, 2026-09-17).
-   Geometry preserved (32/28/40px, r=8/6/12/10px), motion press scale(.97) per BEDS easing, focus visible ring (no offset gap). */
+   Geometry preserved (32/28/40px, r=8/6/12/10px), pointer press scale(.97) on an inert child, focus visible ring. */
 
 /* TextField / TextAreaField / SearchField: migrated to Tailwind + motion in controls.tsx (Fable F1 — beUI `input`, 2026-09-17).
    Geometry preserved (36/40px, r=8/10px), focus border + soft ring replaces offset outline, error shake uses motion `animate`
@@ -27,6 +27,8 @@
 .es-root .es-tabs-edge-button:focus-visible{outline:2px solid var(--es-focus);outline-offset:-2px}
 .es-root .es-tab-panel{min-width:0}
 .es-root :where(button[aria-pressed],button:not([aria-pressed]):not([aria-label]),.es-icon-button,.es-icon-toggle-button,.es-tabs-list>[role="tab"],.es-tab-panel):focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
+@media(forced-colors:active){.es-root :where(.es-button,.es-icon-button,.es-icon-toggle-button):focus-visible{outline:2px solid Highlight;outline-offset:2px}}
+@media(pointer:coarse){.es-root .es-button,.es-root :where(.es-icon-button,.es-icon-toggle-button){min-height:44px}.es-root :where(.es-icon-button,.es-icon-toggle-button){min-width:44px}}
 /* Fields now own their focus idiom via Tailwind utilities (border-ring + shadow-[0_0_0_3px_var(--es-focus-ring)]); forced-colors
    paints Highlight through the explicit `outline:transparent` set on focus. */
 /* Field transitions removed — TextField/TextAreaField/SearchField now use Tailwind transition-colors + motion for shake. */
