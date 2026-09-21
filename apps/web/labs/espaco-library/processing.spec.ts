@@ -49,8 +49,8 @@ async function start(page: Page, kind: ProcessingDemoKind, options: { theme?: 'l
   const trigger = page.getByRole('button', { name: flow.start, exact: true });
   await trigger.focus();
   await trigger.press('Enter');
-  await expect(page.getByRole('main').locator('.es-processing')).toBeVisible();
-  return page.getByRole('main').locator('.es-processing');
+  await expect(page.getByRole('main').locator('.recipe-processing')).toBeVisible();
+  return page.getByRole('main').locator('.recipe-processing');
 }
 
 function master(screen: Locator) {
@@ -71,7 +71,7 @@ async function assertFits(page: Page, screen: Locator) {
 }
 
 async function measureContrast(screen: Locator) {
-  const pairs = await screen.locator('h1,h2,h3,p,button,summary,.es-processing-step-heading > span,.es-processing-progress-label strong').evaluateAll(elements => {
+  const pairs = await screen.locator('h1,h2,h3,p,button,summary,.recipe-processing-step-heading > span,.recipe-processing-progress-label strong').evaluateAll(elements => {
     const channels = (value: string) => value.match(/[\d.]+/g)!.map(Number);
     const over = (foreground: number[], background: number[]) => background.map((value, index) => value * (1 - (foreground[3] ?? 1)) + foreground[index] * (foreground[3] ?? 1));
     const luminance = (color: number[]) => color.slice(0, 3).map(value => value / 255).map(value => value <= .04045 ? value / 12.92 : ((value + .055) / 1.055) ** 2.4).reduce((sum, value, index) => sum + value * [.2126, .7152, .0722][index], 0);
@@ -105,7 +105,7 @@ test('real catalog entry and start controls expose the processing flow and optio
     const trigger = page.getByRole('button', { name: flow.start, exact: true });
     await trigger.focus();
     await trigger.press('Enter');
-    const screen = page.getByRole('main').locator('.es-processing');
+    const screen = page.getByRole('main').locator('.recipe-processing');
     await expect(screen).toHaveAttribute('data-state', 'running');
     await expect(screen.getByRole('heading', { level: 1 })).toHaveText(processingFixtures[kind].title);
     await expect(screen.getByRole('list', { name: flow.steps, exact: true }).getByRole('listitem')).toHaveCount(5);
@@ -114,7 +114,7 @@ test('real catalog entry and start controls expose the processing flow and optio
     expect(await masterValue(screen)).toBeLessThan(100);
     await expect(screen.getByRole('status')).toHaveAttribute('aria-live', 'polite');
 
-    for (const selector of ['.es-processing-details', '.es-processing-transcript']) {
+    for (const selector of ['.recipe-processing-details', '.recipe-processing-transcript']) {
       const disclosure = screen.locator(selector);
       const summary = disclosure.locator('summary');
       await expect(disclosure).not.toHaveAttribute('open', '');
@@ -156,7 +156,7 @@ test('90s and 75s presentations preserve five stage boundaries and wait below co
     await runTo(fixture.durationSeconds * 1000 + 500);
     await expect(screen).toHaveAttribute('data-state', 'waiting');
     await expect(master(screen)).toHaveAttribute('aria-valuenow', '95');
-    await expect(screen.locator('.es-processing-story-copy h2')).toHaveText(fixture.chapters.at(-1)!.title);
+    await expect(screen.locator('.recipe-processing-story-copy h2')).toHaveText(fixture.chapters.at(-1)!.title);
     const finalPresentation = await steps.allTextContents();
     await page.clock.runFor(30_000);
     await expect(screen).toHaveAttribute('data-state', 'waiting');
@@ -178,18 +178,18 @@ test('pause freezes phases and narration while estimated progress keeps advancin
     const resume = screen.getByRole('button', { name: 'Retomar apresentação', exact: true });
     await expect(resume).toBeFocused();
     await expect(screen).toHaveAttribute('data-motion-paused', 'true');
-    const stages = screen.locator('.es-processing-steps');
+    const stages = screen.locator('.recipe-processing-steps');
     const snapshot = await stages.innerHTML();
-    const chapter = await screen.locator('.es-processing-story-copy').innerText();
+    const chapter = await screen.locator('.recipe-processing-story-copy').innerText();
     const before = await masterValue(screen);
     await page.clock.runFor(20_000);
     expect(await stages.innerHTML()).toBe(snapshot);
-    expect(await screen.locator('.es-processing-story-copy').innerText()).toBe(chapter);
+    expect(await screen.locator('.recipe-processing-story-copy').innerText()).toBe(chapter);
     expect(await masterValue(screen)).toBeGreaterThan(before);
     await resume.press('Enter');
     await page.clock.runFor(10_000);
     expect(await stages.innerHTML()).not.toBe(snapshot);
-    await expect(screen.locator('.es-processing-story-copy h2')).toHaveText(processingFixtures[kind].chapters[1].title);
+    await expect(screen.locator('.recipe-processing-story-copy h2')).toHaveText(processingFixtures[kind].chapters[1].title);
   }
 });
 
@@ -210,14 +210,14 @@ test('only explicit completion reveals success and explicit result navigation pr
     await result.focus();
     await result.press('Enter');
     await expect(page).toHaveURL(new RegExp(`view=${kind}-result&theme=dark`));
-    await expect(page.locator('.es-result')).toBeVisible();
+    await expect(page.locator('.recipe-result')).toBeVisible();
     await page.goto(beforeURL);
     await expect(page.getByRole('heading', { name: flows[kind].entry, exact: true })).toBeVisible();
-    await expect(page.locator('.es-processing')).toHaveCount(0);
+    await expect(page.locator('.recipe-processing')).toHaveCount(0);
     await page.getByRole('button', { name: flows[kind].start, exact: true }).click();
     await expect(screen).toHaveAttribute('data-state', 'running');
     expect(await masterValue(screen)).toBeLessThan(20);
-    await expect(screen.locator('.es-processing-story-copy h2')).toHaveText(fixture.chapters[0].title);
+    await expect(screen.locator('.recipe-processing-story-copy h2')).toHaveText(fixture.chapters[0].title);
     await expect(screen.getByRole('button', { name: 'Ver resultado de demonstração', exact: true })).toHaveCount(0);
   }
 });
@@ -228,7 +228,7 @@ test('extended wait, failure, retry and manual review offer distinct recovery pa
     await page.clock.runFor(22_000);
     await page.getByRole('button', { name: 'Simular espera prolongada', exact: true }).click();
     await expect(screen).toHaveAttribute('data-state', 'waiting');
-    await expect(screen.locator('.es-processing-message')).toBeVisible();
+    await expect(screen.locator('.recipe-processing-message')).toBeVisible();
     expect(await masterValue(screen)).toBeLessThan(100);
     await page.getByRole('button', { name: 'Simular falha', exact: true }).click();
     await expect(screen).toHaveAttribute('data-state', 'error');
@@ -238,9 +238,10 @@ test('extended wait, failure, retry and manual review offer distinct recovery pa
     const retry = screen.getByRole('button', { name: 'Tentar novamente', exact: true });
     await retry.focus();
     await retry.press('Enter');
+    await expect(screen.getByRole('heading', { level: 1 })).toBeFocused();
     await expect(screen).toHaveAttribute('data-state', 'running');
     expect(await masterValue(screen)).toBeLessThan(20);
-    await expect(screen.locator('.es-processing-story-copy h2')).toHaveText(processingFixtures[kind].chapters[0].title);
+    await expect(screen.locator('.recipe-processing-story-copy h2')).toHaveText(processingFixtures[kind].chapters[0].title);
     await expect(screen.getByRole('alert')).toBeEmpty();
     await page.getByRole('button', { name: 'Simular revisão manual', exact: true }).click();
     await expect(screen).toHaveAttribute('data-state', 'error');
@@ -260,7 +261,7 @@ test('both themes support long content, narrow widths, reduced motion and a 200%
     await page.evaluate(() => document.fonts.ready);
     await expect(page.locator('.es-root')).toHaveAttribute('data-theme', theme);
     await assertFits(page, screen);
-    await expect(screen.locator('.es-processing-scan')).toHaveCSS('animation-name', 'none');
+    await expect(screen.locator('.recipe-processing-scan')).toHaveCSS('animation-name', 'none');
     expect(await screen.evaluate(element => element.getAnimations({ subtree: true }).filter(animation => animation.playState === 'running').length)).toBe(0);
     for (const button of await screen.getByRole('button').all()) expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     const contrast = await measureContrast(screen);
@@ -269,9 +270,9 @@ test('both themes support long content, narrow widths, reduced motion and a 200%
     if (kind === 'analysis' && theme === 'light' && width === widths[0]) {
       const before = await masterValue(screen);
       await page.clock.runFor(22_000);
-      await expect(screen.locator('.es-processing-story-copy h2')).toHaveText(processingFixtures.analysis.chapters[0].title);
+      await expect(screen.locator('.recipe-processing-story-copy h2')).toHaveText(processingFixtures.analysis.chapters[0].title);
       expect(await masterValue(screen)).toBeGreaterThan(before);
-      await expect(screen.locator('.es-processing-steps > li').first().getByRole('progressbar')).toHaveAttribute('value', '100');
+      await expect(screen.locator('.recipe-processing-steps > li').first().getByRole('progressbar')).toHaveAttribute('value', '100');
     }
   }
 
@@ -281,17 +282,17 @@ test('both themes support long content, narrow widths, reduced motion and a 200%
     // Test harness only: CSS zoom approximates 200%; native browser zoom remains unverified.
     await page.evaluate(() => { document.documentElement.style.zoom = '2'; });
     await assertFits(page, screen);
-    const summary = screen.locator('.es-processing-transcript summary');
+    const summary = screen.locator('.recipe-processing-transcript summary');
     await summary.focus();
     await summary.press('Enter');
-    await expect(screen.locator('.es-processing-transcript')).toHaveAttribute('open', '');
+    await expect(screen.locator('.recipe-processing-transcript')).toHaveAttribute('open', '');
     await expect(summary).toBeFocused();
     await assertFits(page, screen);
     await screen.screenshot({ path: evidence + `${info.project.name}-${theme}-zoom-200.png`, animations: 'disabled' });
     await page.emulateMedia({ forcedColors: 'active' });
     await summary.focus();
     await expect(summary).toHaveCSS('outline-style', 'solid');
-    await expect(screen.locator('.es-processing-art')).toBeHidden();
+    await expect(screen.locator('.recipe-processing-art')).toBeHidden();
     await page.evaluate(() => { document.documentElement.style.zoom = ''; });
     await page.emulateMedia({ forcedColors: 'none' });
   }

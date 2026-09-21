@@ -4,21 +4,24 @@ Use when: checking how the portable library composes an authenticated MCP setup 
 Do not use when: registering a real OAuth application, creating credentials or authorizing a client.
 Read next: [consumer contract](CONSUMER-CONTRACT.md) → [validation](VALIDATION.md). Product integration requires the consuming application's own current MCP/OAuth contract, outside this portable package.
 
-The screen is a local composition. It borrows its information architecture from the inspected MCP reference, while the visuals are owned only by `beds`.
+The screen is a local, product-specific composition. AppShell and PageContentHeader
+are optional catalog recipes, not package exports. The app owns page layout,
+identity and copy; BEDS owns the reusable controls. Earlier measurements below are
+provenance for this example, not universal library requirements.
 
 | Boundary | Contract |
 |---|---|
 | Preview | `http://127.0.0.1:5283/?view=mcp` |
 | Consumer | [McpPage.tsx](../../../apps/web/labs/espaco-library/McpPage.tsx) |
 | Library | Current local `beds` source; version and inventory are not pinned by this example. |
-| Theme / brand | Controlled light or dark + Curriculol orange preset `#ffa133` |
+| Theme / brand | Controlled light or dark + caller-owned orange `#ffa133`; no named DS brand preset |
 | Content authority | Synthetic Curriculol-oriented setup fixture; not a portable OAuth, pricing or permission contract. |
 | Visual authority | Current [foundations](FOUNDATIONS.md), [components](COMPONENTS.md), [consumer contract](CONSUMER-CONTRACT.md) and live MCP geometry measurements |
-| Forbidden | Page CSS, raw SVG/native visual elements, actual credential/OAuth/MCP calls, secret or token fixtures |
+| Forbidden | Actual credential/OAuth/MCP calls, secrets and private BEDS CSS overrides. App layout CSS, native semantics and owned assets are allowed. |
 
 ## Composition
 
-| Region | Existing public primitives | Local behavior |
+| Region | Public primitives or optional recipes | Local behavior |
 |---|---|---|
 | Shell | `AppShell`, sidebar primitives, `AccountMenu` | Same fixed 264/62px rail and responsive drawer as Lucy |
 | Page identity | `PageContentHeader`, `Icon`, `Button` | Source-measured title/subtitle/action header; no breadcrumb bar is added |
@@ -29,7 +32,7 @@ The screen is a local composition. It borrows its information architecture from 
 
 ## Extracted MCP frame
 
-Live computed-style inspection at1728×852 measured a784px page-identity header with `48px 32px 16px` inset. Its main wrapper is also784px and uses `16px 32px 32px`; the working content lane is720px. Consecutive main sections are48px apart. The new `PageContentHeader` owns the identity-header measurement, and `AppShell` owns the16px main top inset. Consumers cannot recreate either with page CSS or numeric props.
+Historical computed-style inspection at1728×852 measured a784px page-identity header with `48px 32px 16px` inset. Its main wrapper is also784px and uses `16px 32px 32px`; the working content lane is720px. Consecutive main sections are48px apart. These values now live in app recipes. Other consumers should choose their own composition instead of treating these measurements as DS constraints.
 
 The library retains its adopted264px sidebar rather than copying the source sidebar width. Existing desktop24px side/bottom page gutters are documented A adaptations; this revision promotes only the observed16px top inset into the shared shell.
 

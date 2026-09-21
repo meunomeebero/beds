@@ -26,7 +26,7 @@ test('MCP composition keeps the DS shell and its measured connection anatomy in 
   for (const theme of themes) {
     await ready(page, theme);
     const root = page.locator('.es-root');
-    const shell = page.locator('.es-app-shell');
+    const shell = page.locator('.recipe-app-shell');
     await expect(root).toHaveAttribute('data-theme', theme);
     await expect(shell).toHaveCSS('background-color', theme === 'dark' ? 'rgb(25, 25, 25)' : 'rgb(255, 255, 255)');
     await expect(page.locator('.es-page')).toHaveCSS('max-width', '720px');

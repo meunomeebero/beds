@@ -33,7 +33,7 @@ test.afterEach(async ({ page }, info) => {
 
 async function openResult(page: Page, mode: ResultMode, preview: ResultPreview = 'default', theme: 'light' | 'dark' = 'light') {
   await page.goto(`/?view=${mode}-result&theme=${theme}&preview=${preview}`);
-  const screen = page.getByRole('main').locator('.es-result');
+  const screen = page.getByRole('main').locator('.recipe-result');
   await expect(screen).toBeVisible();
   await expect(page.getByRole('main')).toHaveCount(1);
   await expect(screen.getByRole('heading', { level: 1 })).toHaveCount(1);
@@ -44,7 +44,7 @@ async function openResult(page: Page, mode: ResultMode, preview: ResultPreview =
 
 async function assertFits(page: Page, screen: Locator) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1), 'No page-level horizontal overflow').toBe(true);
-  const clipped = await screen.locator('h1,h2,h3,p,button,a.es-button,strong,.es-result-offer-price > span').evaluateAll(elements => elements
+  const clipped = await screen.locator('h1,h2,h3,p,button,a.es-button,strong,.recipe-result-offer-price > span').evaluateAll(elements => elements
     .filter(element => element.getClientRects().length && !element.matches('.es-visually-hidden') && !element.closest('[aria-hidden="true"]'))
     .filter(element => element.scrollWidth > element.clientWidth + 1 && getComputedStyle(element).display !== 'inline')
     .map(element => ({ text: element.textContent, width: element.clientWidth, scroll: element.scrollWidth })));
@@ -53,7 +53,7 @@ async function assertFits(page: Page, screen: Locator) {
 
 async function assertLocalSearchPreview(page: Page, screen: Locator, label: string) {
   const resultURL = page.url();
-  const proof = (await screen.locator('.es-result-score').textContent())!;
+  const proof = (await screen.locator('.recipe-result-score').textContent())!;
   const trigger = screen.getByRole('button', { name: label, exact: true });
   await trigger.focus();
   await trigger.press('Enter');
@@ -64,13 +64,13 @@ async function assertLocalSearchPreview(page: Page, screen: Locator, label: stri
   await page.keyboard.press('Escape');
   await expect(page.getByRole('dialog')).toHaveCount(0);
   await expect(page).toHaveURL(resultURL);
-  await expect(screen.locator('.es-result-score')).toHaveText(proof);
+  await expect(screen.locator('.recipe-result-score')).toHaveText(proof);
   await expect(trigger).toBeFocused();
   await expect(trigger).toHaveCSS('outline-style', 'solid');
 }
 
 async function sampledContrast(screen: Locator) {
-  const pairs = await screen.locator('h1,h2,h3,p,.es-button,.es-result-score-values strong,.es-result-score-values small,.es-result-score-delta,.es-result-offer-eyebrow,.es-result-offer-price > span,.es-result-offer li > span').evaluateAll(elements => {
+  const pairs = await screen.locator('h1,h2,h3,p,.es-button,.recipe-result-score-values strong,.recipe-result-score-values small,.recipe-result-score-delta,.recipe-result-offer-eyebrow,.recipe-result-offer-price > span,.recipe-result-offer li > span').evaluateAll(elements => {
     const channels = (value: string) => value.match(/[\d.]+/g)!.map(Number);
     const over = (foreground: number[], background: number[]) => background.map((value, index) => value * (1 - (foreground[3] ?? 1)) + foreground[index] * (foreground[3] ?? 1));
     const luminance = (color: number[]) => color.slice(0, 3).map(value => value / 255).map(value => value <= .04045 ? value / 12.92 : ((value + .055) / 1.055) ** 2.4).reduce((sum, value, index) => sum + value * [.2126, .7152, .0722][index], 0);
@@ -90,9 +90,9 @@ async function sampledContrast(screen: Locator) {
 
 test('eligible free analysis survives checkout cancellation, failure and one explicit mock purchase', async ({ page }) => {
   const screen = await openResult(page, 'analysis');
-  const score = screen.locator('.es-result-score');
+  const score = screen.locator('.recipe-result-score');
   const proof = (await score.textContent())!;
-  const findings = await screen.locator('.es-result-findings').allTextContents();
+  const findings = await screen.locator('.recipe-result-findings').allTextContents();
   const originalURL = page.url();
   await screen.getByRole('tab', { name: 'Vanellope', exact: true }).click();
   const report = (await screen.getByRole('tabpanel').textContent())!;
@@ -124,7 +124,7 @@ test('eligible free analysis survives checkout cancellation, failure and one exp
   await expect(page.getByRole('main')).toBeFocused();
   await expect(page).toHaveURL(originalURL);
   await expect(score).toHaveText(proof);
-  expect(await screen.locator('.es-result-findings').allTextContents()).toEqual(findings);
+  expect(await screen.locator('.recipe-result-findings').allTextContents()).toEqual(findings);
   await expect(screen.getByRole('tabpanel')).toHaveText(report);
   await expect(buy).toHaveCount(0);
   await expect(screen.getByText('1 crédito disponível · demonstração', { exact: true })).toBeVisible();
@@ -133,7 +133,7 @@ test('eligible free analysis survives checkout cancellation, failure and one exp
 
 test('anonymous readers see free proof and unlock reports without buying credits', async ({ page }) => {
   const screen = await openResult(page, 'analysis', 'anonymous');
-  await expect(screen.locator('.es-result-score-current strong')).toHaveText('62/100');
+  await expect(screen.locator('.recipe-result-score-current strong')).toHaveText('62/100');
   await expect(screen.getByRole('heading', { name: 'Dê contexto às suas entregas', exact: true })).toBeVisible();
   await expect(screen.getByRole('tablist')).toHaveCount(0);
   await screen.getByRole('button', { name: 'Simular acesso aos relatórios grátis', exact: true }).click();
@@ -159,7 +159,7 @@ test('balance, existing work and poor or excellent fit choose appropriate non-pu
   for (const preview of ['credits', 'existing', 'low-fit', 'excellent', 'balance-error'] as const) {
     const screen = await openResult(page, 'analysis', preview, 'dark');
     await expect(screen.getByRole('button', { name: buyLabel, exact: true })).toHaveCount(0);
-    await expect(screen.locator('.es-result-offer-price').getByText('R$ 5,90', { exact: true })).toHaveCount(0);
+    await expect(screen.locator('.recipe-result-offer-price').getByText('R$ 5,90', { exact: true })).toHaveCount(0);
     if (preview === 'credits') {
       await expect(screen.getByText('2 créditos disponíveis · demonstração', { exact: true })).toBeVisible();
       await expect(screen.getByRole('link', { name: 'Usar 1 crédito · iniciar prévia', exact: true })).toHaveAttribute('href', '?view=optimization-loading&theme=dark');
@@ -174,7 +174,7 @@ test('balance, existing work and poor or excellent fit choose appropriate non-pu
       await expect(screen.getByText('2 créditos disponíveis · demonstração', { exact: true })).toBeVisible();
       await expect(screen.getByRole('button', { name: buyLabel, exact: true })).toHaveCount(0);
     } else {
-      await expect(screen.locator('.es-result-score-current strong')).toHaveText(preview === 'low-fit' ? '28/100' : '96/100');
+      await expect(screen.locator('.recipe-result-score-current strong')).toHaveText(preview === 'low-fit' ? '28/100' : '96/100');
       await expect(screen.getByRole('tabpanel')).toContainText(preview === 'low-fit' ? 'não têm evidências' : 'Preserve a versão');
       await assertLocalSearchPreview(page, screen, 'Buscar outra vaga');
     }
@@ -187,17 +187,17 @@ test('balance, existing work and poor or excellent fit choose appropriate non-pu
 
 test('already-paid optimization keeps both document previews and recovery available at zero balance', async ({ page }) => {
   const screen = await openResult(page, 'optimization');
-  await expect(screen.locator('.es-result-score-delta')).toHaveText('+24 pts');
+  await expect(screen.locator('.recipe-result-score-delta')).toHaveText('+24 pts');
   await expect(screen.getByText('Seu resultado atual já está pago. A compra é opcional, para a próxima vaga.', { exact: true })).toBeVisible();
   for (const label of ['Ver currículo · prévia', 'Ver carta', 'Revisar currículo'] as const) {
     await screen.getByRole('button', { name: label, exact: true }).click();
     const document = page.getByRole('dialog');
     await expect(document).toContainText('não existe arquivo real para baixar nem edição persistida');
-    await expect(document.locator('.es-document-preview')).toBeVisible();
+    await expect(document.locator('.recipe-document-preview')).toBeVisible();
     await expect(document.getByRole('button', { name: buyLabel, exact: true })).toHaveCount(0);
     await document.getByRole('button', { name: 'Simular falha de entrega', exact: true }).click();
     await expect(document.getByRole('alert')).toContainText('nenhum crédito será usado');
-    await expect(document.locator('.es-document-preview')).toBeVisible();
+    await expect(document.locator('.recipe-document-preview')).toBeVisible();
     await document.getByRole('button', { name: 'Tentar entrega novamente · prévia', exact: true }).click();
     await expect(document.getByRole('alert')).toHaveCount(0);
     await document.getByRole('button', { name: 'Voltar ao resultado', exact: true }).click();
@@ -210,26 +210,26 @@ test('already-paid optimization keeps both document previews and recovery availa
 test('missing, regression and partial evidence remain honest and recover without a new payment', async ({ page }) => {
   for (const mode of ['analysis', 'optimization'] as const) {
     const screen = await openResult(page, mode, 'missing');
-    await expect(screen.locator('.es-result-score-current strong')).toHaveText('—/100');
-    await expect(screen.locator('.es-result-score-delta')).toHaveCount(0);
+    await expect(screen.locator('.recipe-result-score-current strong')).toHaveText('—/100');
+    await expect(screen.locator('.recipe-result-score-delta')).toHaveCount(0);
     await expect(screen.getByRole('meter')).toHaveCount(0);
-    await expect(screen.locator('.es-result-findings')).toHaveCount(0);
+    await expect(screen.locator('.recipe-result-findings')).toHaveCount(0);
     await expect(screen.getByRole('button', { name: buyLabel, exact: true })).toHaveCount(0);
     await expect(screen.getByText(/· leitura indisponível$/, { exact: false })).toHaveCount(4);
     if (mode === 'optimization') {
       await screen.getByRole('button', { name: 'Ver currículo · prévia', exact: true }).click();
-      await expect(page.getByRole('dialog').locator('.es-document-preview')).toBeVisible();
+      await expect(page.getByRole('dialog').locator('.recipe-document-preview')).toBeVisible();
       await page.keyboard.press('Escape');
     } else await expect(screen.getByRole('tablist')).toHaveCount(0);
     await screen.getByRole('button', { name: 'Tentar carregar novamente', exact: true }).click();
-    await expect(screen.locator('.es-result-score-current strong')).toHaveText(mode === 'analysis' ? '62/100' : '86/100');
+    await expect(screen.locator('.recipe-result-score-current strong')).toHaveText(mode === 'analysis' ? '62/100' : '86/100');
     await expect(screen.getByRole('heading', { name: 'Os achados não chegaram', exact: true })).toHaveCount(0);
   }
   const regression = await openResult(page, 'optimization', 'regression');
-  await expect(regression.locator('.es-result-score-previous strong')).toHaveText('86/100');
-  await expect(regression.locator('.es-result-score-current strong')).toHaveText('62/100');
-  await expect(regression.locator('.es-result-score-delta')).toHaveText('−24 pts');
-  await expect(regression.locator('.es-result-score-delta')).toHaveAttribute('data-outcome', 'regression');
+  await expect(regression.locator('.recipe-result-score-previous strong')).toHaveText('86/100');
+  await expect(regression.locator('.recipe-result-score-current strong')).toHaveText('62/100');
+  await expect(regression.locator('.recipe-result-score-delta')).toHaveText('−24 pts');
+  await expect(regression.locator('.recipe-result-score-delta')).toHaveAttribute('data-outcome', 'regression');
   await expect(regression.getByRole('button', { name: buyLabel, exact: true })).toHaveCount(0);
   await regression.getByRole('button', { name: 'Revisar currículo sem novo pagamento', exact: true }).click();
   await expect(page.getByRole('dialog', { name: 'Revisão do currículo · demonstração', exact: true })).toBeVisible();
@@ -286,15 +286,15 @@ test('both themes reflow at desktop, tablet and narrow widths with readable cont
 
 test('entry motion is optional and content remains usable with reduced motion and a 200% zoom proxy', async ({ page }, info) => {
   let screen = await openResult(page, 'analysis');
-  await expect(screen.locator('.es-result-overview')).toHaveCSS('animation-name', 'es-result-enter');
-  await expect(screen.locator('.es-result-overview')).toHaveCSS('animation-duration', '0.22s');
+  await expect(screen.locator('.recipe-result-overview')).toHaveCSS('animation-name', 'recipe-result-enter');
+  await expect(screen.locator('.recipe-result-overview')).toHaveCSS('animation-duration', '0.22s');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   for (const mode of ['analysis', 'optimization'] as const) for (const theme of ['light', 'dark'] as const) {
     await page.setViewportSize({ width: 640, height: 1000 });
     screen = await openResult(page, mode, 'default', theme);
     // Harness-only approximation. Native browser zoom and physical assistive technology remain unverified.
     await page.evaluate(() => { document.documentElement.style.zoom = '2'; });
-    await expect(screen.locator('.es-result-overview')).toHaveCSS('animation-name', 'none');
+    await expect(screen.locator('.recipe-result-overview')).toHaveCSS('animation-name', 'none');
     expect(await screen.evaluate(element => element.getAnimations({ subtree: true }).filter(animation => animation.playState === 'running').length)).toBe(0);
     await assertFits(page, screen);
     const trigger = screen.getByRole('button', { name: mode === 'analysis' ? buyLabel : 'Ver currículo · prévia', exact: true });

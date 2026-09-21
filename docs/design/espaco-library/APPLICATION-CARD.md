@@ -1,8 +1,13 @@
 # ApplicationCard — personal opportunity tracking
 
-Scope: portable presentation. Caller owns dates, scoring semantics, lifecycle,
-documents, notes, requests and persistence. No Curriculol runtime imports.
-Catalog: `?view=application-card`. Consumer preview: `5292/?view=candidaturas`.
+Current scope: app-owned recipe in
+`apps/web/labs/espaco-library/recipes/application-card.tsx`, not a `beds` export.
+Its company/salary/resume and ATS/FIT model is specific to opportunity tracking.
+The recipe composes public controls and `MeterSegments`; generic `ResultsStatus`
+and `CollectionToolbar` remain in core `collection-controls.tsx`.
+Caller owns dates, scoring semantics, lifecycle, documents, requests and persistence.
+Catalog: `?view=application-card`. Earlier consumer URLs and validation below are
+historical, not evidence of a current consumer migration or post-extraction pass.
 
 Additive `purpose="kanban"` and controlled `ApplicationBoard`:
 [Kanban contract](KANBAN.md). Default card layout unchanged;compact purpose

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { AppShell, Button, DesignSystemProvider, Dialog, Icon, Inline, PageHeader, SearchDialog, Select, Stack, Text, ThemeToggle, type SearchResult } from 'beds';
+import { Button, DesignSystemProvider, Dialog, Icon, Inline, PageHeader, SearchDialog, Select, Stack, Text, ThemeToggle, type SearchResult } from 'beds';
+import { AppShell } from './recipes';
 
 const items: SearchResult[] = [
   { id: 'cv-product', categoryId: 'resumes', label: 'Currículo — Product designer', description: 'Currículos · Atualizado hoje', icon: 'FileText', keywords: 'design produto figma' },

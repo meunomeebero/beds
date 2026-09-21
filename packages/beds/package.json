@@ -1,12 +1,12 @@
 {
   "name": "beds",
-  "version": "0.1.7-rc.19",
+  "version": "0.2.0-alpha.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/meunomeebero/beds.git",
     "directory": "packages/beds"
   },
-  "description": "A constrained personal SaaS interface library. Measured geometry, two themes, one brand color.",
+  "description": "Reusable React interface components and a product-agnostic style guide. Private migration candidate.",
   "type": "module",
   "sideEffects": [
     "**/*.css"
@@ -51,7 +51,7 @@
     "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "check": "node scripts/check-library.mjs --tokens src/tokens.css",
     "check:consumer": "node scripts/check-consumer.mjs",
-    "test:guards": "node --test scripts/contracts.test.mjs scripts/visual-audit.test.mjs scripts/package-artifact.test.mjs scripts/build-artifact.test.mjs scripts/docs.test.mjs scripts/results.test.mjs scripts/checkout.test.mjs scripts/reduced-motion-hook.test.mjs",
+    "test:guards": "node --test scripts/agnostic-boundary.test.mjs scripts/contracts.test.mjs scripts/visual-audit.test.mjs scripts/package-artifact.test.mjs scripts/build-artifact.test.mjs scripts/docs.test.mjs scripts/reduced-motion-hook.test.mjs scripts/range-slider.test.mjs scripts/chat-workspace.test.mjs scripts/controls-regression.test.mjs scripts/layout-regression.test.mjs",
     "check:docs": "node scripts/check-docs.mjs",
     "check:visual-baseline": "node scripts/check-visual-baseline.mjs",
     "check:artifact": "node scripts/check-package-artifact.mjs"

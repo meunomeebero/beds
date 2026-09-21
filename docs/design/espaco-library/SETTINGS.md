@@ -4,7 +4,17 @@ Scope: `Tabs variant="settings"`, `SettingsGroup variant="section"`, isolated
 `?view=settings` catalog. No product integration or real account mutations.
 Existing `activity`/`connection` tabs and default settings panels remain unchanged.
 
-## Reference → adaptation
+## Current ownership
+
+SettingsPage is an app-owned example, not a public page template. Its section
+order,720px content lane, account copy and routes do not belong to BEDS policy.
+The reusable Tabs/SettingsGroup parts remain public. Tabs owns its tab strip and
+panel visibility; it must not resize TextField, Switch, Select, ThemeToggle or
+TextLink inside a panel. Each control owns its coarse-pointer targets and field
+typography, independently of its parent. Inline links retain text-link semantics.
+See [Agnostic DS](AGNOSTIC-DS.md) for current migration evidence.
+
+## Reference → adaptation (historical prototype)
 
 Owner-supplied September15 settings screenshot: horizontal top tabs, subtle
 selected background plus underline, narrow central content, restrained groups.
@@ -20,7 +30,8 @@ Stripe, API keys, technical setup steps and source branding are not imported.
 | Colors/type | Canonical Inter and fixed themes; no palette change or reference-image assets |
 | Defaults | Opt-in variants only;no changes to existing MCP shell or compact activity tabs |
 
-Foundations owns geometry. Caller supplies controlled tab value, content,
+The table records the earlier prototype, not mandatory app geometry or current
+nested-control styling. Foundations guides reusable components. Caller supplies controlled tab value, content,
 drafts, validation, persistence and requests. Components do not inspect routes,
 fetch account data, save preferences or implement legal/payment policy.
 

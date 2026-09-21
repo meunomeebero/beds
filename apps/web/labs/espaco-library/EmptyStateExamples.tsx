@@ -1,5 +1,6 @@
+import { HomeHeader } from './recipes';
 import { useState } from 'react';
-import { Button, EmptyState, EmptyStateCard, Inline, PageHeader, ResultsStatus, Select, Stack, Switch, useDesignSystem } from 'beds';
+import { Button, EmptyState, EmptyStateCard, Inline, ResultsStatus, Select, Stack, Switch, useDesignSystem } from 'beds';
 
 const lightArtwork = new URL('./assets/empty-state-light.svg?no-inline', import.meta.url).href;
 const darkArtwork = new URL('./assets/empty-state-dark.svg?no-inline', import.meta.url).href;
@@ -17,7 +18,7 @@ export default function EmptyStateExamples() {
   const src = imageState === 'missing' ? '' : imageState === 'broken' ? 'data:image/png;base64,invalid' : artwork;
 
   return <Stack gap="section">
-    <PageHeader purpose="home" title="Um pouco de espaço" description="Estados vazios que explicam o momento, sem adicionar ruído. Demonstração local." />
+    <HomeHeader title="Um pouco de espaço" description="Estados vazios que explicam o momento, sem adicionar ruído. Demonstração local." />
     {example === 'compact'
       ? <EmptyState title="Nenhum processo em andamento" description="Novas atividades aparecerão aqui." icon="Inbox" />
       : folder ? <EmptyStateCard

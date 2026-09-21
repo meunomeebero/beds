@@ -1,10 +1,24 @@
 # Landing footer
 
-Scope: reusable `LandingFooter`; isolated `?view=landing-footer` catalog.
+## Current ownership — optional app recipe
+
+This composition and its related types are **not exported from `beds`**.
+Source: `apps/web/labs/espaco-library/recipes/landing-footer.tsx`.
+Apps own its page layout, identity and product policy; this is an optional
+example, not a required style-guide composition. Read [Agnostic DS](AGNOSTIC-DS.md)
+and [API boundaries](API-BOUNDARIES.md) before adoption.
+
+The review results below describe the dated pre-extraction snapshot only.
+They do not prove the current recipe or private candidate passed those checks.
+Current verification status belongs to the migration ledger.
+
+
+Scope: optional app-owned `LandingFooter` recipe; isolated `?view=landing-footer` catalog.
 No Curriculol landing integration, FAQ, signup, tracking or external requests.
-Public declarations: `LandingFooterProps`, `LandingFooterLink`,
-`LandingFooterGroup`. [Foundations](FOUNDATIONS.md) owns geometry; [States](STATES.md)
-owns behavior; [Validation](VALIDATION.md) owns executed results.
+Recipe-local declarations: `LandingFooterProps`, `LandingFooterLink`,
+`LandingFooterGroup`. The app owns page geometry and identity;
+[Foundations](FOUNDATIONS.md) guides shared primitives.
+[Validation](VALIDATION.md) records snapshot-specific executed results.
 
 ## Reference → adaptation
 
@@ -24,7 +38,7 @@ Screenshot proportions are visual evidence, not measured source CSS.
 No reference image, logo, commercial claim or source CSS copied. Wordmark uses
 the existing Inter font. Values are documented candidates for owner review.
 
-## Public contract
+## Optional recipe contract
 
 | Prop | Contract |
 |---|---|
@@ -37,7 +51,8 @@ the existing Inter font. Values are documented candidates for owner review.
 | `legal` | Optional labelled bottom links; no generated policies or fake destinations |
 | `note` | Optional plain footer note; copyright/date supplied by host, no automatic legal text |
 
-No arbitrary visual properties, colors, fonts, dimensions or animation knobs.
+The recipe offers a fixed example rather than visual-override props. Apps may
+adapt its own layout CSS, wordmark and copy without modifying BEDS components.
 Link destinations must be host-validated, trusted navigation URLs; no raw user
 HTML or automatic external fetch. Links stay in the current tab by default;
 native modified/middle-click and copy-link behavior remain available.
@@ -61,7 +76,7 @@ copy sits on a solid canvas; CTA has opaque primary fill; decorative wash
 does not sit beneath unbacked functional text. No animation, including with
 reduced motion. Forced colors hides decoration and preserves a CTA boundary.
 
-## Examples and focused review
+## Examples and historical review — September15 snapshot
 
 [Composition](../../../apps/web/labs/espaco-library/LandingFooterPage.tsx):
 default, `preview=long`, `preview=minimal`; both themes. CTA opens local

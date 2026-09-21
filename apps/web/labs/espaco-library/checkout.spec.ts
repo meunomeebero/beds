@@ -32,7 +32,7 @@ test.afterEach(async ({ page }, info) => {
 
 async function openCheckout(page: Page, options: { theme?: 'light' | 'dark'; query?: string } = {}) {
   await page.goto(`/?view=checkout&theme=${options.theme ?? 'light'}${options.query ? `&${options.query}` : ''}`);
-  const screen = page.locator('.es-checkout');
+  const screen = page.locator('.recipe-checkout');
   await expect(screen).toBeVisible();
   await expect(page.getByRole('main')).toHaveCount(1);
   await expect(screen.getByRole('heading', { level: 1 })).toHaveCount(1);
@@ -51,12 +51,14 @@ async function assertFits(page: Page, screen: Locator) {
 }
 
 async function assertTouchTargets(screen: Locator) {
+  // The recipe uses each component's target contract, not a private CSS override.
+  const minimum = await screen.evaluate(() => matchMedia('(pointer:coarse)').matches ? 44 : 32);
   for (const target of await screen.locator('button:visible,a:visible,.es-radio-option:visible').all()) {
     const bounds = (await target.boundingBox())!;
     const label = (await target.innerText()).slice(0, 80);
     // Ignore browser sub-pixel noise: CSS 44px can measure as 43.99997px.
-    expect(Math.round(bounds.width * 100) / 100, `${label}: width`).toBeGreaterThanOrEqual(44);
-    expect(Math.round(bounds.height * 100) / 100, `${label}: height`).toBeGreaterThanOrEqual(44);
+    expect(Math.round(bounds.width * 100) / 100, `${label}: width`).toBeGreaterThanOrEqual(minimum);
+    expect(Math.round(bounds.height * 100) / 100, `${label}: height`).toBeGreaterThanOrEqual(minimum);
   }
   for (const input of await screen.locator('input:not([type=radio]):visible').all()) {
     expect(Number.parseFloat(await input.evaluate(element => getComputedStyle(element).fontSize)), 'Input text avoids mobile zoom').toBeGreaterThanOrEqual(16);
@@ -65,7 +67,7 @@ async function assertTouchTargets(screen: Locator) {
 }
 
 async function sampledContrast(screen: Locator) {
-  const pairs = await screen.locator('h1,h2,h3,p,button:not(:disabled),a,input:not([type=radio]),legend,.es-field > label,.es-radio-option > span:last-child,.es-notice strong,.es-code-label,.es-payment-description,dt,dd,code').evaluateAll(elements => {
+  const pairs = await screen.locator('h1,h2,h3,p,button:not(:disabled),a,input:not([type=radio]),legend,.es-field > label,.es-radio-option > span:last-child,.es-notice strong,.es-code-label,.recipe-payment-description,dt,dd,code').evaluateAll(elements => {
     const channels = (value: string) => value.match(/[\d.]+/g)!.map(Number);
     const over = (foreground: number[], background: number[]) => background.map((value, index) => value * (1 - (foreground[3] ?? 1)) + foreground[index] * (foreground[3] ?? 1));
     const luminance = (color: number[]) => color.slice(0, 3).map(value => value / 255).map(value => value <= .04045 ? value / 12.92 : ((value + .055) / 1.055) ** 2.4).reduce((sum, value, index) => sum + value * [.2126, .7152, .0722][index], 0);
@@ -133,26 +135,26 @@ test('catalog entry, preset prices and custom quantities use the same validated 
   await entry.focus();
   await entry.press('Enter');
   await expect(page).toHaveURL(/view=checkout/);
-  const screen = page.locator('.es-checkout');
+  const screen = page.locator('.recipe-checkout');
   await expect(screen).toBeVisible();
   await expect(page.getByRole('main')).toHaveCount(1);
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
   const choices = screen.getByRole('group', { name: 'Quantidade de créditos', exact: true });
   for (const quantity of [1, 10, 50]) {
     await choices.getByRole('radio', { name: `${checkoutCredits(quantity)} — ${priceFor(quantity)}`, exact: true }).check();
-    await expect(screen.locator('.es-order-total dd')).toHaveText(priceFor(quantity));
+    await expect(screen.locator('.recipe-order-total dd')).toHaveText(priceFor(quantity));
     await expect(submitFor(screen, quantity)).toBeVisible();
   }
   await choices.getByRole('radio', { name: 'Outra quantidade', exact: true }).check();
   const custom = screen.getByRole('textbox', { name: 'Quantidade de créditos personalizada', exact: true });
   for (const quantity of [1, 2, 37, 100]) {
     await custom.fill(String(quantity));
-    await expect(screen.locator('.es-order-total dd')).toHaveText(priceFor(quantity));
+    await expect(screen.locator('.recipe-order-total dd')).toHaveText(priceFor(quantity));
     await expect(submitFor(screen, quantity)).toBeVisible();
   }
   for (const invalid of ['', '0', '101', '1.5', '-1', 'abc']) {
     await custom.fill(invalid);
-    await expect(screen.locator('.es-order-total dd')).toHaveText('—');
+    await expect(screen.locator('.recipe-order-total dd')).toHaveText('—');
     await screen.getByRole('button', { name: 'Gerar Pix', exact: true }).click();
     await expect(custom).toBeFocused();
     await expect(custom).toHaveAttribute('aria-invalid', 'true');
@@ -161,7 +163,7 @@ test('catalog entry, preset prices and custom quantities use the same validated 
   }
   await openCheckout(page, { query: 'quantity=101&paid=true' });
   await expect(custom).toHaveAttribute('aria-invalid', 'true');
-  await expect(screen.locator('.es-order-total dd')).toHaveText('—');
+  await expect(screen.locator('.recipe-order-total dd')).toHaveText('—');
   await expect(screen.getByRole('heading', { name: 'Pagamento confirmado · demonstração', exact: true })).toHaveCount(0);
 });
 
@@ -183,7 +185,7 @@ test('Pix validates fictional CPF while card collects no personal or card fields
   await expect(screen.getByRole('alert')).toContainText('nenhum valor foi cobrado e sua seleção foi mantida');
   await expect(screen.getByRole('radio', { name: 'Cartão de crédito', exact: true })).toBeChecked();
   await expect(screen.getByRole('radio', { name: `${checkoutCredits(10)} — ${priceFor(10)}`, exact: true })).toBeChecked();
-  await expect(screen.locator('.es-order-total dd')).toHaveText(priceFor(10));
+  await expect(screen.locator('.recipe-order-total dd')).toHaveText(priceFor(10));
   expect(await readRecord(page)).toBeNull();
   await createPending(page, screen, 10, 'card');
   await expect(screen.getByRole('textbox')).toHaveCount(0);
@@ -211,7 +213,7 @@ test('pending survives reload without CPF and neither URL flags nor elapsed time
   expect(await readRecord(page, 'analysis')).toEqual(original);
   await expect(screen.getByRole('heading', { name: 'Pagamento confirmado · demonstração', exact: true })).toHaveCount(0);
   await page.reload();
-  screen = page.locator('.es-checkout');
+  screen = page.locator('.recipe-checkout');
   await expect(screen.getByRole('status').filter({ hasText: 'Aguardando confirmação do pagamento' })).toBeVisible();
   expect(await readRecord(page, 'analysis')).toEqual(original);
   await expect(screen.getByText(`Pedido ${original.order}.`, { exact: false })).toBeVisible();
@@ -235,7 +237,7 @@ test('pending delay and lookup errors recover the same order and ended payment r
     await screen.getByRole('button', { name: 'Consultar pagamento novamente', exact: true }).click();
     expect(await readRecord(page)).toEqual(original);
     await expect(screen.getByRole('status').filter({ hasText: 'Aguardando confirmação do pagamento' })).toBeVisible();
-    await expect(screen.locator('.es-order-total dd')).toHaveText(priceFor(50));
+    await expect(screen.locator('.recipe-order-total dd')).toHaveText(priceFor(50));
   }
   await screen.getByRole('button', { name: 'Simular pagamento encerrado', exact: true }).click();
   await expect(screen.getByRole('heading', { name: 'Este pagamento foi encerrado', exact: true })).toBeVisible();
@@ -246,7 +248,7 @@ test('pending delay and lookup errors recover the same order and ended payment r
   await expect(page.getByRole('main')).toBeFocused();
   expect(await readRecord(page)).toBeNull();
   await expect(submitFor(screen, 50)).toBeVisible();
-  await expect(screen.locator('.es-order-total dd')).toHaveText(priceFor(50));
+  await expect(screen.locator('.recipe-order-total dd')).toHaveText(priceFor(50));
 });
 
 test('only explicit confirmation shows a truthful persistent receipt and context return does not grant real credits', async ({ page }) => {
@@ -267,7 +269,7 @@ test('only explicit confirmation shows a truthful persistent receipt and context
   await expect(screen.getByRole('button', { name: /nota fiscal/i })).toHaveCount(0);
   await page.reload();
   await expect(screen.getByRole('heading', { name: 'Pagamento confirmado · demonstração', exact: true })).toBeVisible();
-  await expect(screen.locator('.es-payment-confirmation')).not.toHaveAttribute('data-animate');
+  await expect(screen.locator('.recipe-payment-confirmation')).not.toHaveAttribute('data-animate');
   expect(await readRecord(page, 'analysis')).toEqual({ ...original, state: 'confirmed' });
   const back = screen.getByRole('link', { name: 'Voltar ao resultado da análise', exact: true }).last();
   await expect(back).toHaveAttribute('href', '?view=analysis-result&theme=dark');
@@ -308,7 +310,7 @@ test('keyboard payment and informational dialogs trap focus, Escape preserves or
   expect(await readRecord(page)).toBeNull();
 });
 
-test('light and dark checkout, pending and receipt reflow with readable text and 44px controls', async ({ page }, info) => {
+test('light and dark checkout, pending and receipt reflow with readable text and adaptive control targets', async ({ page }, info) => {
   const widths = info.project.name === 'desktop' ? [1440, 768] : [390, 320];
   await openCheckout(page);
   for (const theme of ['light', 'dark'] as const) for (const width of widths) {
@@ -346,8 +348,8 @@ test('reduced motion, forced colors and a 200% zoom proxy preserve checkout and 
     await page.emulateMedia({ forcedColors: 'active' });
     await radio.focus();
     const option = screen.locator('.es-radio-option').filter({ has: page.getByRole('radio', { name: 'Pix', exact: true }) });
-    await expect(option).toHaveCSS('outline-style', 'solid');
-    await expect(option).not.toHaveCSS('border-top-color', 'rgba(0, 0, 0, 0)');
+    await expect(option.locator('.es-radio-indicator')).toHaveCSS('outline-style', 'solid');
+    await expect(option.locator('.es-radio-indicator')).not.toHaveCSS('border-top-color', 'rgba(0, 0, 0, 0)');
     await radio.press('ArrowRight');
     await expect(screen.getByRole('radio', { name: 'Cartão de crédito', exact: true })).toBeChecked();
     await page.keyboard.press('ArrowLeft');
@@ -356,7 +358,7 @@ test('reduced motion, forced colors and a 200% zoom proxy preserve checkout and 
     await assertFits(page, screen);
     await revealControls(screen);
     await screen.getByRole('button', { name: 'Simular confirmação do pagamento', exact: true }).click();
-    const confirmation = screen.locator('.es-payment-confirmation');
+    const confirmation = screen.locator('.recipe-payment-confirmation');
     await expect(confirmation).toBeVisible();
     expect(await confirmation.evaluate(element => element.getAnimations({ subtree: true }).filter(animation => animation.playState === 'running').length), 'Reduced motion leaves the receipt static').toBe(0);
     await assertFits(page, screen);

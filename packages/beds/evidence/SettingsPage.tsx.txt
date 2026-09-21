@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react';
 import {
-  AppShell, Avatar, Button, DesignSystemProvider, Dialog, Icon, Inline,
+  Avatar, Button, DesignSystemProvider, Dialog, Icon, Inline,
   LoadingIndicator, NavItem, Notice, PageHeader, ResultsStatus, Select,
   SettingsForm, SettingsGroup, SettingsRow, SidebarFooter, SidebarHeader,
-  SidebarSection, Stack, Switch, Tabs, Text, TextField, TextLink, ThemeToggle, brands,
-} from 'beds';
+  SidebarSection, Stack, Switch, Tabs, Text, TextField, TextLink, ThemeToggle, } from 'beds';
+import { AppShell } from './recipes';
 import { confirmations, notificationGroups } from './settings-fixtures';
 
 export default function SettingsPage() {
@@ -49,7 +49,7 @@ export default function SettingsPage() {
     setMessage('');
   }
 
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <AppShell contentWidth="home" collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} navigationLabel="Menu" closeNavigationLabel="Fechar menu" sidebar={<>
       <SidebarHeader closeLabel="Fechar menu" expandLabel="Expandir menu" collapseLabel="Recolher menu"><Inline gap="tight"><Avatar name="Luísa" purpose="workspace" /><Text>Luísa</Text></Inline></SidebarHeader>
       <SidebarSection label="Sua carreira">

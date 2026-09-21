@@ -1,5 +1,9 @@
-import { useEffect, useState } from 'react';
-import { AppShell, BrandMark, Button, ContentHeader, DesignSystemProvider, DocumentPreview, Inline, NavItem, PageHeader, ProcessingView, SidebarHeader, SidebarSection, Stack, Surface, Text, ThemeToggle, brands, type ProcessingStep } from 'beds';
+import { HomeHeader } from './recipes';
+import { useEffect, useRef, useState } from 'react';
+import { BrandMark, Button, ContentHeader, DesignSystemProvider, Inline, NavItem, SidebarHeader, SidebarSection, Stack, Surface, Text, ThemeToggle } from 'beds';
+import { AppShell } from './recipes';
+import { ProcessingView, type ProcessingStep } from './recipes';
+import { DocumentPreview } from './recipes';
 import { processingFixtures, type ProcessingDemoKind } from './processing-fixtures';
 
 type DemoState = 'running' | 'waiting' | 'success' | 'error' | 'manual';
@@ -7,6 +11,7 @@ const formatTime = (seconds: number) => `${Math.floor(seconds / 60)}:${String(Ma
 
 function ProcessingDemo({ kind, onExit, onResult }: { kind: ProcessingDemoKind; onExit: () => void; onResult: () => void }) {
   const fixture = processingFixtures[kind];
+  const headingRef = useRef<HTMLHeadingElement>(null);
   const [state, setState] = useState<DemoState>('running');
   const [clock, setClock] = useState({ elapsed: 0, presentation: 0 });
   const [paused, setPaused] = useState(false);
@@ -69,14 +74,16 @@ function ProcessingDemo({ kind, onExit, onResult }: { kind: ProcessingDemoKind; 
   const statusLabel = state === 'success' ? 'Concluído' : isTerminal ? 'Interrompido' : waiting ? 'Aguardando confirmação' : 'Em andamento';
 
   function retry() {
+    // Move focus before the retry button is removed by the state change.
+    headingRef.current?.focus();
     setClock({ elapsed: 0, presentation: 0 });
     setState('running');
     setPaused(false);
   }
 
   return <Stack gap="section">
-    <ProcessingView title={state === 'success' ? fixture.resultTitle : fixture.title} description={fixture.description}
-      context={long ? 'Curriculol · currículo e vaga de demonstração para uma oportunidade em pesquisa e design de produtos digitais' : 'Curriculol · currículo de demonstração'} mark={<BrandMark label="Curriculol" />}
+    <ProcessingView headingRef={headingRef} title={state === 'success' ? fixture.resultTitle : fixture.title} description={fixture.description}
+      context={long ? 'Curriculol · currículo e vaga de demonstração para uma oportunidade em pesquisa e design de produtos digitais' : 'Curriculol · currículo de demonstração'} mark={<BrandMark src="/demo-brand.svg" label="Curriculol" />}
       state={viewState} statusLabel={statusLabel} progress={Math.min(95, 10 + clock.elapsed / fixture.durationSeconds * 85)} progressLabel="Progresso estimado"
       progressDescription="Estimativa ilustrativa. Só a confirmação do resultado libera 100%." stepsLabel={kind === 'analysis' ? 'Etapas da análise' : 'Etapas da otimização'} steps={steps}
       message={message} announcement={message ?? (activeStep ? `${activeStep.label}. ${activeStep.statusLabel}.` : 'Etapa visual concluída. Aguardando o próximo passo.')}
@@ -109,11 +116,11 @@ export default function ProcessingPage() {
   }, [entryTitle]);
   useEffect(() => { document.querySelector<HTMLElement>('main')?.focus({ preventScroll: true }); }, [started]);
 
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <AppShell contentWidth={started ? 'full' : 'home'} collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} navigationLabel="Navegação" closeNavigationLabel="Fechar navegação"
-      sidebar={<><SidebarHeader closeLabel="Fechar navegação" expandLabel="Expandir menu" collapseLabel="Recolher menu"><Inline gap="tight"><BrandMark label="Curriculol" /><Text>Curriculol</Text></Inline></SidebarHeader><SidebarSection label="Playground"><NavItem label="Componentes" icon="Folder" href={`?view=components&theme=${theme}`} /><NavItem label="Análise em andamento" icon="ScanText" active={kind === 'analysis'} href={`?view=analysis-loading&theme=${theme}`} /><NavItem label="Otimização em andamento" icon="FileText" active={kind === 'optimization'} href={`?view=optimization-loading&theme=${theme}`} /></SidebarSection></>}
+      sidebar={<><SidebarHeader closeLabel="Fechar navegação" expandLabel="Expandir menu" collapseLabel="Recolher menu"><Inline gap="tight"><BrandMark src="/demo-brand.svg" label="Curriculol" /><Text>Curriculol</Text></Inline></SidebarHeader><SidebarSection label="Playground"><NavItem label="Componentes" icon="Folder" href={`?view=components&theme=${theme}`} /><NavItem label="Análise em andamento" icon="ScanText" active={kind === 'analysis'} href={`?view=analysis-loading&theme=${theme}`} /><NavItem label="Otimização em andamento" icon="FileText" active={kind === 'optimization'} href={`?view=optimization-loading&theme=${theme}`} /></SidebarSection></>}
       header={<ContentHeader actions={<ThemeToggle label="Aparência da página" lightLabel="Claro" darkLabel="Escuro" />}><Text>Prévia do processamento</Text></ContentHeader>}>
-      {started ? <ProcessingDemo kind={kind} onExit={() => setStarted(false)} onResult={() => location.assign(`?view=${kind}-result&theme=${theme}`)} /> : <Stack gap="section"><PageHeader purpose="home" title={entryTitle} description="Veja como as etapas do Curriculol aparecem no redesign, com dados fictícios." leading={<BrandMark label="Curriculol" />} /><Surface><Stack><DocumentPreview name="Luísa Andrade" subtitle="Product designer · currículo de demonstração" sections={[{ id: 'experience', title: 'Experiência', text: 'Pesquisa, design de produtos digitais e colaboração com equipes de produto.' }, { id: 'job', title: 'Vaga de referência', text: 'Product designer sênior · Ateliê Digital (empresa fictícia).' }]} /><Inline><Button purpose="welcome" variant="primary" label={kind === 'analysis' ? 'Iniciar análise de demonstração' : 'Iniciar otimização de demonstração'} onClick={() => setStarted(true)} /></Inline></Stack></Surface><Text variant="body-small" tone="secondary">Esta prévia não processa arquivos nem usa créditos. O aplicativo permite sair e receber o resultado por e-mail. Aqui, sair encerra somente a prévia local; nada é enviado ou salvo.</Text></Stack>}
+      {started ? <ProcessingDemo kind={kind} onExit={() => setStarted(false)} onResult={() => location.assign(`?view=${kind}-result&theme=${theme}`)} /> : <Stack gap="section"><HomeHeader title={entryTitle} description="Veja como as etapas do Curriculol aparecem no redesign, com dados fictícios." leading={<BrandMark src="/demo-brand.svg" label="Curriculol" />} /><Surface><Stack><DocumentPreview name="Luísa Andrade" subtitle="Product designer · currículo de demonstração" sections={[{ id: 'experience', title: 'Experiência', text: 'Pesquisa, design de produtos digitais e colaboração com equipes de produto.' }, { id: 'job', title: 'Vaga de referência', text: 'Product designer sênior · Ateliê Digital (empresa fictícia).' }]} /><Inline><Button purpose="welcome" variant="primary" label={kind === 'analysis' ? 'Iniciar análise de demonstração' : 'Iniciar otimização de demonstração'} onClick={() => setStarted(true)} /></Inline></Stack></Surface><Text variant="body-small" tone="secondary">Esta prévia não processa arquivos nem usa créditos. O aplicativo permite sair e receber o resultado por e-mail. Aqui, sair encerra somente a prévia local; nada é enviado ou salvo.</Text></Stack>}
     </AppShell>
   </DesignSystemProvider>;
 }

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useId, useRef, useState, useSyncExternalStore, type ComponentProps, type ReactNode } from 'react';
+import { createContext, useContext, useId, type ComponentProps, type ReactNode } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { Icon, Text } from './foundation';
 import { HelpLabel } from './overlays';
@@ -8,99 +8,32 @@ import './layout.css';
 type IconName = ComponentProps<typeof Icon>['name'];
 type NavigationAction = { href: string; onClick?: never } | { href?: never; onClick: () => void };
 type LockedNavigation = { href?: never; onClick?: never };
-type ShellContextValue = { collapsed: boolean; onCollapsedChange: (collapsed: boolean) => void; mobile: boolean; mobileOpen: boolean; onMobileOpenChange: (open: boolean) => void };
-const ShellContext = createContext<ShellContextValue | null>(null);
+type SidebarContextValue = { collapsed: boolean; onCollapsedChange?: (collapsed: boolean) => void; onDismiss?: () => void };
+const SidebarContext = createContext<SidebarContextValue | null>(null);
 const NavMotionContext = createContext<string | null>(null);
 
-const APP_SHELL_MORPH = {
-  type: 'spring',
-  stiffness: 380,
-  damping: 35,
-  mass: 0.75,
-} as const;
-
-const MOBILE_QUERY = '(max-width: 767px)';
-function subscribeToMobile(onChange: () => void) {
-  const query = window.matchMedia(MOBILE_QUERY);
-  query.addEventListener('change', onChange);
-  return () => query.removeEventListener('change', onChange);
-}
-function getMobileSnapshot() { return window.matchMedia(MOBILE_QUERY).matches; }
-function getMobileServerSnapshot(): boolean | null { return null; }
-
-function trapTab(event: React.KeyboardEvent<HTMLElement>) {
-  if (event.key !== 'Tab') return;
-  const controls = [...event.currentTarget.querySelectorAll<HTMLElement>('button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex="0"]')].filter(control => control.getClientRects().length > 0);
-  const first = controls[0];
-  const last = controls.at(-1);
-  if (!first) { event.preventDefault(); return; }
-  if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
-  if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
-}
-
-export function AppShell({ sidebar, header, children, collapsed, onCollapsedChange, mobileOpen, onMobileOpenChange, contentWidth = 'home', navigationLabel = 'Navigation', closeNavigationLabel, skipToContentLabel = 'Ir para o conteúdo' }: {
-  sidebar: ReactNode; header?: ReactNode; children: ReactNode; collapsed: boolean; onCollapsedChange: (collapsed: boolean) => void; mobileOpen: boolean; onMobileOpenChange: (open: boolean) => void; contentWidth?: 'chat' | 'home' | 'dashboard' | 'full'; navigationLabel?: string; closeNavigationLabel?: string; skipToContentLabel?: string;
+/** Navigation surface only; the host owns its width, placement and mobile overlay. */
+export function Sidebar({ children, label, collapsed = false, onCollapsedChange, onDismiss }: {
+  children: ReactNode; label: string; collapsed?: boolean;
+  onCollapsedChange?: (collapsed: boolean) => void;
+  /** Optional close action when the host presents navigation in an overlay. */
+  onDismiss?: () => void;
 }) {
-  const mobile = useSyncExternalStore(subscribeToMobile, getMobileSnapshot, getMobileServerSnapshot);
-  const sidebarRef = useRef<HTMLElement>(null);
-  const openRef = useRef<HTMLButtonElement>(null);
-  const returnFocusTarget = useRef<HTMLElement | null>(null);
-  const returnFocusFrame = useRef<number | null>(null);
-  const sidebarId = useId();
-  const contentId = useId();
-  const contentRef = useRef<HTMLElement>(null);
-  const reduce = useReducedMotion() ?? false;
-  useEffect(() => {
-    if (!mobile || !mobileOpen) return;
-    if (returnFocusFrame.current !== null) {
-      window.cancelAnimationFrame(returnFocusFrame.current);
-      returnFocusFrame.current = null;
-    }
-    const previous = returnFocusTarget.current ?? (document.activeElement instanceof HTMLElement ? document.activeElement : openRef.current);
-    sidebarRef.current?.querySelector<HTMLElement>('button:not(:disabled),a[href]')?.focus();
-    return () => {
-      // React removes inert from the consuming main region on this close. Focus
-      // only after that commit, otherwise browsers can reject the restoration.
-      returnFocusFrame.current = window.requestAnimationFrame(() => {
-        const target = returnFocusTarget.current ?? previous;
-        if (target?.isConnected) target.focus({ preventScroll: true });
-        returnFocusTarget.current = null;
-        returnFocusFrame.current = null;
-      });
-    };
-  }, [mobile, mobileOpen]);
-  const drawerOpen = mobile === true && mobileOpen;
-
-  return <ShellContext.Provider value={{ collapsed, onCollapsedChange, mobile: mobile === true, mobileOpen, onMobileOpenChange }}>
-    <motion.div
-      className={`es-app-shell${collapsed ? ' es-app-shell--collapsed' : ''}${drawerOpen ? ' es-app-shell--drawer-open' : ''}`}
-      initial={false}
-      animate={mobile === null ? undefined : { gridTemplateColumns: mobile ? 'minmax(0,1fr)' : collapsed ? '62px minmax(0,1fr)' : '264px minmax(0,1fr)' }}
-      transition={reduce ? { duration: 0 } : APP_SHELL_MORPH}
-    >
-      <a className="es-skip-link" href={`#${contentId}`} inert={drawerOpen} onClick={event => { event.preventDefault(); contentRef.current?.focus(); }}>{skipToContentLabel}</a>
-      {drawerOpen && <button className="es-sidebar-backdrop" aria-label={closeNavigationLabel ?? `Close ${navigationLabel.toLowerCase()}`} tabIndex={-1} onClick={() => onMobileOpenChange(false)} />}
-      <aside id={sidebarId} ref={sidebarRef} className="es-sidebar" aria-label={navigationLabel} role={drawerOpen ? 'dialog' : undefined} aria-modal={drawerOpen || undefined} onKeyDown={event => {
-        if (!drawerOpen) return;
-        if (event.key === 'Escape') { event.stopPropagation(); onMobileOpenChange(false); }
-        trapTab(event);
-      }}>{sidebar}</aside>
-      <main id={contentId} ref={contentRef} tabIndex={-1} className="es-app-main" inert={drawerOpen}>
-        <div className="es-mobile-bar"><button ref={openRef} type="button" aria-controls={sidebarId} aria-expanded={drawerOpen} onClick={() => { returnFocusTarget.current = openRef.current; onMobileOpenChange(true); }}><Icon name="PanelLeftOpen" purpose="action" /><span>{navigationLabel}</span></button></div>
-        {header}
-        <div className="es-page-outer"><div className={`es-page es-page--${contentWidth}`}>{children}</div></div>
-      </main>
-    </motion.div>
-  </ShellContext.Provider>;
+  const id = useId();
+  return <SidebarContext.Provider value={{ collapsed, onCollapsedChange, onDismiss }}>
+    <NavMotionContext.Provider value={id}>
+      <nav className="es-sidebar" aria-label={label} data-collapsed={collapsed || undefined}>{children}</nav>
+    </NavMotionContext.Provider>
+  </SidebarContext.Provider>;
 }
 
 export function SidebarHeader({ children, search, closeLabel, expandLabel, collapseLabel }: { children: ReactNode; search?: { label: string; onClick: () => void }; closeLabel?: string; expandLabel?: string; collapseLabel?: string }) {
-  const shell = useContext(ShellContext);
+  const shell = useContext(SidebarContext);
   return <div className="es-sidebar-header">
     <div className="es-sidebar-identity">{children}</div>
     <div className="es-sidebar-header-actions">
       {search && <button type="button" className="es-header-action es-header-search" aria-label={search.label} onClick={search.onClick}><Icon name="Search" purpose="action" /></button>}
-      {shell && <button type="button" className="es-header-action" aria-label={shell.mobile ? closeLabel ?? 'Close navigation' : shell.collapsed ? expandLabel ?? 'Expand sidebar' : collapseLabel ?? 'Collapse sidebar'} onClick={() => shell.mobile ? shell.onMobileOpenChange(false) : shell.onCollapsedChange(!shell.collapsed)}><Icon name={shell.mobile ? 'X' : shell.collapsed ? 'PanelLeftOpen' : 'PanelLeftClose'} purpose="action" /></button>}
+      {(shell?.onDismiss || shell?.onCollapsedChange) && <button type="button" className="es-header-action" aria-label={shell.onDismiss ? closeLabel ?? 'Close navigation' : shell.collapsed ? expandLabel ?? 'Expand sidebar' : collapseLabel ?? 'Collapse sidebar'} onClick={() => shell.onDismiss ? shell.onDismiss() : shell.onCollapsedChange?.(!shell.collapsed)}><Icon name={shell.onDismiss ? 'X' : shell.collapsed ? 'PanelLeftOpen' : 'PanelLeftClose'} purpose="action" /></button>}
     </div>
   </div>;
 }
@@ -124,13 +57,13 @@ export function SidebarSection({ label, children, purpose = 'default' }: { label
  */
 export function NavItem({ label, icon, active = false, badge, locked, href, onClick }: { label: string; icon: IconName; active?: boolean; badge?: string; locked?: string } & (NavigationAction | LockedNavigation)) {
   const reduce = useReducedMotion() ?? false;
-  const navMotionId = useContext(NavMotionContext) ?? 'es-nav-active';
+  const itemId = useId();
+  const navMotionId = useContext(NavMotionContext) ?? itemId;
   const content = <span className="es-nav-content"><Icon name={icon} purpose="navigation" /><span className="es-nav-label">{label}</span>{badge && <span className="es-nav-badge">{badge}</span>}</span>;
   const activeIndicator = locked ? null : active
     ? <motion.span layoutId={`${navMotionId}-active`} initial={false} transition={reduce ? { duration: 0 } : SPRING_LAYOUT} className="es-nav-active-indicator" aria-hidden="true" />
     : <span className="es-nav-active-indicator" aria-hidden="true" />;
-  const shell = useContext(ShellContext);
-  const common = { className: `es-nav-item${active ? ' es-nav-item--active' : ''}${locked ? ' es-nav-item--locked' : ''}`, title: locked ?? (shell?.collapsed ? label : undefined), 'aria-label': locked ? `${label}. ${locked}` : label, 'aria-current': active ? 'page' as const : undefined };
+  const common = { className: `es-nav-item${active ? ' es-nav-item--active' : ''}${locked ? ' es-nav-item--locked' : ''}`, title: locked ?? label, 'aria-label': locked ? `${label}. ${locked}` : label, 'aria-current': active ? 'page' as const : undefined };
   if (locked) return <button {...common} type="button" disabled title={common.title}>{content}</button>;
   if (href !== undefined) return <a {...common} href={href}>{activeIndicator}{content}</a>;
   return <button {...common} type="button" onClick={onClick}>{activeIndicator}{content}</button>;
@@ -142,16 +75,12 @@ export function ContentHeader({ children, actions }: { children: ReactNode; acti
   return <header className="es-content-header"><div className="es-content-header-main">{children}</div>{actions && <div className="es-content-header-actions">{actions}</div>}</header>;
 }
 
-export function PageContentHeader({ title, description, leading, actions }: { title: string; description?: string; leading?: ReactNode; actions?: ReactNode }) {
-  return <header className="es-page-content-header"><div className="es-page-heading">{leading && <span className="es-page-leading">{leading}</span>}<div><h1>{title}</h1>{description && <p>{description}</p>}</div></div>{actions && <div className="es-page-actions">{actions}</div>}</header>;
-}
-
 export function Breadcrumbs({ label = 'Breadcrumb', items }: { label?: string; items: { id: string; label: string; href?: string }[] }) {
   return <nav className="es-breadcrumbs" aria-label={label}><ol>{items.map((item, index) => <li key={item.id}>{index > 0 && <span className="es-breadcrumb-separator" aria-hidden="true">/</span>}{item.href && index < items.length - 1 ? <a href={item.href}>{item.label}</a> : <span aria-current={index === items.length - 1 ? 'page' : undefined}>{item.label}</span>}</li>)}</ol></nav>;
 }
 
-export function PageHeader({ title, description, leading, actions, purpose = 'default' }: { title: string; description?: string; leading?: ReactNode; actions?: ReactNode; purpose?: 'default' | 'home' }) {
-  return <header className={`es-page-header es-page-header--${purpose}`}><div className="es-page-heading">{leading && <span className="es-page-leading">{leading}</span>}<div><h1>{title}</h1>{description && <p>{description}</p>}</div></div>{actions && <div className="es-page-actions">{actions}</div>}</header>;
+export function PageHeader({ title, description, leading, actions }: { title: string; description?: string; leading?: ReactNode; actions?: ReactNode }) {
+  return <header className="es-page-header"><div className="es-page-heading">{leading && <span className="es-page-leading">{leading}</span>}<div><h1>{title}</h1>{description && <p>{description}</p>}</div></div>{actions && <div className="es-page-actions">{actions}</div>}</header>;
 }
 
 export function SectionHeader({ title, description, actions }: { title: string; description?: string; actions?: ReactNode }) {
@@ -163,7 +92,23 @@ export function Inline({ children, gap = 'default', align = 'center' }: { childr
 /** Fixed two-column content relationship that stacks at the shared mobile breakpoint. */
 export function ResponsiveGrid({ children }: { children: ReactNode }) { return <div className="es-responsive-grid">{children}</div>; }
 export function Divider() { return <hr className="es-divider" />; }
-export function Surface({ children, role = 'panel' }: { children: ReactNode; role?: 'panel' | 'subtle' | 'raised' }) { return <div className={`es-surface es-surface--${role}`}>{children}</div>; }
+export type SurfaceProps = {
+  children: ReactNode;
+  role?: 'panel' | 'subtle' | 'raised';
+  /** Stable DOM target for a host-owned deep link or labelled relationship. */
+  id?: string;
+  /** Allows host-owned programmatic focus without adding the panel to tab order. */
+  focusTarget?: boolean;
+};
+
+/**
+ * Fixed visual panel. `focusTarget` is deliberately narrow: it supports focus
+ * restoration and deep links, but never creates a keyboard tab stop or owns
+ * scroll, selection, route, or request behavior.
+ */
+export function Surface({ children, role = 'panel', id, focusTarget = false }: SurfaceProps) {
+  return <div id={id} tabIndex={focusTarget ? -1 : undefined} className={`es-surface es-surface--${role}`}>{children}</div>;
+}
 
 /** Fixed anatomy for a compact horizontal collection card. Consumer supplies only factual content and controls. */
 export function CollectionCard({ avatar, identity, selection, title, metadata, actions }: {

@@ -1,0 +1,39 @@
+/* A: owner-supplied bento anatomy; fixed geometry, original token-based artwork. */
+.recipe-benefits{padding:calc(var(--es-space-10) * 3) var(--es-space-10);background:var(--es-bg);color:var(--es-text);overflow-wrap:anywhere}
+.recipe-benefits-inner{container-type:inline-size;max-inline-size:1040px;margin-inline:auto;min-inline-size:0}
+.recipe-benefits-intro{text-align:center;max-inline-size:600px;margin-inline:auto;margin-block-end:var(--es-space-12)}
+.recipe-benefits-intro>h1,.recipe-benefits-intro>h2{color:var(--es-heading);font-size:32px;line-height:1.4;font-weight:500;letter-spacing:-.8px;text-wrap:balance}
+.recipe-benefits-intro>p{margin-block-start:var(--es-space-6);color:var(--es-secondary);font-size:14px;line-height:1.6;text-wrap:pretty}
+.recipe-benefits-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--es-space-9);padding:0;list-style:none}
+.recipe-benefit{min-inline-size:0;border-radius:var(--es-radius-card);padding:var(--es-space-2);box-shadow:0 0 0 1px var(--es-border)}
+.recipe-benefit article{block-size:100%;display:flex;flex-direction:column}
+.recipe-benefit-media{block-size:220px;flex:none;overflow:hidden;border-radius:var(--es-radius-20);pointer-events:none}
+.recipe-benefit-art{display:block;inline-size:100%;block-size:100%;color:var(--es-secondary);overflow:visible}
+.recipe-benefit-art-paper{fill:var(--es-surface);stroke:var(--es-image-outline);stroke-width:1;filter:drop-shadow(0 4px 4px var(--es-border))}
+.recipe-benefit-art-connector,.recipe-benefit-art-orbit{stroke:var(--es-border-strong);stroke-width:1.5;fill:none}
+.recipe-benefit-art-orbit{stroke-dasharray:5 7}
+.recipe-benefit-copy{padding:var(--es-space-8) var(--es-space-9) var(--es-space-10);text-align:center;margin-block-start:auto}
+.recipe-benefit-copy>h2,.recipe-benefit-copy>h3{font-size:18px;line-height:1.4;letter-spacing:-.15px;font-weight:500;color:var(--es-heading);text-wrap:balance}
+.recipe-benefit-copy>p{font-size:13px;line-height:1.6;color:var(--es-secondary);margin-block-start:var(--es-space-4);max-inline-size:46ch;margin-inline:auto;text-wrap:pretty}
+.recipe-benefits-footer{display:flex;flex-direction:column;align-items:center;gap:var(--es-space-6);margin-block-start:var(--es-space-11);text-align:center}
+a.recipe-benefits-action{display:inline-flex;align-items:center;justify-content:center;gap:var(--es-space-6);max-inline-size:100%;min-block-size:44px;padding:var(--es-space-6) var(--es-space-9);font-size:14px;line-height:1.5;font-weight:500;border-radius:var(--es-radius-full);background:var(--es-primary);color:var(--es-on-primary);box-shadow:var(--es-shadow-xs)}
+.recipe-benefits-action>span{min-inline-size:0}
+a.recipe-benefits-action:active{box-shadow:inset 0 0 0 2px var(--es-on-primary)}
+.recipe-benefits-footer>p{font-size:12px;line-height:1.5;color:var(--es-secondary)}
+@media(hover:hover){a.recipe-benefits-action:hover{text-decoration:underline;text-underline-offset:4px}}
+@container(min-width:640px){
+  .recipe-benefits-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .recipe-benefit[data-featured]{grid-column:span 2}
+}
+@container(min-width:960px){.recipe-benefits-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@container(max-width:639px){
+  .recipe-benefits-intro{margin-block-end:var(--es-space-11)}
+  .recipe-benefits-intro>h1,.recipe-benefits-intro>h2{font-size:28px;letter-spacing:-.5px}
+  .recipe-benefit-media{block-size:200px}
+}
+@media(max-width:767px){.recipe-benefits{padding:var(--es-space-12) var(--es-space-8)}}
+@media(forced-colors:active){
+  .recipe-benefit{border:1px solid CanvasText;box-shadow:none}
+  .recipe-benefit-media{display:none}
+  a.recipe-benefits-action{border:1px solid ButtonText}
+}

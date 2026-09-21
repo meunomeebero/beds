@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { BenefitIllustration, BenefitsSection, ContentHeader, DesignSystemProvider, Inline, Text, TextLink, ThemeToggle, brands } from 'beds';
+import { ContentHeader, DesignSystemProvider, Inline, Text, TextLink, ThemeToggle } from 'beds';
+import { BenefitIllustration, BenefitsSection } from './recipes';
 
 export default function BenefitsPage() {
   const params = new URLSearchParams(location.search);
@@ -8,7 +9,7 @@ export default function BenefitsPage() {
   const long = preview === 'long';
   const href = (view: string) => `?view=${view}&theme=${theme}`;
 
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <ContentHeader actions={<ThemeToggle label="Aparência" lightLabel="Claro" darkLabel="Escuro" />}>
       <Inline><TextLink href={href('components')}>Componentes</TextLink><Text>Vantagens do Curriculol</Text></Inline>
     </ContentHeader>

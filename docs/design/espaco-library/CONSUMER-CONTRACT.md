@@ -1,101 +1,106 @@
-# Espaço library — consumer contract and reuse
+# BEDS — consumer contract and reuse
 
-Read first: [foundations](FOUNDATIONS.md), [components](COMPONENTS.md), [Interface quality](INTERFACE-QUALITY.md). The application owns behavior and content. The library owns rendered visuals. These are repository/build rules, not a claim that browser CSS is physically impossible to override.
+Read [Agnostic DS](AGNOSTIC-DS.md), [Foundations](FOUNDATIONS.md),
+[Components](COMPONENTS.md) and [Interface quality](INTERFACE-QUALITY.md).
+BEDS owns individual components, interaction semantics, tokens and style guidance.
+The app owns identity, content, business rules and page composition.
 
-Every consuming UI scope must include the automatic Better routing from Interface quality in its own `AGENTS.md`. Load `better-interface` and all six owners before design/code decisions and review every domain before handoff,without waiting for a user invocation. Installing `beds` alone does not install skills or activate nested package instructions.
+## Required skills
 
-Current visuals come from [Foundations](FOUNDATIONS.md), not the old prototype or its measurements. The API exposes controlled theme and one brand color; no palette/density/geometry overrides.
+Copy the routing protocol from Interface quality into the consuming project's
+applicable `AGENTS.md`. Automatically load and apply `better-interface` and its
+six domain owners before design/code decisions; review the affected surface before
+handoff. The protocol links the actual `SKILL.md` files. Installing the package
+does not install skills or automatically activate its nested instructions.
+Report unavailable skills and unverified checks instead of claiming approval.
 
-## Allowed configuration
+## Composition boundary
 
-| Input | Contract |
-|---|---|
-| Provider |`DesignSystemProvider`, imported from `beds` |
-| Theme |Required `light` or `dark`; caller state; optional `onThemeChange` callback drives real theme selection |
-| Brand |Optional `brandColor`; exactly one six-digit `#RRGGBB`; default `brands.reference`; Curriculol `brands.curriculol` =`#ffa133` |
-| Brand foreground |Internally selected fixed black/white for contrast; no caller `onBrand` color |
-| Brand preset |Literal, same-file const/preset object, or exported `brands.reference/curriculol`; no arbitrary runtime palette or alpha color |
-| Component variants |Fixed semantic enums such as content context, control purpose, neutral/brand emphasis; no arbitrary lengths/colors/fonts |
-| Product content |Strings, arrays, values, selected ids, disabled/loading/error state, callbacks, hrefs; no provider/domain requests inside visual primitives |
-| Feature image |`FeatureCard.image` accepts owned/licensed image URL,required alt and optional fallback label;artwork is content,not an arbitrary visual JSX slot;caller owns URL authorization/privacy |
-| File data |Caller-controlled `File[]`, accepted formats and validation; `FileUploadField` exposes local selection, drop and removal only, with no native `name` or `FormData` participation |
-| Icons |Library `IconName`/`Icon`; fixed purpose maps; no external icon import or raw SVG |
-| Stylesheet |Public `beds/styles.css` plus fixed `beds/reset.css` for full-page documents; no app-specific stylesheet in audited UI roots |
+- Use public BEDS components for their reusable interactions.
+- Compose pages with app-owned semantic HTML, CSS, breakpoints and layout wrappers.
+  Read BEDS tokens for consistent color, spacing and typography.
+  Read-only metadata is available from `beds/tokens` (also re-exported by `beds`);
+  importing it does not permit redefining the library's CSS tokens.
+- Own your logo, illustrations, icons, brand configuration and asset permissions.
+  `BrandMark` requires caller-supplied `src` and accessible `label`; no product
+  artwork or product brand preset is built into the runtime.
+- Do not target private `.es-*` selectors or redefine `--es-*` properties.
+  Avoid broad app selectors that accidentally restyle nested BEDS controls.
+- BEDS component props remain explicit semantic contracts: no arbitrary
+  `className/style/css/sx`, visual overrides or JSX spreads.
+  This restriction does not apply to app-owned elements.
+- A missing app layout is not automatically a missing library component. Keep it
+  local until a single reusable job and unrelated use cases justify extraction.
+- Optional catalog recipes are editable examples, not runtime exports or mandatory
+  screen designs. Do not copy their product content into the style guide.
+
+## Provider and data
+
+`DesignSystemProvider` accepts a controlled `light` or `dark` theme, an optional
+`onThemeChange`, and an optional six-digit `#RRGGBB` brand color.
+The default accent remains `#d0f300`; apps own any named presets.
+The provider selects a contrasting foreground internally.
 
 ```tsx
 import { useState } from 'react';
-import { DesignSystemProvider, ThemeToggle, Text, brands } from 'beds';
+import { DesignSystemProvider, ThemeToggle, Text } from 'beds';
 import 'beds/styles.css';
-import 'beds/reset.css';
 
 export function Example() {
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
-  return <DesignSystemProvider
-    theme={theme}
-    onThemeChange={setTheme}
-    brandColor={brands.curriculol}
-  >
-    <ThemeToggle />
-    <Text variant="page-title">Your dashboard</Text>
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme}
+    brandColor="#3456ab">
+    <main>
+      <ThemeToggle />
+      <Text variant="page-title">Your dashboard</Text>
+    </main>
   </DesignSystemProvider>;
 }
 ```
 
-Theme switching changes fixed semantic theme roles. Brand switching changes only branded emphasis. Functional blue/success/warning/error and neutral hierarchy remain fixed. Do not pass className/style/css/sx, consumer font/density/geometry props, token overrides or replacement native visual elements.
+Import `beds/reset.css` only when its document-level reset is appropriate for the
+host. The app owns requests, routing, validation, persistence and recovery.
+For example, `FileUploadField` exposes controlled local `File[]` selection; it
+does not upload bytes or participate in native `FormData` via a field name.
+Do not invent successful operations.
 
-`RadioGroup` uses the supplied selected value and callback, with an optional semantic field name. `FileUploadField` is callback-only local `File[]` selection; consumers assemble their own request/form payload from that controlled value. Uploading bytes, size/type validation, merging files, saving and error recovery belong to the consuming application.
+## Enforced checks and limits
 
-## Enforced gates
-
-From repository root:
+Run on explicit consumer UI roots:
 
 ```sh
-node packages/beds/scripts/check-library.mjs --tokens src/tokens.css
 node packages/beds/scripts/check-consumer.mjs path/to/consumer-ui
 ```
 
-| Gate | Checks | Failure behavior |
-|---|---|---|
-| Library API |TypeScript public-export types; disallow className/style and visual escape props, unrestricted/index-signature props; provider-only brandColor |File/line/code; nonzero exit |
-| Library source |All src TypeScript/CSS; type errors; unsupported JS/preprocessor source rejected |No silent passing empty public API |
-| Library tokens |All CSS variable references resolve; noncanonical raw colors/fonts rejected; fixed Inter interface/Geist Mono code roles; canonical stylesheet explicitly configured |Missing CSS/token path fails |
-| Consumer scope |Explicit files/directories; JS/TS/JSX/TSX and style files; follows relative dependencies |Missing path, empty scope and unresolved local dependencies fail |
-| Consumer visual elements |Native JSX rejected; library imports and audited local compositions allowed |Imported unknown JSX providers fail |
-| Consumer escape props |className/style/css/sx/tw/as/asChild and visual props; JSX spreads rejected |Spreads cannot hide escape props |
-| Consumer styles |CSS/preprocessor files/imports, styling libraries, CSS token overrides and styling-context color/font literals |Only fixed styles.css/reset.css library exports allowed |
-| Consumer icons |Arbitrary icon imports and native SVG rejected |Use library glyph registry |
-| Consumer imperative styling |DOM class/style writes, CSSOM construction, manual element cloning/construction, dynamic dependency/code generation |Explicit violation category |
-| Brand input |Provider only; validated static six-digit literal/preset or public brands preset |Invalid color/location fails |
-
-The provider's internal validated brand-style write and read-only package token data are trusted library implementation, not consumer exceptions. Font registration belongs to the library. React fragments, StrictMode, Suspense/Profiler wrappers, data arrays, state and ordinary callbacks are allowed. Product strings such as `user#code` are not mistaken for color declarations; color checks apply to styling contexts.
-
-## Gate scope and limits
-
-| Constraint | Required practice |
+| Check | Actual scope |
 |---|---|
-| Configuration |Commit explicit UI roots in each consuming project's CI; run on every change, not only changed files |
-| Local composition |Relative component imports audited transitively; unresolved alias/external JSX implementation not assumed safe |
-| Entry wrappers |Use nonvisual React composition; actual renderable leaf components come from `beds` |
-| Assets |Do not import source product font/artwork bundles;library owns licensed fonts/audited glyphs;owned/licensed product images may enter documented image props,without custom CSS or raw SVG JSX |
-| Exceptions |No consumer allowlist switch; missing component → library specification/API/catalog/test first |
-| Failure |Fix the primitive/composition; do not bypass with CSS, casts or an unaudited directory |
-| Limits |Static source gate is not a security sandbox; host global CSS, deliberately excluded roots, generated/evaluated code or modified guards can bypass repository policy |
-| Honest verification |Passing configured roots proves only the rules scanned in that scope; does not prove every application's rendering is identical |
-| Review |Changes to guard scope, package CSS, public API and source adaptations require review; human visual judgment remains separate |
+| Inputs | Missing paths, empty scopes and parse errors fail; relative dependencies are followed |
+| BEDS imports | Legacy aliases and private subpaths fail; public component and stylesheet entries are supported |
+| BEDS props | Visual escape props and spreads fail; supported spacing enums are checked |
+| Brand | Provider-only static six-digit literal or same-file constant/preset is checked |
+| App CSS | Native elements, app styles, SVG and external components are allowed; private selectors and token declarations fail |
+| Dependencies | Nonliteral dynamic imports fail because their dependencies cannot be audited |
 
-Guard fixtures must include a valid library composition plus invalid native elements, props/spreads, CSS/icon import, theme/brand misuse and missing scope. Execute real desktop/mobile light/dark interaction checks separately; static contract checks do not test focus, overflow or pixel geometry.
+The runtime provider validates its input too. The guard is deliberately bounded:
+it does not prove external component accessibility, resolve all alias/re-export
+patterns, parse every CSS construction or prevent hostile CSS. A pass is not
+evidence of visual quality. Typecheck the app and perform rendered review separately.
 
-## Adoption and migration
+Tests must preserve positive app-owned layout/style/asset cases and negative
+private overrides, invalid BEDS props, invalid brand and missing-scope cases.
+Do not exclude real UI roots just to obtain a pass.
 
-| Step | Output |
-|---|---|
-|1. Add package |Use `beds` workspace/package dependency; preserve React19 peer boundary and Inter/OFL assets |
-|2. Choose one brand |Store provider preset; choose controlled initial theme; no copied local token stylesheet |
-|3. Compose |Shell, headers, forms, chat and overlays from public primitives; app owns data and route wiring |
-|4. Specify gaps |Missing visual pattern → documented library addition; no temporary native styled wrapper |
-|5. Configure guard |Explicit consumer UI roots; package contract plus consumer check in CI |
-|6. Validate |Both themes, source breakpoint, narrow/short viewport, long copy, keyboard and data recovery |
-|7. Migrate incrementally |One composition at a time; old DS and current production not silently replaced |
-|8. Publish/reuse |Version package and preserve license/evidence; publishing/deployment is separate authorization |
+## Adoption and validation
 
-The portable package does not import Curriculol routes, accounts, scoring thresholds, plan policy, providers or storage. A Curriculol preset supplies only a brand color; the same library can be reused by another SaaS without inheriting product behavior.
+1. Pin an authorized package artifact; preserve React peer compatibility and font licenses.
+2. Configure caller-owned identity and theme. Route required skills from the app.
+3. Compose a representative screen using components and app-owned layout.
+4. Review desktop/mobile, both themes, long content, keyboard, reduced motion and
+   loading/empty/error states before extending the design.
+5. Add genuinely reusable gaps only after applying the admission rule in Agnostic DS.
+6. Upgrade existing apps explicitly, one scope at a time. Publication, integration
+   and deployment require separate authorization.
+
+This migration is a breaking candidate, not a released replacement. Consult the
+[Agnostic DS ledger](AGNOSTIC-DS.md) for remaining work; existing exports and old
+screenshots do not establish product-agnostic or aesthetic acceptance.

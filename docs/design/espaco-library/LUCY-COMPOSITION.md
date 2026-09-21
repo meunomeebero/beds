@@ -1,5 +1,14 @@
 # Lucy — guided profile conversation
 
+## Active component boundary
+
+`ChatThread` and `ChatLayout` are optional catalog recipes, not `beds` exports.
+The app owns the H1, viewport height, transcript spacing, next-step placement and
+focus policy. `ChatMessage`, `ChatComposer`, `ChatOptions`, `Conversation` and
+`ConversationBubble` remain public. Existing flow descriptions below document the
+synthetic Lucy example, not requirements for unrelated products. Brand assets and
+layout CSS belong to the consumer; earlier statements prohibiting them are historical.
+
 Scope: BEDS catalog, local synthetic UI. Current entry: `?view=lucy`;
 alias `?view=home&tab=lucy`. Preview port is host configuration; current
 review used5296. [Consumer](../../../apps/web/labs/espaco-library/LucyPage.tsx).
@@ -24,16 +33,16 @@ No new colors,assets,dependencies or consumer CSS.
 
 This replaces the initial generic prompt/composer composition on the Lucy demo
 route. Original September12 layout checkpoints remain historical in Validation.
-Default ChatLayout,ConversationBubble,SuggestionRow and composer API defaults
-remain available;no implicit change to other consuming screens.
+ChatLayout remains available as an app recipe. ConversationBubble,SuggestionRow
+and composer defaults remain public; no installed consumer is implicitly upgraded.
 
-## Shared APIs
+## APIs used by this example
 
 | Export | Contract |
 |---|---|
 | ChatOptions |title,readonly options,onChoose,optional disabled |
 | ChatOption |id,label,description?,IconName icon,disabled? |
-| ChatThread |title,children,interaction,stepKey,optional notice/announcement |
+| ChatThread (recipe only) |title,children,interaction,stepKey,optional notice/announcement |
 | ChatMessage |Existing contract + purpose bubble/thread,optional author/mark |
 | ChatComposer |Existing contract + purpose default/guided,sendLabel/attachLabel/cancelLabel;controlled attachments,attachmentsLabel,onRemoveAttachment,attachmentPicker |
 | ComposerAttachment |id,name,kind(document/image/spreadsheet/folder/file),removeLabel |
@@ -46,7 +55,7 @@ Keep IDs unique and supply meaningful actions;host handles empty/loading options
 
 ChatThread owns layout and focus transfer only. Initial mount does not autofocus.
 Change stepKey only after an intentional step transition;new step prefers an
-editable control,then file browse,then first enabled button/link. No global
+editable control,then first enabled button/link (the browse button in an upload). No global
 listener,automatic transcript scroll or focus change on theme/rerender.
 It includes one stable polite region;host supplies concise announcements rather
 than making the whole transcript live. One H1;place inside the host main.
@@ -57,8 +66,10 @@ bubble border,user keeps the existing message bubble. Default bubble unchanged.
 Guided composer adds visible label,error focus and visible perimeter;empty submit
 reaches host validation. Enter submits,Shift+Enter inserts newline,IME composition
 does not submit. Default composer keeps the existing empty-disabled behavior.
-Busy disables editable state;optional cancel remains enabled. Label props localize
-controls without changing existing English defaults.
+Busy disables editable state;optional cancel remains enabled. `sendLabel` and
+`attachLabel` retain their host-owned override contract. When omitted, BEDS uses
+the PT-BR fallbacks `Enviar mensagem` and `Adicionar anexo ou contexto`; it does
+not inspect the host locale or force a product translation.
 
 ## Entry → transition → recovery
 

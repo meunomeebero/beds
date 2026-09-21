@@ -1,0 +1,51 @@
+.recipe-application-card{display:flex;flex-direction:column;min-width:0;padding:var(--es-space-10);gap:var(--es-space-6);border:1px solid var(--es-border);border-radius:var(--es-radius-card);background:var(--es-transparent);color:var(--es-text);font:400 13px/20px var(--es-font);transition:border-color 150ms ease-out}
+.recipe-application-card[data-selected]{border-color:var(--es-focus)}
+.recipe-application-top,.recipe-application-status,.recipe-application-artifacts,.recipe-application-actions{display:flex;align-items:center;justify-content:space-between;gap:var(--es-space-4);min-width:0}
+.recipe-application-status{justify-content:flex-end;flex-wrap:wrap}
+.recipe-application-folio{position:relative;display:flex;align-items:center;flex-shrink:0;width:64px;height:56px;isolation:isolate}
+.recipe-application-company-mark,.recipe-application-sheet{position:absolute;display:flex;align-items:center;justify-content:center;width:44px;height:48px;border:1px solid var(--es-border-strong);border-radius:var(--es-radius-10);background:var(--es-bg);color:var(--es-secondary)}
+.recipe-application-company-mark{font:500 16px/20px var(--es-font);transform:rotate(-6deg);overflow:hidden;box-shadow:var(--es-shadow-xs)}
+.recipe-application-company-mark img{width:100%;height:100%;object-fit:cover}
+.recipe-application-sheet{left:12px;transform:rotate(9deg);color:var(--es-secondary);transition:transform 150ms ease-out;background:var(--es-subtle)}
+.recipe-application-sheet>svg{width:12px;height:12px;align-self:flex-start;margin:6px 4px 0 auto}
+.recipe-application-folio:not([data-documents]) .recipe-application-company-mark{transform:none}
+.recipe-application-select{display:flex;position:relative;align-items:center;justify-content:center;min-width:32px;min-height:32px;color:var(--es-secondary);border-radius:var(--es-radius-8);border:1px solid var(--es-border-strong);cursor:pointer}
+.recipe-application-select input{position:absolute;inset:0;margin:0;width:100%;height:100%;opacity:0;cursor:inherit}
+.recipe-application-select:has(:checked){background:var(--es-primary);color:var(--es-on-primary)}
+.recipe-application-select:has(:focus-visible){outline:2px solid var(--es-focus);outline-offset:3px}
+.recipe-application-select:has(:disabled){opacity:.5;cursor:not-allowed}
+.recipe-application-company{color:var(--es-secondary);overflow-wrap:anywhere}
+.recipe-application-identity h3{margin:var(--es-space-2) 0 0;font:500 16px/24px var(--es-font);letter-spacing:-.15px}
+.recipe-application-identity h3>button{padding:0;border:0;background:var(--es-transparent);color:var(--es-heading);font:inherit;text-align:left;cursor:pointer;overflow-wrap:anywhere}
+.recipe-application-details{display:flex;flex-wrap:wrap;gap:var(--es-space-2) var(--es-space-6);list-style:none;margin:0;padding:0;color:var(--es-secondary)}
+.recipe-application-details li{display:flex;gap:var(--es-space-2);align-items:center;min-width:0;overflow-wrap:anywhere}
+.recipe-application-details svg{flex-shrink:0}
+.recipe-application-keywords{margin:0;color:var(--es-secondary);font-size:12px;line-height:18px;overflow-wrap:anywhere}
+.recipe-application-note{position:relative;display:flex;align-items:center;gap:var(--es-space-4);padding:var(--es-space-4) var(--es-space-6);margin:var(--es-space-2) 0;border:1px solid var(--es-border-strong);border-radius:var(--es-radius-10);background:var(--es-subtle);color:var(--es-text);font:400 12px/18px var(--es-font);text-align:left;cursor:pointer;min-width:0}
+.recipe-application-note::before{content:'';position:absolute;top:-5px;left:var(--es-space-9);width:8px;height:8px;border-top:1px solid var(--es-border-strong);border-left:1px solid var(--es-border-strong);background:var(--es-subtle);transform:rotate(45deg)}
+.recipe-application-note>span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;flex:1}
+.recipe-application-note>svg{flex-shrink:0;color:var(--es-secondary)}
+.recipe-application-provenance{display:flex;flex-wrap:wrap;gap:var(--es-space-2) var(--es-space-4);color:var(--es-secondary);font-size:12px;line-height:18px;overflow-wrap:anywhere}
+.recipe-application-tag{display:inline-flex;align-items:center;gap:var(--es-space-2)}
+.recipe-application-bottom{display:flex;flex-direction:column;gap:var(--es-space-6);margin-top:auto;padding-top:var(--es-space-4)}
+.recipe-application-score-copy{display:flex;align-items:center;justify-content:space-between;gap:var(--es-space-4);flex-wrap:wrap;margin-bottom:var(--es-space-4)}
+.recipe-application-score-value{display:inline-flex;align-items:baseline;gap:var(--es-space-2);font-variant-numeric:tabular-nums;font-weight:500}
+.recipe-application-score-value small{font-size:12px;font-weight:400;color:var(--es-secondary)}
+.recipe-application-delta{margin-left:var(--es-space-2);font-size:12px;color:var(--es-secondary);font-weight:400}
+.recipe-application-score--pending{display:flex;align-items:center;gap:var(--es-space-4);color:var(--es-secondary)}
+.recipe-application-unavailable,.recipe-application-feedback{margin:0;color:var(--es-secondary);font-size:12px;line-height:18px;overflow-wrap:anywhere}
+.recipe-application-artifacts{flex-wrap:wrap}
+.recipe-application-documents{display:flex;flex-wrap:wrap;gap:var(--es-space-4)}
+.recipe-application-documents>button{display:inline-flex;align-items:center;gap:var(--es-space-2);padding:var(--es-space-2) 0;border:0;min-height:28px;background:var(--es-transparent);color:var(--es-secondary);font:400 12px/18px var(--es-font);cursor:pointer}
+.recipe-application-age{color:var(--es-secondary);font-size:12px;font-variant-numeric:tabular-nums}
+.recipe-application-actions{flex-wrap:wrap;gap:var(--es-space-4);padding-top:var(--es-space-2)}
+.recipe-application-details-action,.recipe-application-primary{display:inline-flex;align-items:center;justify-content:center;gap:var(--es-space-4);min-height:32px;padding:var(--es-space-2) 0;border:0;border-radius:var(--es-radius-8);background:var(--es-transparent);color:var(--es-secondary);font:400 13px/20px var(--es-font);text-decoration:none;cursor:pointer;text-align:left}
+.recipe-application-primary{padding-inline:var(--es-space-6);background:var(--es-control);color:var(--es-text)}
+.recipe-application-primary:disabled{opacity:.5;cursor:wait}
+@media(hover:hover){.recipe-application-card:hover{border-color:var(--es-border-strong)}.recipe-application-card:hover .recipe-application-sheet{transform:translateX(3px) rotate(13deg)}.recipe-application-identity h3>button:hover,.recipe-application-details-action:hover,.recipe-application-documents>button:hover{color:var(--es-heading)}.recipe-application-primary:hover{background:var(--es-pressed)}}
+.recipe-application-card:focus-within .recipe-application-sheet{transform:translateX(3px) rotate(13deg)}
+@media(prefers-reduced-motion:reduce){.recipe-application-card,.recipe-application-sheet{transition:none}.recipe-application-card:hover .recipe-application-sheet,.recipe-application-card:focus-within .recipe-application-sheet{transform:rotate(9deg)}}
+@media(max-width:767px){.recipe-application-card{padding:var(--es-space-9)}}
+
+.recipe-application-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.recipe-application-status-trigger{display:flex;min-width:0;max-width:100%}

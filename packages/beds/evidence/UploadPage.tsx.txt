@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import {
-  AppShell, BrandMark, Breadcrumbs, Button, ContentHeader, DesignSystemProvider,
+  BrandMark, Breadcrumbs, Button, ContentHeader, DesignSystemProvider,
   FileUploadField, Inline, NavItem, PageHeader, SidebarHeader, SidebarSection,
-  Stack, Text, ThemeToggle, brands,
-} from 'beds';
+  Stack, Text, ThemeToggle, } from 'beds';
+import { AppShell } from './recipes';
 import { resumeAccept, resumeSelectionError } from './resume-upload';
 
 export default function UploadPage() {
@@ -30,9 +30,9 @@ export default function UploadPage() {
     setStatus(file ? `${file.name} selecionado. Nada foi enviado.` : 'Currículo removido da seleção. O arquivo original não foi alterado.');
   }
 
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <AppShell contentWidth="home" collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} navigationLabel="Navegação" closeNavigationLabel="Fechar navegação"
-      sidebar={<><SidebarHeader closeLabel="Fechar navegação" expandLabel="Expandir navegação" collapseLabel="Recolher navegação"><Inline gap="tight"><BrandMark label="Curriculol" /><Text>Curriculol</Text></Inline></SidebarHeader><SidebarSection label="Playground"><NavItem label="Componentes" icon="Folder" href={`?view=components&theme=${theme}`} /><NavItem label="Importar currículo" icon="FileText" active href={`?view=upload&theme=${theme}`} /><NavItem label="Lucy" icon="MessageCircle" href={`?view=lucy&theme=${theme}`} /></SidebarSection></>}
+      sidebar={<><SidebarHeader closeLabel="Fechar navegação" expandLabel="Expandir navegação" collapseLabel="Recolher navegação"><Inline gap="tight"><BrandMark src="/demo-brand.svg" label="Curriculol" /><Text>Curriculol</Text></Inline></SidebarHeader><SidebarSection label="Playground"><NavItem label="Componentes" icon="Folder" href={`?view=components&theme=${theme}`} /><NavItem label="Importar currículo" icon="FileText" active href={`?view=upload&theme=${theme}`} /><NavItem label="Lucy" icon="MessageCircle" href={`?view=lucy&theme=${theme}`} /></SidebarSection></>}
       header={<ContentHeader actions={<ThemeToggle label="Aparência" lightLabel="Claro" darkLabel="Escuro" />}><Breadcrumbs label="Localização" items={[{ id: 'catalog', label: 'Componentes', href: `?view=components&theme=${theme}` }, { id: 'upload', label: 'Upload' }]} /></ContentHeader>}>
       <Stack gap="section">
         <PageHeader title="Importar currículo" description="Comece pelo que você já tem." />

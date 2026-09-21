@@ -2,10 +2,49 @@
 
 Canonical repository:`meunomeebero/beds`. Historical release candidate:
 `beds@0.1.7-rc.16`,2026-09-15. The current local candidate is
-`beds@0.1.7-rc.19`; current migration status is tracked in
+`beds@0.1.7-rc.21`; current migration status is tracked in
 [F0–F4 migration closeout](F0-F4-MIGRATION-TRACKING.md). Publication identity/hash
 belong to an immutable GitHub prerelease;this record describes source validation,
 not deployment or release acceptance.
+
+## Current local candidate — September 20
+
+`beds@0.1.7-rc.21` is a local, uncommitted candidate. It adds
+`SandboxedHtmlPreview`, a narrow read-only `iframe srcDoc` primitive for a BEDS
+Dialog or Drawer. The native frame has an empty `sandbox` and `no-referrer`
+policy; the host retains content trust, loading/error/retry, actions,
+idempotency and every automation or send decision. The beUI registry had no
+compatible iframe/HTML/email/sandbox preview source, so no third-party source
+was copied. Its contract records this no-fit decision and the platform evidence.
+
+It retains the controlled `ChatWorkspace` presentation, generic native
+`RangeSlider` contract and native controlled `DateField` from the recorded beUI
+sources, while retaining every existing BEDS chat export. `DateField` preserves
+the platform calendar control and ISO `min`/`max` bounds; no custom picker or
+date/business policy enters the package. `Surface` also accepts a stable `id`
+and optional `focusTarget` for a host-owned deep link or focus restoration; that
+target has `tabIndex=-1`, so it does not create a keyboard tab stop or take
+ownership of scroll/highlight behavior. It also adds the optional generic
+`ApplicationBoard destinations` catalog: host destinations may be valid without
+a rendered column, item movement remains the host-owned `moveTo ∩ destinations`
+intersection, and a controlled removal returns focus to the source-column
+heading without manufacturing an announcement. It is a new candidate identity:
+`0.1.7-rc.20` must never be reused with changed bytes or API.
+
+The candidate is not published or tagged. An approved local immutable archive
+will be created after this candidate's fresh pack and placed read-only at a
+hash-addressed local path for Curriculol construction, not a public release.
+Package/static validation is recorded after its fresh run.
+Browser rendering, assistive-technology speech, non-Chromium engines, native
+zoom, physical devices, performance profiling and design-owner aesthetic
+approval remain pending.
+
+Fresh selected static gates passed: package build and typecheck; 138 public
+components and 206 declared tokens with 0 library violations; 110 Markdown
+files/975 local targets with 0 documentation violations; all 51 static guards;
+and packed-artifact/extracted-consumer smoke. This dirty source candidate has no
+public release identity. The immutable local archive is created in the next
+construction step.
 
 ## Current F0–F4 closeout checkpoint — September 19
 

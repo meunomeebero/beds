@@ -110,7 +110,8 @@ export function checkLibrary({ root = DEFAULT_ROOT, tokens = [] } = {}) {
       const lineOf = index => text.slice(0, index).split('\n').length;
       const base = path.basename(file);
       if (base !== 'tailwind.css' && !CSS_MOTION_ALLOWLIST.has(base)) {
-        for (const match of text.matchAll(/@keyframes\b|(?:^|[;{\s])transition(?:-[a-z]+)?\s*:/g)) issue(file, 'CSS_MOTION', 'Interaction motion belongs in motion/react; this stylesheet is not in the CSS motion allowlist.', lineOf(match.index));
+        // Disabling a transition is an accessibility safeguard, not new CSS motion.
+        for (const match of text.matchAll(/@keyframes\b|(?:^|[;{\s])transition(?:-[a-z]+)?\s*:(?!\s*none\s*(?:!important\s*)?[;}])/g)) issue(file, 'CSS_MOTION', 'Interaction motion belongs in motion/react; this stylesheet is not in the CSS motion allowlist.', lineOf(match.index));
       }
       for (const match of text.matchAll(/font-size\s*:\s*(\d+(?:\.\d+)?)px|font\s*:[^;{}]*?\b(\d+(?:\.\d+)?)px\s*\//g)) {
         const size = Number(match[1] ?? match[2]);

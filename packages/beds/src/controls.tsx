@@ -93,8 +93,11 @@ export function Button({ label, onClick, type = 'button', variant = 'secondary',
   </motion.button>;
 }
 
-export function IconButton({ label, icon, onClick, disabled, 'aria-describedby': describedBy }: {
+export function IconButton({ label, icon, onClick, disabled, ref, onKeyDown, 'aria-describedby': describedBy, 'aria-haspopup': hasPopup, 'aria-expanded': expanded, 'aria-controls': controls }: {
   label: string; icon: IconName; onClick: () => void; disabled?: boolean; 'aria-describedby'?: string;
+  /** Semantic composition for anchored menus and dialogs; never a styling escape. */
+  ref?: ForwardedRef<HTMLButtonElement>; onKeyDown?: (event: KeyboardEvent<HTMLButtonElement>) => void;
+  'aria-haspopup'?: 'menu' | 'dialog' | 'listbox'; 'aria-expanded'?: boolean; 'aria-controls'?: string;
 }) {
   const reduce = useReducedMotionPreference();
   const { pointerPressed, ...pointerPress } = usePointerPress();
@@ -102,6 +105,11 @@ export function IconButton({ label, icon, onClick, disabled, 'aria-describedby':
     type="button"
     aria-label={label}
     aria-describedby={describedBy}
+    ref={ref}
+    onKeyDown={onKeyDown}
+    aria-haspopup={hasPopup}
+    aria-expanded={expanded}
+    aria-controls={controls}
     onClick={onClick}
     disabled={disabled}
     {...pointerPress}
@@ -153,6 +161,14 @@ type FieldProps = {
 };
 
 type TextFieldProps = FieldProps & { purpose?: 'settings' | 'connection'; type?: 'text' | 'email' | 'url' | 'tel' | 'password' };
+
+type DateFieldProps = Omit<FieldProps, 'placeholder' | 'inputMode' | 'spellCheck'> & {
+  /** Inclusive ISO-8601 calendar-date bounds delegated to the native date input. */
+  min?: string;
+  max?: string;
+  /** Native required semantics; validation and recovery remain caller-owned. */
+  required?: boolean;
+};
 
 function setForwardedRef<T>(ref: ForwardedRef<T>, node: T | null) {
   if (typeof ref === 'function') {
@@ -225,6 +241,26 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
 });
 TextField.displayName = 'TextField';
 
+/**
+ * A labelled native calendar-date field. It intentionally has no picker, locale
+ * formatter or date arithmetic: browsers provide the platform date control while
+ * callers retain ISO values, bounds, validation and any business-date policy.
+ *
+ * The visual/error anatomy is the beUI `input` adaptation already used by
+ * TextField; beUI's wheel-picker was a no-fit for this native form control.
+ */
+export const DateField = forwardRef<HTMLInputElement, DateFieldProps>(function DateField({ label, value, onChange, description, error, disabled, readOnly, name, autoComplete, focusOnError, reserveErrorLine, min, max, required }, forwardedRef) {
+  const { id, describedBy } = useFieldIds(description, error);
+  const inputRef = useErrorFocus<HTMLInputElement>(error, focusOnError);
+  const shakeRef = useErrorShake<HTMLDivElement>(error);
+  return <div className="grid gap-2 min-w-0" ref={shakeRef}>
+    <label htmlFor={id} className="text-sm font-medium leading-4 tracking-normal text-foreground">{label}</label>
+    <input ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} type="date" name={name} autoComplete={autoComplete} value={value} onChange={event => onChange(event.target.value)} min={min} max={max} required={required} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} className={cn(TEXT_INPUT_BASE, TEXT_INPUT_SETTINGS)} />
+    <FieldNotes id={id} description={description} error={error} reserveErrorLine={reserveErrorLine} />
+  </div>;
+});
+DateField.displayName = 'DateField';
+
 export const TextAreaField = forwardRef<HTMLTextAreaElement, FieldProps>(function TextAreaField({ label, value, onChange, description, error, placeholder, disabled, readOnly, name, autoComplete, inputMode, spellCheck, focusOnError, reserveErrorLine }, forwardedRef) {
   const { id, describedBy } = useFieldIds(description, error);
   const inputRef = useErrorFocus<HTMLTextAreaElement>(error, focusOnError);
@@ -286,9 +322,9 @@ export function Switch({ label, checked, onChange, description, disabled }: Togg
     <span aria-hidden className={cn('peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-ring relative inline-flex shrink-0 items-center w-8 h-[18.4px] px-0 rounded-full border', 'border-input bg-switch-off', checked && 'border-info bg-info')}>
       <motion.span
         aria-hidden
-        animate={{ x: reduce || !checked ? 0 : 14 }}
+        animate={{ insetInlineStart: checked ? 14 : 0 }}
         transition={reduce ? { duration: 0 } : { duration: 0.18, ease: EASE_OUT }}
-        className="block h-4 w-4 rounded-full bg-switch-thumb"
+        className={cn('relative block h-4 w-4 rounded-full', checked ? 'bg-switch-thumb-on' : 'bg-switch-thumb')}
       />
     </span>
   </label>;
@@ -299,8 +335,8 @@ type Choice = { id: string; label: string; disabled?: boolean };
 /** Pill: 22px span (24px container incl. padding) · 13px label · joined: 36px row · label maintained as radiogroup with Arrow nav.
  *  Legacy class hooks (.es-segmented-choice, .es-segmented-choice-span) preserved for theme CSS like
  *  patterns.css `.es-account-appearance .es-segmented-choice > span { min-height: 20px }`. */
-const SEGMENTED_PILL = 'box-border inline-flex items-stretch min-w-0 max-w-full overflow-x-auto overscroll-x-contain [scroll-padding-inline:4px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden gap-0.5 p-px rounded-full bg-subtle';
-const SEGMENTED_JOINED = 'box-border inline-flex items-stretch min-w-0 max-w-full overflow-x-auto overscroll-x-contain [scroll-padding-inline:4px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden gap-0 h-9 rounded-lg bg-transparent shadow-[inset_0_0_0_1px_var(--es-border)]';
+const SEGMENTED_PILL = 'box-border inline-flex w-fit items-stretch min-w-0 max-w-full overflow-x-auto overscroll-x-contain [scroll-padding-inline:4px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden gap-0.5 p-px rounded-full bg-subtle';
+const SEGMENTED_JOINED = 'box-border inline-flex w-fit items-stretch min-w-0 max-w-full overflow-x-auto overscroll-x-contain [scroll-padding-inline:4px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden gap-0 h-9 rounded-lg bg-transparent shadow-[inset_0_0_0_1px_var(--es-border)]';
 const SEGMENTED_CHOICE = 'es-segmented-choice relative min-w-0 flex-none cursor-pointer';
 const SEGMENTED_SPAN_PILL = 'es-segmented-choice-span relative flex items-center justify-center min-h-[22px] px-2 rounded-full text-muted-foreground text-xs leading-4 tracking-normal font-medium whitespace-nowrap transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-[-2px] peer-focus-visible:outline-ring';
 const SEGMENTED_SPAN_JOINED = 'es-segmented-choice-span relative flex items-center justify-center h-9 rounded-none bg-sidebar text-xs leading-4 tracking-normal font-medium whitespace-nowrap first:rounded-l-lg last:rounded-r-lg peer-focus-visible:outline-2 peer-focus-visible:outline-offset-[-2px] peer-focus-visible:outline-ring';
@@ -397,8 +433,8 @@ export function SegmentedControl({ label, value, options, onChange, variant = 'p
 }
 
 const TABS_LIST_ACTIVITY = 'inline-flex items-center gap-0.5 max-w-full min-h-[30px] p-0.5 border border-border-subtle rounded-lg bg-subtle pointer-coarse:min-h-11';
-const TABS_TAB_ACTIVITY = 'flex-1 min-w-0 min-h-6 px-2 border-0 rounded-md bg-transparent text-secondary text-xs leading-4 font-medium whitespace-nowrap cursor-pointer pointer-coarse:min-h-11 transition-colors motion-reduce:transition-none';
-const TABS_TAB_CONNECTION = 'min-h-7 px-2 border border-transparent rounded-lg text-sm leading-4 transition-colors motion-reduce:transition-none';
+const TABS_TAB_ACTIVITY = 'flex-1 min-w-0 min-h-6 px-2 border-0 rounded-md bg-transparent text-muted-foreground text-xs leading-4 font-medium whitespace-nowrap cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 pointer-coarse:min-h-11 transition-colors motion-reduce:transition-none';
+const TABS_TAB_CONNECTION = 'min-h-7 px-2 border border-transparent rounded-lg text-sm leading-4 disabled:cursor-not-allowed disabled:opacity-50 transition-colors motion-reduce:transition-none';
 const TABS_TAB_SELECTED = 'relative text-foreground';
 const TABS_PANEL_TRANSITION = { duration: 0.18, ease: EASE_OUT } as const;
 const TABS_EDGE_SIZE = 44;
@@ -544,7 +580,7 @@ export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
     const tabId = `${id}-tab-${item.id}`;
     const panelId = `${id}-panel-${item.id}`;
     const indicator = active && <motion.span layoutId={`${id}-${variant}-indicator`} initial={false} transition={keyboardInstant ? { duration: 0 } : SPRING_LAYOUT} className="es-tabs-indicator pointer-events-none absolute inset-0 rounded-[inherit] bg-surface shadow-[0_1px_2px_var(--es-border)]" data-tabs-indicator aria-hidden="true" />;
-    return <button key={item.id} ref={button => { tabRefs.current[item.id] = button; }} id={tabId} type="button" role="tab" aria-controls={panelId} aria-selected={active} tabIndex={active ? 0 : -1} disabled={item.disabled} onClick={event => { if (event.detail === 0) { const activation = keyboardActivation.current; keyboardActivation.current = null; if (activation?.id === item.id) return; propose(item.id, true); return; } propose(item.id, false); }} onKeyDown={event => navigate(event, item.id)} className={cn(variant === 'connection' && TABS_TAB_CONNECTION, variant === 'activity' && TABS_TAB_ACTIVITY, variant === 'settings' && 'es-settings-tab relative flex-none min-h-12 border-none px-0 pb-2 pt-0.5 rounded-md bg-transparent shadow-none text-sm leading-5 font-normal', active && (variant !== 'settings') && TABS_TAB_SELECTED)}>{variant === 'settings' ? <><span className="es-settings-tab-label relative z-10 block px-2.5 py-2 rounded-md">{item.label}</span>{active && <motion.span layoutId={`${id}-settings-indicator`} initial={false} transition={keyboardInstant ? { duration: 0 } : SPRING_LAYOUT} className="es-settings-tab-indicator" data-tabs-indicator aria-hidden="true" />}</> : <>{indicator}<span className="relative z-10">{item.label}</span></>}</button>;
+    return <button key={item.id} ref={button => { tabRefs.current[item.id] = button; }} id={tabId} type="button" role="tab" aria-controls={panelId} aria-selected={active} tabIndex={active ? 0 : -1} disabled={item.disabled} onClick={event => { if (event.detail === 0) { const activation = keyboardActivation.current; keyboardActivation.current = null; if (activation?.id === item.id) return; propose(item.id, true); return; } propose(item.id, false); }} onKeyDown={event => navigate(event, item.id)} className={cn(variant === 'connection' && TABS_TAB_CONNECTION, variant === 'activity' && TABS_TAB_ACTIVITY, variant === 'settings' && 'es-settings-tab relative flex-none min-h-12 border-none px-0 pb-2 pt-0.5 rounded-md bg-transparent shadow-none text-sm leading-5 font-normal disabled:cursor-not-allowed disabled:opacity-50', active && (variant !== 'settings') && TABS_TAB_SELECTED)}>{variant === 'settings' ? <><span className="es-settings-tab-label relative z-10 block px-2.5 py-2 rounded-md">{item.label}</span>{active && <motion.span layoutId={`${id}-settings-indicator`} initial={false} transition={keyboardInstant ? { duration: 0 } : SPRING_LAYOUT} className="es-settings-tab-indicator" data-tabs-indicator aria-hidden="true" />}</> : <>{indicator}<span className="relative z-10">{item.label}</span></>}</button>;
   });
   const tabList = <div ref={list} id={`${id}-list`} className={cn('es-tabs-list', variant === 'connection' && 'w-full min-w-0 min-h-9 p-1 border-0 rounded-xl bg-subtle overflow-x-auto overscroll-x-contain [scrollbar-width:thin] [scroll-padding-inline:36px]', variant === 'activity' && TABS_LIST_ACTIVITY, variant === 'settings' && 'flex items-stretch gap-1 w-full min-w-0 px-1 pt-1 pb-0 border-0 border-b border-border rounded-none bg-transparent overflow-x-auto overscroll-x-contain [scrollbar-width:thin] [scroll-padding-inline:36px]')} role="tablist" aria-label={label} onFocusCapture={event => { if (event.target instanceof HTMLElement && event.target.getAttribute('role') === 'tab') reveal(event.target, reduce || keyboardTarget !== null); }}>{variant === 'connection' ? <div className="grid items-center gap-0 min-w-0" style={connectionListStyle}>{tabButtons}</div> : tabButtons}</div>;
   // `rounded-[16px]` is an arbitrary value: BEDS tokens only ship --radius (8px) and the Tailwind scale

@@ -9,8 +9,8 @@ import { fileURLToPath } from 'node:url';
 const script = fileURLToPath(new URL('./build-css.mjs', import.meta.url));
 const realTailwind = fileURLToPath(new URL('../src/tailwind.css', import.meta.url));
 const realNodeModules = fileURLToPath(new URL('../../../node_modules', import.meta.url));
-const order = ['tokens.css','foundation.css','controls.css','form-fields.css','decisions.css','overlays.css','layout.css','patterns.css','disclosure.css','data.css','feedback.css','chat.css','technical.css','feature-card.css','empty-state-card.css','pricing.css','records.css','input-otp.css','paged-carousel.css','toast.css','application-card.css','application-board.css','onboarding.css','account-credits.css','forum-topic.css','date-item.css','payment-confirmation.css','blog-post.css','landing-footer.css','benefits.css','landing.css','processing.css','results.css'];
-order.push('checkout.css');
+const order = ['tokens.css','foundation.css','controls.css','range-slider.css','form-fields.css','decisions.css','overlays.css','layout.css','patterns.css','disclosure.css','data.css','feedback.css','chat.css','technical.css','feature-card.css','empty-state-card.css','pricing.css','records.css','input-otp.css','paged-carousel.css','toast.css','collection-controls.css','account-credits.css','forum-topic.css','date-item.css','blog-post.css'];
+
 
 /** Temp monorepo with the real Tailwind toolchain (symlinked node_modules) and fixture stylesheets. */
 function fixture({ docs = null, sources = {} } = {}) {

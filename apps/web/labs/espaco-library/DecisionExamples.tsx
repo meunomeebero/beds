@@ -1,5 +1,6 @@
+import { HomeHeader } from './recipes';
 import { useState } from 'react';
-import { ApprovalCard, Button, DecisionStatus, Inline, PageHeader, QuestionCard, RadioGroup, ResultsStatus, Stack, Switch, Text, type DecisionState } from 'beds';
+import { ApprovalCard, Button, DecisionStatus, Inline, QuestionCard, RadioGroup, ResultsStatus, Stack, Switch, Text, type DecisionState } from 'beds';
 
 const labels: Record<DecisionState, string> = { approval: 'Aprovação', confirmation: 'Confirmação', processing: 'Confirmando', success: 'Confirmado', skipped: 'Pulado', denied: 'Negado', error: 'Não confirmado' };
 type ExampleState = { state: DecisionState; feedback: string };
@@ -44,7 +45,7 @@ export default function DecisionExamples() {
     setRadioFeedback(`Escolha aceita: ${radioOptions.find(option => option.id === next)?.label}.`);
   };
   return <Stack gap="section">
-    <PageHeader purpose="home" title="Uma decisão de cada vez" description="Perguntas e aprovações com contexto. Todos os exemplos são locais; nenhuma permissão ou operação é executada." />
+    <HomeHeader title="Uma decisão de cada vez" description="Perguntas e aprovações com contexto. Todos os exemplos são locais; nenhuma permissão ou operação é executada." />
     <Stack>
       <ApprovalCard title={long ? 'Permitir que a Lucy consulte as experiências profissionais e a formação do currículo selecionado?' : 'Permitir acesso ao currículo?'} description="Lucy poderá ler o arquivo selecionado. Nenhum arquivo será enviado nesta demonstração." status={status(access.state)} feedback={access.feedback}
         primaryAction={{ label: 'Permitir', onClick: () => start(setAccess) }}

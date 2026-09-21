@@ -1,5 +1,10 @@
 # BEDS — Bero's Design System
 
+Active correction: [product-agnostic component library](docs/design/espaco-library/AGNOSTIC-DS.md).
+Export classification: [public API boundaries](docs/design/espaco-library/API-BOUNDARIES.md).
+This migration separates reusable components and style guidance from product
+identity and full-page compositions. See the ledger for pending verification.
+
 Portable React19 SaaS UI. Two fixed themes, one brand color, constrained public
 components and versioned design contracts. Package and import name: **beds**.
 No Curriculol runtime, API, database or business logic.
@@ -15,6 +20,16 @@ portable guidance for positioning, product proof and conversion-focused copy.
 The complete skill is bundled in source/local candidates under `skills/`; it is
 not in the published RC16 archive yet. Consumer agents need the documented
 routing or explicit skill installation; no runtime or background audit is added.
+
+## What belongs in BEDS
+
+Promote only components with one clear responsibility and credible reuse across
+distinct products—not every UI created while building an app. Record at least
+two unrelated product uses before proposing a shared API. Repetition within one
+app, a generic name or moving CSS into the package is not sufficient evidence.
+Keep logos, page compositions and business flows in their owning app. When reuse
+is unclear, keep the implementation local until the shared need is demonstrated.
+Follow [component admission](docs/design/espaco-library/GOVERNANCE.md#component-admission).
 
 ## Develop
 
@@ -51,7 +66,7 @@ Checkout: `?view=checkout` (quantity,Pix/card,summary and recovery;synthetic onl
 no provider or charge). Supports both fixed themes.
 Illustrated empty state: `?view=empty-state` (all-clear, first use, optional
 action and image recovery; original light/dark artwork; no product request).
-Folder/flies variant: `?view=empty-state&preview=folder&brand=curriculol`
+Folder/flies variant: `?view=empty-state&preview=folder&brand=orange`
 (no jobs/applications;visible pause,static reduced motion;no product integration).
 Questions and approvals: `?view=decisions` (numbered single choice, explicit
 confirmation, allow/skip/deny, recovery; simulated results only).
@@ -63,26 +78,19 @@ set `PLAYWRIGHT_BASE_URL=http://127.0.0.1:5294` for matching tests.
 
 ## Consume
 
-Install the exact `.tgz` release asset, not this repository's source archive or
-a mutable branch. The package contains built ESM, declarations, CSS, fonts,
-contracts and consumer checks. No lifecycle scripts required.
-
-```sh
-bun add beds@https://github.com/meunomeebero/beds/releases/download/v0.1.7-rc.16/beds-0.1.7-rc.16.tgz --ignore-scripts
-```
-
-Equivalent npm install:
-`npm install https://github.com/meunomeebero/beds/releases/download/v0.1.7-rc.16/beds-0.1.7-rc.16.tgz --ignore-scripts`.
-RC16 is a prerelease,not production or aesthetic acceptance. Release notes own
-source SHA and archive hash. Earlier local.24/RC15 checkpoints stay historical.
-Keep the exact URL and lockfile together;never install a mutable source branch.
+Current source is the private `0.2.0-alpha.1` breaking candidate, not a published
+release. Use only an explicitly authorized, immutable package artifact and its
+integrity hash; never a mutable source branch. Do not upgrade consumers implicitly.
+The historical [RC16 release](https://github.com/meunomeebero/beds/releases/tag/v0.1.7-rc.16)
+has a different API and does not implement the current agnostic boundary.
+See the [package usage guide](packages/beds/README.md) and migration ledger.
 
 ```tsx
-import { DesignSystemProvider, brands, Button } from 'beds';
+import { DesignSystemProvider, Text } from 'beds';
 import 'beds/styles.css';
 
-<DesignSystemProvider theme="dark" brandColor={brands.curriculol}>
-  <Button label="Continuar" onClick={continueFlow} />
+<DesignSystemProvider theme="dark" brandColor="#5470c6">
+  <main className="app-layout"><Text>Your application content</Text></main>
 </DesignSystemProvider>
 ```
 
@@ -100,8 +108,14 @@ Wrap only explicitly migrated screens; never enclose legacy UI to simulate migra
 | [September15 consolidation](docs/design/espaco-library/CONSOLIDATION-2026-09-15.md) | Historical local.24 checkpoint |
 | [Library map](docs/design/espaco-library/README.md) | Routing and boundaries |
 | [Foundations](docs/design/espaco-library/FOUNDATIONS.md) | Approved visual values |
+| [Navigation boundary](docs/design/espaco-library/NAVIGATION.md) | Reusable Sidebar controls and the optional app-owned shell recipe |
+| [Historical foundations](docs/design/espaco-library/FOUNDATIONS-HISTORY.md) | Archived product decisions; not active style guidance |
 | [Components](docs/design/espaco-library/COMPONENTS.md) | Public component anatomy |
 | [InputOTP](docs/design/espaco-library/INPUT-OTP.md) | Controlled 4/6/8 digit entry, caller-owned status, motion and evidence |
+| [Sandboxed HTML preview](docs/design/espaco-library/SANDBOXED-HTML-PREVIEW.md) | Read-only server HTML inside a fixed iframe sandbox; caller owns trust, errors and actions |
+| [Chat workspace](docs/design/espaco-library/CHAT-WORKSPACE.md) | Controlled transcript, composer, streaming and recoverable error presentation |
+| [RangeSlider](docs/design/espaco-library/RANGE-SLIDER.md) | Generic native range, controlled/uncontrolled value, keyboard/RTL and no price policy |
+| [DateField](docs/design/espaco-library/DATE-FIELD.md) | Controlled native ISO calendar date, bounds and caller-owned validation; no custom picker or date policy |
 | [Document upload](docs/design/espaco-library/DOCUMENT-UPLOAD.md) | Illustrated drop field, controlled selection and recovery |
 | [Date item](docs/design/espaco-library/DATE-ITEM.md) | Mini calendar, dated rows and optional native destinations |
 | [Blog posts](docs/design/espaco-library/BLOG-POST.md) | Compact editorial cards, native article links and thumbnail recovery |
@@ -113,8 +127,8 @@ Wrap only explicitly migrated screens; never enclose legacy UI to simulate migra
 | [Checkout](docs/design/espaco-library/CHECKOUT.md) | Focused purchase,exact host-owned total,Pix/card fields and recovery;Revenue-Centric,local simulation only |
 | [Settings](docs/design/espaco-library/SETTINGS.md) | Top tabs, borderless groups and local account preferences preview |
 | [Payment confirmation](docs/design/espaco-library/PAYMENT-CONFIRMATION.md) | Printer-style receipt, separate invoice status and controlled actions |
-| [Application card](docs/design/espaco-library/APPLICATION-CARD.md) | Personal notes, document folio, scores and controlled next steps |
-| [Application kanban](docs/design/espaco-library/KANBAN.md) | Compact card purpose, status lanes and controlled accessible moves |
+| [Application card recipe](docs/design/espaco-library/APPLICATION-CARD.md) | Optional app-owned notes, document folio and scores; not a package export |
+| [Application kanban recipe](docs/design/espaco-library/KANBAN.md) | Optional status lanes and controlled moves; not a generic board export |
 | [Search dialog](docs/design/espaco-library/SEARCH-DIALOG.md) | Categorized global search, result selection and controlled recovery |
 | [Drawer](docs/design/espaco-library/DRAWER.md) | Contextual details, scrollable sections and modal focus recovery |
 | [Illustrated empty state](docs/design/espaco-library/EMPTY-STATE.md) | Message-first empty card, optional next step and image recovery |

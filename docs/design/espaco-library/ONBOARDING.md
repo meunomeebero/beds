@@ -1,5 +1,18 @@
 # Onboarding — focused form and live preview
 
+## Current ownership — optional app recipe
+
+This composition and its related types are **not exported from `beds`**.
+Source: `apps/web/labs/espaco-library/recipes/onboarding.tsx`.
+Apps own its page layout, identity and product policy; this is an optional
+example, not a required style-guide composition. Read [Agnostic DS](AGNOSTIC-DS.md)
+and [API boundaries](API-BOUNDARIES.md) before adoption.
+
+The review results below describe the dated pre-extraction snapshot only.
+They do not prove the current recipe or private candidate passed those checks.
+Current verification status belongs to the migration ledger.
+
+
 ## Scope
 
 `Onboarding`: standalone page composition;brand → form → primary action,with a
@@ -8,16 +21,16 @@ engine. Caller owns fields,validation,steps,requests,persistence and navigation.
 
 Reference:owner screenshot `codex-clipboard-6f00a941-cc8c-48a8-95f4-0f8445c9e50a.png`.
 **A adaptation**:split composition,quiet outline,generous corners and inset
-workspace illustration. [Foundations](FOUNDATIONS.md) owns exact local geometry;
+workspace illustration. The recipe owns page geometry;
 no claim of CSS measurement from a resized raster. Reference artwork/logo not
 copied. Existing BEDS neutrals,Inter,BrandMark and controls retained.
 
-## Public contract
+## Optional recipe contract
 
 | Input | Ownership |
 |---|---|
 | `title`,optional `description` |H1 and form accessible name/description;one main landmark. Do not nest inside another main or use alongside another page H1 |
-| `brandMark` |Optional public BEDS identity component;26px BrandMark context;no borrowed reference logo |
+| `brandMark` |Caller-owned identity;optional public BrandMark;no embedded product logo |
 | `children` |Public fields/layout primitives;no nested form. Host supplies visible labels,autocomplete,input types and inline errors |
 | `submitLabel`, `onSubmit` |Native submit and Enter;default enabled;host validates then decides next action;no implicit network call |
 | `busy`, `disabled` |Native disabled fieldset and action guard;busy preserves button label plus existing loader;form exposes aria-busy. Host restores state and focus after an actual result |
@@ -26,8 +39,9 @@ copied. Existing BEDS neutrals,Inter,BrandMark and controls retained.
 | `preview` |Optional name/detail/section IDs and labels;static decorative duplicate of supplied form data,not a live product screenshot. No actions,loading announcement or unique instructions |
 | `footer` |Optional public content/actions outside form;terms/help or catalog-only controls. Must not carry a second competing primary action |
 
-No raw CSS,className,dimensions,palette,step timing,progress percentage or request
-props. Without preview,form-only shell centers at480px maximum. Onboarding creates
+This recipe has no visual-override props; apps may adapt its own HTML/CSS and
+layout rather than extending the BEDS runtime. Its form-only example centers at
+480px maximum; this is not a universal DS width. Onboarding creates
 no account/upload/scoring operation and does not decide which fields are required.
 
 ## Flow and state
@@ -53,7 +67,7 @@ Footer lets a reviewer choose success/error/pending. Pending settles only throug
 an explicit simulation button;no timer pretends to complete a real operation.
 Success explicitly says no data was sent. Reload discards fixture state.
 
-## Review checkpoint — September15
+## Historical review checkpoint — September15
 
 Candidate:`0.1.7-rc.16-local.19`;BEDS catalog5296. No implicit upgrade of5292,
 real application integration,publication,commit or push. Seven Better entrypoints

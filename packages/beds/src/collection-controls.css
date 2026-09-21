@@ -1,0 +1,6 @@
+
+.es-root .es-results-status{margin:0;color:var(--es-secondary);font:400 12px/18px var(--es-font);overflow-wrap:anywhere}
+.es-root .es-collection-toolbar{display:flex;flex-wrap:wrap;gap:var(--es-space-8);align-items:center;min-width:0}
+.es-root .es-collection-search{flex:1;min-width:0}
+.es-root .es-collection-filters{display:flex;flex-wrap:wrap;gap:var(--es-space-4);min-width:0}
+@media(max-width:767px){.es-root .es-collection-search{flex-basis:100%}}

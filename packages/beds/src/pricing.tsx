@@ -1,4 +1,4 @@
-import { useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { useId, useLayoutEffect, useRef, useState } from 'react';
 import { Button } from './controls';
 import { AnimatedNumber, Icon } from './foundation';
 import { CardMedia } from './card-media';
@@ -74,28 +74,4 @@ export function PricingCard({ title, description, image, price, featuresLabel, f
       </div>
     </div>
   </article>;
-}
-
-export type PricingPlan = Omit<PricingCardProps, 'headingLevel'> & { id: string };
-export type PricingSectionProps = {
-  title: string;
-  description?: string;
-  mark?: ReactNode;
-  plans: readonly PricingPlan[];
-  headingLevel?: 1 | 2;
-};
-
-/** Two-column comparison; only the first explicitly featured plan gets brand emphasis. */
-export function PricingSection({ title, description, mark, plans, headingLevel = 2 }: PricingSectionProps) {
-  const id = useId();
-  const Heading = headingLevel === 1 ? 'h1' : 'h2';
-  const featured = plans.find(plan => plan.featured)?.id;
-  return <section className="es-pricing-section" aria-labelledby={`${id}-title`} aria-describedby={description ? `${id}-description` : undefined}>
-    <header className="es-pricing-intro">
-      {mark && <div className="es-pricing-mark">{mark}</div>}
-      <Heading id={`${id}-title`}>{title}</Heading>
-      {description && <p id={`${id}-description`}>{description}</p>}
-    </header>
-    {plans.length > 0 && <div className="es-pricing-grid">{plans.map(plan => <PricingCard key={plan.id} {...plan} featured={plan.id === featured} headingLevel={headingLevel === 1 ? 2 : 3} />)}</div>}
-  </section>;
 }

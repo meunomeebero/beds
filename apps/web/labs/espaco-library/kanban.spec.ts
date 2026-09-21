@@ -12,7 +12,7 @@ test('keyboard move updates columns and counts, retains focus and opens full det
   await page.getByRole('menu').press('Enter');
   await expect(sent.getByRole('article')).toHaveCount(1);
   await expect(saved.getByRole('article')).toHaveCount(1);
-  await expect(sent.locator('.es-application-board-count')).toHaveText('1 vaga');
+  await expect(sent.locator('.recipe-application-board-count')).toHaveText('1 vaga');
   await expect(menu).toBeFocused();
   await expect(page.getByRole('status').last()).toContainText('movida para Enviadas');
   const open = sent.getByRole('button', { name: 'Ver detalhes', exact: true });
@@ -36,8 +36,8 @@ test('light/dark, mobile and long titles stay inside cards; board alone may scro
     await expect(page.getByRole('article')).toHaveCount(5);
     await expect(page.getByRole('heading', { level: 2 })).toHaveCount(width >= 768 ? 5 : 4);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    expect(await page.locator('.es-application-card').evaluateAll(cards => cards.every(card => card.scrollWidth <= card.clientWidth + 1))).toBe(true);
-    const contrasts = await page.locator('.es-application-board h3>button,.es-application-company,.es-application-details li,.es-application-note>span,.es-application-board-count,.es-application-board-empty,.es-application-details-action').evaluateAll(elements => elements.map(element => {
+    expect(await page.locator('.recipe-application-card').evaluateAll(cards => cards.every(card => card.scrollWidth <= card.clientWidth + 1))).toBe(true);
+    const contrasts = await page.locator('.recipe-application-board h3>button,.recipe-application-company,.recipe-application-details li,.recipe-application-note>span,.recipe-application-board-count,.recipe-application-board-empty,.recipe-application-details-action').evaluateAll(elements => elements.map(element => {
       const rgba = (value: string) => value.match(/[\d.]+/g)!.map(Number);
       const layers: number[][] = [];
       let node: Element | null = element;
@@ -53,7 +53,7 @@ test('light/dark, mobile and long titles stay inside cards; board alone may scro
     if (overflowing) await expect(board).toHaveAttribute('tabindex', '0');
     else await expect(board).not.toHaveAttribute('tabindex');
     if (width < 768) {
-      const columns = await page.locator('.es-application-board-column').all();
+      const columns = await page.locator('.recipe-application-board-column').all();
       const first = await columns[0].boundingBox();
       const second = await columns[1].boundingBox();
       expect(second!.y).toBeGreaterThan(first!.y + first!.height);
@@ -72,8 +72,8 @@ test('read-only, unavailable score, empty and rejected moves do not invent outco
   await expect(page.getByRole('article', { name: 'Senior UX designer' }).getByRole('meter')).toHaveCount(0);
   await page.goto('/?view=kanban&preview=empty');
   await expect(page.getByRole('article')).toHaveCount(0);
-  await expect(page.locator('.es-application-board-empty')).toHaveCount(4);
-  await expect(page.locator('.es-application-board-count')).toHaveText(['0 vagas', '0 vagas', '0 vagas', '0 vagas']);
+  await expect(page.locator('.recipe-application-board-empty')).toHaveCount(4);
+  await expect(page.locator('.recipe-application-board-count')).toHaveText(['0 vagas', '0 vagas', '0 vagas', '0 vagas']);
   await page.goto('/?view=kanban&preview=move-error');
   const menu = page.getByRole('button', { name: 'Mover Product designer na Norte', exact: true });
   await menu.click();
@@ -90,8 +90,8 @@ test('zoom, RTL and reduced motion preserve the same reading and control structu
   await page.evaluate(() => { document.documentElement.style.zoom = '2'; document.documentElement.dir = 'rtl'; });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await expect(page.getByRole('article')).toHaveCount(5);
-  await expect(page.locator('.es-application-sheet').first()).toHaveCSS('transition-duration', '0s');
-  expect(await page.locator('.es-application-card').evaluateAll(cards => cards.every(card => card.scrollWidth <= card.clientWidth + 1))).toBe(true);
+  await expect(page.locator('.recipe-application-sheet').first()).toHaveCSS('transition-duration', '0s');
+  expect(await page.locator('.recipe-application-card').evaluateAll(cards => cards.every(card => card.scrollWidth <= card.clientWidth + 1))).toBe(true);
   await page.screenshot({ path: `apps/web/labs/espaco-library/evidence/kanban/${info.project.name}-zoom-rtl.png`, fullPage: true });
   await page.emulateMedia({ forcedColors: 'active' });
   const menu = page.getByRole('button', { name: /^Mover/ }).first();

@@ -1,8 +1,9 @@
-import { AppShell, Button, Conversation, ConversationBubble, DesignSystemProvider, PageHeader, Stack, brands } from 'beds';
+import { Button, Conversation, ConversationBubble, DesignSystemProvider, PageHeader, Stack } from 'beds';
+import { AppShell } from './recipes';
 
 export default function ConversationPage() {
   const theme = new URLSearchParams(location.search).get('theme') === 'light' ? 'light' : 'dark';
-  return <DesignSystemProvider theme={theme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} brandColor={"#ffa133"}>
     <AppShell sidebar={null} contentWidth="chat" collapsed={true} onCollapsedChange={() => {}} mobileOpen={false} onMobileOpenChange={() => {}}>
       <Stack>
         <PageHeader title="Conversa" description="Mensagens, horários e reações em uma composição única." />

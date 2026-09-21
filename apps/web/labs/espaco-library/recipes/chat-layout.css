@@ -1,0 +1,6 @@
+.recipe-chat-layout{width:100%;max-width:640px;margin:0 auto;padding-top:136px;padding-bottom:48px}
+.recipe-chat-layout>h1{color:var(--es-heading);display:flex;align-items:center;gap:10px;font-size:16px;line-height:24px;font-weight:500;letter-spacing:-.15px;margin:0 0 20px}
+.recipe-chat-compose-region{min-width:0}
+.recipe-chat-suggestions{display:grid;gap:0;margin-top:24px}
+.recipe-chat-recent{margin-top:48px}
+@media(max-width:767px){.recipe-chat-layout{padding-top:56px}}

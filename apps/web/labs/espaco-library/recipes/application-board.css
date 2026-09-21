@@ -1,0 +1,28 @@
+/* A: reference compact cards + status columns, adapted to the BEDS type/spacing system. */
+.recipe-application-board{min-width:0}
+.recipe-application-board-viewport{position:relative;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(280px,1fr);align-items:stretch;gap:var(--es-space-8);overflow-x:auto;padding:var(--es-space-2) var(--es-space-2) var(--es-space-8);scroll-padding-inline:var(--es-space-2);overscroll-behavior-x:contain}
+.recipe-application-board-column{min-width:0;padding:var(--es-space-4);border-radius:var(--es-radius-panel);background:var(--es-subtle)}
+.recipe-application-board-heading{display:flex;align-items:center;justify-content:space-between;gap:var(--es-space-4);padding:var(--es-space-4) var(--es-space-4) var(--es-space-8)}
+.recipe-application-board-heading h2{min-width:0;margin:0;font:500 13px/20px var(--es-font)}
+.recipe-application-board-heading h2:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
+.recipe-application-board-count{flex-shrink:0;color:var(--es-secondary);font:400 12px/18px var(--es-font);font-variant-numeric:tabular-nums}
+.recipe-application-board-list{display:flex;flex-direction:column;gap:var(--es-space-6);list-style:none;margin:0;padding:0}
+.recipe-application-board-list>li{min-width:0}
+.recipe-application-board-empty{padding:var(--es-space-10) var(--es-space-8);margin:0;color:var(--es-secondary);font:400 13px/20px var(--es-font);text-align:center;overflow-wrap:anywhere}
+.recipe-application-card[data-purpose="kanban"]{padding:var(--es-space-8);gap:var(--es-space-6);border-radius:var(--es-radius-14);background:var(--es-bg);box-shadow:var(--es-shadow-xs)}
+.recipe-application-card[data-purpose="kanban"] .recipe-application-top{justify-content:flex-start;align-items:flex-start;gap:var(--es-space-6)}
+.recipe-application-card[data-purpose="kanban"] .recipe-application-folio{width:36px;height:40px}
+.recipe-application-card[data-purpose="kanban"] .recipe-application-company-mark,.recipe-application-card[data-purpose="kanban"] .recipe-application-sheet{width:30px;height:34px;border-radius:var(--es-radius-8);font-size:12px}
+.recipe-application-card[data-purpose="kanban"] .recipe-application-sheet{left:auto;inset-inline-start:5px}
+.recipe-application-card[data-purpose="kanban"] .recipe-application-identity{min-width:0;flex:1}
+.recipe-application-card[data-purpose="kanban"] .recipe-application-company{font-size:12px;line-height:18px}
+.recipe-application-card[data-purpose="kanban"] .recipe-application-identity h3{font-size:14px;line-height:20px;letter-spacing:0}
+.recipe-application-card[data-purpose="kanban"] .recipe-application-identity h3>button{text-align:start}
+.recipe-application-card[data-purpose="kanban"] .recipe-application-details{font-size:12px;line-height:18px}
+.recipe-application-card[data-purpose="kanban"] .recipe-application-status{min-width:0;max-width:100%;justify-content:flex-start}
+.recipe-application-card[data-purpose="kanban"] .recipe-application-details-action{font-size:12px;line-height:18px}
+@media(max-width:767px){
+ .recipe-application-board-viewport{grid-auto-flow:row;grid-auto-columns:minmax(0,1fr);overflow-x:visible;gap:var(--es-space-10)}
+ .recipe-application-card[data-purpose="kanban"] .recipe-application-details-action,.recipe-application-card[data-purpose="kanban"] .recipe-application-documents>button{min-height:44px}
+}
+@media(forced-colors:active){.recipe-application-board-heading h2:focus-visible{outline-color:Highlight}}

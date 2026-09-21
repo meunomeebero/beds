@@ -1,0 +1,39 @@
+/* A: reference-inspired editorial footer; fixed brand wash, no consumer styling. */
+.recipe-landing-footer{container-type:inline-size;background:var(--es-bg);color:var(--es-text);padding:calc(var(--es-space-12) * 2) var(--es-space-10) var(--es-space-11);overflow-wrap:anywhere}
+.recipe-landing-footer-inner{max-inline-size:1040px;min-inline-size:0;margin-inline:auto}
+.recipe-landing-footer-top{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:var(--es-space-12)}
+.recipe-landing-footer-brand{display:flex;align-items:center;gap:var(--es-space-4);margin-block-end:var(--es-space-10);font-size:13px;line-height:1.5;font-weight:500}
+.recipe-landing-footer-brand>span[aria-hidden]{flex:none}
+.recipe-landing-footer-brand>span{min-inline-size:0}
+.recipe-landing-footer-intro h2{max-inline-size:22ch;color:var(--es-heading);font-size:32px;font-weight:500;line-height:1.4;letter-spacing:-.8px;text-wrap:balance}
+.recipe-landing-footer-description{max-inline-size:44ch;margin-block-start:var(--es-space-6);font-size:14px;line-height:1.6;color:var(--es-secondary);text-wrap:pretty}
+.recipe-landing-footer-intro>nav{margin-block-start:var(--es-space-9)}
+.recipe-landing-footer ul{list-style:none;padding:0}
+.recipe-landing-footer a{display:inline-flex;align-items:center;min-block-size:44px;max-inline-size:100%;font-size:14px;line-height:1.5;border-radius:var(--es-radius-2);text-decoration-thickness:from-font;text-underline-offset:4px;text-decoration-skip-ink:auto}
+.recipe-landing-footer a:hover{text-decoration:underline}
+.recipe-landing-footer a:active{color:var(--es-heading)}
+.recipe-landing-footer-inline-links{display:flex;flex-wrap:wrap;column-gap:var(--es-space-10);row-gap:var(--es-space-2)}
+.recipe-landing-footer-groups{display:flex;flex-wrap:wrap;gap:var(--es-space-11);justify-content:flex-end;padding-block-start:var(--es-space-2)}
+.recipe-landing-footer-groups>nav{flex:1 1 128px;max-inline-size:180px;min-inline-size:0}
+.recipe-landing-footer-groups h3{font-size:12px;font-weight:400;line-height:1.5;color:var(--es-secondary);margin-block-end:var(--es-space-6)}
+.recipe-landing-footer-signature{position:relative;isolation:isolate;display:flex;flex-direction:column;gap:var(--es-space-10);margin-block-start:var(--es-space-12);padding-block:var(--es-space-10);container-type:inline-size}
+.recipe-landing-footer-glow{position:absolute;inset:0;inline-size:100%;block-size:100%;z-index:-1;pointer-events:none}
+.recipe-landing-footer-wordmark{font-size:clamp(40px,26cqi,272px);line-height:1.1;letter-spacing:-.065em;font-weight:600;color:var(--es-heading);opacity:.12;pointer-events:none;overflow-wrap:anywhere}
+.recipe-landing-footer-action-row{display:flex;justify-content:flex-end}
+a.recipe-landing-footer-action{gap:var(--es-space-6);padding:var(--es-space-6) var(--es-space-9);background:var(--es-primary);color:var(--es-on-primary);border-radius:var(--es-radius-full);box-shadow:var(--es-shadow-popup);font-weight:500}
+a.recipe-landing-footer-action:active{color:var(--es-on-primary);box-shadow:var(--es-shadow-xs)}
+.recipe-landing-footer-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;column-gap:var(--es-space-10);row-gap:var(--es-space-4);padding-block-start:var(--es-space-10);color:var(--es-secondary);font-size:12px;line-height:1.5}
+.recipe-landing-footer-bottom a{font-size:12px}
+@container (max-width:700px){
+  .recipe-landing-footer-top{grid-template-columns:minmax(0,1fr);gap:var(--es-space-11)}
+  .recipe-landing-footer-groups{justify-content:flex-start;gap:var(--es-space-10)}
+  .recipe-landing-footer-groups>nav{max-inline-size:none}
+  .recipe-landing-footer-intro h2{font-size:28px;letter-spacing:-.5px}
+  .recipe-landing-footer-signature{margin-block-start:var(--es-space-11)}
+  .recipe-landing-footer-action-row{justify-content:flex-start}
+}
+@media(max-width:767px){.recipe-landing-footer{padding:var(--es-space-12) var(--es-space-10) var(--es-space-10)}}
+@media(forced-colors:active){
+  .recipe-landing-footer-glow,.recipe-landing-footer-wordmark{display:none}
+  a.recipe-landing-footer-action{border:1px solid ButtonText}
+}

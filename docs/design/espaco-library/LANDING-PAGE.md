@@ -1,11 +1,24 @@
 # Landing page — product-first composition
 
+## Current ownership — optional app recipe
+
+This composition and its related types are **not exported from `beds`**.
+Source: `apps/web/labs/espaco-library/recipes/landing.tsx`.
+Apps own its page layout, identity and product policy; this is an optional
+example, not a required style-guide composition. Read [Agnostic DS](AGNOSTIC-DS.md)
+and [API boundaries](API-BOUNDARIES.md) before adoption.
+
+The review results below describe the dated pre-extraction snapshot only.
+They do not prove the current recipe or private candidate passed those checks.
+Current verification status belongs to the migration ledger.
+
+
 September16 local candidate; `?view=landing&theme=light|dark`. Not included in
 published RC16. No release, product integration, authentication, analysis,
 upload, purchase or application submission. Package remains product-neutral;
 Curriculol copy/fixtures live only in the playground.
 
-## Public API
+## Optional recipe API
 
 | Export | Contract |
 |---|---|
@@ -21,8 +34,10 @@ Curriculol copy/fixtures live only in the playground.
 
 `PricingCard.action` also accepts a mutually exclusive native `{label,href}`
 variant. Existing `{label,onClick,busy?,disabled?}` unchanged. See [Pricing](PRICING.md).
-No consumer CSS, new token, dependency, font, icon family or layout escape hatch.
-Fixed dimensions and adaptations: [Foundations](FOUNDATIONS.md).
+The app owns layout CSS and may adapt this recipe without changing BEDS. Keep
+individual component internals intact; [Consumer contract](CONSUMER-CONTRACT.md)
+defines that boundary. [Foundations](FOUNDATIONS.md) guides reusable styles, not
+this product page’s hierarchy or dimensions.
 
 ## Composition and decision
 
@@ -80,7 +95,7 @@ Static page: no network loading/error/success state to invent. Pricing artwork
 reuses CardMedia loading/error recovery. Real destination validation and errors
 remain outside this prototype. Page title/lang set while mounted, restored on exit.
 
-## Better review — completed scope
+## Historical Better review — September16 snapshot
 
 React19, existing BEDS semantic tokens/Inter/Geist/Lucide. Read root/package/lab
 AGENTS, Foundations, Consumer contract, Interface quality, relevant component

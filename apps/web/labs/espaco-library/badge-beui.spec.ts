@@ -67,7 +67,7 @@ for (const theme of ['light', 'dark'] as const) {
       await page.goto(`/?view=application-card&theme=${theme}`);
 
       const card = page.getByRole('article').first();
-      const badge = card.locator('.es-application-status .es-badge');
+      const badge = card.locator('.recipe-application-status .es-badge');
       await expect(badge.locator('.es-badge-label')).toHaveText('Pronta para enviar');
       await expect(badge.locator('.es-badge-marker-dot')).toHaveCount(1);
 

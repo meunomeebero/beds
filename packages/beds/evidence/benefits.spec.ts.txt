@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 async function assertTextContrast(page: Page) {
-  const pairs = await page.locator('.es-benefits h1,.es-benefits h2,.es-benefits p,.es-benefits a').evaluateAll(elements => elements.map(element => {
+  const pairs = await page.locator('.recipe-benefits h1,.recipe-benefits h2,.recipe-benefits p,.recipe-benefits a').evaluateAll(elements => elements.map(element => {
     const rgb = (value: string) => value.match(/[\d.]+/g)!.map(Number);
     const layers: number[][] = [];
     let node: Element | null = element;
@@ -54,7 +54,7 @@ test('bento geometry, full copy and contrast survive both themes and widths', as
     await page.setViewportSize({ width, height: 1000 });
     await page.goto(`/?view=benefits&theme=${theme}`);
     await page.evaluate(() => document.fonts.ready);
-    const boxes = await page.locator('.es-benefit').evaluateAll(elements => elements.map(el => { const { x, y, width, height } = el.getBoundingClientRect(); return { x, y, width, height }; }));
+    const boxes = await page.locator('.recipe-benefit').evaluateAll(elements => elements.map(el => { const { x, y, width, height } = el.getBoundingClientRect(); return { x, y, width, height }; }));
     if (width >= 1008) {
       expect(boxes[0].y).toBe(boxes[1].y);
       expect(boxes[0].width).toBeCloseTo(boxes[1].width * 2 + 20, 0);
@@ -67,12 +67,12 @@ test('bento geometry, full copy and contrast survive both themes and widths', as
       for (let i = 1; i < boxes.length; i++) expect(boxes[i].y).toBeGreaterThanOrEqual(boxes[i - 1].y + boxes[i - 1].height);
     }
     await assertTextContrast(page);
-    const ids = await page.locator('.es-benefit-art radialGradient').evaluateAll(elements => elements.map(el => el.id));
+    const ids = await page.locator('.recipe-benefit-art radialGradient').evaluateAll(elements => elements.map(el => el.id));
     expect(new Set(ids).size).toBe(5);
     await page.screenshot({ path: `apps/web/labs/espaco-library/evidence/benefits/${info.project.name}-${theme}-${width}.png`, fullPage: true });
     await page.goto(`/?view=benefits&theme=${theme}&preview=long`);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    expect(await page.locator('.es-benefits h1,.es-benefits h2,.es-benefits p,.es-benefits a').evaluateAll(elements => elements.every(el => el.scrollWidth <= el.clientWidth + 1))).toBe(true);
+    expect(await page.locator('.recipe-benefits h1,.recipe-benefits h2,.recipe-benefits p,.recipe-benefits a').evaluateAll(elements => elements.every(el => el.scrollWidth <= el.clientWidth + 1))).toBe(true);
     const action = page.getByRole('main').getByRole('link');
     await action.hover();
     await page.mouse.down();
@@ -88,7 +88,7 @@ test('optional content, RTL, zoom, reduced motion and forced colors retain meani
   await expect(page.getByRole('main').getByRole('link')).toHaveCount(0);
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   await page.goto('/?view=benefits&preview=minimal');
-  await expect(page.locator('.es-benefit').first().locator('.es-benefit-media')).toHaveCount(0);
+  await expect(page.locator('.recipe-benefit').first().locator('.recipe-benefit-media')).toHaveCount(0);
   await expect(page.getByRole('main').getByRole('link')).toHaveCount(0);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 640, height: 1000 });
@@ -101,7 +101,7 @@ test('optional content, RTL, zoom, reduced motion and forced colors retain meani
   await expect(action).toBeFocused();
   await page.screenshot({ path: `apps/web/labs/espaco-library/evidence/benefits/${info.project.name}-zoom-rtl.png`, fullPage: true });
   await page.emulateMedia({ forcedColors: 'active' });
-  await expect(page.locator('.es-benefit-media').first()).toBeHidden();
+  await expect(page.locator('.recipe-benefit-media').first()).toBeHidden();
   await expect(page.getByRole('main').getByRole('heading')).toHaveCount(6);
   expect(await action.evaluate(el => parseFloat(getComputedStyle(el).outlineWidth))).toBeGreaterThan(0);
   await action.press('Enter');

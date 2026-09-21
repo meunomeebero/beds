@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import {
-  AccountMenu, AppShell, Avatar, BrandMark, Breadcrumbs, Button, ChatComposer,
-  ChatMessage, ChatOptions, ChatThread, ContentHeader, DesignSystemProvider, Dialog, FileUploadField, Inline, NavItem,
+  AccountMenu, Avatar, BrandMark, Breadcrumbs, Button, ChatComposer,
+  ChatMessage, ChatOptions, ContentHeader, DesignSystemProvider, Dialog, FileUploadField, Inline, NavItem,
   RecentItem, SearchField, SidebarFooter, SidebarHeader, SidebarSection,
-  Stack, Text, WorkspaceTrigger, brands, type ChatOption, type ComposerAttachment, type IconName, type Theme,
+  Stack, Text, WorkspaceTrigger, type ChatOption, type ComposerAttachment, type IconName, type Theme,
 } from 'beds';
+import { AppShell, ChatThread } from './recipes';
 import { resumeAccept, resumeSelectionError } from './resume-upload';
 
 const choices = [
@@ -155,7 +156,7 @@ export default function LucyPage() {
   const searchResults = Object.entries(panels)
     .filter(([id, label]) => id !== 'search' && label.toLocaleLowerCase('pt-BR').includes(query.toLocaleLowerCase('pt-BR')));
 
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <AppShell contentWidth="chat" collapsed={collapsed} onCollapsedChange={setCollapsed}
       mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} navigationLabel="Navegação"
       sidebar={<>
@@ -210,10 +211,10 @@ export default function LucyPage() {
               <Inline><Button label="Escolher outra opção" variant="ghost" onClick={returnToChoices} disabled={busy} />{busy && <Text>Carregamento de exemplo…</Text>}</Inline>
             </Stack>}
           </Stack>}>
-        <ChatMessage role="assistant" purpose="thread" author="Lucy" mark={<BrandMark label="Curriculol" />}>
+        <ChatMessage role="assistant" purpose="thread" author="Lucy" mark={<BrandMark src="/demo-brand.svg" label="Curriculol" />}>
           <Stack><Text variant="body">Olá, Marina. Vamos dar forma à sua trajetória?</Text><Text variant="body">Podemos começar pelo que você já tem ou conversar sobre suas experiências. Depois, você revisa tudo com calma.</Text></Stack>
         </ChatMessage>
-        {messages.map((message, index) => <ChatMessage key={index} role={message.role} purpose="thread" author={message.role === 'assistant' ? 'Lucy' : undefined} mark={message.role === 'assistant' ? <BrandMark label="Curriculol" /> : undefined}>{message.text}</ChatMessage>)}
+        {messages.map((message, index) => <ChatMessage key={index} role={message.role} purpose="thread" author={message.role === 'assistant' ? 'Lucy' : undefined} mark={message.role === 'assistant' ? <BrandMark src="/demo-brand.svg" label="Curriculol" /> : undefined}>{message.text}</ChatMessage>)}
       </ChatThread>
     </AppShell>
     <Dialog open={resetOpen} onOpenChange={setResetOpen} title="Começar uma nova prévia?" description="A conversa, os rascunhos e os arquivos selecionados nesta prévia serão removidos.">

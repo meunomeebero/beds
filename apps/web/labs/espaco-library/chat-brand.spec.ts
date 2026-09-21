@@ -24,7 +24,7 @@ for (const theme of ['light','dark'] as const) {
   await expect(input).toHaveCSS('line-height','22.4px');
   await expect(page.locator('.es-root')).toHaveCSS('background-color',theme==='dark'?'rgb(25, 25, 25)':'rgb(255, 255, 255)');
   await page.getByRole('button',{name:'Cor da marca: Referência'}).click();
-  await page.getByRole('option',{name:'Curriculol',exact:true}).click();
+  await page.getByRole('option',{name:'Laranja · exemplo',exact:true}).click();
   const after=await page.locator('.es-root').evaluate(e=>{
    const s=getComputedStyle(e);const panel=e.querySelector('.es-composer')!.getBoundingClientRect();
    return {colors:['--es-bg','--es-text','--es-secondary','--es-surface','--es-border','--es-info','--es-success'].map(k=>s.getPropertyValue(k)),width:panel.width,height:panel.height,font:s.fontFamily,brand:s.getPropertyValue('--es-brand')};
@@ -32,7 +32,8 @@ for (const theme of ['light','dark'] as const) {
   expect(after.brand.trim()).toBe('#ffa133');
   expect(after.colors).toEqual(before.colors);
   expect(after.width).toBe(before.width);expect(after.height).toBe(before.height);
-  await expect(page.locator('.es-chat-layout .es-brand-mark')).toHaveCSS('fill','rgb(255, 161, 51)');
+  await expect(page.locator('.recipe-chat-layout .es-brand-mark')).toHaveAttribute('src','/demo-brand.svg');
+  await expect(page.locator('.recipe-chat-layout .es-brand-mark')).toHaveAttribute('alt','Example brand');
   const fontLoaded=await page.evaluate(()=>document.fonts.check('13px "Espaco Inter"'));expect(fontLoaded).toBe(true);
   await page.screenshot({path:evidence+'library-'+theme+'-'+info.project.name+'.png'});
   expect(errors).toEqual([]);
@@ -48,6 +49,7 @@ for (const theme of ['light','dark'] as const) {
   await input.press('End');await input.press('Shift+Enter');await input.press('a');
   await expect(input).toHaveValue('Research competitors’ ads\na');
   await input.dispatchEvent('keydown',{key:'Enter',code:'Enter',isComposing:true});
+  await input.dispatchEvent('keydown',{key:'Enter',code:'Enter',keyCode:229,isComposing:false});
   await expect(page.getByRole('article',{name:'Sua mensagem'})).toHaveCount(0);
   await input.press('Enter');
   await expect(page.getByRole('article',{name:'Sua mensagem'})).toHaveCount(1);

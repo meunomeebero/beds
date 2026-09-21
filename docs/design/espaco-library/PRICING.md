@@ -1,12 +1,17 @@
-# Pricing — illustrated plan comparison
+# Pricing — individual card and optional comparison recipe
 
-Scope: portable BEDS;catalog `?view=pricing`. Fictional offers and local
-callbacks only. No Curriculol pricing,checkout,subscription or integration changes.
+Current package contract: `PricingCard` and `PricingCardProps` are public BEDS
+exports. `PricingSection`, `PricingSectionProps` and `PricingPlan` are app-owned
+examples in `apps/web/labs/espaco-library/recipes/pricing-section.tsx`, not exports
+of `beds`. The catalog demonstrates the recipe at `?view=pricing` with fictional
+offers. Comparison columns, introductory identity and which plan to emphasize
+are consumer decisions, not universal DS rules.
 
 ## API / boundaries
 
 ```tsx
-import { PricingSection, type PricingPlan } from 'beds';
+// Catalog-local recipe; applications own their equivalent composition.
+import { PricingSection, type PricingPlan } from './recipes';
 
 const plans: PricingPlan[] = [{
   id: 'starter',
@@ -29,8 +34,8 @@ const plans: PricingPlan[] = [{
 | Price |Complete localized label;optional description for billing terms;no numeric formatting,currency conversion or inferred interval. Optional `amount: { value, format }` is an authoritative host-owned numeric pair for a real controlled price/package change; the label is never parsed. |
 | Features |Readonly `{id,text}[]`;unique stable IDs;native named ul/list;empty array removes benefits block |
 | Action |Exclusive `{label,onClick,busy?,disabled?}` or `{label,href}`;callback busy also disables;native href has no busy/disabled/callback;actionNote explains unavailable/current plan;feedback announces host-supplied result |
-| PricingSection / PricingSectionProps |Required title/plans;optional description,mark,headingLevel1/2(default);mark uses an existing noninteractive DS identity component |
-| PricingPlan |PricingCardProps without headingLevel,plus unique stable id;section supplies H2 below H1 or H3 below H2 |
+| Recipe-only PricingSection / PricingSectionProps |Required title/plans;optional description,mark,headingLevel1/2(default);mark is caller-owned noninteractive identity |
+| Recipe-only PricingPlan |PricingCardProps without headingLevel,plus unique stable id;section supplies H2 below H1 or H3 below H2 |
 
 No style/className/children/size/layout overrides. PricingCard can stand alone;
 PricingSection owns comparison layout and marks only the first explicitly
@@ -85,7 +90,10 @@ Context7 tools unavailable;no new dependency. Official fallbacks:
 [React keyed reset](https://react.dev/learn/preserving-and-resetting-state#resetting-state-with-a-key),
 [CSS auto-fit/minmax](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/repeat).
 
-## Review checkpoint
+## Historical review checkpoint — before recipe extraction
+
+The results below describe the earlier implementation, not acceptance of the
+current extraction. Re-run affected browser checks before claiming equivalence.
 
 Candidate `0.1.7-rc.16-local.16`;local only. No commit,push,publication or
 consumer upgrade. Seven Better skills +frontend-design/ui-skills-root read.

@@ -24,7 +24,7 @@ for (const theme of ['light', 'dark'] as const) {
     expect(geometry.fill).not.toBe('none');
     expect(geometry.stroke).not.toBe('none');
 
-    const inactive = sidebar.getByRole('button', { name: 'Chat', exact: true });
+    const inactive = sidebar.getByRole('button', { name: 'Chat · receita', exact: true });
     const inactiveIndicator = inactive.locator('.es-nav-active-indicator');
     expect(await inactiveIndicator.evaluate(element => getComputedStyle(element).backgroundColor)).toBe('rgba(0, 0, 0, 0)');
     const longLabel = sidebar.getByRole('link', { name: 'Resultado da otimização', exact: true });
@@ -52,7 +52,7 @@ for (const theme of ['light', 'dark'] as const) {
   test(`navigation drawer and locked item preserve logical accessibility in ${theme}`, async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'mobile', 'The drawer contract is covered at mobile width.');
     await page.goto(`/?view=disclosures&theme=${theme}`, { waitUntil: 'commit' });
-    const firstFrame = await page.locator('.es-app-shell').evaluate(element => {
+    const firstFrame = await page.locator('.recipe-app-shell').evaluate(element => {
       const bounds = element.getBoundingClientRect();
       return { grid: getComputedStyle(element).gridTemplateColumns, documentWidth: document.documentElement.scrollWidth, viewportWidth: innerWidth, right: bounds.right };
     });
@@ -65,7 +65,7 @@ for (const theme of ['light', 'dark'] as const) {
     const sidebar = page.getByRole('dialog', { name: 'Navegação', exact: true });
     await expect(sidebar).toBeVisible();
     await expect(sidebar).toHaveCSS('width', '264px');
-    await expect(page.locator('.es-app-main')).toHaveAttribute('inert', '');
+    await expect(page.locator('.recipe-app-main')).toHaveAttribute('inert', '');
 
     const locked = sidebar.getByRole('button', { name: /Fórum\. O fórum está disponível/ });
     await expect(locked).toBeDisabled();

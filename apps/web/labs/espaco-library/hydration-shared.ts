@@ -1,5 +1,6 @@
 import React from 'react';
-import { AppShell, DesignSystemProvider, Dock, DockItem, DockSeparator, NavItem, SegmentedControl, SidebarHeader, SidebarSection, Stack, Text } from 'beds';
+import { DesignSystemProvider, Dock, DockItem, DockSeparator, NavItem, SegmentedControl, SidebarHeader, SidebarSection, Stack, Text } from 'beds';
+import { AppShell } from './recipes';
 
 function HydrationCompletionMarker() {
   React.useEffect(() => {

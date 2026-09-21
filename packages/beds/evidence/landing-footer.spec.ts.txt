@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 async function assertContrast(page: Page) {
-  const pairs = await page.locator('.es-landing-footer h2,.es-landing-footer h3,.es-landing-footer p,.es-landing-footer a,.es-landing-footer-brand').evaluateAll(elements => elements.map(element => {
+  const pairs = await page.locator('.recipe-landing-footer h2,.recipe-landing-footer h3,.recipe-landing-footer p,.recipe-landing-footer a,.recipe-landing-footer-brand').evaluateAll(elements => elements.map(element => {
     const rgb = (value: string) => value.match(/[\d.]+/g)!.map(Number);
     const layers: number[][] = [];
     let node: Element | null = element;
@@ -60,7 +60,7 @@ test('both themes preserve geometry, contrast and long-content growth at desktop
     await page.screenshot({ path: `apps/web/labs/espaco-library/evidence/landing-footer/${info.project.name}-${theme}-${width}.png`, fullPage: true });
     await page.goto(`/?view=landing-footer&theme=${theme}&preview=long`);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    expect(await page.locator('.es-landing-footer h2,.es-landing-footer-brand,.es-landing-footer a,.es-landing-footer-wordmark').evaluateAll(elements => elements.every(el => el.scrollWidth <= el.clientWidth + 1))).toBe(true);
+    expect(await page.locator('.recipe-landing-footer h2,.recipe-landing-footer-brand,.recipe-landing-footer a,.recipe-landing-footer-wordmark').evaluateAll(elements => elements.every(el => el.scrollWidth <= el.clientWidth + 1))).toBe(true);
     await expect(page.getByRole('navigation', { name: 'Documentação da prévia' })).toBeVisible();
     await assertContrast(page);
   }
@@ -84,7 +84,7 @@ test('minimal data, reduced motion, RTL, zoom and high contrast keep the action 
   await expect(action).toBeFocused();
   await page.screenshot({ path: `apps/web/labs/espaco-library/evidence/landing-footer/${info.project.name}-zoom-rtl.png`, fullPage: true });
   await page.emulateMedia({ forcedColors: 'active' });
-  await expect(page.locator('.es-landing-footer-glow')).toBeHidden();
+  await expect(page.locator('.recipe-landing-footer-glow')).toBeHidden();
   expect(await action.evaluate(el => parseFloat(getComputedStyle(el).outlineWidth))).toBeGreaterThan(0);
   await action.press('Enter');
   await expect(page).toHaveURL(/view=onboarding/);

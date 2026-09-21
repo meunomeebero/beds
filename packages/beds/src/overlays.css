@@ -1,7 +1,7 @@
 .es-root .es-select,.es-root .es-dropdown{display:inline-flex;min-width:0;max-width:100%}
 .es-root .es-select-trigger{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-width:0;max-width:100%;min-height:28px;padding:6px 10px;border:0;border-radius:6px;background:var(--es-control);color:var(--es-text);font:500 13px/16px var(--es-font);letter-spacing:-.1px;cursor:pointer}
-.es-root .es-select-trigger>span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.es-root .es-select-trigger>svg:last-child{color:var(--es-secondary)}
+.es-root .es-select-trigger>span:not([aria-hidden]){flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.es-root .es-select-trigger>span[aria-hidden]{display:inline-flex;flex:none;color:var(--es-secondary)}
 .es-root .es-select-trigger:disabled{opacity:.5;cursor:default}
 .es-root .es-select[data-variant="filter"]>.es-select-trigger{min-height:36px;gap:8px;padding:8px 10px;border:1px solid var(--es-border);border-radius:var(--es-radius-8);background:var(--es-transparent);font-weight:400}
 .es-root .es-select[data-variant="filter"]>.es-select-trigger>svg{width:16px;height:16px;flex:none}
@@ -116,3 +116,6 @@
 
 /* Drawer: a viewport-edge panel, not a rounded card or a resizable window. */
 .es-root .es-drawer::backdrop{background:var(--es-overlay)}
+
+/* Select owns its touch target regardless of which page or panel contains it. */
+@media(pointer:coarse){.es-root .es-select[data-variant]>.es-select-trigger{min-height:44px}}

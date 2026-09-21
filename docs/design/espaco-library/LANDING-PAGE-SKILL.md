@@ -56,7 +56,9 @@ belong in shared instructions; no automatic postinstall script changes agent con
 - [Landing principles](../../../packages/beds/skills/marc-lou-landing-page/references/landing-principles.md): selective lenses; no fixed section count or forced SaaS template.
 - [UI metadata](../../../packages/beds/skills/marc-lou-landing-page/agents/openai.yaml): implicit invocation enabled; discovery still depends on the host agent.
 - Product: language, audience, proof, price, promises and real destinations.
-- DS: components, tokens, responsive behavior and accessibility.
+- App: page composition, layout HTML/CSS, identity assets and responsive page policy.
+- DS: individual components, semantic tokens, control containment and interaction
+  accessibility. A new landing layout alone does not justify a library export.
 - Validation: frontmatter plus local links and packaged-file integrity; independent
   scenario review for meaningful instruction changes. These do not certify
   conversion, agent compliance or visual quality of a future landing.

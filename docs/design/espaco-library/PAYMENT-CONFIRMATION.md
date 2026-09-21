@@ -1,5 +1,14 @@
 # Payment confirmation
 
+## Current ownership
+
+`PaymentConfirmation` and its receipt/invoice types are an optional app recipe,
+not `beds` exports. Source lives in
+`apps/web/labs/espaco-library/recipes/payment-confirmation.tsx` with its own CSS.
+It composes public `Button` and `Icon` controls. Printer artwork, receipt layout,
+payment messaging and reveal timing belong to this example; applications may
+choose a different confirmation presentation without changing the DS.
+
 Use when: the host has already verified a successful payment and has receipt data.
 Read next: [Foundations](FOUNDATIONS.md), [States](STATES.md),
 [Interface quality](INTERFACE-QUALITY.md), [Governance](GOVERNANCE.md).
@@ -17,12 +26,12 @@ mark slot, white paper/black ink in both themes. No fake barcode, fiscal number,
 timer-driven payment confirmation or automatic invoice issuance. Paper is a
 document material, not a new general filled-card policy.
 
-## Public contract
+## Recipe contract (not package API)
 
 | Property | Owner / behavior |
 |---|---|
 | `title/description` | Host-localized confirmed-payment heading and optional support copy |
-| `merchant/mark` | Visible merchant name; optional decorative public BEDS mark |
+| `merchant/mark` | Visible merchant name; optional caller-owned decorative identity |
 | `purchase` | Label and optional description, no plan/credit policy inferred |
 | `receipt` | Title, keyed item rows, total label/value, optional keyed details/note |
 | `PaymentReceiptRow` | `id/label/value`; strings already formatted by host; zero remains literal; no tax arithmetic |
@@ -33,7 +42,7 @@ document material, not a new general filled-card policy.
 | Action | `label/onClick`; optional `busy/disabled`; native shared Button |
 | `continueAction` | Optional independent next step; no automatic navigation |
 | `animate` | Default true; false for restored receipts; OS reduced motion always wins |
-| `headingLevel` | H2 default, H3 in an existing section |
+| `headingLevel` | Recipe-local: H1 on a standalone page, H2 default, H3 in an existing section; host chooses document hierarchy |
 
 Mount only after server/provider confirmation. Never use a timer or the paper's
 animation completion as evidence of payment. Receipt and fiscal invoice are
@@ -71,7 +80,10 @@ Escape → original action. Preview state buttons exercise recovery and replay.
 All values synthetic; R$20 is not an approved offer. No real charge, fiscal
 issuance, upload or downloaded document. Production integration remains separate.
 
-## Better and motion review
+## Historical Better and motion review — before extraction
+
+The following checks refer to the earlier packaged implementation. They do not
+prove visual or behavioral equivalence after extraction; that review is pending.
 
 Seven Better entrypoints, frontend-design, repo-adapted emil-design-eng and
 review-animations applied. UI Skills motion category inspected; no new library

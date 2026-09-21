@@ -14,6 +14,15 @@
   --color-white: var(--es-white);
   --color-black: var(--es-black);
   --color-background: var(--background);
+  --color-bg: var(--es-bg);
+  --color-surface: var(--es-surface);
+  --color-field: var(--es-field);
+  --color-input-text: var(--es-input-text);
+  --color-subtle: var(--es-subtle);
+  --color-border-subtle: var(--es-border-subtle);
+  --color-switch-off: var(--es-switch-off);
+  --color-switch-thumb: var(--es-switch-thumb);
+  --color-switch-thumb-on: var(--es-switch-thumb-on);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);

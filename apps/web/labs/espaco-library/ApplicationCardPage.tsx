@@ -1,5 +1,7 @@
+import { AppShell } from './recipes';
 import { useState } from 'react';
-import { ApplicationCard, AppShell, Badge, DesignSystemProvider, Dialog, Inline, PageHeader, ResponsiveGrid, ResultsStatus, SegmentedMeter, Select, Stack, Text, ThemeToggle, brands } from 'beds';
+import { Badge, DesignSystemProvider, Dialog, Inline, PageHeader, ResponsiveGrid, ResultsStatus, SegmentedMeter, Select, Stack, Text, ThemeToggle } from 'beds';
+import { ApplicationCard } from './recipes';
 
 export default function ApplicationCardPage() {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => new URLSearchParams(location.search).get('theme') === 'light' ? 'light' : 'dark');
@@ -10,7 +12,7 @@ export default function ApplicationCardPage() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scoreValue, setScoreValue] = useState('92');
   const [scoreKind, setScoreKind] = useState<'ats' | 'fit' | 'match'>('ats');
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <AppShell sidebar={<ThemeToggle />} contentWidth="dashboard" collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen}><Stack gap="section">
       <PageHeader title="Card de candidatura" description="Identidade, contexto pessoal, documentos e próximo passo. Dados fictícios." />
       <ResultsStatus>{selected ? '1 candidatura selecionada' : 'Nenhuma candidatura selecionada'}</ResultsStatus>

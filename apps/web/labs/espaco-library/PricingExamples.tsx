@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { BrandMark, Button, Inline, PricingSection, Select, Stack, Switch, Text, type PricingPlan } from 'beds';
+import { BrandMark, Button, Inline, Select, Stack, Switch, Text } from 'beds';
+import { PricingSection, type PricingPlan } from './recipes';
 
 const starterArt = new URL('./assets/pricing-starter.svg?no-inline', import.meta.url).href;
 const proArt = new URL('./assets/pricing-pro.svg?no-inline', import.meta.url).href;
@@ -51,7 +52,7 @@ export default function PricingExamples() {
     },
   ];
   return <Stack gap="section">
-    <PricingSection headingLevel={1} title="Um plano para cada momento" description="Planos e valores demonstrativos. Nenhuma contratação será realizada." mark={<BrandMark label="Curriculol" />} plans={single ? plans.slice(0, 1) : plans} />
+    <PricingSection headingLevel={1} title="Um plano para cada momento" description="Planos e valores demonstrativos. Nenhuma contratação será realizada." mark={<BrandMark src="/demo-brand.svg" label="Curriculol" />} plans={single ? plans.slice(0, 1) : plans} />
     <Stack>
       <Text variant="section-title">Testar o componente</Text>
       {result.state === 'busy' && <Inline gap="tight">

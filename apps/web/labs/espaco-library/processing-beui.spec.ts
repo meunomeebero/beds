@@ -18,7 +18,7 @@ async function start(page: Page, kind: ProcessingDemoKind, theme: 'light' | 'dar
   await expect(page.getByRole('heading', { name: flow.entry, exact: true })).toBeVisible();
   await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
   await page.getByRole('button', { name: flow.start, exact: true }).click();
-  const screen = page.locator('.es-processing');
+  const screen = page.locator('.recipe-processing');
   await expect(screen).toHaveAttribute('data-state', 'running');
   return screen;
 }
@@ -31,7 +31,7 @@ async function advanceToScores(page: Page, durationSeconds: number) {
 }
 
 function scores(screen: Locator) {
-  return screen.locator('.es-processing-scores');
+  return screen.locator('.recipe-processing-scores');
 }
 
 test.describe('ProcessingView · beUI todo-list adaptation', () => {
@@ -102,10 +102,10 @@ test.describe('ProcessingView · beUI todo-list adaptation', () => {
       expect(await meter.evaluate(element => getComputedStyle(element).clipPath)).toBe('none');
       expect(await meter.evaluate(element => element.getAnimations().length)).toBe(0);
     }
-    for (const mark of await screen.locator('.es-processing-step-icon > span').all()) {
+    for (const mark of await screen.locator('.recipe-processing-step-icon > span').all()) {
       expect(await mark.evaluate(element => getComputedStyle(element).transform)).toBe('none');
       expect(await mark.evaluate(element => element.getAnimations().length)).toBe(0);
     }
-    expect(await screen.locator('.es-processing-transcript li').count()).toBe(fixture.chapters.length);
+    expect(await screen.locator('.recipe-processing-transcript li').count()).toBe(fixture.chapters.length);
   });
 });

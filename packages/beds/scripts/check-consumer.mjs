@@ -66,7 +66,13 @@ export function checkConsumerPaths(inputs) {
   for (let index = 0; index < queue.length; index++) {
     const file = queue[index];
     files++;
-    if (STYLE.test(file)) { report(file, 'CONSUMER_CSS', 'Consumer stylesheets are forbidden; put reusable visual rules inside beds.'); continue; }
+    if (STYLE.test(file)) {
+      // Apps own layout, not BEDS internals. This is a bounded source check,
+      // not a CSS parser or proof of rendered accessibility.
+      const css = fs.readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+      if (/\.es-[\w-]+|--es-[\w-]+\s*:/.test(css)) report(file, 'PRIVATE_LIBRARY_STYLE', 'Use app-owned selectors and read BEDS tokens; do not override private .es-* selectors or declare --es-* properties.');
+      continue;
+    }
     const source = ts.createSourceFile(file, fs.readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true, /x$/i.test(file) ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
     for (const error of source.parseDiagnostics) report(file, 'PARSE_ERROR', ts.flattenDiagnosticMessageText(error.messageText, ' '));
     const imports = new Map();
@@ -75,10 +81,8 @@ export function checkConsumerPaths(inputs) {
     const issue = (node, code, message) => report(file, code, message, source, node);
     const registerImport = (specifier, node) => {
       if (specifier === '@espaco/ui' || specifier.startsWith('@espaco/ui/')) issue(node, 'LEGACY_PACKAGE_IMPORT', 'Import from beds; the previous package name is not an alias.');
-      if (specifier === 'beds/styles.css' || specifier === 'beds/reset.css') return;
-      if (STYLE.test(specifier.split('?')[0])) issue(node, 'STYLE_IMPORT', 'Only the fixed beds styles.css and reset.css exports may provide consumer CSS.');
-      if (STYLE_MODULE.test(specifier)) issue(node, 'VISUAL_DEPENDENCY', `Import visual primitives and icons from beds, not ${specifier}.`);
-      if (specifier.startsWith('beds/')) issue(node, 'PRIVATE_LIBRARY_IMPORT', 'Use the public beds entry or fixed styles.css/reset.css exports.');
+      if (specifier === 'beds/styles.css' || specifier === 'beds/reset.css' || specifier === 'beds/tokens') return;
+      if (specifier.startsWith('beds/')) issue(node, 'PRIVATE_LIBRARY_IMPORT', 'Use the public beds entry, beds/tokens metadata, or fixed styles.css/reset.css exports.');
       if (specifier.startsWith('.')) {
         const resolved = resolveLocal(file, specifier);
         if (!resolved) issue(node, 'UNRESOLVED_LOCAL_IMPORT', `Cannot audit local dependency ${specifier}.`);
@@ -127,7 +131,6 @@ export function checkConsumerPaths(inputs) {
       if (ts.isIdentifier(node) && constants.has(node.text) && !visited.has(node.text)) return validBrand(constants.get(node.text), new Set([...visited, node.text]));
       if (ts.isPropertyAccessExpression(node)) {
         const info = importOf(node.expression);
-        if (info?.module === 'beds' && info.exported === 'brands' && ['reference', 'curriculol'].includes(node.name.text)) return true;
         const base = unwrap(ts.isIdentifier(node.expression) ? constants.get(node.expression.text) : node.expression);
         if (base && ts.isObjectLiteralExpression(base)) {
           const property = base.properties.find(item => ts.isPropertyAssignment(item) && item.name.getText(source).replace(/^['"]|['"]$/g, '') === node.name.text);
@@ -140,8 +143,9 @@ export function checkConsumerPaths(inputs) {
       const tag = node.tagName;
       const text = tag.getText(source);
       const info = importOf(tag);
-      if (/^[a-z]/.test(text) || text.includes('-')) issue(tag, 'NATIVE_VISUAL_ELEMENT', `Render ${text} through a public beds component.`);
-      else if (!(info?.module === 'beds' || (info?.module === 'react' && ['Fragment', 'StrictMode', 'Suspense', 'Profiler'].includes(info.exported)) || info?.local || (ts.isIdentifier(tag) && localComponents.has(tag.text)))) issue(tag, 'UNVERIFIED_COMPONENT', `Cannot establish ${text} as a library component or audited local composition.`);
+      // A DS is not the owner of every HTML element in the application.
+      // Native layout, identity artwork and app-owned compositions are allowed.
+      if (info?.module !== 'beds') return;
       for (const attribute of node.attributes.properties) {
         if (ts.isJsxSpreadAttribute(attribute)) { issue(attribute, 'JSX_SPREAD', 'Use explicit props; spreads can hide visual escape hatches.'); continue; }
         const name = attribute.name.getText(source);
@@ -156,7 +160,7 @@ export function checkConsumerPaths(inputs) {
         }
         if (name === 'brandColor') {
           const value = attribute.initializer && (ts.isJsxExpression(attribute.initializer) ? attribute.initializer.expression : attribute.initializer);
-          if (!isProvider(tag) || !validBrand(value)) issue(attribute, 'BRAND_CONTRACT', 'brandColor is provider-only: #RRGGBB literal, same-file const preset, or brands.reference/curriculol from beds.');
+          if (!isProvider(tag) || !validBrand(value)) issue(attribute, 'BRAND_CONTRACT', 'brandColor is provider-only: #RRGGBB literal or same-file const preset owned by the app.');
         }
       }
     };
@@ -165,25 +169,16 @@ export function checkConsumerPaths(inputs) {
       if (ts.isPropertyAssignment(node)) {
         const name = node.name.getText(source).replace(/^['"]|['"]$/g, '');
         const value = unwrap(node.initializer);
-        if ((STYLE_KEYS.has(name) || name.startsWith('--')) && (ts.isStringLiteral(value) || ts.isNoSubstitutionTemplateLiteral(value)) && (COLOR.test(value.text) || name.startsWith('--') || ['font', 'fontFamily'].includes(name))) issue(node, 'STYLE_LITERAL', `Styling declaration ${name} belongs inside the library.`);
+        if (name.startsWith('--es-')) issue(node, 'PRIVATE_LIBRARY_STYLE', 'App styles may read but not redefine private BEDS tokens.');
       }
       if (ts.isCallExpression(node)) {
         const call = node.expression.getText(source);
-        if (['eval', 'Function'].includes(call) || /(?:^|\.)(?:createElement|cloneElement|createPortal|insertRule|replaceSync|attachShadow)$/.test(call)) issue(node, 'IMPERATIVE_VISUAL_ESCAPE', 'Dynamic DOM/style construction is outside the consumer contract.');
-        if (ts.isPropertyAccessExpression(node.expression)) {
-          const method = node.expression.name.text;
-          const target = node.expression.expression.getText(source);
-          const first = node.arguments[0];
-          if ((/\.style$|\.classList$/.test(target)) || (method === 'setAttribute' && first && ts.isStringLiteral(first) && ['style', 'class'].includes(first.text))) issue(node, 'IMPERATIVE_STYLE', 'Consumers may not mutate classes or CSS.');
-        }
         if (node.expression.kind === ts.SyntaxKind.ImportKeyword || call === 'require') {
           const first = node.arguments[0];
           if (!first || !ts.isStringLiteral(first)) issue(node, 'DYNAMIC_IMPORT', 'Dynamic dependency cannot be statically audited; use a static import.');
           else registerImport(first.text, node);
         }
       }
-      if (ts.isBinaryExpression(node) && node.operatorToken.kind >= ts.SyntaxKind.FirstAssignment && node.operatorToken.kind <= ts.SyntaxKind.LastAssignment && /(?:\.style(?:\.|\[|$)|\.(?:className|innerHTML|outerHTML|adoptedStyleSheets)$)/.test(node.left.getText(source))) issue(node, 'IMPERATIVE_STYLE', 'Consumers may not write DOM classes, markup or CSS.');
-      if (ts.isNewExpression(node) && ['Function', 'CSSStyleSheet'].includes(node.expression.getText(source))) issue(node, 'DYNAMIC_STYLE', 'Runtime code/style generation is outside the consumer contract.');
       ts.forEachChild(node, visit);
     };
     visit(source);
@@ -195,7 +190,7 @@ export function checkConsumerPaths(inputs) {
 if (process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(process.argv[1]) === fs.realpathSync(fileURLToPath(import.meta.url))) {
   const inputs = process.argv.slice(2);
   if (inputs.includes('--help')) {
-    console.log('Usage: node check-consumer.mjs <consumer-file-or-directory> [...]\nScans explicit UI roots and local imports. Only beds supplies visual elements/styles.');
+    console.log('Usage: node check-consumer.mjs <consumer-file-or-directory> [...]\nScans explicit UI roots and local imports. Apps own composition; BEDS owns its public component contract. This is not an accessibility or CSS-safety certification.');
   } else {
     try {
       const result = checkConsumerPaths(inputs);

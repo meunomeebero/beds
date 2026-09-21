@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
-import {
-  DesignSystemProvider, brands, BrandMark, IconButton, LandingPageLayout, LandingHero,
-  LandingSection, ProductDemo, DocumentPreview, ProcessSteps, FAQSection, BenefitsSection,
-  BenefitIllustration, PricingSection, LandingFooter, ApplicationCard, Dialog, Stack, Text,
-  TextLink, type Theme,
-} from 'beds';
+import { DesignSystemProvider, BrandMark, IconButton, Dialog, Stack, Text, TextLink, type Theme } from 'beds';
+import { ApplicationCard } from './recipes';
+import { PricingSection } from './recipes';
+import { LandingPageLayout, LandingHero, LandingSection, ProductDemo, DocumentPreview, ProcessSteps, FAQSection, BenefitsSection, BenefitIllustration, LandingFooter } from './recipes';
 import starterArt from './assets/pricing-starter.svg';
 import proArt from './assets/pricing-pro.svg';
 
@@ -42,12 +40,12 @@ export default function LandingPage() {
     setTheme(next);
     const url = new URL(location.href); url.searchParams.set('theme', next); history.replaceState(null, '', url);
   }
-  return <DesignSystemProvider theme={theme} brandColor={brands.curriculol}>
-    <LandingPageLayout brandName="Curriculol" brandMark={<BrandMark label="Curriculol" />} homeHref={local('landing')} skipLabel="Pular para o conteúdo"
+  return <DesignSystemProvider theme={theme} brandColor={"#ffa133"}>
+    <LandingPageLayout brandName="Curriculol" brandMark={<BrandMark src="/demo-brand.svg" label="Curriculol" />} homeHref={local('landing')} skipLabel="Pular para o conteúdo"
       navigationLabel="Navegação principal" menuLabel="Menu" navigation={[{ label: 'Como funciona', href: '#como-funciona' }, { label: 'Vantagens', href: '#vantagens' }, { label: 'Créditos', href: '#creditos' }]}
       accountLink={{ label: 'Entrar', href: local('otp') }}
       appearance={<IconButton label={theme === 'light' ? 'Usar tema escuro' : 'Usar tema claro'} icon={theme === 'light' ? 'Moon' : 'Sun'} onClick={changeTheme} />}
-      footer={<LandingFooter brandName="Curriculol" brandMark={<BrandMark label="Curriculol" />} title="Sua próxima candidatura começa com a sua história."
+      footer={<LandingFooter brandName="Curriculol" brandMark={<BrandMark src="/demo-brand.svg" label="Curriculol" />} title="Sua próxima candidatura começa com a sua história."
         description="Descubra o que seu currículo já comunica bem — e o que pode ficar mais claro para a vaga que você quer." action={start}
         groups={[{ id: 'product', label: 'Seu próximo passo', links: [{ id: 'profile', label: 'Preparar meu perfil', href: local('onboarding') }, { id: 'applications', label: 'Conhecer o quadro de vagas', href: local('kanban') }, { id: 'faq', label: 'Tirar uma dúvida', href: '#perguntas' }] }]}
         legal={{ label: 'Sobre a prévia', links: [{ id: 'catalog', label: 'Ver componentes no BEDS', href: local('components') }] }}

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { AppShell, Button, DesignSystemProvider, InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator, PageHeader, Stack, Text, brands, type InputOTPStatus } from 'beds';
+import { Button, DesignSystemProvider, InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator, PageHeader, Stack, Text, type InputOTPStatus } from 'beds';
+import { AppShell } from './recipes';
 
 export default function OtpPage() {
   const [value, setValue] = useState('');
@@ -17,7 +18,7 @@ export default function OtpPage() {
     if (delayedTimer.current !== undefined) window.clearTimeout(delayedTimer.current);
   }, []);
   const messages = { idle: 'Exemplo visual. Nenhum código é enviado ou validado.', processing: 'Verificando — estado demonstrativo.', error: 'Código inválido. Confira os dígitos e tente novamente.', success: 'Código confirmado — estado demonstrativo.' };
-  return <DesignSystemProvider theme={theme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} brandColor={"#ffa133"}>
     <AppShell sidebar={null} contentWidth="chat" collapsed={true} onCollapsedChange={() => {}} mobileOpen={false} onMobileOpenChange={() => {}}>
       <Stack>
         <PageHeader title="Código de verificação" description="Componente OTP do BEDS" />

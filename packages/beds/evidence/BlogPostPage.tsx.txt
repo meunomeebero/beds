@@ -1,5 +1,6 @@
+import { AppShell } from './recipes';
 import { useState } from 'react';
-import { AppShell, BlogPostCard, BlogPostList, BrandMark, Button, ContentHeader, DesignSystemProvider, Inline, NavItem, PageHeader, SidebarHeader, SidebarSection, Stack, Text, TextLink, ThemeToggle, brands, type BlogPostCardProps } from 'beds';
+import { BlogPostCard, BlogPostList, BrandMark, Button, ContentHeader, DesignSystemProvider, Inline, NavItem, PageHeader, SidebarHeader, SidebarSection, Stack, Text, TextLink, ThemeToggle, type BlogPostCardProps } from 'beds';
 import marina from './assets/forum-marina.svg';
 import rafael from './assets/forum-rafael.svg';
 
@@ -22,9 +23,9 @@ export default function BlogPostPage() {
   const post = posts.find(item => item.id === params.get('post'));
   const listHref = `?view=blog-post&theme=${theme}`;
 
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <AppShell contentWidth="chat" collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} navigationLabel="Navegação" closeNavigationLabel="Fechar navegação"
-      sidebar={<><SidebarHeader><Inline gap="tight"><BrandMark label="Curriculol" /><Text>Curriculol</Text></Inline></SidebarHeader><SidebarSection label="Playground"><NavItem label="Componentes" icon="Folder" href={`?view=components&theme=${theme}`} /><NavItem label="Posts do blog" icon="FileText" active href={listHref} /></SidebarSection></>}
+      sidebar={<><SidebarHeader><Inline gap="tight"><BrandMark src="/demo-brand.svg" label="Curriculol" /><Text>Curriculol</Text></Inline></SidebarHeader><SidebarSection label="Playground"><NavItem label="Componentes" icon="Folder" href={`?view=components&theme=${theme}`} /><NavItem label="Posts do blog" icon="FileText" active href={listHref} /></SidebarSection></>}
       header={<ContentHeader actions={<ThemeToggle label="Aparência da página" lightLabel="Claro" darkLabel="Escuro" />}><Text>Componentes / Posts do blog</Text></ContentHeader>}>
       {post ? <Stack gap="section">
         <TextLink href={listHref}>Voltar para os artigos</TextLink>

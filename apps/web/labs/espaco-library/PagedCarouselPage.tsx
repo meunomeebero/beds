@@ -1,4 +1,5 @@
-import { AppShell, DesignSystemProvider, PageHeader, PagedCarousel, Stack, Surface, Text, brands } from 'beds';
+import { DesignSystemProvider, PageHeader, PagedCarousel, Stack, Surface, Text } from 'beds';
+import { AppShell } from './recipes';
 
 const slides = [
   ['Importe seu perfil', 'Envie o PDF do LinkedIn para preencher suas experiências e habilidades.'],
@@ -8,7 +9,7 @@ const slides = [
 
 export default function PagedCarouselPage() {
   const theme = new URLSearchParams(location.search).get('theme') === 'light' ? 'light' : 'dark';
-  return <DesignSystemProvider theme={theme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} brandColor={"#ffa133"}>
     <AppShell sidebar={null} contentWidth="chat" collapsed={true} onCollapsedChange={() => {}} mobileOpen={false} onMobileOpenChange={() => {}}>
       <Stack>
         <PageHeader title="Carrossel paginado" description="Galeria manual para onboarding e conteúdo editorial." />

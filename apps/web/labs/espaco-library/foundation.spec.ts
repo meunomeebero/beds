@@ -28,7 +28,7 @@ test('provider SSR keeps theme, brand and context instances isolated', async () 
       React.createElement(foundation.DesignSystemProvider, { theme: 'light' }, React.createElement(Probe, { label: 'light' })),
       React.createElement(foundation.DesignSystemProvider, { theme: 'dark', brandColor: '#111111' },
         React.createElement(Probe, { label: 'dark' }),
-        React.createElement(foundation.BrandMark, { label: 'Second brand' }),
+        React.createElement(foundation.BrandMark, { src: '/demo-brand.svg', label: 'Second brand' }),
         React.createElement(foundation.ThemeToggle, { label: 'Appearance' }),
       ),
     ));
@@ -36,7 +36,12 @@ test('provider SSR keeps theme, brand and context instances isolated', async () 
     expect(markup).toContain('data-probe="light">light|#d0f300');
     expect(markup).toContain('data-probe="dark">dark|#111111');
     expect(markup).toContain('--es-on-brand:#ffffff');
-    expect((markup.match(/aria-labelledby="([^"]+)"/g) ?? []).length).toBe(1);
+    expect(markup).toContain('src="/demo-brand.svg"');
+    expect(markup).toContain('alt="Second brand"');
+    expect(markup).not.toContain('<rect');
+    expect(foundation.brands).toBeUndefined();
+    expect(() => renderToString(React.createElement(foundation.BrandMark, { label: 'Missing image' }))).toThrow(/caller-owned/);
+    expect(() => renderToString(React.createElement(foundation.BrandMark, { src: '/demo-brand.svg', label: '' }))).toThrow(/accessible label/);
     expect(markup.match(/<button[^>]+disabled=""/g) ?? []).toHaveLength(2);
 
     expect(() => renderToString(React.createElement(foundation.DesignSystemProvider, { theme: 'light', brandColor: '#fff' }, 'invalid'))).toThrow(/brandColor/);
@@ -61,7 +66,7 @@ async function openFoundationProbe(page: Page) {
           <button type="button" id="avatar-a" onClick={() => setSrc('/foundation/avatar-a.png')}>Avatar A</button>
           <button type="button" id="avatar-b" onClick={() => setSrc('/foundation/avatar-b.png')}>Avatar B</button>
           <Avatar name="Ada Lovelace" src={src} purpose="profile" />
-      <BrandMark label="Foundation brand" />
+      <BrandMark src="/demo-brand.svg" label="Foundation brand" />
           <TextLink href="https://example.com/foundation" external>External foundation link</TextLink>
           <div className="foundation-texts">{variants.map(variant => <Text key={variant} variant={variant}>Long {variant} text for wrapping and contrast.</Text>)}</div>
           <div className="foundation-icons"><Icon name="Home" purpose="navigation" /><Icon name="Plus" purpose="action" /><Icon name="ChevronRight" purpose="small" /><Icon name="Sparkles" purpose="feature" /></div>

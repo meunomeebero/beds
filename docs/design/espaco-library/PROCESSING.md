@@ -1,5 +1,11 @@
 # Processing — analysis and resume optimization
 
+Current ownership: `ProcessingView` and its types are optional app recipes in
+`apps/web/labs/espaco-library/recipes/processing.tsx`, not BEDS exports. The timing
+cap, story, scoring context and page hierarchy below describe that example only.
+The reusable `MeterSegments` remains in BEDS; it imposes no processing steps,
+completion timing or score policy. [Agnostic DS](AGNOSTIC-DS.md) owns this boundary.
+
 Scope: local BEDS candidate,2026-09-16. Published RC16 unchanged.
 User request: port current Curriculol processing screens into the redesign
 playground,using shared components,Better and Emil. No production migration,

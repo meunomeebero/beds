@@ -25,7 +25,7 @@ test('AppShell hydrates on a mobile matchMedia snapshot without mismatch errors'
       window.dispatchEvent(new Event('beds-hydration-markup-ready'));
     }, module.renderHydrationProbe());
     await page.waitForFunction(() => (window as Window & { __bedsHydrationComplete?: boolean }).__bedsHydrationComplete === true);
-    const shells = page.locator('.es-app-shell');
+    const shells = page.locator('.recipe-app-shell');
     await expect(shells).toHaveCount(2);
     const firstFrame = await shells.first().evaluate(element => ({
       grid: getComputedStyle(element).gridTemplateColumns,
@@ -45,7 +45,7 @@ test('AppShell hydrates on a mobile matchMedia snapshot without mismatch errors'
     await expect(segmented.nth(1).getByRole('radio', { name: 'Allow', exact: true })).toBeChecked();
     await expect(segmented.nth(0).locator('[data-segmented-indicator]')).toHaveCount(1);
     await expect(segmented.nth(1).locator('[data-segmented-indicator]')).toHaveCount(1);
-    const shellIds = await page.locator('.es-app-shell aside').evaluateAll(asides => asides.map(aside => aside.id));
+    const shellIds = await page.locator('.recipe-app-shell aside').evaluateAll(asides => asides.map(aside => aside.id));
     expect(new Set(shellIds).size).toBe(2);
     const activeDock = page.getByRole('button', { name: 'Active dock action', exact: true });
     const disabledDock = page.getByRole('button', { name: 'Disabled dock action', exact: true });

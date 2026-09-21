@@ -2,11 +2,29 @@
 
 Visual decisions: [Foundations](FOUNDATIONS.md). Executed checks: [Validation](VALIDATION.md). Historical prototypes do not supply current defaults.
 
-Public entry: `packages/beds/src/index.ts`. Exact TypeScript declarations are the API authority. Import only from `beds`; no internal subpath, arbitrary className/style or raw element replacement. Named variants select fixed contexts. States: [STATES.md](STATES.md); dimensions/type: [FOUNDATIONS.md](FOUNDATIONS.md).
+Public entry: `packages/beds/src/index.ts`. Exact TypeScript declarations are the API authority. Import reusable components from `beds`; no private subpaths or arbitrary className/style props on BEDS components. Apps may compose them with native elements and app-owned layout CSS. Named variants select component contexts, not whole-page designs. States: [STATES.md](STATES.md); component dimensions/type: [FOUNDATIONS.md](FOUNDATIONS.md).
 
-Current local inventory:129 public components;92 tokens. Published RC16 retains113 components. Additional exports: `useDesignSystem`, `brands`, `IconName`, `Theme`, `TextVariant`, `DataTableColumn`, `DataTableRow`, `DataTableState`, `FeatureCardProps`, `EmptyStateCardProps`, `OnboardingProps`, `AccountCreditsProps`, `CreditBalance`, `ForumTopicCardProps`, `BlogPostCardProps`, `LandingFooterProps`, `LandingFooterLink`, `LandingFooterGroup`, `LandingLink`, `ProductDemoTab`, `ProcessingViewProps`, `ProcessingStep`, `ProcessingStory`, `ResultLayoutProps`, `ResultScoreProps`, `ResultFindingsProps`, `ResultSectionProps`, `ResultOfferProps`, `ResultAction`, `CheckoutLayoutProps`, `OrderSummaryProps`, `CheckoutSectionProps`, `BenefitsSectionProps`, `BenefitItem`, `BenefitIllustrationKind`, `ApplicationBoardColumn`, `ApplicationBoardItem`, `DateItemProps`, `DateItemDate`, `PaymentConfirmationProps`, `PaymentInvoice`, `PaymentReceiptRow`, `ChatOption`, pricing/decision/record-family types, `SearchResult` and read-only `typography/geometry/neutrals/themes` metadata; these are not extra visual components. A source-backed component can contain locally engineered A keyboard/recovery behavior. Feedback/populated-data patterns with no matching visible source state remain A/U.
+The inventory is being classified under [Agnostic DS](AGNOSTIC-DS.md). The source
+barrel, not historical section counts below, is authoritative during migration.
+Landing, benefits, footer, onboarding, checkout, processing and results are now
+app-owned recipes; their names and types are no longer imports from `beds`.
+`brands` was removed; identity and presets are caller-owned.
+
+## Reusable segmented meter
+
+`MeterSegments` exposes the existing shared meter anatomy without prescribing
+label/value layout. Required: `label` and `value` (number or null). Optional:
+`max` (100), semantic `tone`, `rounding`, accessible `valueText`, `role` (meter or
+progressbar), `animateFill` and `paused`. Null/invalid evidence stays unavailable;
+known values clamp to the valid range. Animation does not delay accessible values.
+Use `SegmentedMeter` when the standard visible label/value row is appropriate.
+Storage quota and background-task progress are independent reuse cases. This is
+the existing sourced implementation, not a newly invented or duplicated widget;
+its motion provenance remains in [Provenance](PROVENANCE.md).
 
 ## Checkout — 3
+
+Optional app recipe, not exported from `beds`.
 
 `CheckoutLayout`,`OrderSummary`,`CheckoutSection`:focused purchase composition,
 host-formatted order summary,named form/status sections. No payment SDK,pricing
@@ -14,6 +32,8 @@ logic or invoice assertion. Reuse fields,radio groups and confirmed-payment
 presentation. [Contract and source mapping](CHECKOUT.md).
 
 ## Results — 5
+
+Optional app recipe, not exported from `beds`.
 
 `ResultLayout`,`ResultScore`,`ResultFindings`,`ResultSection`,`ResultOffer`:
 proof first,contextual next action,readable findings and host-owned detail.
@@ -25,12 +45,16 @@ describe the primary control. No entitlement,pricing,checkout or delivery logic.
 
 ## Processing — 1
 
+Optional app recipe, not exported from `beds`.
+
 `ProcessingView`: controlled ordered phases,estimated progress,narrative,
 disclosed activity,optional metrics,pause and host terminal/recovery actions.
 Types:`ProcessingViewProps`,`ProcessingStep`,`ProcessingStory`.
 [Contract and source mapping](PROCESSING.md);no application timing in the DS.
 
 ## Landing composition — 7
+
+Optional app recipe, not exported from `beds`.
 
 `LandingPageLayout`, `LandingHero`, `LandingSection`, `ProductDemo`,
 `DocumentPreview`, `ProcessSteps`, `FAQSection`: product-neutral native
@@ -41,6 +65,8 @@ Reuse existing benefits, pricing, footer and application card.
 
 ## Landing benefits — 2
 
+Optional app recipe, not exported from `beds`.
+
 `BenefitsSection`: heading, optional description, ordered benefit items, optional
 native action/note. Fixed first-card emphasis; page/section semantic contexts.
 `BenefitIllustration`: static decorative documents/profile/match/conversation/board
@@ -48,15 +74,21 @@ miniatures. No metrics or behavior. [Contract](BENEFITS.md).
 
 ## Landing footer — 1
 
+Optional app recipe, not exported from `beds`.
+
 `LandingFooter`: site-level closing message, named link groups, optional
 community/legal navigation, native primary CTA and decorative brand wordmark.
 No generated destinations or product state. [Contract](LANDING-FOOTER.md).
 
-## Application kanban — 1
+## Application kanban — optional app recipe
+
+`ApplicationBoard` and `ApplicationCard` are not package exports. Their job,
+resume and ATS/FIT model belongs to the optional catalog recipes; it is not a
+generic collection or board contract. The table below describes that recipe.
 
 | Component | Contract | Evidence / constraint |
 |---|---|---|
-|`ApplicationBoard` |`label/columns`;optional `onMove/announcement/emptyLabel` |Controlled status lanes;derived counts;explicit allowed moves;compact shared ApplicationCard;no drag/persistence;[contract](KANBAN.md). F3 NO_FIT for beUI `kanban` (registry slug 404) and `swipeable-list`: mobile swipe actions/refresh would add a different item contract and interaction model |
+|`ApplicationBoard` |`label/columns`;optional `destinations/onMove/announcement/emptyLabel` |Controlled status lanes;derived counts;per-item `moveTo ∩ destinations`;an optional host catalog may name destinations without visible lanes, while omitted catalog preserves the legacy columns fallback. Host owns permissions/transitions;compact shared ApplicationCard;no drag/persistence;[contract](KANBAN.md). F3 NO_FIT for beUI `kanban` (registry slug 404) and `swipeable-list`: mobile swipe actions/refresh would add a different item contract and interaction model |
 
 `ApplicationCard purpose="kanban"`: named compact layout, small folio beside
 identity, options menu for supplied destinations; default purpose unchanged.
@@ -79,7 +111,7 @@ identity, options menu for supplied destinations; default purpose unchanged.
 
 | Component | Contract | Evidence / constraint |
 |---|---|---|
-|`PaymentConfirmation` |`title/merchant/purchase/receipt`;optional `description/mark/invoice/continueAction/animate/headingLevel` |Confirmed-only presentation;paper motion never confirms payment or emits an invoice;[contract](PAYMENT-CONFIRMATION.md) |
+|`PaymentConfirmation` (app recipe, not a package export) |`title/merchant/purchase/receipt`;optional `description/mark/invoice/continueAction/animate/headingLevel` |Confirmed-only example;paper motion never confirms payment or emits an invoice;[recipe contract](PAYMENT-CONFIRMATION.md) |
 
 ## Foundation — 7
 
@@ -90,7 +122,7 @@ identity, options menu for supplied destinations; default purpose unchanged.
 |`Text` |`children`; `variant=body-small`, `tone=default` |Fixed contextual type; variants page-title/section-title/chat-title/body/body-small/label/caption/overline/option/metric; default/secondary tone only |
 |`Avatar` |`name`, optional `src`; `purpose=account` (`account/workspace/profile/forum`) |Fixed size by identity context;forum40px/r8;fallback initials;no caller pixel size. Broken image recovers once per URL to the deterministic initials — no retry loop,no network-generated identity;a changed `src` retries from scratch |
 |`TextLink` |`href`; optional `external/ariaLabel` |Text-level native link, shared hover/focus contract, underline from the border token; `external` adds a 12px up-right glyph and safe `rel`; no color/style overrides |
-|`BrandMark` |Optional accessible `label=Brand` |User-owned three18×4px bars,3px gaps,18×18 footprint; provider brand fill; A identity |
+|`BrandMark` |Required caller-owned `src` and accessible `label` |18×18 contained image; no embedded logo or recoloring. Larger wordmarks belong in app-owned image composition. |
 |`ThemeToggle` |Optional `label/lightLabel/darkLabel` |Reads actual provider theme; invokes provider callback; disabled when callback absent; real theme control, unlike legacy fixture |
 |`AnimatedNumber` |`value` (`number \| null`), `format`; optional `fallback=—`, `duration=1.1`, `startOnView=false`, `initialValue` (known prior number) |Tabular count-up to the true value. The first ready frame uses the current value unless `initialValue` supplies a known prior frame; `null` or non-finite → renders `fallback` from the first frame and never paints a fabricated zero. `startOnView` delays motion while preserving the truthful ready frame; the live reduced-motion preference is observed after mount and jumps straight to the final value; integer targets snap per frame. Not for evidence whose displayed text must stay stable, such as result scores. A adaptation of beUI `number` |
 
@@ -100,51 +132,54 @@ Icon registry additions: `House`, `MessageCircle`, `ChartColumn`, `UserRound`, `
 
 | Component | Required / optional API | Constraint |
 |---|---|---|
-|`AppShell` |`sidebar/children/collapsed/onCollapsedChange/mobileOpen/onMobileOpenChange`; optional `header/contentWidth/navigationLabel/closeNavigationLabel/skipToContentLabel` |First-focus skip link targets main;264px sidebar/62px rail;768 breakpoint; contentWidth chat/home/dashboard/full maps640/720/880/fluid;fixed16px page-top inset after header/mobile bar; mobile drawer traps focus and restores its opener after inert is removed; state controlled; drawer/backdrop labels accept translated copy |
-|`SidebarHeader` |`children`; optional search `{label,onClick}`, `closeLabel/expandLabel/collapseLabel` |42px minimum header;40px identity +32px search/collapse controls; shell context owns behavior; collapse/search controls accept translated labels |
-|`WorkspaceTrigger` |`name/onClick`; optional `mark/expanded/menuLabel` |40px profile control;17px mark/14px text; arbitrary data/artwork only through other library components in audited consumer; menu accessible name accepts translated copy |
+|`Sidebar` |`children/label`; optional `collapsed/onCollapsedChange/onDismiss` |Named navigation surface; controlled compact mode and optional host close action. No page width, mobile query, main landmark or route ownership. See [navigation boundary](NAVIGATION.md). |
+|`AppShell` (app recipe, not a package export) |Controlled sidebar and mobile state; optional header and content-width preset |Catalog-only page geometry and mobile focus/inert/skip-link orchestration. Not a universal layout contract. |
+|`SidebarHeader` |`children`; optional search `{label,onClick}`, `closeLabel/expandLabel/collapseLabel` |Header controls read the nearest Sidebar context; collapse or close appears only when the host supplies its callback; labels are localizable. |
+|`WorkspaceTrigger` |`name/onClick`; optional `mark/expanded/menuLabel` |40px profile control;17px mark/14px text; caller-owned ReactNode artwork in the mark slot, without overriding private component styles; menu accessible name accepts translated copy |
 |`SidebarSection` |`children`; optional `label`; purpose primary/default/history |Default17px top;12/18px label/8px bottom gap;history15px top;primary horizontal40px controls/31px selected pill; unique heading relationship |
 |`NavItem` |`label/icon`; either `href` or `onClick`; optional `active/badge/locked` |Primary active glyph filled currentColor with sidebar-color stroke;inactive outlined;no caller styling prop. Native link/button;31px row,14/19.6px regular text,gap11px,r6,padding8px; accessible current state; icon registry. `locked` carries the truthful reason: the row stays visible and non-interactive (`disabled`, muted), keeps its accessible name and exposes the reason through `title` and the label — never a no-op handler |
 |`SidebarFooter` |`children` |Anchored footer region; no plan policy |
 |`ContentHeader` |`children`; optional `actions` |Compact header/location region; fixed slots |
-|`PageContentHeader` |`title`; optional `description/leading/actions` |Measured page-identity header:784px maximum,48px top/32px side/16px bottom desktop inset;16px/16px/12px mobile inset; fixed title/action arrangement |
+|`PageContentHeader` (app recipe, not package export) |`title`; optional `description/leading/actions` |Example page-identity composition. Its784px measure and desktop/mobile page insets belong to the app, not the reusable heading contract. |
 |`Breadcrumbs` |`items:{id,label,href?}[]`; optional label |Named ordered navigation; last item current page; preceding href items native links |
-|`PageHeader` |`title`; optional description/leading/actions/purpose |Default measured dashboard heading context; `home` is the fixed22/28px desktop,20/26px mobile greeting context; not arbitrary H1 sizing |
+|`PageHeader` |`title`; optional description/leading/actions |Reusable H1 with supporting text and actions. No page margins, identity asset or home preset. The former `purpose="home"` belongs to the optional HomeHeader recipe. |
 |`SectionHeader` |`title`; optional description/actions |Named section rhythm; no per-screen style |
 |`Stack` |`children`; gap tight/default/section |Fixed semantic rhythm, not numeric spacing |
 |`Inline` |`children`; gap tight/default; align start/center/between |Fixed wrapping/action grouping |
 |`ResponsiveGrid` |`children` |Presentational relationship only: two equal columns from768px, one column through767px; fixed16px token gap and `min-width:0` containment. No grid ARIA, state, focus handling or visual props. |
 |`Divider` |No props |Canonical theme boundary |
-|`Surface` |`children`; role panel/subtle/raised |Panel transparent,r20,p16;subtle/raised intentional inset roles;no arbitrary fill |
-|`CollectionCard` |`avatar/identity/title/metadata/actions`; optional selection |Transparent,r24,p20;260px desktop/240px mobile inner anatomy: identity/selection,metadata,aligned actions;content and controls caller-owned |
-|`ActivityPanel` |`title/icon/children`;optional description;purpose=default/history |Transparent,r20,p16;260px desktop inner panel;mobile fits content;default header divider;history has no header divider;description keeps dotted HelpLabel in both;no ordering/request behavior |
+|`Surface` |`children`; role panel/subtle/raised; optional `id/focusTarget` |Panel transparent,r20,p16;subtle/raised intentional inset roles;no arbitrary fill. `id` is only a stable host-owned deep-link or relationship target. `focusTarget` adds programmatic focus with `tabIndex=-1`, never a tab stop; scroll, highlighting, route and request behavior stay host-owned. |
+|`CollectionCard` |`avatar/identity/title/metadata/actions`; optional selection |Transparent,r24,p20;minimum260px desktop/240px mobile;identity wraps without losing the full value;content and controls caller-owned |
+|`ActivityPanel` |`title/icon/children`;optional description;purpose=default/history |Transparent,r20,p16;minimum260px desktop,content-driven growth;mobile fits content;does not clip children or override nested ScrollableList containment;default header divider;history has no header divider;description keeps dotted HelpLabel in both;no ordering/request behavior |
 
-Primary navigation reuses `NavItem` inside `SidebarSection purpose="primary"`:4px group gap,9px icon/text gap,11px horizontal padding and14px/21px text. Selected appearance persists on hover;150ms neutral transition,none with reduced motion. Collapsed rail preserves accessible names and42px-wide controls within62px. Mobile keeps the768px breakpoint.
+Primary navigation reuses `NavItem` inside `SidebarSection purpose="primary"`:4px group gap,9px icon/text gap,11px horizontal padding and14px/21px text. Selected appearance persists on hover;150ms neutral transition,none with reduced motion. Collapsed controls fit the available sidebar width and preserve accessible names. Rail width and mobile breakpoint belong to the AppShell recipe, not Sidebar.
 
 `Dock` / `DockItem` / `DockSeparator` are migrated to Tailwind + `motion/react` (beUI `dock`, 2026-09-18): 44px fixed item size, active pill glides via `layoutId` (`SPRING_LAYOUT`), glass `bg-card/80` + `backdrop-blur-xl`. No public sizing or styling escape hatches.
 
-## Controls — 12
+## Controls — 13
 
 | Component | API | States / constraints |
 |---|---|---|
 |`Button` |`label`; optional onClick/type/variant/compact/purpose/icon/disabled/busy/aria-describedby/aria-expanded/aria-controls |Primary/secondary/ghost/destructive; purpose default/welcome/connection; compact applies to default purpose only; native type; busy shows an inline spinner with the label preserved and disables repeated action (motion/react rotation, static under reduced motion); destructive fills `--destructive` with `--destructive-foreground` ink; disclosure toggles expose the controlled region state |
-|`IconButton` |`label/icon/onClick`; optional disabled/aria-describedby |Accessible name; fixed action geometry |
+|`IconButton` |`label/icon/onClick`; optional disabled/ref/onKeyDown/aria-describedby/aria-haspopup/aria-expanded/aria-controls |Accessible name; shared 32px minimum target, 44px with coarse pointer. Semantic popup attributes support reusable triggers without duplicating their presentation. DropdownMenu uses this control. |
 |`IconToggleButton` |`label/icon/pressed/onPressedChange`; optional disabled/aria-describedby |Controlled native `aria-pressed`; persistent accessible name; selected icon fills currentColor; no domain policy |
 |`TextField` |`label/value/onChange`; optional description/error/placeholder/disabled/readOnly/name/autoComplete/inputMode/spellCheck/focusOnError/reserveErrorLine/type; purpose settings/connection |Persistent label; associated helper/error; `reserveErrorLine` keeps the error slot occupied (visibility-hidden) so appearing errors never shift layout; semantic input mode/type and forwarded ref preserve fixed settings13/20px,36px or connection14/16px,40px geometry; 16px text under `pointer:coarse` (connection keeps its 40px box) |
+|`DateField` |`label/value/onChange`; optional description/error/disabled/readOnly/name/autoComplete/focusOnError/reserveErrorLine/min/max/required |Controlled native `type="date"` field. `value`, `min` and `max` are ISO calendar-date strings (`YYYY-MM-DD`); empty `value` is valid. Browser localization, date parsing, validation copy, timezone conversion, availability and business policy remain caller-owned. Fixed settings field geometry and error recovery match `TextField`; no custom calendar or wheel picker. [Contract](DATE-FIELD.md) |
 |`TextAreaField` |Field contract except `type`; forwarded ref |Multiline role with fixed geometry; caller validation and optional error focus; honors `reserveErrorLine` |
 |`SearchField` |`label/value/onChange`; optional placeholder/disabled/name/autoComplete/inputMode/spellCheck; forwarded ref |Native search input; filtering external |
+|`RangeSlider` |`label`; optional value/defaultValue/onValueChange/min/max/step/disabled/description/formatValue/name/id/showTicks |Native single-value range; controlled value remains authoritative, uncontrolled state is local; label and formatted value stay visible; an off-grid `max` resolves to the last legal grid value in React, text, ARIA, callback and native input; keyboard/form/RTL semantics remain native; 40px desktop/44px coarse target, 2px focus perimeter and forced-colors fallback; ticks are decorative and capped at50 intervals. No quantity, price, promotion, checkout or persistence policy. [RangeSlider](RANGE-SLIDER.md) |
 |`Checkbox` |`label/checked/onChange`; optional description/disabled |Native checked semantics; visible source checkbox U, local visual A |
 |`Switch` |Same toggle contract |Measured32×18.4px track/16px thumb; functional blue selected; native switch semantics;visible label names input,description associated separately without repetition |
-|`SegmentedControl` |`label/value/options/onChange`; options id/label/disabled?; variant pill/joined |Native exclusive radios; pointer/Space use native activation; pill Left/Right and joined Left/Right/Up/Down/Home/End move focus while skipping disabled options; keyboard selection/reveal is instant and direction-aware in RTL; checked state and selected indicator remain caller-controlled under lag/rejection; selected pill/joined surface uses isolated `layoutId` motion with reduced-motion fallback while pointer press retains `.92`; the 2px focus perimeter is painted inside the 24px/36px lane and forced-colors uses `Highlight`; long labels use a contained inline scroll lane without widening the document; pill24px group versus source MCP joined36px; fixed contextual geometry |
-|`Tabs` |`label/value/items/onChange`; items id/label/disabled?/content; variant activity/connection/settings |Named tablist/panels;activity30px minimum group,intrinsic labels,wrap;connection owns16px shell,53px strip,36px distributed list and16/32/32px panel;settings owns48px intrinsic tabs,scroll lane,quiet selected fill+2px underline,24px panel gap;internal overflow fades/44px edge controls appear only when needed;roving focus;arrows/Home/End skip disabled;settings mirrors arrows in RTL;controlled value;pointer/edge reveal may animate while keyboard and reduced motion settle instantly. [Settings](SETTINGS.md) |
+|`SegmentedControl` |`label/value/options/onChange`; options id/label/disabled?; variant pill/joined |Native exclusive radios; pointer/Space use native activation; pill Left/Right and joined Left/Right/Up/Down/Home/End move focus while skipping disabled options; keyboard selection/reveal is instant and direction-aware in RTL; checked state and selected indicator remain caller-controlled under lag/rejection; selected pill/joined surface uses isolated `layoutId` motion with reduced-motion fallback while pointer press retains `.92`; the 2px focus perimeter is painted inside the 24px/36px lane and forced-colors uses `Highlight`; its width follows its options until the available inline space, then long labels use a contained inline scroll lane without widening the document; pill24px group versus source MCP joined36px; fixed contextual geometry |
+|`Tabs` |`label/value/items/onChange`; items id/label/disabled?/content; variant activity/connection/settings |Named tablist/panels;activity30px minimum group,intrinsic labels,wrap and semantic muted-text inactive state;connection owns16px shell,53px strip,36px distributed list and16/32/32px panel;settings owns48px intrinsic tabs,scroll lane,quiet selected fill+2px underline,24px panel gap;all variants retain native disabled semantics with a distinct reduced-opacity state;internal overflow fades/44px edge controls appear only when needed;roving focus;arrows/Home/End skip disabled;settings mirrors arrows in RTL;controlled value;pointer/edge reveal may animate while keyboard and reduced motion settle instantly. [Settings](SETTINGS.md) |
 |`RadioGroup` |`label/value/options/onChange`; optional description/error/disabled/name/purpose |Default16px indicator/8px rhythm unchanged;accepted pointer selection uses an instance-scoped dot layout spring and `.92` press;native keyboard navigation is instant. `purpose="question"` keeps numbered52px minimum rows with immediate number→check and no transform/layout motion. Native fieldset/radios;label remains visible standalone;QuestionCard hides repeated legend only. Caller owns selection/validation |
 |`FileUploadField` |`label/files/onFilesChange/dropLabel/browseLabel/removeLabel`; optional description/error/status/accept/multiple/disabled/purpose/documentLabel/dragLabel |Controlled callback-only picker/drop/list/removal;document purpose adds illustrated entry;cancel preserves selection,removal restores focus. No serialization,upload,validation or persistence. [Document upload](DOCUMENT-UPLOAD.md) |
 
 Welcome action context is a source-measured fixed button purpose:40px high,12px radius,14px horizontal padding,14/16px medium label. Connection action uses40px height/10px radius. These are not general size APIs; use each with its matching context.
 
-Button, IconButton, IconToggleButton, TextField, TextAreaField, SearchField, Checkbox, Switch, SegmentedControl and all Tabs variants are migrated to Tailwind utilities + `motion/react` (F1/F2, beUI-sourced, 2026-09-19): API and source-measured geometry preserved, legacy `.es-*` class hooks dropped for element/role/`data-purpose` selectors, interaction motion in the [motion contract](STATES.md). Checkbox/Switch keep a full-area invisible native input (`inset-0`, `opacity-0`) so the real element owns the >=44px coarse hit-target. SegmentedControl keeps native radio participation, transfers focus to the accepted keyboard destination, and derives checked/indicator state only from the controlled value; keyboard navigation/reveal is instant, pointer selection uses an instance-scoped layout indicator and beUI press scale, and the focus perimeter remains inside the lane in light/dark/forced-colors. Tabs keep their variant-specific geometry and controlled native semantics; pointer/edge reveal can use the beUI layout spring and panel fade, while Arrow/Home/End/Enter/Space and reduced motion use zero-duration indicator/panel transforms. Settings keeps its measured scroll lane, RTL keyboard behavior, forced-colors indicator and 2px underline; all layout indicators are reduced-motion guarded.
+Button, IconButton, IconToggleButton, TextField, DateField, TextAreaField, SearchField, Checkbox, Switch, SegmentedControl and all Tabs variants are migrated to Tailwind utilities + `motion/react` (F1/F2, beUI-sourced, 2026-09-19): API and source-measured geometry preserved, legacy `.es-*` class hooks dropped for element/role/`data-purpose` selectors, interaction motion in the [motion contract](STATES.md). `DateField` reuses the already-adopted beUI `input` anatomy with the platform `type="date"`; the separately discovered beUI `wheel-picker` is not a date-form replacement. Checkbox/Switch keep a full-area invisible native input (`inset-0`, `opacity-0`) so the real element owns the >=44px coarse hit-target. SegmentedControl keeps native radio participation, transfers focus to the accepted keyboard destination, and derives checked/indicator state only from the controlled value; keyboard navigation/reveal is instant, pointer selection uses an instance-scoped layout indicator and beUI press scale, and the focus perimeter remains inside the lane in light/dark/forced-colors. Tabs keep their variant-specific geometry and controlled native semantics; pointer/edge reveal can use the beUI layout spring and panel fade, while Arrow/Home/End/Enter/Space and reduced motion use zero-duration indicator/panel transforms. Settings keeps its measured scroll lane, RTL keyboard behavior, forced-colors indicator and 2px underline; all layout indicators are reduced-motion guarded.
 
-## Overlays — 10
+## Overlays — 11
 
 | Component | API | Constraints |
 |---|---|---|
@@ -154,6 +189,7 @@ Button, IconButton, IconToggleButton, TextField, TextAreaField, SearchField, Che
 |`DropdownMenu` |`label/open/onOpenChange/items/onSelect`; optional icon |Items id/label/icon?/disabled?/destructive?;160px period-style popup; keyboard and disabled handling |
 |`Tooltip` |`label`, one compatible library control child |Associates aria-describedby while open; keyboard/pointer/touch; fixed bottom-default placement with 8px anchor gap and internal viewport clamp; animated surfaces reserve a width-scaled overshoot margin while the public viewport guarantee stays >=8px; no arbitrary wrapper CSS; A adaptation of beUI `tooltip` |
 |`Dialog` |`open/onOpenChange/title`; optional children/description/actions/artwork; variant standard/welcome |Native modal; labelled content; focus recovery; standard geometry derived from command surface A; welcome geometry M; artwork only in welcome region |
+|`SandboxedHtmlPreview` |`title/html` |Read-only server HTML in native `iframe srcDoc`; empty `sandbox`, `no-referrer`, fixed responsive frame. Use inside BEDS Dialog/Drawer; host owns content trust, request/error/retry and all following actions. [Contract](SANDBOXED-HTML-PREVIEW.md) |
 |`CommandPalette` |`open/onOpenChange/label/query/onQueryChange/items/onSelect`; optional emptyLabel |672px search/list surface; native modal; fuzzy cursor/active-descendant choice; ArrowUp/Down cycle enabled options only; Home/End preserve the platform-native field behavior; reduced-motion-safe active-row motion; no network search or public upstream escape APIs |
 |`SearchDialog` |Controlled open/query/items/onSelect; optional categories, resultsLabel, state, filterMode and copy labels; `SearchResult` adds categoryId/keywords/identity |Rich discovery overlay with category buttons, identity/result/description rows, keyboard hints and recovery. Shared native modal mechanics; CommandPalette keeps the controlled API while Home/End preserve the platform-native field behavior. [Search contract](SEARCH-DIALOG.md) |
 |`Drawer` |`open/onOpenChange/title/children`;optional description,headerActions,actions,closeLabel,contentLabel |Modal inline-end panel;full-height,independent body scroll,stable chrome,focus recovery;beUI `drawer` motion adapted without public escape hatches;caller owns data/dismissal policy. [Drawer contract](DRAWER.md) |
@@ -185,7 +221,7 @@ Unlike the old prototype, portable AccountMenu exposes workspace and theme callb
 |---|---|---|
 |`Badge` |`label`; tone neutral/success/warning/error/info; purpose tag(default)/status |Tag retains compact filled12/16px treatment and semantic inset. Status uses transparent12/18px regular secondary text,6px leading dot/gap; no border/shadow; complete labels wrap. Visible label carries meaning; no live-region or button semantics. Status is an A adaptation; beUI `animated-badge` roll/layout motion is adopted with the BEDS API and reduced-motion fallback, preview in ApplicationCard catalog |
 |`StatusDot` |`label/status` |Named status shape; no color-only meaning |
-|`Notice` |`title`; optional description/tone/onDismiss |Status/alert semantics; source complete notice matrix U; local A |
+|`Notice` |`title`; optional description/tone/onDismiss/dismissLabel |Status/alert semantics; BEDS falls back to PT-BR `Dispensar notificação` only when the host supplies a dismiss callback without its own label; source complete notice matrix U; local A |
 |`EmptyState` |`title`; optional description/icon/action |Observed empty-state pattern; action supplied, not inferred upsell |
 |`EmptyStateCard` |`title/description`;exactly one of `image:{src,alt,fallbackLabel?}` or `illustration:'empty-folder'`;optional `icon`, `headingLevel:2\|3`, `action:{label,onClick,disabled?,busy?}` |Message-first card;480px maximum,r24,p8;image15:7/r16 or built-in folder/flies with visible pause and static reduced motion;transparent;optional next-step action;compact EmptyState unchanged. [Contract](EMPTY-STATE.md) |
 |`Skeleton` |Purpose line/avatar/card |Fixed A placeholder; decorative; not proof source loading state audited |
@@ -215,20 +251,21 @@ Carousel RC11 replaces the RC9 edge-reversal/toolbar contract. Overflow uses thr
 |`ForumTopicCard` |`title/author`;exactly one `href/onOpen`;optional `excerpt/activity/repliesLabel/status/unreadLabel/selected` |Avatar-led native destination;transparent rest,neutral current;full subject wrap,excerpt recovered at destination;no data effects. [Contract](FORUM-TOPICS.md) |
 |`ForumTopicList` |`label/children` |Named ul with one li per direct keyed card;fixed4px rhythm;not a listbox;no fragments wrapping multiple cards |
 
-## Chat — 8
+## Chat — 9
 
 | Component | API | Evidence / constraint |
 |---|---|---|
 |`Conversation` |`label/children` |Named semantic message stack;fixed8px chronology gap;no arbitrary layout props |
 |`ConversationBubble` |`role:user|assistant/children`;optional `sentAt/reactions` |User/assistant alignment and fixed surface anatomy;time remains visibly available instead of hidden behind an undiscoverable click;reactions are named metadata;no caller variant/color/radius escape |
 |`ChatLayout` |`title/children`; optional mark/suggestions/recent |Measured header/composer/suggestion/recent grouping |
-|`ChatComposer` |`label/value/onChange/onSubmit`; optional placeholder/context/tools/busy/disabled/onAttach/onCancel/error/purpose/sendLabel/attachLabel/cancelLabel;attachments/attachmentsLabel/onRemoveAttachment/attachmentPicker |Default geometry retained;guided adds visible label,error focus,mobile16px input. Controlled attachment chips precede editor;full names,kind icons,individual removal and focus recovery. Optional local picker;no upload/read. Enter submits,Shift+Enter newline,IME guarded. [Lucy](LUCY-COMPOSITION.md) |
+|`ChatComposer` |`label/value/onChange/onSubmit`; optional placeholder/context/tools/busy/disabled/onAttach/onCancel/error/purpose/sendLabel/attachLabel/cancelLabel;attachments/attachmentsLabel/onRemoveAttachment/attachmentPicker |Default geometry retained;guided adds visible label,error focus,mobile16px input. BEDS falls back to PT-BR `Enviar mensagem` and `Adicionar anexo ou contexto`; optional labels remain host-owned overrides, not forced product translation. Controlled attachment chips precede editor;full names,kind icons,individual removal and focus recovery. Optional local picker;no upload/read. Enter submits,Shift+Enter newline,IME guarded. [Lucy](LUCY-COMPOSITION.md) |
 |`SuggestionRow` |`icon/title/onClick`; optional description |Measured40px row/24px tile; content external |
 |`ChatMessage` |`role:user|assistant`,children;status sending/sent/error;optional onRetry/purpose/author/mark |Default bubble retained;thread opens assistant prose across the lane and preserves newlines;optional author/DS mark;user bubble remains trailing. PT-BR sending/error recovery;no provider or streaming behavior |
-|`ChatThread` |`title/children/interaction/stepKey`;optional notice/announcement |640px host chat lane;open transcript + in-flow next step;hidden H1;stable polite announcement;changed stepKey moves focus to new step,never initial mount or theme flip. [Lucy](LUCY-COMPOSITION.md) |
+|`ChatThread` (app recipe, not a package export) |`title/children/interaction/stepKey`;optional notice/announcement |App-owned transcript, H1, next-step placement and focus policy. Native selectors, no private component access. [Lucy example](LUCY-COMPOSITION.md) |
 |`ChatOptions` |`title/options/onChoose`;optional disabled |Native action rows from `ChatOption:{id,label,description?,icon,disabled?}`;no radio selection or automatic confirmation;no policy/provider calls. [Lucy](LUCY-COMPOSITION.md) |
+|`ChatWorkspace` |`label/title/messages/draft/onDraftChange/onSubmit`; optional `state/disabled/error/onCancel/onRetry/emptyState` and localized labels |Controlled beUI-chat-app presentation subset: ordered incremental transcript, native composer, stream/cancel/error/retry states; no session/SSE/identity/credit/network logic. [Contract](CHAT-WORKSPACE.md) |
 
-APIs specify controlled local behavior, not provider integrations. A rendered reply fixture is not an AI response. Consumers coordinate context/tools availability with composer busy state; primitives do not silently mutate sibling slot controls.
+APIs specify controlled local behavior, not provider integrations. A rendered reply fixture is not an AI response. Consumers coordinate context/tools availability with composer busy state; primitives do not silently mutate sibling slot controls. `ChatWorkspace` adds `ChatWorkspaceProps`, `ChatWorkspaceMessage` and `ChatWorkspaceError`; it preserves every prior chat export unchanged.
 
 ## Questions and approvals — 4
 
@@ -246,7 +283,7 @@ Exact type exports and consumer examples: [Decision contract](DECISIONS.md).
 | Component | API | Evidence / constraint |
 |---|---|---|
 |`PricingCard` |`title/description/image/price/featuresLabel/features/action`;optional featured/actionNote/feedback/headingLevel |Transparent360px maximum,r24,p20;4:1 art;literal price and billing description;optional typed `price.amount` animates only a controlled real change;semantic benefit list;one full-width40/44px pill action;caller owns requests and outcomes |
-|`PricingSection` |`title/plans`;optional description/mark/headingLevel |Centered720px maximum;two columns when space permits,one below664px available width;named section and semantic heading hierarchy;only first explicitly featured plan gets brand emphasis |
+|`PricingSection` (app recipe, not a package export) |`title/plans`;optional description/mark/headingLevel |Example comparison layout and first-featured policy are app-owned, not DS constraints;`PricingCard` remains the reusable public component |
 
 Full API,source adaptation and validation: [Pricing contract](PRICING.md).
 
@@ -268,11 +305,13 @@ Existing Badge tag/status and compact RadioGroup styles remain unchanged.
 
 | Component | API | Evidence / constraint |
 |---|---|---|
-|`CodeSnippet` |`label/value`; optional async `onCopy(value)` and complete `messages: CodeSnippetMessages` |Measured MCP code/copy context;Geist Mono40012/20px;42px region,r12;caller owns localization including accessible label,pending,success,error recovery. English default preserves existing consumers;stable live region and inset focus ring |
+|`CodeSnippet` |`label/value`; optional async `onCopy(value)` and complete `messages: CodeSnippetMessages` |Measured MCP code/copy context;Geist Mono40012/20px;42px region,r12;caller owns localization including accessible label,pending,success,error recovery. The complete BEDS fallback is PT-BR; pass `messages` for the host locale rather than relying on locale detection. Stable live region and inset focus ring |
 
 Copy begins only on a user click. Caller may inject an asynchronous copy callback; otherwise the component calls the browser clipboard API. Copying disables repeat activation; copied state announces success; failure offers retry or manual selection. Horizontally scrollable code remains selectable/focusable. These local recovery states are A, not evidence that source clipboard failures were observed. No pasted value is submitted to a network service.
 
 ## Onboarding — 1
+
+Optional app recipe, not exported from `beds`.
 
 Standalone form composition:`Onboarding` takes title/children/submitLabel/onSubmit;
 optional description,brandMark,preview,secondaryAction,busy,disabled,feedback,footer.
@@ -299,11 +338,16 @@ Provide an owned/licensed image,prefer3:2 crop with no essential embedded instru
 These primitives own measurement and disclosure semantics only; they never fetch or style consumer content. The beUI `bouncy-accordion` height/opacity/layout intent is adapted with reduced-motion fallback. `DisclosureText` keeps the full string mounted; `LabelField` keeps its hidden remainder mounted inert/aria-hidden; `DisclosedRecords` removes collapsed records from the document by design. Both toggles expose `aria-expanded`/`aria-controls` through the shared `Button`.
 
 Catalog:Library → **Card de apresentação** (`?view=feature-card`). [Controlled example](../../../apps/web/labs/espaco-library/FeatureCardExamples.tsx);local synthetic content,no real onboarding request.
-## Application tracking
+## Application tracking — optional app recipe
 
-`ApplicationCard`, `ResultsStatus`, `CollectionToolbar`: [Application card contract](APPLICATION-CARD.md).
-Portable data/actions; personal document folio and annotation; controlled status,
-FIT/ATS distinction; no product runtime. Catalog `?view=application-card`.
+`ApplicationCard`: [Application card recipe](APPLICATION-CARD.md), outside the
+package. Personal document folio, annotation, controlled status and FIT/ATS
+distinction remain app-specific. Catalog `?view=application-card`.
+
+Public generic controls remain in `collection-controls.tsx`: `ResultsStatus`
+accepts caller-owned text in a stable polite status region; `CollectionToolbar`
+accepts `search` and `filters` slots with wrapping containment. Neither carries
+vacancy, resume, score or transition policy.
 
 ## InputOTP contract
 

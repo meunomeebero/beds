@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
-import { BrandMark, Button, DesignSystemProvider, Inline, Onboarding, Select, Text, TextField, ThemeToggle, brands } from 'beds';
+import { BrandMark, Button, DesignSystemProvider, Inline, Select, Text, TextField, ThemeToggle } from 'beds';
+import { Onboarding } from './recipes';
 
 export default function OnboardingPage() {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => new URLSearchParams(location.search).get('theme') === 'dark' ? 'dark' : 'light');
@@ -38,8 +39,8 @@ export default function OnboardingPage() {
     complete();
   }
 
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={brands.curriculol}>
-    <Onboarding title="Prepare seu espaço" description="Comece pelo básico. Você pode ajustar depois." brandMark={<BrandMark label="Curriculol" />} submitLabel="Continuar" onSubmit={submit} busy={busy} feedback={feedback}
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
+    <Onboarding title="Prepare seu espaço" description="Comece pelo básico. Você pode ajustar depois." brandMark={<BrandMark src="/demo-brand.svg" label="Curriculol" />} submitLabel="Continuar" onSubmit={submit} busy={busy} feedback={feedback}
       preview={{ name: name.trim() || 'Seu espaço', detail: headline.trim() || 'Seu próximo passo', sections: [{ id: 'career', label: 'Sua carreira' }, { id: 'account', label: 'Sua conta' }, { id: 'recent', label: 'Recentes' }] }}
       footer={<Inline><Text variant="caption" tone="secondary">Demonstração local, sem cadastro.</Text><ThemeToggle label="Aparência" lightLabel="Claro" darkLabel="Escuro" /><Select label="Resultado simulado" value={result} options={[{ id: 'success', label: 'Sucesso' }, { id: 'error', label: 'Erro' }, { id: 'pending', label: 'Aguardando' }]} onChange={value => setResult(value === 'error' ? 'error' : value === 'pending' ? 'pending' : 'success')} />{busy && <Button label="Concluir simulação" onClick={complete} />}</Inline>}>
       <TextField ref={nameInput} label="Nome" name="name" autoComplete="name" placeholder="Luísa Costa" value={name} onChange={value => { setName(value); if (error) setError(''); if (feedback) setFeedback(undefined); }} error={error || undefined} />

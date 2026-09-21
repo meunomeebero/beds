@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DesignSystemProvider, brands, Stack, PageHeader, TextField, Button, Notice, ThemeToggle, type Theme } from 'beds';
+import { DesignSystemProvider, Stack, PageHeader, TextField, Button, Notice, ThemeToggle, type Theme } from 'beds';
 import 'beds/styles.css';
 import 'beds/reset.css';
 
@@ -7,7 +7,7 @@ export function PersonalSaaS() {
   const [theme, setTheme] = useState<Theme>('dark');
   const [name, setName] = useState('');
   const [saved, setSaved] = useState(false);
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <Stack>
       <PageHeader title="Workspace" actions={<ThemeToggle />} />
       <TextField label="Workspace name" value={name} onChange={value => { setName(value); setSaved(false); }} />

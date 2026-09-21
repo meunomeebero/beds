@@ -6,8 +6,8 @@
    and the error message settles in via AnimatePresence (no CSS keyframes). Touch ergonomics inlined in the controls. */
 
 /* Checkbox / Switch: migrated to Tailwind + motion in controls.tsx (Fable F1 — beUI `checkbox` / `switch`, 2026-09-17).
-   Geometry preserved (16×16 box / 32×18.4 track with 16 thumb travelling translateX(14px)),
-   check enters via motion (scale .6→1 in 160ms BEDS easing), thumb travel via motion.x (180ms).
+   Geometry preserved (16×16 box / 32×18.4 track with 16 thumb travelling logical14px),
+   check enters via motion (scale .6→1 in 160ms BEDS easing), thumb travel via insetInlineStart (180ms).
    Focus ring uses the `peer-focus-visible:` Tailwind variant. */
 
 .es-root .es-tabs{min-width:0}
@@ -33,7 +33,7 @@
    paints Highlight through the explicit `outline:transparent` set on focus. */
 /* Field transitions removed — TextField/TextAreaField/SearchField now use Tailwind transition-colors + motion for shake. */
 /* Field error shake/error-in keyframes removed — replaced by motion `animate` (one-shot x oscillation) and AnimatePresence in controls.tsx. */
-/* Binary control transitions and check-in keyframe removed — switch thumb travel is motion.x; check enter is motion scale. */
+/* Binary control transitions and check-in keyframe removed — switch thumb uses logical motion inset; check enter is motion scale. */
 /* Touch ergonomics (WCAG 2.5.8 / HIG): desktop geometry is untouched. On coarse pointers text fields grow to 44px at 16px
    (below 16px iOS Safari zooms the page on focus) and compact controls grow to a real 44px target. A pseudo-element hit
    area was tried and rejected: an ::after inset -6px inflates scrollWidth by 6px (reads as clipped text in evidence specs)
@@ -63,7 +63,5 @@
 .es-root .es-tabs[data-variant="settings"] [aria-selected="true"] .es-settings-tab-label{background:var(--es-selected);color:var(--es-text)}
 .es-root .es-tabs[data-variant="settings"] .es-settings-tab-indicator{position:absolute;inset-inline:var(--es-space-1);inset-block-end:0;block-size:2px;border-radius:var(--es-radius-full);background:var(--es-text);pointer-events:none}
 .es-root .es-tabs[data-variant="settings"] .es-tabs-list>[role="tab"]:focus-visible{outline-offset:-2px}
-.es-root .es-tabs[data-variant="settings"] .es-switch{min-height:44px}
 @media(hover:hover){.es-root .es-tabs[data-variant="settings"] [role="tab"]:not(:disabled):not([aria-selected="true"]):hover{background:transparent}.es-root .es-tabs[data-variant="settings"] [role="tab"]:not(:disabled):not([aria-selected="true"]):hover .es-settings-tab-label{background:var(--es-hover)}}
-@media(max-width:767px){.es-root .es-tabs[data-variant="settings"] :where(input,select,textarea){font-size:16px}.es-root .es-tabs[data-variant="settings"] :where(.es-select-trigger,.es-theme-toggle>button){min-height:44px}.es-root .es-tabs[data-variant="settings"] .es-text-link{display:inline-flex;align-items:center;min-height:44px}}
 @media(forced-colors:active){.es-root .es-tabs[data-variant="settings"] .es-settings-tab-indicator{background:Highlight}.es-root .es-tabs[data-variant="settings"] [aria-selected="true"] .es-settings-tab-label{outline:1px solid Highlight}}

@@ -2,12 +2,16 @@ import { animate, motion, useMotionValue, useReducedMotion, useTransform } from 
 import { useEffect } from 'react';
 import { EASE_OUT } from './lib/ease';
 
-/** Shared internal anatomy; public consumers use SegmentedMeter or ApplicationCard. */
+/** Shared normalization for meters; null represents unavailable evidence. */
 export function meterFraction(value: number | null, max: number) {
   if (value === null || !Number.isFinite(value) || !Number.isFinite(max) || max <= 0) return null;
   return Math.min(max, Math.max(0, value)) / max;
 }
 
+/** Reusable meter/progress anatomy without a prescribed label/value layout.
+ * Use for unrelated quantities such as storage usage or task progress.
+ * UI authoring requires ../docs/INTERFACE-QUALITY.md and its linked skills.
+ */
 export function MeterSegments({ label, value, max = 100, tone = 'neutral', rounding = 'nearest', valueText, role = 'meter', animateFill = false, paused = false }: {
   label: string;
   value: number | null;
@@ -16,7 +20,7 @@ export function MeterSegments({ label, value, max = 100, tone = 'neutral', round
   rounding?: 'nearest' | 'down';
   valueText?: string;
   role?: 'meter' | 'progressbar';
-  /** Internal ProcessingView-only visual fill; the accessible value stays final. */
+  /** Optional visual entrance; the accessible value stays final. */
   animateFill?: boolean;
   paused?: boolean;
 }) {

@@ -1,5 +1,11 @@
 # Results — analysis, optimization and next action
 
+Current ownership: the `Result*` family is an optional app recipe in
+`apps/web/labs/espaco-library/recipes/results.tsx`, not BEDS runtime exports.
+Its scores, findings, offer hierarchy and conversion flow are example decisions,
+not a universal style guide. Numeric-evidence and offer-semantics tests were
+preserved with the recipe. [Agnostic DS](AGNOSTIC-DS.md) owns the current boundary.
+
 Scope: September16 local BEDS redesign candidate. Preview routes:
 `?view=analysis-result&theme=light|dark` and
 `?view=optimization-result&theme=light|dark`. Synthetic data and explicit local

@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 
 const evidence = fileURLToPath(new URL('./evidence/payment-confirmation/', import.meta.url));
 const component = (page: Page) => page.getByRole('region', { name: 'Pagamento confirmado', exact: true });
-const paper = (page: Page) => page.locator('.es-payment-paper');
+const paper = (page: Page) => page.locator('.recipe-payment-paper');
 
 async function freezePaper(page: Page, time: number) {
   await paper(page).evaluate((element, value) => {
@@ -15,7 +15,7 @@ async function freezePaper(page: Page, time: number) {
 }
 
 async function contrast(page: Page) {
-  return component(page).locator('h2,p,dt,dd,.es-payment-description,.es-payment-merchant,.es-button').evaluateAll(elements => elements.filter(element => element.textContent?.trim()).map(element => {
+  return component(page).locator('h2,p,dt,dd,.recipe-payment-description,.recipe-payment-merchant,.es-button').evaluateAll(elements => elements.filter(element => element.textContent?.trim()).map(element => {
     const rgba = (value: string) => value.match(/[\d.]+/g)!.map(Number);
     const layers: number[][] = [];
     let node: Element | null = element;
@@ -106,8 +106,8 @@ test('long content, reflow, RTL, zoom and static restored receipt', async ({ pag
     expect((await component(page).getByRole('button').boundingBox())!.height).toBeGreaterThanOrEqual(44);
     await page.screenshot({ path: evidence + `${info.project.name}-${theme}-320.png`, fullPage: true });
     await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
-    const term = await page.locator('.es-payment-rows dt').first().boundingBox();
-    const value = await page.locator('.es-payment-rows dd').first().boundingBox();
+    const term = await page.locator('.recipe-payment-rows dt').first().boundingBox();
+    const value = await page.locator('.recipe-payment-rows dd').first().boundingBox();
     expect(term!.x).toBeGreaterThan(value!.x);
     await page.setViewportSize({ width: 1280, height: 1000 });
     await page.evaluate(() => { document.documentElement.dir = 'ltr'; document.documentElement.style.zoom = '2'; });

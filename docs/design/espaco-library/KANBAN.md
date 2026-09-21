@@ -1,8 +1,13 @@
 # Application kanban
 
-Scope: public `ApplicationBoard`; opt-in `ApplicationCard purpose="kanban"`.
-Local.24 source addition; catalog `?view=kanban&theme=light` or `theme=dark`.
-No Curriculol runtime, persistence, requests, release or consumer upgrade.
+Current scope: optional application recipes, not public BEDS exports.
+`ApplicationBoard` and `ApplicationCard purpose="kanban"` live together under
+`apps/web/labs/espaco-library/recipes/`. The fixed application-card data model,
+vacancy terminology and column-to-card mapping do not belong in the core DS.
+Existing state/focus behavior is retained. No generic replacement board is
+invented in this extraction; shared navigation/menus/meters remain public.
+Catalog: `?view=kanban&theme=light` or `theme=dark`. No consumer upgrade.
+Earlier Local.24 checks below are historical, not post-extraction acceptance.
 
 ## Reference and adaptation
 
@@ -18,14 +23,15 @@ owned by [ApplicationCard](APPLICATION-CARD.md). No duplicate score logic.
 Host chooses summary fields; details must recover omitted data. Catalog keeps
 salary, keywords and provenance in the existing Drawer. Default cards unchanged.
 
-## Public API
+## Recipe API (not package exports)
 
 | Input | Contract |
 |---|---|
 | `label` | Accessible board name; region focusable only while horizontally overflowing |
 | `columns` | Ordered `ApplicationBoardColumn[]`: unique `id`, visible `label`, optional semantic `tone/emptyLabel`, `items` |
+| `destinations` | Optional ordered host catalog of unique `{id,label}` destinations. It may include an allowed destination without a visible column. When omitted, `columns` is projected to preserve the legacy destination catalog. |
 | `items` | `ApplicationBoardItem[]`: globally unique stable `id`; existing card props except purpose/status/statusOptions/onStatusChange; column owns status |
-| `moveTo` | Per-item explicit destination IDs; omitted/empty = read-only; missing IDs ignored, current column never offered |
+| `moveTo` | Per-item explicit destination IDs; omitted/empty = read-only. The menu is only `moveTo ∩ destinations`; invalid IDs and the current column are never offered. |
 | `onMove(itemId,columnId)` | Optional controlled request; host validates transitions and updates columns; callback does not send, generate or persist anything |
 | `announcement` | Host-confirmed update or recovery copy; stable polite live region; no synthetic success inferred |
 | `emptyLabel` | Default `Nenhuma vaga nesta etapa`; per-column override for context |
@@ -57,7 +63,7 @@ existing LoadingIndicator/Notice before supplying settled data.
 | Entry → transition | Result / recovery |
 |---|---|
 | Card title / Ver detalhes → Drawer | Complete synthetic context; Escape restores the activating control |
-| Options menu → allowed destination | Caller changes columns; count follows actual items; focus follows moved card; host announces confirmation |
+| Options menu → allowed destination | Caller changes columns or removes the card for a destination outside visible lanes; count follows actual items. A surviving moved card receives focus; a removed card returns focus to its source-column heading. Host announces confirmation. |
 | Host rejects move | Original column/count retained; no success announcement; menu remains usable |
 | Read-only / preparing | No move control; no fabricated workflow transition |
 | Empty column / empty board | Visible heading, zero count and meaningful empty text |

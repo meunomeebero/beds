@@ -1,12 +1,20 @@
-import { readFile, writeFile, mkdir, readdir, copyFile, access } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, readdir, copyFile, access, unlink } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const tailwindCli = createRequire(import.meta.url).resolve('@tailwindcss/cli/package.json').replace(/package\.json$/, 'dist/index.mjs');
 // tokens, then component stylesheets, then Tailwind utilities compiled from src/tailwind.css against src/**/*.tsx.
-const order = ['tokens.css','foundation.css','controls.css','form-fields.css','decisions.css','overlays.css','layout.css','patterns.css','disclosure.css','data.css','feedback.css','chat.css','technical.css','feature-card.css','empty-state-card.css','pricing.css','records.css','input-otp.css','paged-carousel.css','toast.css','application-card.css','application-board.css','onboarding.css','account-credits.css','forum-topic.css','date-item.css','payment-confirmation.css','blog-post.css','landing-footer.css','benefits.css','landing.css','processing.css','results.css','checkout.css'];
+const order = ['tokens.css','foundation.css','controls.css','range-slider.css','form-fields.css','decisions.css','overlays.css','layout.css','patterns.css','disclosure.css','data.css','feedback.css','chat.css','technical.css','feature-card.css','empty-state-card.css','pricing.css','records.css','input-otp.css','paged-carousel.css','toast.css','collection-controls.css','account-credits.css','forum-topic.css','date-item.css','blog-post.css'];
 await mkdir(root + 'dist', { recursive:true });
+// These modules moved to app-owned recipes. TypeScript does not remove outputs
+// for deleted sources; do not accidentally ship the previous implementation.
+for (const name of ['landing', 'landing-footer', 'benefits', 'onboarding', 'checkout', 'processing', 'results', 'chat-workspace', 'payment-confirmation', 'application-card', 'application-board']) {
+ for (const ext of ['js', 'd.ts']) {
+  try { await unlink(root + `dist/${name}.${ext}`); }
+  catch (error) { if (error.code !== 'ENOENT') throw error; }
+ }
+}
 const tailwind = execFileSync(process.execPath, [tailwindCli, '--input', root + 'src/tailwind.css', '--cwd', root + 'src', '--minify'], { encoding:'utf8', stdio:['ignore','pipe','inherit'] });
 // Utilities ship unlayered and last: BEDS component CSS and consumer legacy CSS are unlayered, and an
 // unlayered rule always beats a layered one, so keeping @layer would let any .es-root rule override a utility.

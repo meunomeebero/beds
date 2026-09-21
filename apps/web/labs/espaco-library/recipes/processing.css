@@ -1,0 +1,91 @@
+.recipe-processing { width:100%; max-width:1040px; margin-inline:auto; container-type:inline-size; min-width:0; padding-block:var(--es-space-11); }
+.recipe-processing-heading { display:grid; gap:var(--es-space-6); margin-bottom:var(--es-space-12); max-width:65ch; }
+.recipe-processing-heading > h1:focus-visible { outline:2px solid var(--es-focus); outline-offset:6px; border-radius:var(--es-radius-6); }
+.recipe-processing-identity { display:flex; align-items:center; gap:var(--es-space-5); color:var(--es-secondary); font:400 13px/20px var(--es-font); margin-bottom:var(--es-space-4); }
+.recipe-processing-identity > svg { width:18px; height:18px; flex:none; }
+.recipe-processing h1 { margin:0; color:var(--es-heading); font:500 28px/36px var(--es-font); letter-spacing:-.6px; text-wrap:balance; }
+.recipe-processing-heading > p { margin:0; color:var(--es-secondary); font:400 14px/22px var(--es-font); text-wrap:pretty; }
+.recipe-processing-workspace { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); align-items:start; gap:var(--es-space-12); }
+:is(.recipe-processing-main,.recipe-processing-story) { min-width:0; }
+.recipe-processing :is(p,h1,h2,h3,span,summary) { overflow-wrap:anywhere; }
+.recipe-processing-progress { display:grid; gap:var(--es-space-6); }
+.recipe-processing-progress-label { display:flex; align-items:baseline; justify-content:space-between; gap:var(--es-space-8); color:var(--es-text); font:400 13px/20px var(--es-font); }
+.recipe-processing-progress-label strong { font:500 24px/30px var(--es-font); font-variant-numeric:tabular-nums; }
+.recipe-processing-progress > p { margin:0; color:var(--es-secondary); font:400 12px/18px var(--es-font); }
+.recipe-processing-message { display:flex; align-items:flex-start; gap:var(--es-space-4); margin:var(--es-space-10) 0 0; padding:var(--es-space-6); background:var(--es-subtle); border-radius:var(--es-radius-8); color:var(--es-text); font:400 13px/20px var(--es-font); }
+.recipe-processing-message > svg { flex:none; margin-top:2px; }
+.recipe-processing-message[data-state=error] > svg { color:var(--es-badge-error-marker); }
+.recipe-processing-message[data-state=success] > svg { color:var(--es-badge-success-marker); }
+.recipe-processing-steps { display:grid; gap:var(--es-space-10); list-style:none; padding:0; margin:var(--es-space-11) 0; }
+.recipe-processing-steps > li { display:grid; grid-template-columns:28px minmax(0,1fr); gap:var(--es-space-6); }
+.recipe-processing-step-icon { position:relative; display:grid; place-items:center; width:28px; height:28px; border:1px solid var(--es-border-strong); border-radius:var(--es-radius-8); color:var(--es-secondary); font:400 12px/18px var(--es-font); font-variant-numeric:tabular-nums; }
+.recipe-processing-step-icon > span { display:grid; place-items:center; }
+.recipe-processing-steps > li[data-state=active] .recipe-processing-step-icon { background:var(--es-brand); color:var(--es-on-brand); border-color:var(--es-brand); }
+.recipe-processing-steps > li[data-state=complete] .recipe-processing-step-icon { color:var(--es-badge-success-marker); }
+.recipe-processing-step-heading { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:var(--es-space-2) var(--es-space-4); }
+.recipe-processing-step-heading h2 { margin:0; color:var(--es-heading); font:500 14px/21px var(--es-font); }
+.recipe-processing-step-heading > span { font:400 12px/18px var(--es-font); color:var(--es-secondary); }
+.recipe-processing-step-copy > p { margin:var(--es-space-2) 0 var(--es-space-5); color:var(--es-secondary); font:400 13px/20px var(--es-font); }
+.recipe-processing-step-copy > progress { display:block; appearance:none; width:100%; height:3px; border:0; border-radius:var(--es-radius-full); overflow:hidden; color:var(--es-secondary); background:var(--es-subtle); }
+.recipe-processing-step-copy > progress::-webkit-progress-bar { background:var(--es-subtle); }
+.recipe-processing-step-copy > progress::-webkit-progress-value { background:var(--es-secondary); border-radius:var(--es-radius-full); }
+.recipe-processing-step-copy > progress::-moz-progress-bar { background:var(--es-secondary); }
+.recipe-processing-steps > li[data-state=active] progress::-webkit-progress-value { background:var(--es-brand); }
+.recipe-processing-steps > li[data-state=active] progress::-moz-progress-bar { background:var(--es-brand); }
+:is(.recipe-processing-details,.recipe-processing-transcript) > summary { display:flex; justify-content:space-between; align-items:center; gap:var(--es-space-6); min-height:44px; width:fit-content; max-width:100%; color:var(--es-text); font:400 13px/20px var(--es-font); cursor:pointer; list-style:none; border-radius:var(--es-radius-6); }
+:is(.recipe-processing-details,.recipe-processing-transcript) > summary::-webkit-details-marker { display:none; }
+:is(.recipe-processing-details,.recipe-processing-transcript) > summary:focus-visible { outline:2px solid var(--es-focus); outline-offset:3px; }
+:is(.recipe-processing-details,.recipe-processing-transcript)[open] > summary svg { transform:rotate(180deg); }
+.recipe-processing-details ol { list-style:none; margin:var(--es-space-4) 0 0; padding:var(--es-space-8); border-radius:var(--es-radius-8); background:var(--es-subtle); display:grid; gap:var(--es-space-6); }
+.recipe-processing-details li { display:flex; gap:var(--es-space-4); color:var(--es-text); font:400 12px/19px var(--es-font); }
+.recipe-processing-details li svg { flex:none; margin-top:3px; }
+.recipe-processing-scores { margin-top:var(--es-space-10); }
+.recipe-processing-scores h2 { font:500 13px/20px var(--es-font); color:var(--es-heading); margin:0; }
+.recipe-processing-scores > p { font:400 12px/18px var(--es-font); color:var(--es-secondary); margin:var(--es-space-2) 0 var(--es-space-8); }
+.recipe-processing-scores > div { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--es-space-8); }
+.recipe-processing-actions { display:flex; flex-wrap:wrap; gap:var(--es-space-4); margin-top:var(--es-space-10); }
+.recipe-processing-story-card { border:1px solid var(--es-border); border-radius:var(--es-radius-card); overflow:hidden; padding:var(--es-space-10); }
+.recipe-processing-art { position:relative; height:196px; max-width:280px; margin:var(--es-space-10) auto var(--es-space-8); }
+.recipe-processing-sheet { position:absolute; width:130px; height:168px; inset-block-start:12px; inset-inline-start:calc(50% - 65px); border-radius:var(--es-radius-14); border:1px solid var(--es-image-outline); box-shadow:var(--es-shadow-xs); background:var(--es-surface); }
+.recipe-processing-sheet--back { transform:translate(-15px,6px) rotate(-9deg); background:var(--es-subtle); }
+.recipe-processing-sheet--front { transform:rotate(4deg); padding:18px 16px; overflow:hidden; }
+.recipe-processing-art-avatar { display:block; width:22px; height:22px; border-radius:var(--es-radius-6); background:var(--es-subtle); margin-bottom:10px; }
+.recipe-processing-art-line { display:block; width:64%; height:4px; border-radius:var(--es-radius-full); background:var(--es-border-strong); margin-bottom:5px; }
+.recipe-processing-art-line--name { width:80%; background:var(--es-secondary); }
+.recipe-processing-art-block { display:grid; gap:5px; margin-top:14px; }
+.recipe-processing-art-block > span { height:3px; border-radius:var(--es-radius-full); background:var(--es-border-strong); }
+.recipe-processing-art-block > span:last-child { width:65%; }
+.recipe-processing-scan { position:absolute; inset-inline:0; inset-block-start:0; height:2px; background:var(--es-brand); opacity:.7; }
+.recipe-processing-art-badge { display:grid; place-items:center; position:absolute; inset-inline-start:calc(50% + 35px); inset-block-start:148px; width:44px; height:44px; border-radius:var(--es-radius-14); background:var(--es-surface); color:var(--es-text); border:1px solid var(--es-border-strong); box-shadow:var(--es-shadow-popup); }
+.recipe-processing[data-state=success] .recipe-processing-art-badge { color:var(--es-badge-success-marker); }
+.recipe-processing[data-state=error] .recipe-processing-art-badge { color:var(--es-badge-error-marker); }
+.recipe-processing[data-state=success] .recipe-processing-scan,.recipe-processing[data-state=error] .recipe-processing-scan { display:none; }
+.recipe-processing-story-copy { min-height:152px; }
+.recipe-processing-story-copy > span { color:var(--es-secondary); font:400 12px/18px var(--es-font); }
+.recipe-processing-story-copy h2 { margin:var(--es-space-4) 0; color:var(--es-heading); font:500 18px/25px var(--es-font); letter-spacing:-.2px; }
+.recipe-processing-story-copy p { margin:0; color:var(--es-secondary); font:400 14px/22px var(--es-font); text-wrap:pretty; }
+.recipe-processing-playback { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--es-space-4); }
+.recipe-processing-playback > span { color:var(--es-secondary); font:400 12px/18px var(--es-font); font-variant-numeric:tabular-nums; }
+.recipe-processing-motion-note { margin:var(--es-space-4) 0 0; color:var(--es-secondary); font:400 12px/17px var(--es-font); }
+.recipe-processing-transcript { margin-top:var(--es-space-8); }
+.recipe-processing-transcript ol { display:grid; gap:var(--es-space-9); list-style:none; margin:var(--es-space-6) 0 0; padding:0; }
+.recipe-processing-transcript li { display:grid; grid-template-columns:36px minmax(0,1fr); gap:var(--es-space-6); color:var(--es-secondary); font:400 12px/19px var(--es-font); }
+.recipe-processing-transcript li > span { font-variant-numeric:tabular-nums; }
+.recipe-processing-transcript h3 { margin:0; color:var(--es-text); font:500 13px/20px var(--es-font); }
+.recipe-processing-transcript p { margin:var(--es-space-2) 0 0; }
+.recipe-processing-transcript [aria-current] h3 { text-decoration:underline; text-underline-offset:4px; }
+@container (max-width:760px) { .recipe-processing-workspace { grid-template-columns:minmax(0,1fr); gap:var(--es-space-11); } .recipe-processing-story-copy { min-height:0; } }
+@container (max-width:380px) { .recipe-processing-story-card { padding:var(--es-space-8); } .recipe-processing h1 { font-size:24px; line-height:32px; } .recipe-processing-scores > div { grid-template-columns:minmax(0,1fr); } }
+@media (prefers-reduced-motion:no-preference) {
+ .recipe-processing-scan { animation:recipe-processing-scan 3200ms cubic-bezier(.45,0,.55,1) infinite alternate; }
+ .recipe-processing[data-motion-paused] .recipe-processing-scan,.recipe-processing-art[data-offscreen] .recipe-processing-scan { animation-play-state:paused; }
+ .recipe-processing[data-state=success] .recipe-processing-art-badge { animation:recipe-processing-confirm 400ms cubic-bezier(.16,1,.3,1) both; }
+ .recipe-processing-step-icon { transition:background-color 150ms ease-out,color 150ms ease-out; }
+ @keyframes recipe-processing-scan { from { transform:translateY(12px); } to { transform:translateY(156px); } }
+ @keyframes recipe-processing-confirm { from { transform:translateY(6px) scale(.9); } to { transform:translateY(0) scale(1); } }
+}
+@media (forced-colors:active) { .recipe-processing-art { display:none; } .recipe-processing-steps > li[data-state=active] .recipe-processing-step-icon { border:2px solid Highlight; } .recipe-processing :is(summary,button):focus-visible { outline-color:Highlight; } }
+
+.recipe-processing-meter { min-width:0; display:grid; gap:var(--es-space-6); }
+.recipe-processing-meter-label { display:flex; align-items:center; justify-content:space-between; gap:var(--es-space-8); color:var(--es-secondary); font-size:13px; line-height:16px; font-variant-numeric:tabular-nums; }
+.recipe-processing-announcement { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }

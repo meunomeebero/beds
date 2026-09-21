@@ -29,10 +29,10 @@ test('catalog entry, both themes, keyboard validation and exact live preview', a
     await name.press('Tab');
     await expect(page.getByRole('textbox', { name: 'Título profissional (opcional)' })).toBeFocused();
     await page.keyboard.type('Product designer');
-    await expect(page.locator('.es-onboarding-window-header')).toContainText('Luísa Costa');
-    await expect(page.locator('.es-onboarding-window-content')).toContainText('Product designer');
-    await expect(page.locator('.es-onboarding-preview')).toHaveAttribute('aria-hidden', 'true');
-    await expect(page.locator('.es-onboarding-preview button, .es-onboarding-preview input, .es-onboarding-preview a')).toHaveCount(0);
+    await expect(page.locator('.recipe-onboarding-window-header')).toContainText('Luísa Costa');
+    await expect(page.locator('.recipe-onboarding-window-content')).toContainText('Product designer');
+    await expect(page.locator('.recipe-onboarding-preview')).toHaveAttribute('aria-hidden', 'true');
+    await expect(page.locator('.recipe-onboarding-preview button, .recipe-onboarding-preview input, .recipe-onboarding-preview a')).toHaveCount(0);
     await page.keyboard.press('Tab');
     await page.keyboard.type('São Paulo');
     await page.keyboard.press('Tab');
@@ -43,8 +43,8 @@ test('catalog entry, both themes, keyboard validation and exact live preview', a
     await submit.press('Enter');
     await expect(form.getByRole('status')).toHaveText('Prévia confirmada. Nenhum dado foi enviado.');
     await expect(name).toHaveValue('Luísa Costa');
-    await expect(page.locator('.es-onboarding-card')).toHaveCSS('border-radius', '24px');
-    await expect(page.locator('.es-onboarding-card')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await expect(page.locator('.recipe-onboarding-card')).toHaveCSS('border-radius', '24px');
+    await expect(page.locator('.recipe-onboarding-card')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
     expect((await submit.boundingBox())!.height).toBeGreaterThanOrEqual(info.project.name === 'mobile' ? 44 : 40);
     await page.screenshot({ path: evidence + `${info.project.name}-${theme}.png`, fullPage: true });
   }
@@ -84,7 +84,7 @@ test('narrow reflow, long copy, RTL, zoom and reduced motion', async ({ page }, 
     for (const width of [1440, 820, 768, 390, 320]) {
       await page.setViewportSize({ width, height: 1000 });
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-      const preview = page.locator('.es-onboarding-preview');
+      const preview = page.locator('.recipe-onboarding-preview');
       if (width >= 820) await expect(preview).toBeVisible();
       else await expect(preview).toBeHidden();
       if (width <= 767) await expect(page.getByRole('textbox', { name: 'Nome', exact: true })).toHaveCSS('font-size', '16px');
@@ -96,14 +96,14 @@ test('narrow reflow, long copy, RTL, zoom and reduced motion', async ({ page }, 
       document.documentElement.dir = 'rtl';
       document.body.style.zoom = '2';
       document.querySelector('h1')!.textContent = 'Configure seu espaço profissional e suas próximas oportunidades';
-      document.querySelector('.es-onboarding-actions button span')!.textContent = 'Continuar para a próxima etapa de configuração';
+      document.querySelector('.recipe-onboarding-actions button span')!.textContent = 'Continuar para a próxima etapa de configuração';
     });
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await expect(page.getByRole('button', { name: 'Continuar para a próxima etapa de configuração' })).toBeVisible();
     await page.screenshot({ path: evidence + `${info.project.name}-${theme}-zoom.png`, fullPage: true });
     await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'active' });
-    await expect(page.locator('.es-onboarding-card')).toHaveCSS('border-top-style', 'solid');
-    expect(await page.locator('.es-onboarding-preview').evaluate(element => element.getAnimations({ subtree: true }).length)).toBe(0);
+    await expect(page.locator('.recipe-onboarding-card')).toHaveCSS('border-top-style', 'solid');
+    expect(await page.locator('.recipe-onboarding-preview').evaluate(element => element.getAnimations({ subtree: true }).length)).toBe(0);
     await page.emulateMedia({ reducedMotion: 'no-preference', forcedColors: 'none' });
   }
 });

@@ -108,8 +108,10 @@ JSON SHA-256
 main HEAD `90c29d7f80f661263f7b424629738e40a5a48db7`; MIT license SHA-256
 `9e27b491d5691a1bd95708e79de23beb2962f33fe6c1ee31ab639f43009a0b20`.
 
-The local adaptation stays in `packages/beds/src/processing.tsx` and
-`meter-segments.tsx`. BEDS preserves the public ProcessingView API, numbered
+The original local adaptation lived in `packages/beds/src/processing.tsx` and
+`meter-segments.tsx`. In the agnostic migration, processing moved to the catalog's
+`recipes/processing.tsx`; MeterSegments remains shared and is publicly reusable.
+The optional recipe preserves the former ProcessingView API, numbered
 28px tiles, host-owned timing, 95% waiting cap, pause/offscreen/reduced-motion
 contracts and final ARIA values. ATS labels and numeric text are host-provided
 and static from first render; only the internal 28-segment fill reveals. The

@@ -1,4 +1,4 @@
-.es-blog-post-list{list-style:none;margin:0;padding:0;display:grid;gap:var(--es-space-6);inline-size:100%;max-inline-size:var(--es-chat-width)}
+.es-blog-post-list{list-style:none;margin:0;padding:0;display:grid;gap:var(--es-space-6);inline-size:100%;max-inline-size:var(--es-reading-width)}
 .es-blog-post-list>li,.es-blog-post-frame{min-inline-size:0}
 .es-blog-post-frame{container-type:inline-size}
 .es-root .es-blog-post{display:grid;grid-template-columns:64px minmax(0,1fr);align-items:start;gap:var(--es-space-6);padding:var(--es-space-6);border-radius:var(--es-radius-panel);box-shadow:0 0 0 1px var(--es-border);background:var(--es-transparent);color:var(--es-text);text-decoration:none;text-align:start;min-inline-size:0}

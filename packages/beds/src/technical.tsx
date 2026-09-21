@@ -1,7 +1,7 @@
 import { useId, useRef, useState } from 'react';
 import { Icon } from './foundation';
 
-/** Complete caller-owned copy; English remains the backwards-compatible default. */
+/** Complete caller-owned copy; BEDS supplies a PT-BR fallback without detecting host locale. */
 export type CodeSnippetMessages = {
   copy: string;
   copying: string;
@@ -12,12 +12,12 @@ export type CodeSnippetMessages = {
 };
 
 const defaultMessages: CodeSnippetMessages = {
-  copy: 'Copy',
-  copying: 'Copying',
-  copied: 'Copied',
-  copyLabel: label => `Copy ${label}`,
-  success: 'Copied to clipboard',
-  error: 'Copy failed. Select the value and copy it manually, or try again.',
+  copy: 'Copiar',
+  copying: 'Copiando',
+  copied: 'Copiado',
+  copyLabel: label => `Copiar ${label}`,
+  success: 'Copiado para a área de transferência',
+  error: 'Não foi possível copiar. Selecione o valor e copie manualmente ou tente novamente.',
 };
 
 /** Measured connection-value presentation; copying starts only on a user click. */

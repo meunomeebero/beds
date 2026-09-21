@@ -1,5 +1,5 @@
 @import '../../../../packages/beds/src/input-otp.css';
-@import '../../../../packages/beds/src/onboarding.css';
+@import './recipes/onboarding.css';
 @import '../../../../packages/beds/src/account-credits.css';
 @import '../../../../packages/beds/src/forum-topic.css';
 @import '../../../../packages/beds/src/tokens.css';
@@ -13,5 +13,7 @@
 @import '../../../../packages/beds/src/technical.css';
 /* Last import, like dist/styles.css: utilities must follow every component stylesheet. */
 @import '../../../../packages/beds/src/tailwind.css';
+/* Optional recipes compile only into the catalog, not the portable package. */
+@source './recipes/**/*.tsx';
 /* Definite host height lets provider-only component previews cover the viewport. */
 html,body,#root{margin:0;min-height:100%;height:100%;}

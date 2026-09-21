@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { BrandMark, ContentHeader, DesignSystemProvider, Inline, LandingFooter, Text, TextLink, ThemeToggle, brands } from 'beds';
+import { BrandMark, ContentHeader, DesignSystemProvider, Inline, Text, TextLink, ThemeToggle } from 'beds';
+import { LandingFooter } from './recipes';
 
 export default function LandingFooterPage() {
   const params = new URLSearchParams(location.search);
@@ -8,11 +9,11 @@ export default function LandingFooterPage() {
   const minimal = params.get('preview') === 'minimal';
   const href = (view: string) => `?view=${view}&theme=${theme}`;
 
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <ContentHeader actions={<ThemeToggle label="Aparência" lightLabel="Claro" darkLabel="Escuro" />}>
       <Inline><TextLink href={href('components')}>Componentes</TextLink><Text>Rodapé da landing</Text></Inline>
     </ContentHeader>
-    <LandingFooter brandName={long ? 'Curriculol — sua próxima oportunidade' : 'Curriculol'} brandMark={<BrandMark />}
+    <LandingFooter brandName={long ? 'Curriculol — sua próxima oportunidade' : 'Curriculol'} brandMark={<BrandMark src="/demo-brand.svg" label="Example brand" />}
       title={long ? 'Conte sua trajetória com clareza e encontre espaço para o próximo capítulo da sua carreira.' : 'Seu próximo passo começa com a sua história.'}
       description="Reúna suas experiências, encontre vagas e acompanhe suas candidaturas em um só lugar."
       action={minimal ? undefined : { label: long ? 'Começar a organizar minhas experiências profissionais' : 'Preparar meu perfil', href: href('onboarding') }}

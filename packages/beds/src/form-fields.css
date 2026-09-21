@@ -1,7 +1,9 @@
 .es-root .es-radio-group{display:grid;min-width:0;padding:0;margin:0;border:0;gap:8px}
 .es-root .es-radio-group>legend,.es-root .es-file-upload-label{padding:0;color:var(--es-text);font:500 13px/16px var(--es-font);letter-spacing:-.1px}
 .es-root .es-radio-options{display:grid;gap:8px}
-.es-root .es-radio-option{display:flex;position:relative;align-items:center;gap:8px;min-width:0;color:var(--es-text);font:400 13px/16px var(--es-font);cursor:pointer;overflow-wrap:anywhere}
+.es-root .es-radio-option{display:flex;position:relative;align-items:center;gap:8px;min-width:0;min-height:32px;padding-block:4px;color:var(--es-text);font:400 13px/20px var(--es-font);cursor:pointer;overflow-wrap:anywhere}
+.es-root .es-radio-group>legend{margin-block-end:8px}
+@media(pointer:coarse){.es-root .es-radio-option{min-height:44px}}
 .es-root .es-radio-option>input{position:absolute;width:1px;height:1px;padding:0;margin:0;opacity:0}
 .es-root .es-radio-indicator{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:16px;height:16px;border:1px solid var(--es-control-border);border-radius:50%;background:var(--es-surface)}
 .es-root .es-radio-indicator>span{display:block;width:6px;height:6px;border-radius:50%;background:var(--es-info)}
@@ -35,6 +37,7 @@
 .es-root .es-file-upload-list>li>span{min-width:0;overflow-wrap:anywhere}
 .es-root .es-file-upload-list button{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:24px;height:24px;padding:0;border:0;border-radius:6px;background:transparent;color:var(--es-secondary);cursor:pointer}
 .es-root .es-file-upload-list button:disabled{cursor:default}
+@media(max-width:767px){.es-root .es-file-upload-browse{min-block-size:44px}.es-root .es-file-upload-list button{inline-size:44px;block-size:44px}}
 .es-root .es-file-upload-list button:not(:disabled):active{background:var(--es-pressed);color:var(--es-text)}
 .es-root .es-file-upload-list button:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
 @media(hover:hover) and (pointer:fine){.es-root .es-file-upload-browse:not(:disabled):hover{background:var(--es-hover);color:var(--es-text)}.es-root .es-file-upload-list button:not(:disabled):hover{background:var(--es-hover);color:var(--es-text)}}

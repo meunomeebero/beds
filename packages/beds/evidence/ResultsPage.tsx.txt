@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { AppShell, BrandMark, Button, ContentHeader, DesignSystemProvider, Dialog, DocumentPreview, Inline, NavItem, Notice, PaymentConfirmation, ResponsiveGrid, ResultFindings, ResultLayout, ResultOffer, ResultScore, ResultSection, SegmentedControl, SegmentedMeter, Select, SidebarHeader, SidebarSection, Stack, Tabs, Text, ThemeToggle, brands } from 'beds';
+import { BrandMark, Button, ContentHeader, DesignSystemProvider, Dialog, Inline, NavItem, Notice, ResponsiveGrid, SegmentedControl, SegmentedMeter, Select, SidebarHeader, SidebarSection, Stack, Tabs, Text, ThemeToggle } from 'beds';
+import { AppShell } from './recipes';
+import { PaymentConfirmation } from './recipes';
+import { ResultFindings, ResultLayout, ResultOffer, ResultScore, ResultSection } from './recipes';
+import { DocumentPreview } from './recipes';
 import { parseResultPreview, resultExample, resultPreviewOptions, type ResultMode, type ResultPreview } from './results-fixtures';
 
 type ResultDialog = 'checkout' | 'account' | 'document' | 'letter' | 'edit' | 'share' | 'jobs' | null;
@@ -63,7 +67,7 @@ function ResultDemo({ mode, preview, viewHref }: { mode: ResultMode; preview: Re
   </Stack>;
 
   return <>
-    <ResultLayout context={`${resultExample.job} · ${resultExample.company} · exemplo fictício`} title={missing ? 'Esta leitura precisa ser recarregada.' : title} description={optimization ? 'Confira o que mudou e revise os documentos antes de se candidatar.' : 'Veja os pontos que já funcionam e os ajustes para esta vaga.'} mark={<BrandMark label="Curriculol" />} summary={summary} nextStep={nextStep()} evidence={missing ? undefined : <ResultFindings title={regression ? 'Antes de se candidatar' : optimization ? 'Uma mudança que importa' : preserve ? 'Seu ponto forte' : lowFit ? 'O principal desencontro' : 'O ajuste mais importante'} items={findings.slice(0, 1)} />}>
+    <ResultLayout context={`${resultExample.job} · ${resultExample.company} · exemplo fictício`} title={missing ? 'Esta leitura precisa ser recarregada.' : title} description={optimization ? 'Confira o que mudou e revise os documentos antes de se candidatar.' : 'Veja os pontos que já funcionam e os ajustes para esta vaga.'} mark={<BrandMark src="/demo-brand.svg" label="Curriculol" />} summary={summary} nextStep={nextStep()} evidence={missing ? undefined : <ResultFindings title={regression ? 'Antes de se candidatar' : optimization ? 'Uma mudança que importa' : preserve ? 'Seu ponto forte' : lowFit ? 'O principal desencontro' : 'O ajuste mais importante'} items={findings.slice(0, 1)} />}>
       <Text variant="caption" tone="secondary">Prévia com dados fictícios. Nenhum currículo foi analisado, pagamento realizado ou crédito utilizado.</Text>
       {regression && <Notice tone="warning" title="O resultado precisa de revisão" description="A comparação não indicou melhora. Confira os fatos e as mudanças; comprar mais créditos não corrige este resultado." />}
       <ResultSection title={optimization ? 'Compare as quatro dimensões' : 'Entenda a leitura técnica'} description={partial ? 'A dimensão de impacto não chegou. Ela permanece sem valor, sem média ou diferença presumida.' : 'Palavras-chave, estrutura e clareza de leitura. Valores de demonstração.'}>
@@ -121,9 +125,9 @@ export default function ResultsPage({ mode }: { mode: ResultMode }) {
     history.replaceState(null, '', url);
   }
 
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <AppShell contentWidth="full" collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} navigationLabel="Navegação" closeNavigationLabel="Fechar navegação"
-      sidebar={<><SidebarHeader closeLabel="Fechar navegação" expandLabel="Expandir menu" collapseLabel="Recolher menu"><Inline gap="tight"><BrandMark label="Curriculol" /><Text>Curriculol</Text></Inline></SidebarHeader><SidebarSection label="Playground"><NavItem label="Componentes" icon="Folder" href={`?view=components&theme=${theme}`} /><NavItem label="Resultado da análise" icon="ScanText" active={mode === 'analysis'} href={`?view=analysis-result&theme=${theme}`} /><NavItem label="Resultado da otimização" icon="FileText" active={mode === 'optimization'} href={`?view=optimization-result&theme=${theme}`} /></SidebarSection></>}
+      sidebar={<><SidebarHeader closeLabel="Fechar navegação" expandLabel="Expandir menu" collapseLabel="Recolher menu"><Inline gap="tight"><BrandMark src="/demo-brand.svg" label="Curriculol" /><Text>Curriculol</Text></Inline></SidebarHeader><SidebarSection label="Playground"><NavItem label="Componentes" icon="Folder" href={`?view=components&theme=${theme}`} /><NavItem label="Resultado da análise" icon="ScanText" active={mode === 'analysis'} href={`?view=analysis-result&theme=${theme}`} /><NavItem label="Resultado da otimização" icon="FileText" active={mode === 'optimization'} href={`?view=optimization-result&theme=${theme}`} /></SidebarSection></>}
       header={<ContentHeader actions={<ThemeToggle label="Aparência da página" lightLabel="Claro" darkLabel="Escuro" />}><Text>Resultados · demonstração</Text></ContentHeader>}>
       <Stack gap="section"><ResultDemo key={`${mode}-${preview}`} mode={mode} preview={preview} viewHref={viewHref} /><ResultSection title="Estados da demonstração" description="Troque o cenário para validar recuperação, saldo e acesso. Nenhuma mudança é salva em uma conta."><Select label="Cenário de resultado" value={preview} options={options} onChange={changePreview} variant="field" /></ResultSection></Stack>
     </AppShell>

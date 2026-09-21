@@ -1,0 +1,7 @@
+.recipe-pricing-section { display:grid; gap:var(--es-space-12); width:100%; max-width:720px; min-width:0; margin-inline:auto; }
+.recipe-pricing-intro { display:grid; justify-items:center; gap:var(--es-space-4); text-align:center; min-width:0; }
+.recipe-pricing-mark { display:flex; align-items:center; justify-content:center; margin-bottom:var(--es-space-8); }
+.recipe-pricing-intro > :is(h1,h2) { margin:0; color:var(--es-heading); font:500 22px/28px var(--es-font); letter-spacing:-.25px; text-wrap:balance; overflow-wrap:anywhere; }
+.recipe-pricing-intro > p { margin:0; max-width:60ch; color:var(--es-secondary); font:400 14px/21px var(--es-font); text-wrap:pretty; overflow-wrap:anywhere; }
+.recipe-pricing-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr)); gap:var(--es-space-10); justify-items:center; min-width:0; }
+@media(max-width:767px) { .recipe-pricing-intro > :is(h1,h2) { font-size:20px; line-height:28px; } }

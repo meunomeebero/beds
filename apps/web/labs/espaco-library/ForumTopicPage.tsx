@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { AppShell, Avatar, Button, DesignSystemProvider, Drawer, DrawerSection, EmptyState, ForumTopicCard, ForumTopicList, Icon, Inline, LoadingIndicator, NavItem, Notice, PageHeader, ResultsStatus, Select, SidebarHeader, SidebarSection, Stack, Text, ThemeToggle, brands, type ForumTopicCardProps } from 'beds';
+import { Avatar, Button, DesignSystemProvider, Drawer, DrawerSection, EmptyState, ForumTopicCard, ForumTopicList, Icon, Inline, LoadingIndicator, NavItem, Notice, PageHeader, ResultsStatus, Select, SidebarHeader, SidebarSection, Stack, Text, ThemeToggle, type ForumTopicCardProps } from 'beds';
+import { AppShell } from './recipes';
 import marinaAvatar from './assets/forum-marina.svg';
 import rafaelAvatar from './assets/forum-rafael.svg';
 import joanaAvatar from './assets/forum-joana.svg';
@@ -31,7 +32,7 @@ export default function ForumTopicPage() {
   const selectTopic = (id: string) => { setSelected(id); setRead(previous => previous.includes(id) ? previous : [...previous, id]); setOpen(true); };
   const updateExample = (next: string) => { setExample(next); setOpen(false); };
 
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <AppShell contentWidth="home" collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} navigationLabel="Navegação" closeNavigationLabel="Fechar navegação"
       sidebar={<><SidebarHeader><ThemeToggle label="Tema" lightLabel="Claro" darkLabel="Escuro" /></SidebarHeader><SidebarSection label="Catálogo"><NavItem label="Componentes" icon="Folder" href={`?view=components&theme=${theme}`} /><NavItem label="Cards do fórum" icon="MessageCircle" href={`?view=forum&theme=${theme}`} active /></SidebarSection></>}>
       <Stack gap="section">

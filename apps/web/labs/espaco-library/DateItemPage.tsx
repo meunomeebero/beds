@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { AppShell, BrandMark, ContentHeader, DateItem, DateItemList, DesignSystemProvider, Drawer, Inline, NavItem, PageHeader, SidebarHeader, SidebarSection, Stack, Text, ThemeToggle, brands, type DateItemDate } from 'beds';
+import { BrandMark, ContentHeader, DateItem, DateItemList, DesignSystemProvider, Drawer, Inline, NavItem, PageHeader, SidebarHeader, SidebarSection, Stack, Text, ThemeToggle, type DateItemDate } from 'beds';
+import { AppShell } from './recipes';
 
 const events = [
   { id: 'interview', title: 'Conversa com a equipe de produto', date: { dateTime: '2026-10-22', month: 'out', day: '22', label: '22 de outubro de 2026' }, description: 'Entrevista com a equipe do Ateliê Digital. Horário a combinar.' },
@@ -16,9 +17,9 @@ export default function DateItemPage() {
   const event = events.find(item => item.id === current);
   const long = params.get('preview') === 'long';
 
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <AppShell contentWidth="home" collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} navigationLabel="Navegação" closeNavigationLabel="Fechar navegação"
-      sidebar={<><SidebarHeader><Inline gap="tight"><BrandMark label="Curriculol" /><Text>Curriculol</Text></Inline></SidebarHeader><SidebarSection label="Playground"><NavItem label="Componentes" icon="Folder" href={`?view=components&theme=${theme}`} /><NavItem label="Itens com data" icon="CalendarDays" active href={`?view=date-item&theme=${theme}`} /></SidebarSection></>}
+      sidebar={<><SidebarHeader><Inline gap="tight"><BrandMark src="/demo-brand.svg" label="Curriculol" /><Text>Curriculol</Text></Inline></SidebarHeader><SidebarSection label="Playground"><NavItem label="Componentes" icon="Folder" href={`?view=components&theme=${theme}`} /><NavItem label="Itens com data" icon="CalendarDays" active href={`?view=date-item&theme=${theme}`} /></SidebarSection></>}
       header={<ContentHeader actions={<ThemeToggle label="Aparência da página" lightLabel="Claro" darkLabel="Escuro" />}><Text>Componentes / Item com data</Text></ContentHeader>}>
       <Stack gap="section">
         <PageHeader title="Compromissos" description="Datas que merecem um lugar na sua próxima etapa." />

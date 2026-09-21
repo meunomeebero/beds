@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
-import { AppShell, Button, DesignSystemProvider, Inline, PageHeader, ResultsStatus, SettingsForm, SettingsGroup, Stack, TextField, ThemeToggle } from 'beds';
+import { Button, DesignSystemProvider, Inline, PageHeader, ResultsStatus, SettingsForm, SettingsGroup, Stack, TextField, ThemeToggle } from 'beds';
+import { AppShell } from './recipes';
 
 export default function SettingsFormPage() {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => new URLSearchParams(location.search).get('theme') === 'light' ? 'light' : 'dark');

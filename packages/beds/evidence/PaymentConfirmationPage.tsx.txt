@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { AppShell, BrandMark, Button, ContentHeader, DefinitionTable, DesignSystemProvider, Dialog, Inline, NavItem, PaymentConfirmation, SidebarHeader, SidebarSection, Stack, Text, ThemeToggle, brands, type PaymentInvoice } from 'beds';
+import { BrandMark, Button, ContentHeader, DefinitionTable, DesignSystemProvider, Dialog, Inline, NavItem, SidebarHeader, SidebarSection, Stack, Text, ThemeToggle } from 'beds';
+import { AppShell } from './recipes';
+import { PaymentConfirmation, type PaymentInvoice } from './recipes';
 
 export default function PaymentConfirmationPage() {
   const params = new URLSearchParams(location.search);
@@ -16,12 +18,12 @@ export default function PaymentConfirmationPage() {
       ? { state: 'pending', message: 'O pagamento foi confirmado. Sua nota fiscal ainda está em emissão.' }
       : { state: 'error', message: 'Não foi possível carregar a nota fiscal. Tente novamente; você não será cobrado de novo.', action: { label: 'Tentar novamente', onClick: () => setInvoiceState('available') } };
 
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <AppShell contentWidth="home" collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} navigationLabel="Navegação" closeNavigationLabel="Fechar navegação"
-      sidebar={<><SidebarHeader><Inline gap="tight"><BrandMark label="Curriculol" /><Text>Curriculol</Text></Inline></SidebarHeader><SidebarSection label="Playground"><NavItem label="Componentes" icon="Folder" href={`?view=components&theme=${theme}`} /><NavItem label="Pagamento confirmado" icon="CreditCard" active href={`?view=payment-confirmation&theme=${theme}`} /></SidebarSection></>}
+      sidebar={<><SidebarHeader><Inline gap="tight"><BrandMark src="/demo-brand.svg" label="Curriculol" /><Text>Curriculol</Text></Inline></SidebarHeader><SidebarSection label="Playground"><NavItem label="Componentes" icon="Folder" href={`?view=components&theme=${theme}`} /><NavItem label="Pagamento confirmado" icon="CreditCard" active href={`?view=payment-confirmation&theme=${theme}`} /></SidebarSection></>}
       header={<ContentHeader actions={<ThemeToggle label="Aparência da página" lightLabel="Claro" darkLabel="Escuro" />}><Text>Componentes / Confirmação de pagamento</Text></ContentHeader>}>
       <Stack gap="section">
-        <PaymentConfirmation key={replay} title="Pagamento confirmado" description="Tudo certo. Guarde os detalhes da sua compra." merchant={long ? 'Curriculol — experiências e oportunidades para sua próxima etapa profissional' : 'Curriculol'} mark={<BrandMark label="Curriculol" />} purchase={{ label: long ? 'Créditos para preparar currículos e cartas personalizados para suas próximas candidaturas' : 'Créditos para sua próxima etapa', description: 'Compra de demonstração' }} receipt={{
+        <PaymentConfirmation headingLevel={1} key={replay} title="Pagamento confirmado" description="Tudo certo. Guarde os detalhes da sua compra." merchant={long ? 'Curriculol — experiências e oportunidades para sua próxima etapa profissional' : 'Curriculol'} mark={<BrandMark src="/demo-brand.svg" label="Curriculol" />} purchase={{ label: long ? 'Créditos para preparar currículos e cartas personalizados para suas próximas candidaturas' : 'Créditos para sua próxima etapa', description: 'Compra de demonstração' }} receipt={{
           title: 'Comprovante de pagamento',
           items: [{ id: 'credits', label: 'Créditos', value: 'R$ 20,00' }],
           total: { label: 'Total pago', value: 'R$ 20,00' },

@@ -1,0 +1,15 @@
+.recipe-sidebar-region{display:flex;flex-direction:column;min-width:0;height:100dvh;position:sticky;inset-block-start:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.recipe-app-shell{display:grid;grid-template-columns:264px minmax(0,1fr);min-height:100dvh;background:var(--es-bg);color:var(--es-text)}
+.recipe-app-main{min-width:0}
+.recipe-skip-link{position:fixed;inset-block-start:8px;inset-inline-start:8px;z-index:40;padding:12px 16px;border-radius:var(--es-radius-8);background:var(--es-primary);color:var(--es-on-primary);font:500 14px/20px var(--es-font);transform:translateY(calc(-100% - 16px))}
+.recipe-skip-link:focus{transform:none;outline:2px solid var(--es-focus);outline-offset:2px}
+.recipe-page-outer{padding:16px 24px 24px}
+.recipe-page{width:100%;margin-inline:auto}
+.recipe-page--chat{max-width:640px}
+.recipe-page--home{max-width:720px}
+.recipe-page--dashboard{max-width:880px}
+.recipe-mobile-bar{display:none}
+.recipe-sidebar-backdrop{position:fixed;inset:0;z-index:30;padding:0;border:0;background:var(--es-overlay);cursor:pointer}
+@media(min-width:768px){.recipe-app-shell--collapsed{grid-template-columns:62px minmax(0,1fr)}}
+@media(max-width:767px){.recipe-app-shell{grid-template-columns:minmax(0,1fr)}.recipe-sidebar-region{display:none}.recipe-app-shell--drawer-open .recipe-sidebar-region{display:flex;position:fixed;z-index:31;inset-block:0;inset-inline-start:0;inset-inline-end:auto;width:264px;max-width:calc(100vw - 32px)}.recipe-mobile-bar{display:flex;align-items:center;height:48px;padding:0 12px;border-bottom:1px solid var(--es-border-subtle)}.recipe-mobile-bar>button{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 4px;border:0;background:transparent;color:var(--es-secondary);font:400 13px/16px var(--es-font)}.recipe-page-outer{padding:16px 16px 24px}}
+@media(forced-colors:active){.recipe-skip-link{border:1px solid CanvasText;background:Canvas;color:CanvasText}.recipe-skip-link:focus{outline-color:Highlight}:is(.recipe-mobile-bar>button,.recipe-skip-link):focus-visible{outline-color:Highlight}.recipe-sidebar-backdrop{background:Canvas;border:0;forced-color-adjust:none;opacity:.72}}

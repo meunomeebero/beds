@@ -1,5 +1,6 @@
+import { AppShell } from './recipes';
 import { useState } from 'react';
-import { AccountCredits, AccountMenu, AppShell, Avatar, DesignSystemProvider, PageHeader, ResultsStatus, Select, SidebarHeader, Stack, Text, WorkspaceTrigger, brands, type CreditBalance } from 'beds';
+import { AccountCredits, AccountMenu, Avatar, DesignSystemProvider, PageHeader, ResultsStatus, Select, SidebarHeader, Stack, Text, WorkspaceTrigger, type CreditBalance } from 'beds';
 
 const formatCredits = (value: number) => Math.round(value).toLocaleString('pt-BR');
 const normal: CreditBalance = { status: 'ready', value: 12500, formattedValue: '12.500', formatValue: formatCredits, limit: 20000 };
@@ -26,7 +27,7 @@ export default function AccountCreditsPage() {
       : normal);
   }
 
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <AppShell collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} contentWidth="home" sidebar={<SidebarHeader><AccountMenu
       open={open} onOpenChange={setOpen} label="Menu do usuário" appearanceLabel="Aparência" lightLabel="Claro" darkLabel="Escuro"
       trigger={<WorkspaceTrigger name="Luísa Costa" menuLabel="Menu de Luísa Costa" expanded={open} mark={<Avatar name="Luísa Costa" purpose="workspace" />} onClick={() => setOpen(!open)} />}

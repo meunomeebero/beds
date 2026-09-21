@@ -1,5 +1,6 @@
 .es-root {box-sizing:border-box;min-height:100%;background:var(--es-bg);color:var(--es-text);font-family:var(--es-font);font-size:13px;line-height:20px;letter-spacing:-.1px;font-weight:400;font-optical-sizing:auto;font-feature-settings:normal;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 .es-root *, .es-root *::before, .es-root *::after {box-sizing:border-box}
+.es-root[data-theme-switching],.es-root[data-theme-switching] *,.es-root[data-theme-switching]::before,.es-root[data-theme-switching]::after,.es-root[data-theme-switching] *::before,.es-root[data-theme-switching] *::after{transition:none!important}
 .es-root :where(h1,h2,h3,h4,h5,h6,p,ul,ol){margin:0}
 /* Element defaults sit at zero specificity so any component rule or utility (outline-none, text-*, cursor-*) wins over them. */
 :where(.es-root) :where(button,input,textarea,select){font-family:inherit;color:inherit;letter-spacing:inherit}
@@ -31,11 +32,12 @@
 .es-root .es-text-link{color:inherit;text-decoration:underline;text-decoration-color:var(--es-border);text-underline-offset:2px;border-radius:2px}
 .es-root .es-text-link>svg{width:12px;height:12px;stroke-width:1.5;vertical-align:-1px;margin-left:2px}
 .es-root .es-text-link:hover{text-decoration-color:var(--es-text)}
-.es-root .es-brand-mark{display:block;width:18px;height:18px;flex:none;fill:var(--es-brand)}
-.es-root .es-theme-toggle{display:inline-flex;align-items:center;gap:2px;padding:1px;height:24px;border-radius:999px;background:var(--es-subtle);white-space:nowrap}
-.es-root .es-theme-toggle button{border:0;background:var(--es-transparent);border-radius:999px;height:22px;padding:0 8px;font-size:12px;line-height:16px;font-weight:500;color:var(--es-secondary)}
+.es-root .es-brand-mark{display:block;width:18px;height:18px;flex:none;object-fit:contain}
+.es-root .es-theme-toggle{display:inline-flex;inline-size:fit-content;max-inline-size:100%;flex-wrap:wrap;align-items:center;gap:2px;padding:2px;border-radius:var(--es-radius-full);background:var(--es-subtle)}
+.es-root .es-theme-toggle button{border:0;background:var(--es-transparent);border-radius:var(--es-radius-full);min-block-size:32px;min-inline-size:32px;max-inline-size:100%;padding:6px 10px;font-size:12px;line-height:1.4;font-weight:500;color:var(--es-secondary);overflow-wrap:anywhere;touch-action:manipulation}
+@media(pointer:coarse){.es-root .es-theme-toggle button{min-block-size:44px;min-inline-size:44px}}
 .es-root .es-theme-toggle button[aria-pressed=true]{background:var(--es-surface);color:var(--es-text)}
-.es-root .es-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.es-root .es-sr-only{position:absolute;inset-inline-start:0;width:1px;height:1px;padding:0;margin:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 
 
 .es-root[data-theme=dark] .es-theme-toggle{background:var(--es-bg)}

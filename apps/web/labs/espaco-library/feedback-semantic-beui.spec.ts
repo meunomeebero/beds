@@ -17,7 +17,7 @@ for (const theme of ['light', 'dark'] as const) {
     await page.goto(`/?view=application-card&theme=${theme}`);
 
     const card = page.getByRole('article').first();
-    const badge = card.locator('.es-application-status .es-badge');
+    const badge = card.locator('.recipe-application-status .es-badge');
     const label = badge.locator('.es-badge-label');
     await expect(label).toHaveText('Pronta para enviar');
     await expect.poll(() => page.evaluate(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches)).toBe(false);

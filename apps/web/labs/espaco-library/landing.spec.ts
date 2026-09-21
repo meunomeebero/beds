@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 async function textContrast(page: Page) {
-  const pairs = await page.locator('.es-landing :is(h1,h2,h3,h4,p,a,button,summary)').evaluateAll(elements => elements.filter(el => el.getClientRects().length && !el.closest('[aria-hidden="true"]')).map(element => {
+  const pairs = await page.locator('.recipe-landing :is(h1,h2,h3,h4,p,a,button,summary)').evaluateAll(elements => elements.filter(el => el.getClientRects().length && !el.closest('[aria-hidden="true"]')).map(element => {
     const rgb = (value: string) => value.match(/[\d.]+/g)!.map(Number);
     const layers: number[][] = [];
     let node: Element | null = element;
@@ -47,17 +47,17 @@ test('catalog entry, landmarks, product demo and recovery are keyboard operable'
   await expect(page.getByRole('dialog')).not.toBeVisible();
   await expect(details).toBeFocused();
   if (page.viewportSize()!.width < 768) {
-    const menu = page.locator('.es-landing-mobile-nav summary');
+    const menu = page.locator('.recipe-landing-mobile-nav summary');
     await menu.focus(); await menu.press('Enter');
-    await expect(page.locator('.es-landing-mobile-nav')).toHaveAttribute('open', '');
+    await expect(page.locator('.recipe-landing-mobile-nav')).toHaveAttribute('open', '');
     await page.keyboard.press('Escape'); await expect(menu).toBeFocused();
-    await expect(page.locator('.es-landing-mobile-nav')).not.toHaveAttribute('open', '');
+    await expect(page.locator('.recipe-landing-mobile-nav')).not.toHaveAttribute('open', '');
     await menu.press('Enter');
   }
   await page.getByRole('link', { name: 'Créditos', exact: true }).filter({ visible: true }).click();
   await expect(page).toHaveURL(/#creditos$/);
   await expect(page.locator('#creditos')).toBeInViewport();
-  await expect(page.locator('.es-landing-mobile-nav')).not.toHaveAttribute('open', '');
+  await expect(page.locator('.recipe-landing-mobile-nav')).not.toHaveAttribute('open', '');
   const question = page.locator('summary').filter({ hasText: 'O que posso fazer de graça?' });
   await question.focus(); await question.press('Enter');
   await expect(page.locator('details[open]')).toContainText('confirma seu e-mail');
@@ -67,7 +67,7 @@ test('catalog entry, landmarks, product demo and recovery are keyboard operable'
 
 test('primary CTA opens the existing local upload and round-trips without a provider', async ({ page }) => {
   await page.goto('/?view=landing&theme=dark');
-  const start = page.locator('.es-landing-primary');
+  const start = page.locator('.recipe-landing-primary');
   await start.focus(); await start.press('Enter');
   await expect(page).toHaveURL(/view=upload&theme=dark/);
   await expect(page.getByRole('heading', { name: 'Sua trajetória começa aqui' })).toBeVisible();
@@ -94,9 +94,9 @@ test('responsive geometry and computed contrast in both themes', async ({ page }
     await page.goto(`/?view=landing&theme=${theme}`);
     await page.evaluate(() => document.fonts.ready);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    const clips = await page.locator('.es-landing :is(h1,h2,h3,h4,p,a,summary)').evaluateAll(elements => elements.filter(el => el.getClientRects().length && el.scrollWidth > el.clientWidth + 1 && getComputedStyle(el).display !== 'inline').map(el => ({ text: el.textContent, width: el.clientWidth, scroll: el.scrollWidth })));
+    const clips = await page.locator('.recipe-landing :is(h1,h2,h3,h4,p,a,summary)').evaluateAll(elements => elements.filter(el => el.getClientRects().length && el.scrollWidth > el.clientWidth + 1 && getComputedStyle(el).display !== 'inline').map(el => ({ text: el.textContent, width: el.clientWidth, scroll: el.scrollWidth })));
     expect(clips).toEqual([]);
-    const primary = page.locator('.es-landing-primary');
+    const primary = page.locator('.recipe-landing-primary');
     expect((await primary.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     const minimumContrast = await textContrast(page);
     await info.attach(`contrast-${theme}-${width}`, { body: JSON.stringify({ minimumContrast }), contentType: 'application/json' });
@@ -106,13 +106,13 @@ test('responsive geometry and computed contrast in both themes', async ({ page }
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({ path: `apps/web/labs/espaco-library/evidence/landing/${theme}-${width}.png`, fullPage: true });
     if (width === 1440) await page.screenshot({ path: `apps/web/labs/espaco-library/evidence/landing/${theme}-first-fold.png` });
-    if (width === 390) await page.locator('.es-landing-hero').screenshot({ path: `apps/web/labs/espaco-library/evidence/landing/${theme}-mobile-hero.png` });
+    if (width === 390) await page.locator('.recipe-landing-hero').screenshot({ path: `apps/web/labs/espaco-library/evidence/landing/${theme}-mobile-hero.png` });
   }
 });
 
 test('reduced motion, interrupted disclosure, zoom proxy and forced colors', async ({ page }, info) => {
   await page.goto('/?view=landing&theme=dark');
-  const question = page.locator('.es-landing-faq summary').first();
+  const question = page.locator('.recipe-landing-faq summary').first();
   await question.focus();
   await question.press('Enter'); await question.press('Enter'); await question.press('Enter');
   await expect(page.locator('details[open]')).toHaveCount(1);
@@ -135,11 +135,11 @@ test('reduced motion, interrupted disclosure, zoom proxy and forced colors', asy
 test('product demo responds to available container width, not just viewport', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/?view=landing&theme=light');
-  const demo = page.locator('.es-product-demo');
+  const demo = page.locator('.recipe-product-demo');
   // Test harness only: simulate embedding the public component in a narrow host.
   await demo.evaluate(element => { element.style.width = '320px'; });
-  const context = (await page.locator('.es-product-demo-context').boundingBox())!;
-  const result = (await page.locator('.es-product-demo-result').boundingBox())!;
+  const context = (await page.locator('.recipe-product-demo-context').boundingBox())!;
+  const result = (await page.locator('.recipe-product-demo-result').boundingBox())!;
   expect(result.y).toBeGreaterThanOrEqual(context.y + context.height);
   expect(await demo.evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
 });

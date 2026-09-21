@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { AppShell, Avatar, BrandMark, Button, DisclosureText, DisclosedRecords, DesignSystemProvider, LabelField, NavItem, PageHeader, SidebarFooter, SidebarHeader, SidebarSection, Stack, Text, TextLink, brands, type Theme } from 'beds';
+import { Avatar, BrandMark, Button, DisclosureText, DisclosedRecords, DesignSystemProvider, LabelField, NavItem, PageHeader, SidebarFooter, SidebarHeader, SidebarSection, Stack, Text, TextLink, type Theme } from 'beds';
+import { AppShell } from './recipes';
 
 const longAbout = 'Linha um com bastante texto para garantir que o parágrafo realmente transborde o limite configurado de linhas visíveis. '.repeat(6);
 const shortAbout = 'Texto curto.';
@@ -26,7 +27,7 @@ export default function DisclosuresPage() {
   const [theme, setTheme] = useState<Theme>((new URLSearchParams(location.search).get('theme') === 'light' ? 'light' : 'dark'));
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <AppShell contentWidth="dashboard" collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} navigationLabel="Navegação" sidebar={<>
         <SidebarHeader closeLabel="Fechar navegação" expandLabel="Expandir barra lateral" collapseLabel="Recolher barra lateral"><Avatar name="Marina Costa" purpose="workspace" /></SidebarHeader>
         <SidebarSection purpose="primary">
@@ -64,7 +65,7 @@ export default function DisclosuresPage() {
               <Text><TextLink href="/interna">Página interna</TextLink></Text>
               <Text><TextLink href="tel:+5511999999999">+55 11 99999-9999</TextLink></Text>
             </Stack>
-            <Stack gap="tight"><BrandMark label="Curriculol" /></Stack>
+            <Stack gap="tight"><BrandMark src="/demo-brand.svg" label="Curriculol" /></Stack>
           </Stack>
     </AppShell>
   </DesignSystemProvider>;

@@ -12,7 +12,7 @@
  --es-mono:var(--font-mono);--es-font:var(--font-sans);
  --es-info:var(--info);--es-success:var(--success);--es-warning:var(--warning);--es-error:var(--destructive);--es-focus:var(--ring);
  --es-white:#ffffff;--es-switch-thumb-on:#ffffff;--es-black:#000000;--es-transparent:transparent;--es-overlay:#0000007a;
- --es-sidebar-width:264px;--es-rail-width:62px;--es-chat-width:640px;--es-home-width:720px;--es-dashboard-width:880px;
+ --es-reading-width:640px;
  --es-account-width:280px;--es-choice-width:260px;--es-command-width:672px;
  --es-space-1:2px;--es-space-2:4px;--es-space-3:6px;--es-space-4:8px;--es-space-5:10px;--es-space-6:12px;--es-space-7:14px;--es-space-8:16px;--es-space-9:20px;--es-space-10:24px;--es-space-11:32px;--es-space-12:48px;
  --es-radius-2:2px;--es-radius-6:6px;--es-radius-7:7px;--es-radius-8:var(--radius);--es-radius-10:10px;--es-radius-14:14px;--es-radius-20:20px;--es-radius-full:999px;

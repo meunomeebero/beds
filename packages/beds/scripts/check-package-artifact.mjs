@@ -115,7 +115,7 @@ export function smokePackedConsumer(packageDirectory, { moduleRoot = null } = {}
       "const resolved = import.meta.resolve('beds');",
       "if (!resolved.includes('/dist/index.js') || resolved.includes('/src/')) throw new Error(`Consumer resolved an invalid library entry: ${resolved}`);",
       "const library = await import('beds');",
-      "for (const name of ['DesignSystemProvider', 'Text', 'PageContentHeader', 'DataTable', 'Pagination', 'FilterSelect', 'HelpLabel', 'Carousel', 'FeatureCard']) if (typeof library[name] !== 'function') throw new Error(`Missing public package export: ${name}`);",
+      "for (const name of ['DesignSystemProvider', 'Text', 'PageHeader', 'DataTable', 'Pagination', 'FilterSelect', 'HelpLabel', 'Carousel', 'FeatureCard']) if (typeof library[name] !== 'function') throw new Error(`Missing public package export: ${name}`);",
       "console.log(resolved);",
     ].join('\n'));
     run(process.execPath, [consumer], { cwd:temporary });

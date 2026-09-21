@@ -47,10 +47,13 @@ They are candidate lenses, not a requirement to include every section on a page.
 
 - Precedence: truth, safety, security and accessibility → explicit product/DS
   contracts → observed evidence → user clarity and autonomy → these heuristics.
-- In BEDS, use its public components and approved visuals. Better owns visual
-  quality and accessibility; this skill owns the landing's message and decision
-  structure. It does not waive Better review or authorize CSS/token overrides.
-  If a needed pattern is missing, report a shared DS gap, not a local workaround.
+- In BEDS, reuse public components for their individual jobs. The app owns page
+  hierarchy, layout HTML/CSS, identity and product-specific illustrations; a new
+  hero, section sequence or grid is not automatically a missing DS component.
+  Better owns visual quality and accessibility; this skill owns message and
+  decision structure. Keep private component selectors and tokens intact.
+  Propose a shared DS gap only for one reusable job with credible unrelated uses.
+  Preserve useful BEUI anatomy, behavior and motion when adapting a shared control.
 - Other specialist skills remain contextual: motion only when interaction is in
   scope; signup/onboarding only when those downstream flows are actually assigned.
   This skill has no required dependency on another product's documentation.

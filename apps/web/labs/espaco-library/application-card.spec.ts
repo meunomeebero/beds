@@ -42,7 +42,7 @@ test('application card preserves semantics, long content, image recovery and red
     await expect(cards).toHaveCount(4);
     const ready = cards.first();
     await expect(ready.locator('img')).toHaveCount(0);
-    await expect(ready.locator('.es-application-company-mark')).toHaveText('AD');
+    await expect(ready.locator('.recipe-application-company-mark')).toHaveText('AD');
     await expect(cards.nth(1).getByRole('meter')).toHaveAttribute('aria-valuenow', '88');
     await expect(cards.nth(2).getByRole('meter')).toHaveCount(0);
     await expect(cards.nth(3).getByRole('meter')).toHaveCount(0);
@@ -56,6 +56,6 @@ test('application card preserves semantics, long content, image recovery and red
     await expect(ready).toContainText('Enviada');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     expect(await cards.nth(1).evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true);
-    expect(await ready.locator('.es-application-sheet').evaluate(el => getComputedStyle(el).transitionDuration)).toBe('0s');
+    expect(await ready.locator('.recipe-application-sheet').evaluate(el => getComputedStyle(el).transitionDuration)).toBe('0s');
   }
 });

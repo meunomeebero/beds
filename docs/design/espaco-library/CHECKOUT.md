@@ -1,5 +1,18 @@
 # Checkout — focused purchase and recovery
 
+## Current ownership — agnostic migration
+
+`CheckoutLayout`, `CheckoutSection` and `OrderSummary` are app-owned recipes in
+`apps/web/labs/espaco-library/recipes/checkout.tsx`, no longer BEDS runtime exports.
+The corresponding CSS owns page layout, not private component selectors. Their
+SSR tests now live with the recipes and run through the workspace `npm test`.
+The earlier product-specific decisions below are historical context, not general
+style-guide requirements. [Agnostic DS](AGNOSTIC-DS.md) owns the current boundary.
+
+Default RadioGroup label targets are now 32px minimum, growing to 44px for coarse
+pointers; numbered question rows retain their 52px minimum. The old checkout-only
+radio grid and component overrides are not part of the reusable contract.
+
 September16 local playground candidate. `?view=checkout&theme=light|dark`.
 No provider,account request,charge,credit mutation,fiscal issuance,production
 migration or release. Published RC16 unchanged. [Foundations](FOUNDATIONS.md),

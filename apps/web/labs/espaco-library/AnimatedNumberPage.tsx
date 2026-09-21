@@ -1,5 +1,6 @@
+import { AppShell } from './recipes';
 import { useLayoutEffect, useRef, useState } from 'react';
-import { AnimatedNumber, AppShell, Button, DesignSystemProvider, Inline, PageHeader, SidebarHeader, Stack, Surface, Text, brands, type Theme } from 'beds';
+import { AnimatedNumber, Button, DesignSystemProvider, Inline, PageHeader, SidebarHeader, Stack, Surface, Text, type Theme } from 'beds';
 
 type NumberState = 'unavailable' | 'invalid' | 'ready' | 'updated';
 
@@ -22,7 +23,7 @@ export default function AnimatedNumberPage() {
     document.querySelector('.es-animated-number')?.setAttribute('data-frame-trace', frames.current.join(','));
   }, [state, startOnView]);
 
-  return <DesignSystemProvider theme={theme} brandColor={brands.curriculol} onThemeChange={setTheme}>
+  return <DesignSystemProvider theme={theme} brandColor={"#ffa133"} onThemeChange={setTheme}>
     <AppShell collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} contentWidth="home" sidebar={<SidebarHeader><Text>Fixture F3</Text></SidebarHeader>}>
       <Stack gap="section">
         <PageHeader title="AnimatedNumber regression" description="Controlled synthetic values for first-frame, visibility and reduced-motion checks." />

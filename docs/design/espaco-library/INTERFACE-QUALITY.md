@@ -13,13 +13,13 @@ Pinned revision:`267330e1adfc66a718fb65fa6918c1f06d0a689e`;MIT;retain copyright/
 
 | Skill | Ownership |
 |---|---|
-| `better-interface` | Complete screen/flow review;consolidates six domain reviews |
-| `better-accessibility` | Semantics,keyboard,focus,assistive technology,motion,zoom |
-| `better-layout` | Grouping,alignment,reading order,adaptivity,long/localized content |
-| `better-writing` | UI terminology,action labels,errors,recovery,empty states |
-| `better-typography` | Contextual type hierarchy,wrapping,truncation,font rendering |
-| `better-colors` | Semantic roles and measured contrast in both themes |
-| `better-ui` | Surfaces,radii,icons,optical alignment,interaction polish |
+| [`better-interface` SKILL.md](https://github.com/jakubkrehel/skills/blob/267330e1adfc66a718fb65fa6918c1f06d0a689e/skills/better-interface/SKILL.md) | Complete screen/flow review;consolidates six domain reviews |
+| [`better-accessibility` SKILL.md](https://github.com/jakubkrehel/skills/blob/267330e1adfc66a718fb65fa6918c1f06d0a689e/skills/better-accessibility/SKILL.md) | Semantics,keyboard,focus,assistive technology,motion,zoom |
+| [`better-layout` SKILL.md](https://github.com/jakubkrehel/skills/blob/267330e1adfc66a718fb65fa6918c1f06d0a689e/skills/better-layout/SKILL.md) | Grouping,alignment,reading order,adaptivity,long/localized content |
+| [`better-writing` SKILL.md](https://github.com/jakubkrehel/skills/blob/267330e1adfc66a718fb65fa6918c1f06d0a689e/skills/better-writing/SKILL.md) | UI terminology,action labels,errors,recovery,empty states |
+| [`better-typography` SKILL.md](https://github.com/jakubkrehel/skills/blob/267330e1adfc66a718fb65fa6918c1f06d0a689e/skills/better-typography/SKILL.md) | Contextual type hierarchy,wrapping,truncation,font rendering |
+| [`better-colors` SKILL.md](https://github.com/jakubkrehel/skills/blob/267330e1adfc66a718fb65fa6918c1f06d0a689e/skills/better-colors/SKILL.md) | Semantic roles and measured contrast in both themes |
+| [`better-ui` SKILL.md](https://github.com/jakubkrehel/skills/blob/267330e1adfc66a718fb65fa6918c1f06d0a689e/skills/better-ui/SKILL.md) | Surfaces,radii,icons,optical alignment,interaction polish |
 
 Install each `skills/<name>` directory from that exact revision through the agent's skill installer. Install all seven for a complete review;include referenced Markdown files and metadata. A single orchestrator entrypoint is insufficient.
 
@@ -67,11 +67,11 @@ The repository routing regression test checks that author/package/catalog entryp
 
 | Concern | Decision |
 |---|---|
-| Visual authority | Approved Foundations/component contracts own Inter/Geist,two themes,one brand,geometry,density,icons and motion. Generic taste is not authority to replace them. |
+| Visual authority | Foundations/component contracts own reusable component typography, themes, semantic variants and motion. Apps own page hierarchy, layout geometry, density and identity. Generic taste alone does not justify overriding component internals; documented accessibility or usability failures require review at their source. |
 | Objective failures | Report accessibility,contrast,clipping and task failures even when their cause is a shared DS rule. Source fidelity does not certify accessibility. |
-| Fix location | Propose shared token/component changes through Governance;no consumer CSS,visual prop escape,new palette or font. |
+| Fix location | Fix component behavior and shared tokens in BEDS. Apps own page-layout CSS, identity and composition; they may read tokens but must not override private BEDS selectors or redeclare its tokens. Follow [Agnostic DS](AGNOSTIC-DS.md). |
 | Motion recipes | Exact upstream scale/easing/icon-stroke recipes are candidates for DS review,not automatic replacements for approved values. No global transition kill-switch in consumer code. |
-| Product content | Caller owns copy and business behavior. Review language,consistency and recovery;do not invent prices,guarantees,success states or a new brand voice. Curriculol copy remains PT-BR. |
+| Product content | Caller owns language, copy and business behavior. Review consistency and recovery; do not invent prices, guarantees, success states or a new brand voice. Historical product examples do not impose their locale or policy on unrelated apps. |
 | Authority | A review does not authorize implementation,publishing,merging,external actions,delegation or a product-policy change. |
 
 Known tensions,not automatic waivers:compact editable text/touch targets require contextual measurement;the continuous carousel has no visible toolbar but has interaction/reduced-motion guards and persistent keyboard pause. Better's visible-autoplay-control recommendation differs from this adopted anatomy. Record the concern and inspect mechanism discoverability/input coverage;do not silently restore controls or claim accessibility conformance from a written exception. [WCAG pause mechanism](https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html).

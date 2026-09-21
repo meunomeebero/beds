@@ -1,8 +1,21 @@
 # Landing benefits
 
+## Current ownership — optional app recipe
+
+This composition and its related types are **not exported from `beds`**.
+Source: `apps/web/labs/espaco-library/recipes/benefits.tsx`.
+Apps own its page layout, identity and product policy; this is an optional
+example, not a required style-guide composition. Read [Agnostic DS](AGNOSTIC-DS.md)
+and [API boundaries](API-BOUNDARIES.md) before adoption.
+
+The review results below describe the dated pre-extraction snapshot only.
+They do not prove the current recipe or private candidate passed those checks.
+Current verification status belongs to the migration ledger.
+
+
 Scope:`BenefitsSection`,`BenefitIllustration`;isolated `?view=benefits` catalog.
 No product landing integration,analytics,signup,provider calls or release.
-[Foundations](FOUNDATIONS.md) owns geometry;[States](STATES.md) owns behavior;
+The recipe owns section geometry;[Foundations](FOUNDATIONS.md) guides shared primitives;
 [Validation](VALIDATION.md) owns executed checks. Candidate remains unpublished.
 
 ## Reference and adaptation
@@ -26,20 +39,21 @@ capabilities,not measured user outcomes. No invented statistics,ATS improvement,
 interview/offer guarantee,free-plan claim or unsupervised application promise.
 Illustrations are conceptual,not live UI or a claim that an operation finished.
 
-## Public API
+## Optional recipe API
 
 | API | Contract |
 |---|---|
 | `BenefitsSection.title` | Required plain heading;caller owns wording |
 | `description` | Optional supporting paragraph |
 | `items` | Ordered readonly array:stable unique `id`,`title`,optional `description`,`illustration` |
-| `illustration` | Passive public BEDS visual;no interactive children;do not hide unique information in art |
+| `illustration` | Passive caller-owned visual;no interactive children;do not hide unique information in art |
 | `action` | Optional single `{label,href}`;native link,not a form submit;trusted host-owned destination |
 | `note` | Optional plain supporting/preview note |
 | `purpose` | `section` default:named section,H2/H3;`page`:main,H1/H2 for standalone use;never nest main |
 | `BenefitIllustration.kind` | `documents`, `profile`, `match`, `conversation`, `board`;always decorative/static |
 
-No visual overrides,arbitrary HTML rendering,network access or state machine.
+This recipe does not fetch data or own a state machine. Apps may change its
+HTML/CSS and illustrations without adding product-specific variants to BEDS.
 Keep benefit count focused;five matches this reference. Fewer/more items flow
 in source order;first item remains emphasized. Zero items omits the list;host
 may omit the whole section. No illustration removes its frame. No action means
@@ -54,7 +68,7 @@ Catalog navigation → benefits → “Preparar meu perfil” → local onboardi
 No upload,profile mutation,LLM call or data persistence.
 [Browser regression](../../../apps/web/labs/espaco-library/benefits.spec.ts).
 
-## Review
+## Historical review — September15 snapshot
 
 Skills:`better-interface` + accessibility/layout/writing/typography/colors/UI,
 `frontend-design`,`copywriting`;UI-skills visual routing. Approved DS contracts

@@ -86,7 +86,7 @@ test('consumer smoke resolves the extracted public dist entry, never source',()=
  const packageDirectory = path.join(directory, 'package');
  fs.mkdirSync(path.join(packageDirectory, 'dist'), { recursive:true });
  fs.writeFileSync(path.join(packageDirectory, 'package.json'), JSON.stringify({ name:'beds', type:'module', exports:{ '.':'./dist/index.js' } }));
- fs.writeFileSync(path.join(packageDirectory, 'dist', 'index.js'), 'export function DesignSystemProvider(){} export function Text(){} export function PageContentHeader(){} export function DataTable(){} export function Pagination(){} export function RadioGroup(){} export function FileUploadField(){} export function FilterSelect(){} export function HelpLabel(){} export function Carousel(){} export function FeatureCard(){}');
+ fs.writeFileSync(path.join(packageDirectory, 'dist', 'index.js'), 'export function DesignSystemProvider(){} export function Text(){} export function PageHeader(){} export function DataTable(){} export function Pagination(){} export function RadioGroup(){} export function FileUploadField(){} export function FilterSelect(){} export function HelpLabel(){} export function Carousel(){} export function FeatureCard(){}');
  smokePackedConsumer(packageDirectory);
 }));
 

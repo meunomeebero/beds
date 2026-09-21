@@ -1,0 +1,11 @@
+/* RangeSlider — beUI `range-slider` anatomy adapted to BEDS's native-input contract.
+   The input stays semantic and owns keyboard/form behavior; the decorative track,
+   fill and ticks never receive pointer events. Motion for the fill lives in TSX. */
+.es-root .es-range-slider{color:var(--es-text)}
+.es-root .es-range-slider[data-disabled]{opacity:.5}
+.es-root .es-range-slider__control::-webkit-slider-runnable-track{block-size:4px;border:0;border-radius:var(--es-radius-full);background:transparent}
+.es-root .es-range-slider__control::-moz-range-track{block-size:4px;border:0;border-radius:var(--es-radius-full);background:transparent}
+.es-root .es-range-slider__control::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;box-sizing:border-box;inline-size:4px;block-size:24px;border:0;border-radius:var(--es-radius-full);background:var(--es-text);box-shadow:0 0 0 1px var(--es-bg)}
+.es-root .es-range-slider__control::-moz-range-thumb{box-sizing:border-box;inline-size:4px;block-size:24px;border:0;border-radius:var(--es-radius-full);background:var(--es-text);box-shadow:0 0 0 1px var(--es-bg)}
+.es-root .es-range-slider:has(.es-range-slider__control:focus-visible){outline:2px solid var(--es-focus);outline-offset:2px;border-radius:var(--es-radius-8)}
+@media(forced-colors:active){.es-root .es-range-slider__control{forced-color-adjust:auto}.es-root .es-range-slider:has(.es-range-slider__control:focus-visible){outline-color:Highlight}.es-root .es-range-slider__track,.es-root .es-range-slider__ticks{display:none}.es-root .es-range-slider__control::-webkit-slider-thumb,.es-root .es-range-slider__control::-moz-range-thumb{background:Highlight}}

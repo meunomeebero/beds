@@ -6,15 +6,36 @@ Scope: the portable library and explicitly identified consumers. Start at the [m
 
 | Concern | Rule |
 |---|---|
-| Visual authority | [Foundations](FOUNDATIONS.md) owns approved typography, colors, icons, spacing, radii and component contexts. Consumer preferences do not create local exceptions. |
+| Visual authority | [Foundations](FOUNDATIONS.md) owns reusable component typography, colors, icons, spacing and radii. Apps own identity, page hierarchy and layout. App composition is not an exception to component internals. |
 | Implementation | Public declarations own API syntax; CSS owns executed values. A mismatch with the approved contract is a defect to investigate, not an automatic new design decision. |
 | Evidence | M = measured; D = declared; A = local adaptation; U = unobserved. Evidence describes its recorded state; historical measurements cannot override later explicit adoptions. |
 | Product ownership | Caller owns copy, data, routing, requests, callbacks, recovery and business policy. A fixture is not a product requirement. |
-| Design changes | Use an existing semantic variant first. Missing pattern → search beUI per [External component sourcing](EXTERNAL-COMPONENT-SOURCING.md), then shared proposal; no CSS, token override or arbitrary visual prop in a consumer. |
+| Design changes | Reuse an existing component/semantic variant when it fits. Apps may compose native HTML, owned assets and layout CSS, reading tokens without redefining them or overriding private component selectors. New reusable behavior requires beUI sourcing and a shared contract; product-specific composition stays in the app. |
 | New decision | Record rationale, affected components, source/adaptation, states, migration impact and validation. Ask the design owner if resolving the conflict requires a new aesthetic or product choice. |
 | Accessibility | Report objective failures even if a shared rule causes them. Reference fidelity and design approval never waive accessibility findings. |
 
 Generic skills are mandatory review inputs for BEDS UI tasks, not a second token system. [Interface quality](INTERFACE-QUALITY.md) owns automatic seven-skill routing, evidence and known tensions. Agents must invoke that workflow without waiting for a user skill request; missing skill/review evidence never becomes an approval.
+
+## Component admission
+
+Promote only components with one clear responsibility and credible reuse across
+distinct products—not every UI created while building an app. An instruction to
+“feed app creations back into BEDS” means evaluate candidates, not copy all work.
+
+Before proposing a shared API, document:
+
+- The component's single responsibility and at least two concrete, unrelated
+  product uses. Repetition on two screens of the same app is not enough.
+- Which behavior is genuinely shared, which inputs are caller-owned, and why
+  existing BEDS/BEUI components cannot already satisfy the need through composition.
+- The reusable states, API, sourcing decision and validation required by the
+  [admission rule](AGNOSTIC-DS.md#admission-rule).
+
+Logos, identity assets, complete pages, business flows and app-specific policy
+stay in the app. A generic name, a configurable wrapper or moving CSS into the
+package does not establish reuse. If the shared need is not demonstrated, keep
+the implementation local and revisit it when another product supplies evidence;
+do not add speculative variants merely to justify admission.
 
 ## Scope-appropriate verification
 

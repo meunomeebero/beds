@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
-// User-selected Lucy preview, measured at5282 on2026-09-12.
-// This contract replaces the original Marketer sidebar/dark defaults.
+// Historical Lucy geometry is retained where applicable. Catalog recipes now
+// live in their own navigation group, not alongside public component shortcuts.
 for (const theme of ['light', 'dark'] as const) {
   test(`Lucy sidebar hierarchy and current ${theme} semantic colors stay fixed`, async ({ page }, info) => {
     await page.goto(`/?view=chat&theme=${theme}&brand=curriculol`);
@@ -11,7 +11,7 @@ for (const theme of ['light', 'dark'] as const) {
     await expect(sidebar).toHaveCSS('width', '264px');
     await expect(sidebar).toHaveCSS('padding', '9px 12px 0px');
     await expect(sidebar).toHaveCSS('background-color', theme === 'dark' ? 'rgb(25, 25, 25)' : 'rgb(251, 250, 249)');
-    await expect(page.locator('.es-app-shell')).toHaveCSS('background-color', theme === 'dark' ? 'rgb(25, 25, 25)' : 'rgb(255, 255, 255)');
+    await expect(page.locator('.recipe-app-shell')).toHaveCSS('background-color', theme === 'dark' ? 'rgb(25, 25, 25)' : 'rgb(255, 255, 255)');
 
     const profile = page.getByRole('button', { name: 'Workspace workspace menu', exact: true });
     await expect(profile).toHaveCSS('height', '40px');
@@ -22,19 +22,11 @@ for (const theme of ['light', 'dark'] as const) {
     await expect(page.getByRole('button', { name: 'Buscar no catálogo', exact: true })).toHaveCSS('width', '32px');
 
     const primary = page.locator('.es-sidebar-section--primary');
-    const chat = primary.getByRole('button', { name: 'Chat', exact: true });
+    const chat = sidebar.getByRole('button', { name: 'Chat · receita', exact: true });
     const components = primary.getByRole('button', { name: 'Componentes', exact: true });
     await expect(chat).toHaveAttribute('aria-current', 'page');
-    await expect(chat).toHaveCSS('height', '40px');
-    const bounds = await chat.boundingBox();
-    const sibling = await components.boundingBox();
-    expect(sibling!.y).toBe(bounds!.y);
-    expect(sibling!.x - bounds!.x - bounds!.width).toBeCloseTo(4, 1);
-    const pill = await chat.evaluate(element => {
-      const css = getComputedStyle(element, '::before');
-      return { height: css.height, radius: css.borderRadius, background: css.backgroundColor };
-    });
-    expect(pill).toEqual({ height: '31px', radius: '30px', background: theme === 'dark' ? 'rgb(42, 42, 42)' : 'rgb(237, 236, 233)' });
+    await expect(primary.getByRole('button', { name: 'Chat · receita', exact: true })).toHaveCount(0);
+    await expect(sidebar.getByRole('heading', { name: 'Exemplos de app', exact: true })).toBeVisible();
 
     const selectedFill = theme === 'dark' ? 'rgb(206, 206, 206)' : 'rgb(55, 53, 46)';
     const selectedStroke = theme === 'dark' ? 'rgb(25, 25, 25)' : 'rgb(251, 250, 249)';

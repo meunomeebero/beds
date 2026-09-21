@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { ApplicationBoard, AppShell, BrandMark, ContentHeader, DesignSystemProvider, Drawer, DrawerSection, Inline, NavItem, PageHeader, ResultsStatus, SidebarHeader, SidebarSection, Stack, Text, ThemeToggle, brands, type ApplicationBoardColumn, type ApplicationScore } from 'beds';
+import { BrandMark, ContentHeader, DesignSystemProvider, Drawer, DrawerSection, Inline, NavItem, PageHeader, ResultsStatus, SidebarHeader, SidebarSection, Stack, Text, ThemeToggle } from 'beds';
+import { ApplicationBoard, type ApplicationBoardColumn, type ApplicationScore } from './recipes';
+import { AppShell } from './recipes';
 
 const stages: Omit<ApplicationBoardColumn, 'items'>[] = [
   { id: 'saved', label: 'Salvas' },
@@ -36,9 +38,9 @@ export default function KanbanPage() {
     onOpen: () => setDetail({ id: job.id }),
   })) }));
 
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <AppShell contentWidth="full" collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} navigationLabel="Navegação" closeNavigationLabel="Fechar navegação"
-      sidebar={<><SidebarHeader><Inline gap="tight"><BrandMark label="Curriculol" /><Text>Curriculol</Text></Inline></SidebarHeader><SidebarSection label="Playground"><NavItem label="Componentes" icon="Folder" href={`?view=components&theme=${theme}`} /><NavItem label="Quadro de vagas" icon="Briefcase" active href={`?view=kanban&theme=${theme}`} /></SidebarSection></>}
+      sidebar={<><SidebarHeader><Inline gap="tight"><BrandMark src="/demo-brand.svg" label="Curriculol" /><Text>Curriculol</Text></Inline></SidebarHeader><SidebarSection label="Playground"><NavItem label="Componentes" icon="Folder" href={`?view=components&theme=${theme}`} /><NavItem label="Quadro de vagas" icon="Briefcase" active href={`?view=kanban&theme=${theme}`} /></SidebarSection></>}
       header={<ContentHeader actions={<ThemeToggle label="Aparência da página" lightLabel="Claro" darkLabel="Escuro" />}><Text>Componentes / Quadro de vagas</Text></ContentHeader>}>
       <Stack gap="section">
         <PageHeader title="Candidaturas" description="Cada oportunidade, no seu próximo passo." />

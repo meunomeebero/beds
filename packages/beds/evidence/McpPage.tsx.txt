@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { copyMessages } from './copy-messages';
 import {
-  AccountMenu, AppShell, Avatar, Button, CodeSnippet,
+  AccountMenu, Avatar, Button, CodeSnippet,
   DataList, DesignSystemProvider, EmptyState, Icon, Inline, NavItem, Notice,
-  PageContentHeader, SectionHeader, SegmentedControl, SidebarFooter, SidebarHeader,
+  SectionHeader, SegmentedControl, SidebarFooter, SidebarHeader,
   SidebarSection, Stack, Surface, Tabs, Text, TextField, WorkspaceTrigger,
-  brands, type IconName, type Theme,
+  type IconName, type Theme,
 } from 'beds';
+import { AppShell, PageContentHeader } from './recipes';
 
 const accountActions = [
   { id: 'settings', label: 'Configurações', icon: 'Settings2' },
@@ -92,7 +93,7 @@ export default function McpPage() {
     },
   ];
 
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <AppShell contentWidth="home" collapsed={collapsed} onCollapsedChange={setCollapsed}
       mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} navigationLabel="Navegação"
       sidebar={<>

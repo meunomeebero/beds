@@ -4,13 +4,36 @@ Canonical library: `beds`. React 19; two fixed themes; one brand color. Independ
 
 ## Read only the relevant path
 
+Start with [Agnostic DS](AGNOSTIC-DS.md) for the active component-only migration.
+Its ownership boundary supersedes historical product-specific layout mandates.
+
+The map includes optional catalog recipes, not only public components. Landing,
+benefits/footer, onboarding, checkout, processing/results, payment confirmation,
+chat workspace, AppShell and application cards/boards are app-owned examples.
+They are not imports from `beds`. Pricing keeps the individual `PricingCard`,
+not the comparison section. Consult `src/index.ts` for actual exports and the
+migration ledger before treating an older flow contract as library policy.
+
+The catalog's “Biblioteca de componentes” and “Exemplos de app” groups distinguish
+API exploration from synthetic product screens. The default entry is components;
+chat requires explicit selection. The orange color example is caller-owned, not
+a named product preset. Existing product pages remain available as examples,
+not a template that unrelated apps must inherit.
+
 | Task | Read next |
 |---|---|
-| Current consolidated review | [Better review](REVIEW-CONSOLIDATION-2026-09-15.md) → [Validation](VALIDATION.md);[earlier checkpoint](CONSOLIDATION-2026-09-15.md) remains historical |
+| Decide whether a component belongs in the core | [Public API boundaries](API-BOUNDARIES.md): export-by-export ownership and borderline decisions |
+| Current migration status | [Agnostic DS](AGNOSTIC-DS.md): active boundary and scoped verification checkpoints |
+| Historical consolidated review | [September15 Better review](REVIEW-CONSOLIDATION-2026-09-15.md) → [Validation](VALIDATION.md);[earlier checkpoint](CONSOLIDATION-2026-09-15.md); none certifies the current candidate |
 | Find useful animation | [Motion opportunities](MOTION-OPPORTUNITIES-2026-09-15.md): Emil advisory,four candidates;not implemented |
 | Compose an application | [Consumer contract](CONSUMER-CONTRACT.md) → relevant [Components](COMPONENTS.md) / [States](STATES.md) entries |
+| Compose navigation without imposing a page | [Navigation boundary](NAVIGATION.md): public Sidebar and controls, optional app-owned AppShell recipe |
 | Build or change a primitive | [Foundations](FOUNDATIONS.md) → relevant component/state contract → [Governance](GOVERNANCE.md) |
+| Trace former product-specific geometry | [Historical foundations](FOUNDATIONS-HISTORY.md): provenance only, not current instructions |
 | Build or review an OTP input | [InputOTP](INPUT-OTP.md): controlled 4/6/8 digit entry, caller-owned status, motion and evidence |
+| Build a generic numeric range | [RangeSlider](RANGE-SLIDER.md): native single-value range, controlled/uncontrolled contract, keyboard/RTL and no product pricing policy |
+| Capture a calendar date | [DateField](DATE-FIELD.md): controlled native ISO date, bounds and caller-owned validation; no custom calendar or business-date policy |
+| Need a stable panel anchor or programmatic focus target | [Components](COMPONENTS.md#layout--11): `Surface id/focusTarget`; host owns deep-link scroll and highlighting |
 | Need a pattern BEDS lacks | [External component sourcing](EXTERNAL-COMPONENT-SOURCING.md): search beUI before building from scratch;MIT adapt-never-install contract,provenance and attribution |
 | Track F2 beUI migration | [F2 migration tracking](F2-MIGRATION-TRACKING.md): implementation status, helper dependencies, extraction boundary and restart point |
 | Track F3 numeric/data decisions | [F3 decisions](F3-MIGRATION-DECISIONS.md): typed numeric motion adoption and explicit no-fit provenance |
@@ -34,6 +57,8 @@ Canonical library: `beds`. React 19; two fixed themes; one brand color. Independ
 | Compose onboarding | [Onboarding](ONBOARDING.md): focused form,live decorative preview,controlled validation and feedback |
 | Select a resume/document | [Document upload](DOCUMENT-UPLOAD.md): illustrated drop field,local selection,recovery and full filenames |
 | Show dated entries | [Date item](DATE-ITEM.md): mini calendar,title,status and native/static rows |
+| Compose a controlled agent conversation | [Chat workspace](CHAT-WORKSPACE.md): transcript,composer,streaming and recovery presentation;no transport or policy |
+| Render server HTML in an isolated overlay | [Sandboxed HTML preview](SANDBOXED-HTML-PREVIEW.md): fixed iframe sandbox, caller-owned trust/error/action flow |
 | Confirm an already-paid purchase | [Payment confirmation](PAYMENT-CONFIRMATION.md): animated paper receipt,separate invoice states and host-owned actions |
 | Show account credits | [Account credits](ACCOUNT-CREDITS.md): compact menu footer,truthful balance/limit,retry and host-owned action |
 | Show forum topics | [Forum topics](FORUM-TOPICS.md): avatar rows,unread/current state,full-text recovery and native destinations |
@@ -51,7 +76,7 @@ Canonical library: `beds`. React 19; two fixed themes; one brand color. Independ
 
 | Concern | Single owner |
 |---|---|
-| Active visual decisions | Foundations: approved Lucy sidebar/dark neutrals, Inter/Geist, Lucide, contextual geometry and transparent cards |
+| Active visual decisions | Foundations: reusable semantic palette, Inter/Geist, Lucide, component geometry and state guidance; app identity and page layout remain caller-owned |
 | Public API | Package `src/index.ts` and exported TypeScript declarations; Components explains intended use |
 | Runtime values | Package `src/tokens.css` and component styles; Foundations records the approved contract |
 | Consumer behavior | Application data, copy, routes, requests, persistence and business policy |
@@ -63,4 +88,4 @@ Repository authors edit `docs/design/espaco-library/*.md`. Build generates the p
 
 The old `apps/web/src/design-system/espaco` prototype, terminal product typography and D5 screen contracts are separate systems. Do not merge their visual defaults into this package. A code/doc disagreement is drift to investigate against the approved decision, not permission to declare either side correct automatically.
 
-Local candidate version comes from package metadata; executed inventory and gates from Validation. New patterns require a shared library contract, not consumer CSS. Technical checks do not grant aesthetic approval or establish universal accessibility.
+Local candidate version comes from package metadata; executed inventory and gates from Validation. Reusable components require a shared contract; app-specific composition belongs in consumer HTML/CSS or optional recipes. Technical checks do not grant aesthetic approval or establish universal accessibility.

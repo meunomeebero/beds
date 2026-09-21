@@ -1,0 +1,8 @@
+.recipe-chat-thread{display:flex;flex-direction:column;gap:64px;min-inline-size:0;min-block-size:min(780px,calc(100svh - 104px));padding-block:32px 8px}
+.recipe-chat-transcript{display:flex;flex-direction:column;gap:32px;min-inline-size:0}
+.recipe-chat-next{display:grid;gap:16px;min-inline-size:0;margin-block-start:auto}
+.recipe-chat-notice{margin:0;text-align:center;color:var(--es-secondary);font-size:12px;line-height:18px;text-wrap:pretty}
+@media(max-width:767px){
+  .recipe-chat-thread{min-block-size:calc(100svh - 168px);padding-block:24px 8px;gap:40px}
+}
+.recipe-chat-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}

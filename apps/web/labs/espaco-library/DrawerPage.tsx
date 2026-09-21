@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { ApplicationCard, AppShell, Avatar, Button, DesignSystemProvider, Dialog, Drawer, DrawerSection, EmptyState, Icon, Inline, LoadingIndicator, Notice, PageHeader, ResponsiveGrid, ResultsStatus, Select, Stack, Text, ThemeToggle, brands } from 'beds';
+import { Avatar, Button, DesignSystemProvider, Dialog, Drawer, DrawerSection, EmptyState, Icon, Inline, LoadingIndicator, Notice, PageHeader, ResponsiveGrid, ResultsStatus, Select, Stack, Text, ThemeToggle } from 'beds';
+import { ApplicationCard } from './recipes';
+import { AppShell } from './recipes';
 
 const title = 'Product designer sênior';
 const longTitle = 'Especialista em pesquisa, acessibilidade e sistemas de design para plataformas internacionais de produtos e serviços digitais';
@@ -15,7 +17,7 @@ export default function DrawerPage() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const ready = example === 'ready' || example === 'long';
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <AppShell sidebar={<ThemeToggle lightLabel="Claro" darkLabel="Escuro" />} contentWidth="home" collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen}>
       <Stack gap="section">
         <PageHeader title="Detalhes da vaga" leading={<Icon name="Briefcase" purpose="feature" />} description="Explore uma oportunidade sem sair da lista. Demonstração com dados fictícios." />

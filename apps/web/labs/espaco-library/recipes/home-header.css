@@ -1,0 +1,8 @@
+.recipe-home-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-block-start:16px}
+.recipe-home-heading{display:flex;align-items:flex-start;gap:10px;min-width:0}
+.recipe-home-heading>div{min-width:0}
+.recipe-home-leading{display:flex;align-items:center;justify-content:center;min-height:28px;flex-shrink:0}
+.recipe-home-header h1{margin:0;color:var(--es-heading);font:500 22px/28px var(--es-font);letter-spacing:-.25px;overflow-wrap:anywhere}
+.recipe-home-header p{margin:8px 0 0;color:var(--es-secondary);font:400 13px/20px var(--es-font);overflow-wrap:anywhere}
+.recipe-home-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+@media(max-width:767px){.recipe-home-header{flex-wrap:wrap;padding-block-start:8px}.recipe-home-header h1{font-size:20px;line-height:26px}}

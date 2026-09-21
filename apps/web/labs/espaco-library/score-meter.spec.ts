@@ -16,7 +16,7 @@ test('ATS, FIT and compatibility share the vertical segmented anatomy without ch
     await expect(meter).toHaveAccessibleName('ATS do currículo');
     await expect(meter).toHaveAttribute('aria-valuenow', '92');
     await expect(meter).toHaveAttribute('aria-valuetext', '92 de 100 pontos');
-    await expect(card.locator('.es-application-delta')).toHaveText('+24 pts');
+    await expect(card.locator('.recipe-application-delta')).toHaveText('+24 pts');
     await expect(meter.locator(':scope > span')).toHaveCount(28);
     await expect(meter.locator('[data-filled]')).toHaveCount(25);
     await expect(meter).toHaveCSS('height', '16px');
@@ -28,7 +28,7 @@ test('ATS, FIT and compatibility share the vertical segmented anatomy without ch
     await select(page, 'Tipo da nota', 'Compatibilidade');
     await expect(meter).toHaveAccessibleName('Compatibilidade');
     await expect(meter).toHaveAttribute('aria-valuenow', '92');
-    await expect(card.locator('.es-application-delta')).toHaveCount(0);
+    await expect(card.locator('.recipe-application-delta')).toHaveCount(0);
     await card.screenshot({ path: evidence + `${info.project.name}-${theme}-match.png` });
     await select(page, 'Tipo da nota', 'FIT');
     await expect(meter).toHaveAccessibleName('FIT do perfil');

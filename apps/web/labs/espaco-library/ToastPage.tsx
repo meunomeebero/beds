@@ -1,8 +1,9 @@
-import { AppShell, Button, DesignSystemProvider, PageHeader, Stack, Toaster, brands, toast } from 'beds';
+import { Button, DesignSystemProvider, PageHeader, Stack, Toaster, toast } from 'beds';
+import { AppShell } from './recipes';
 
 export default function ToastPage() {
   const theme = new URLSearchParams(location.search).get('theme') === 'light' ? 'light' : 'dark';
-  return <DesignSystemProvider theme={theme} brandColor={brands.curriculol}>
+  return <DesignSystemProvider theme={theme} brandColor={"#ffa133"}>
     <Toaster />
     <AppShell sidebar={null} contentWidth="chat" collapsed={true} onCollapsedChange={() => {}} mobileOpen={false} onMobileOpenChange={() => {}}>
       <Stack>
