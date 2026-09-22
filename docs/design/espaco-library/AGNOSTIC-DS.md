@@ -42,6 +42,17 @@ provenance, not universal rules.
 
 ## Migration and verification ledger
 
+### Mainline promotion — 2026-09-21
+
+The user authorized consolidation onto `main` and immutable distribution as
+`0.2.0-rc.1`. This supersedes the private-candidate delivery restriction below,
+not its recorded review limitations. The runtime starts at `fba8fc3`; release
+metadata and current documentation are reconciled separately. Existing consumers
+must explicitly migrate app-owned compositions before installing the new API.
+Curriculol migration and forum polish follow publication; neither is established
+by this library's technical checks. See the repository release workflow and the
+GitHub release for the exact source SHA, archive hash and executed gates.
+
 This is a breaking candidate. Do not publish or upgrade existing consumers
 implicitly. Preserve the previous published artifact as their current dependency.
 

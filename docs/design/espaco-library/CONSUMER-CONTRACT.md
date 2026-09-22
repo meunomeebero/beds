@@ -101,6 +101,6 @@ Do not exclude real UI roots just to obtain a pass.
 6. Upgrade existing apps explicitly, one scope at a time. Publication, integration
    and deployment require separate authorization.
 
-This migration is a breaking candidate, not a released replacement. Consult the
+The 0.2 release line is a breaking migration, not a drop-in replacement. Consult the
 [Agnostic DS ledger](AGNOSTIC-DS.md) for remaining work; existing exports and old
 screenshots do not establish product-agnostic or aesthetic acceptance.

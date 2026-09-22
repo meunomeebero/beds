@@ -6,7 +6,7 @@ Reusable React 19 components and a product-agnostic style guide. Two themes; one
 
 Install an explicitly selected local/package candidate. Read its version from package metadata and evidence from [Validation](docs/VALIDATION.md); source aliases are not package-portability evidence.
 
-This source is the private `0.2.0-alpha.1` breaking migration candidate, not a published release. Follow [Agnostic DS](docs/AGNOSTIC-DS.md) and [API boundaries](docs/API-BOUNDARIES.md). Do not upgrade existing consumers implicitly. The historical [RC16 archive](https://github.com/meunomeebero/beds/releases/tag/v0.1.7-rc.16) has a different API and is not the installation target for this example.
+Version `0.2.0-rc.1` consolidates the breaking, product-agnostic migration on `main`. Use the immutable archive and SHA-256 from the [release](https://github.com/meunomeebero/beds/releases/tag/v0.2.0-rc.1). Follow [Agnostic DS](docs/AGNOSTIC-DS.md) and [API boundaries](docs/API-BOUNDARIES.md). Do not upgrade existing consumers implicitly. Historical 0.1 releases expose a different API.
 
 ```tsx
 import { DesignSystemProvider, Text } from 'beds';

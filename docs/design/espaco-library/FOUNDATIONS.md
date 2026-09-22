@@ -39,7 +39,7 @@ not make it product-agnostic. Follow [component admission](GOVERNANCE.md#compone
 Multi-part widgets such as dialogs and tables can still be individual components.
 See [Consumer contract](CONSUMER-CONTRACT.md) for the enforced boundary.
 
-The private 0.2 candidate removes page presets from `geometry`: `sidebar`,
+The 0.2 release line removes page presets from `geometry`: `sidebar`,
 `rail`, `breakpoint`, `mobileGutter`, `desktopGutter`, `chat`, `home` and
 `dashboard`. Corresponding sidebar/rail/chat/home/dashboard CSS width tokens
 are removed. Apps choose these values in their own layout styles; do not copy

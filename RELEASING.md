@@ -15,6 +15,16 @@ Read next: [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.
 
 Rollback: select the previous known release URL/integrity, reinstall and rerun app gates. Do not mutate the old release.
 
+## Agnostic mainline — 0.2.0-rc.1
+
+`main` supersedes the historical bootstrap branch as the default. Source starts
+from the reviewed agnostic extraction `fba8fc3`; former branches and releases
+remain reachable. The release changes distribution metadata and current guidance,
+not the candidate's component runtime. Foundations and Consumer contract own
+the new app/core boundary. Full-page recipes remain repository examples, not
+package exports. This candidate does not claim completed consumer migration,
+independent aesthetic approval, native assistive-technology or physical-device QA.
+
 Initial extraction preserves RC13 runtime byte-for-byte. RC14 changes repository/
 distribution metadata and repository setup only. Historical machine-specific reports
 are excluded from publication; source screenshots/provenance remain historical.

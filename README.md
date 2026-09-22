@@ -78,9 +78,11 @@ set `PLAYWRIGHT_BASE_URL=http://127.0.0.1:5294` for matching tests.
 
 ## Consume
 
-Current source is the private `0.2.0-alpha.1` breaking candidate, not a published
-release. Use only an explicitly authorized, immutable package artifact and its
-integrity hash; never a mutable source branch. Do not upgrade consumers implicitly.
+The consolidated mainline is `main`. Version `0.2.0-rc.1` is the breaking,
+product-agnostic release candidate. Install the immutable archive from its
+[GitHub release](https://github.com/meunomeebero/beds/releases/tag/v0.2.0-rc.1),
+checking the release's SHA-256; never install a mutable source branch.
+Consumer migration remains explicit, not automatic.
 The historical [RC16 release](https://github.com/meunomeebero/beds/releases/tag/v0.1.7-rc.16)
 has a different API and does not implement the current agnostic boundary.
 See the [package usage guide](packages/beds/README.md) and migration ledger.
