@@ -25,7 +25,7 @@ test('provider SSR keeps theme, brand and context instances isolated', async () 
       return React.createElement('output', { 'data-probe': label }, `${value.theme}|${value.brandColor}`);
     };
     const markup = renderToString(React.createElement('main', null,
-      React.createElement(foundation.DesignSystemProvider, { theme: 'light' }, React.createElement(Probe, { label: 'light' })),
+      React.createElement(foundation.DesignSystemProvider, { theme: 'light', brandColor: '#d0f300' }, React.createElement(Probe, { label: 'light' })),
       React.createElement(foundation.DesignSystemProvider, { theme: 'dark', brandColor: '#111111' },
         React.createElement(Probe, { label: 'dark' }),
         React.createElement(foundation.BrandMark, { src: '/demo-brand.svg', label: 'Second brand' }),
@@ -45,7 +45,8 @@ test('provider SSR keeps theme, brand and context instances isolated', async () 
     expect(markup.match(/<button[^>]+disabled=""/g) ?? []).toHaveLength(2);
 
     expect(() => renderToString(React.createElement(foundation.DesignSystemProvider, { theme: 'light', brandColor: '#fff' }, 'invalid'))).toThrow(/brandColor/);
-    expect(() => renderToString(React.createElement(foundation.DesignSystemProvider, { theme: 'sepia' }, 'invalid'))).toThrow(/theme/);
+    expect(() => renderToString(React.createElement(foundation.DesignSystemProvider, { theme: 'light' } as unknown as { theme: 'light'; brandColor: string }, 'invalid'))).toThrow(/brandColor is required/);
+    expect(() => renderToString(React.createElement(foundation.DesignSystemProvider, { theme: 'sepia', brandColor: '#d0f300' }, 'invalid'))).toThrow(/theme/);
     expect(() => renderToString(React.createElement(Probe, { label: 'outside' }))).toThrow(/DesignSystemProvider/);
   });
 });
@@ -60,7 +61,7 @@ async function openFoundationProbe(page: Page) {
     function Probe() {
       const [theme, setTheme] = useState('light');
       const [src, setSrc] = useState('/foundation/avatar-a.png');
-      return <DesignSystemProvider theme={theme} onThemeChange={setTheme}>
+      return <DesignSystemProvider brandColor="#d0f300" theme={theme} onThemeChange={setTheme}>
         <main className="foundation-fixture">
           <ThemeToggle label="Appearance" lightLabel="Light" darkLabel="Dark" />
           <button type="button" id="avatar-a" onClick={() => setSrc('/foundation/avatar-a.png')}>Avatar A</button>

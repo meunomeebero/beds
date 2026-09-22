@@ -2,6 +2,7 @@
 
 - Inter4.1: bundled font files and [SIL Open Font License](packages/beds/fonts/OFL.txt).
 - Geist Mono: bundled font and [SIL Open Font License](packages/beds/fonts/Geist-OFL.txt).
+- Caveat (variable, latin subset from `@fontsource-variable/caveat` 5): bundled font for `HandDrawnArrow` notes and [SIL Open Font License](packages/beds/fonts/Caveat-OFL.txt).
 - Lucide: runtime dependency, its upstream ISC license applies; no copied alternate icon library.
 - Better skills: referenced at a pinned MIT-licensed upstream revision in [Interface quality](docs/design/espaco-library/INTERFACE-QUALITY.md). Skill implementations are not silently bundled or installed here.
 - Marc Lou landing-page skill: BEDS-authored adaptation of the project's existing paraphrased Marc heuristics; [scope and attribution](packages/beds/skills/marc-lou-landing-page/SKILL.md). Not official or endorsed; no full article text or third-party artwork bundled. Original-post fidelity remains unverified, as documented in the skill.

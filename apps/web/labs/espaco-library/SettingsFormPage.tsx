@@ -10,7 +10,7 @@ export default function SettingsFormPage() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const ref = useRef<HTMLInputElement>(null);
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme}>
+  return <DesignSystemProvider brandColor="#d0f300" theme={theme} onThemeChange={setTheme}>
     <AppShell sidebar={<ThemeToggle />} contentWidth="home" collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen}>
       <Stack gap="section"><PageHeader title="Formulário de configurações" description="Enter, validação e retorno local. Nenhuma requisição." />
         <SettingsGroup title="Identidade"><SettingsForm label="Editar identidade" onSubmit={() => {

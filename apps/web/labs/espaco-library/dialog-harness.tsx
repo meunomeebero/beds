@@ -43,7 +43,7 @@ export default function DialogHarness() {
     setStatus('reopened');
   }
 
-  return <DesignSystemProvider theme="light">
+  return <DesignSystemProvider brandColor="#d0f300" theme="light">
     <main>
       {!triggerRemoved && <Button label="Open harness dialog" onClick={() => { setOpen(true); setStatus('open'); }} />}
       <Button label="Remove trigger" onClick={() => setTriggerRemoved(true)} />

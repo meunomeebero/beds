@@ -29,10 +29,12 @@ import ProcessingPage from './ProcessingPage';
 import ResultsPage from './ResultsPage';
 import CheckoutPage from './CheckoutPage';
 import AnimatedNumberPage from './AnimatedNumberPage';
+import HandDrawnArrowPage from './HandDrawnArrowPage';
 const params = new URLSearchParams(location.search);
 const pages: Record<string, React.ComponentType> = {
   checkout: CheckoutPage,
   'animated-number': AnimatedNumberPage,
+  'hand-drawn-arrow': HandDrawnArrowPage,
   'analysis-result': () => <ResultsPage mode="analysis" />,
   'optimization-result': () => <ResultsPage mode="optimization" />,
   'analysis-loading': ProcessingPage,

@@ -93,3 +93,7 @@ test('pseudo-element selectors do not declare CSS tokens',()=>withFixture({
  assert.equal(result.tokens,3);
  assert.ok(result.issues.some(issue=>issue.code==='UNDECLARED_TOKEN' && issue.message.includes('--active')));
 }));
+test('requires a deliberate provider brand color',()=>withFixture({
+ 'App.tsx':"import {DesignSystemProvider,Text} from 'beds'; export const App=()=> <DesignSystemProvider theme='light'><Text>Sem cor</Text></DesignSystemProvider>"
+},dir=>assert.ok(checkConsumerPaths([dir]).issues.some(issue=>issue.code==='BRAND_REQUIRED'))));
+

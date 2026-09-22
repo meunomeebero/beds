@@ -17,9 +17,14 @@ export function useDesignSystem() {
   return value;
 }
 
-export function DesignSystemProvider({ children, theme, brandColor = '#d0f300', onThemeChange }: {
-  children: ReactNode; theme: Theme; brandColor?: string; onThemeChange?: (theme: Theme) => void;
+/**
+ * `brandColor` is required: every product picks one deliberate contrast color
+ * (FOUNDATIONS.md, "Contrast color — mandatory choice") and records why in its AGENTS.md.
+ */
+export function DesignSystemProvider({ children, theme, brandColor, onThemeChange }: {
+  children: ReactNode; theme: Theme; brandColor: string; onThemeChange?: (theme: Theme) => void;
 }) {
+  if (!brandColor) throw new Error('brandColor is required: choose this product\'s contrast color (FOUNDATIONS.md, "Contrast color — mandatory choice").');
   if (!/^#[0-9a-f]{6}$/i.test(brandColor)) throw new Error('brandColor must be one six-digit hex color.');
   if (theme !== 'light' && theme !== 'dark') throw new Error('theme must be light or dark.');
   const root = useRef<HTMLDivElement>(null);

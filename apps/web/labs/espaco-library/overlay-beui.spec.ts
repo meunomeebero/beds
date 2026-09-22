@@ -35,7 +35,7 @@ export function OverlayProbe() {
   useEffect(() => {
     (window as Window & { __ber39OverlayHydrated?: boolean }).__ber39OverlayHydrated = true;
   }, []);
-  return <DesignSystemProvider theme="light">
+  return <DesignSystemProvider brandColor="#d0f300" theme="light">
     <main>
       <h1>Overlay probe</h1>
       <p data-testid="rejected-request">{rejectedRequest}</p>

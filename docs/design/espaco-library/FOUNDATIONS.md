@@ -63,6 +63,7 @@ from `tokens.ts`. The light/dark palette remains stable during extraction.
 | Focus | `--es-focus` |
 | Primary action | `--es-primary`, `--es-on-primary` |
 | Caller-owned branded emphasis | `--es-brand`, `--es-on-brand` |
+| Decorative brand stroke (never text) | `--es-brand-ink`: light theme mixes 70% brand with `--es-heading` in oklab so light hues stay visible; dark theme is `--es-brand` |
 | Error text | `--es-error-text` |
 
 Shadcn-style names such as `--background`, `--foreground`, `--card`, `--muted`,
@@ -70,8 +71,8 @@ Shadcn-style names such as `--background`, `--foreground`, `--card`, `--muted`,
 `--es-*` aliases keep component roles compatible; neither naming system implies
 permission to replace component internals with application overrides.
 
-`DesignSystemProvider` accepts an explicit theme and optional six-digit brand
-color. Its default accent is `#d0f300`; there are no named product presets.
+`DesignSystemProvider` accepts an explicit theme and a **required** six-digit
+brand color. There is no default and there are no named product presets.
 `BrandMark` contains a caller-supplied image and requires `src` and `label`.
 It contains no BEDS-owned product logo. Assets and their licenses belong to the
 app. Functional error/success states must not depend on brand color alone.
@@ -81,10 +82,39 @@ A palette value is not a contrast guarantee for every placement. Keep floating
 menus and dialogs on a legible surface; a preference for transparent cards does
 not justify transparent popovers.
 
+## Contrast color — mandatory choice
+
+Owner decision, 2026-09-22. Neutrals give structure; one contrast color gives the
+product its identity. A product with only black, white and gray reads as raw and
+unfinished, so every consumer passes a deliberate `brandColor` (the type and
+`check-consumer` both require it). It is still exactly one color. Functional
+blue, success, warning and error stay separate and never double as the brand.
+
+**Choosing it (agent task when the user has not decided):**
+
+1. Name the feeling the product should give its customers in two or three words,
+   from its audience and promise. Examples: "energy, money, new"; "calm, trust, focus".
+2. Pick a hue that carries that feeling and stays distinct from functional colors.
+   Starting points, not rules: electric lime or yellow for energy, speed and money
+   (Hyppo `#d0f300`); orange for warmth and optimism (Curriculol `#ffa133`); violet
+   for creativity and premium; teal or green for growth and health; pink or coral
+   for playful and social. Avoid link-like blues and red, which read as links and errors.
+3. Prefer saturated colors with presence on both `#ffffff` and `#191919`. BEDS
+   derives black or white foreground on brand fills; `--es-brand-ink` keeps light
+   brands visible as decoration on light surfaces.
+4. Record the color and a one-sentence reason in the product's `AGENTS.md`.
+
+**Using it:** primary CTAs and their hover fills, selected or active states, small
+identity marks (logo accent, highlighter under key headline words, decorative
+strokes such as `HandDrawnArrow`) and progress. Keep it to a few focal points per
+screen. Never use it for body text, large page backgrounds or several competing
+CTAs. Brand is never the only carrier of meaning.
+
 ## Typography
 
 The current component family uses bundled Inter for interface text and Geist
-Mono for code. Preserve font licenses. Runtime Text roles are:
+Mono for code. Caveat (`--font-hand`) is bundled only for short handwritten
+`HandDrawnArrow` notes; never use it for interface text. Preserve font licenses. Runtime Text roles are:
 
 | Role | Size / line height | Weight |
 |---|---|---|

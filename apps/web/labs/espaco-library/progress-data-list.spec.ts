@@ -27,7 +27,7 @@ function serverProbeProps() {
 
 function createProbeElement(feedback: Record<string, any>, value = 1.5) {
   return React.createElement('main', { id: 'progress-data-list-probe' },
-    React.createElement(feedback.DesignSystemProvider, { theme: 'light' },
+    React.createElement(feedback.DesignSystemProvider, { theme: 'light', brandColor: '#d0f300' },
       React.createElement('div', { id: 'progress-cases' },
         React.createElement(feedback.ProgressBar, { label: 'Fractional', value, max: 3 }),
         React.createElement(feedback.ProgressBar, { label: 'Below', value: -2, max: 3 }),
@@ -65,7 +65,7 @@ async function openProbe(page: Page, ssrMarkup?: string) {
       const [pending, setPending] = useState(null);
       useEffect(() => { window.__bedsHydrationComplete = true; }, []);
       return <main id="progress-data-list-probe">
-        <DesignSystemProvider theme="light">
+        <DesignSystemProvider brandColor="#d0f300" theme="light">
           <div id="progress-cases">
             <ProgressBar label="Fractional" value={value} max={3} />
             <ProgressBar label="Below" value={-2} max={3} />

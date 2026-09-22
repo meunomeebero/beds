@@ -1,9 +1,10 @@
 import { createContext, useContext, useId, type ComponentProps, type ReactNode } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
 import { Icon, Text } from './foundation';
 import { HelpLabel } from './overlays';
 import { SPRING_LAYOUT } from './lib/ease';
 import './layout.css';
+import { useReducedMotionPreference } from './lib/hooks/use-reduced-motion';
 
 type IconName = ComponentProps<typeof Icon>['name'];
 type NavigationAction = { href: string; onClick?: never } | { href?: never; onClick: () => void };
@@ -56,7 +57,7 @@ export function SidebarSection({ label, children, purpose = 'default' }: { label
  * (title) and assistive technology (label).
  */
 export function NavItem({ label, icon, active = false, badge, locked, href, onClick }: { label: string; icon: IconName; active?: boolean; badge?: string; locked?: string } & (NavigationAction | LockedNavigation)) {
-  const reduce = useReducedMotion() ?? false;
+  const reduce = useReducedMotionPreference();
   const itemId = useId();
   const navMotionId = useContext(NavMotionContext) ?? itemId;
   const content = <span className="es-nav-content"><Icon name={icon} purpose="navigation" /><span className="es-nav-label">{label}</span>{badge && <span className="es-nav-badge">{badge}</span>}</span>;

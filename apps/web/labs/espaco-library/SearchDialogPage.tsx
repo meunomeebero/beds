@@ -35,7 +35,7 @@ export default function SearchDialogPage() {
   ].map((item, index) => ({ ...item, id: `${item.id}-${index}` })) : items;
   const state = example === 'loading' ? { kind: 'loading' as const, label: 'Buscando resultados…' }
     : example === 'error' ? { kind: 'error' as const, title: 'Não foi possível buscar', description: 'Tente novamente para carregar os resultados. Seu termo de busca foi mantido.', retry: { label: 'Tentar novamente', onClick: () => setExample('ready') } } : undefined;
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme}>
+  return <DesignSystemProvider brandColor="#d0f300" theme={theme} onThemeChange={setTheme}>
     <AppShell sidebar={<ThemeToggle lightLabel="Claro" darkLabel="Escuro" />} contentWidth="home" collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen}>
       <Stack gap="section">
         <PageHeader title="Busca global" leading={<Icon name="Search" purpose="feature" />} description="Currículos e vagas no mesmo lugar. Exemplo com dados fictícios." />

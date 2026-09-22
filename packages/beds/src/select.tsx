@@ -1,12 +1,13 @@
 "use client";
 
-import { motion, useReducedMotion, type Transition, type Variants } from "motion/react";
+import { motion, type Transition, type Variants } from "motion/react";
 import { useId, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
 import { Icon, type IconName } from "./foundation";
 import { useAnchoredPopup } from "./lib/anchored-popup";
 import { EASE_OUT } from "./lib/ease";
 import { nextOption } from "./lib/option-navigation";
 import "./overlays.css";
+import { useReducedMotionPreference } from "./lib/hooks/use-reduced-motion";
 
 const INSTANT_TRANSITION: Transition = { duration: 0 };
 const CHEVRON_TRANSITION: Transition = { type: "spring", duration: 0.4, bounce: 0.3 };
@@ -54,7 +55,7 @@ export function Select({ label, value, options, onChange, disabled, icon, varian
   const [open, setOpen] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
   const typeahead = useRef({ value: "", at: 0 });
-  const reduce = useReducedMotion() ?? false;
+  const reduce = useReducedMotionPreference();
   const selected = options.find(option => option.id === value);
   const active = options.find(option => option.id === activeId && !option.disabled)
     ?? options.find(option => option.id === value && !option.disabled)

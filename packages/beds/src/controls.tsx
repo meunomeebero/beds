@@ -1,5 +1,5 @@
 import { forwardRef, useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type ForwardedRef, type InputHTMLAttributes, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react';
-import { AnimatePresence, animate, LayoutGroup, motion, useReducedMotion } from 'motion/react';
+import { AnimatePresence, animate, LayoutGroup, motion } from 'motion/react';
 import { Icon, type IconName } from './foundation';
 import { cn } from './lib/utils';
 import { EASE_OUT, SPRING_LAYOUT, SPRING_PRESS } from './lib/ease';
@@ -193,7 +193,7 @@ function useFieldIds(description?: string, error?: string) {
 }
 
 function FieldNotes({ id, description, error, reserveErrorLine }: { id: string; description?: string; error?: string; reserveErrorLine?: boolean }) {
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionPreference();
   const showError = Boolean(error) || Boolean(reserveErrorLine);
   return <>
     {description && <p id={`${id}-description`} className="text-xs leading-[18px] text-muted-foreground">{description}</p>}
@@ -220,7 +220,7 @@ const TEXT_INPUT_CONNECTION = 'h-10 py-1 px-4 text-[14px] leading-4 rounded-xl p
 /** Shake the field once when a new error appears — adopted from beUI `input` (state intent + reduce-motion guard). */
 function useErrorShake<T extends HTMLElement>(error?: string) {
   const ref = useRef<T>(null);
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionPreference();
   useEffect(() => {
     if (!ref.current || reduce || !error) return;
     animate(ref.current, { x: [0, -3, 3, -2, 2, 0] }, { duration: 0.28, ease: [0.36, 0.07, 0.19, 0.97] });
@@ -294,7 +294,7 @@ const TOGGLE_WRAPPER = 'relative box-border inline-flex items-center gap-2 min-h
 
 export function Checkbox({ label, checked, onChange, description, disabled }: ToggleProps) {
   const id = useId();
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionPreference();
   return <label data-disabled={disabled || undefined} className={cn('es-checkbox', TOGGLE_WRAPPER)}>
     <input type="checkbox" className="peer absolute inset-0 z-10 w-full h-full p-0 m-0 opacity-0" checked={checked} onChange={event => onChange(event.target.checked)} disabled={disabled} aria-describedby={description ? id : undefined} />
     <span aria-hidden className={cn('es-checkbox-box peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-ring relative inline-flex shrink-0 items-center justify-center h-4 w-4 rounded-md border', 'border-input bg-surface text-bg', checked && 'border-foreground bg-foreground text-background')}>
@@ -315,7 +315,7 @@ export function Checkbox({ label, checked, onChange, description, disabled }: To
 
 export function Switch({ label, checked, onChange, description, disabled }: ToggleProps) {
   const id = useId();
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionPreference();
   return <label data-disabled={disabled || undefined} className={cn('es-switch', TOGGLE_WRAPPER, 'justify-between gap-4 py-2.5')}>
     <span className={cn(TOGGLE_LABEL, 'font-medium')}><span id={`${id}-label`}>{label}</span>{description && <small id={id} className={cn(TOGGLE_DESCRIPTION, 'text-xs leading-4')}>{description}</small>}</span>
     <input type="checkbox" role="switch" className="peer absolute inset-0 z-10 w-full h-full p-0 m-0 opacity-0" checked={checked} onChange={event => onChange(event.target.checked)} disabled={disabled} aria-labelledby={`${id}-label`} aria-describedby={description ? id : undefined} />
@@ -359,7 +359,7 @@ export function SegmentedControl({ label, value, options, onChange, variant = 'p
   label: string; value: string; options: Choice[]; onChange: (value: string) => void; variant?: 'pill' | 'joined';
 }) {
   const name = useId();
-  const reduce = useReducedMotion() ?? false;
+  const reduce = useReducedMotionPreference();
   const groupRef = useRef<HTMLDivElement>(null);
   const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
   const [keyboardTarget, setKeyboardTarget] = useState<string | null>(null);
@@ -446,7 +446,7 @@ export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
   const root = useRef<HTMLDivElement>(null);
   const list = useRef<HTMLDivElement>(null);
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const reduce = useReducedMotion() ?? false;
+  const reduce = useReducedMotionPreference();
   const [edges, setEdges] = useState({ overflow: false, left: false, right: false });
   const [keyboardTarget, setKeyboardTarget] = useState<string | null>(null);
   const keyboardTargetRef = useRef<string | null>(null);

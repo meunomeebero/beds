@@ -1,6 +1,7 @@
-import { animate, motion, useMotionValue, useReducedMotion, useTransform } from 'motion/react';
+import { animate, motion, useMotionValue, useTransform } from 'motion/react';
 import { useEffect } from 'react';
 import { EASE_OUT } from './lib/ease';
+import { useReducedMotionPreference } from './lib/hooks/use-reduced-motion';
 
 /** Shared normalization for meters; null represents unavailable evidence. */
 export function meterFraction(value: number | null, max: number) {
@@ -27,7 +28,7 @@ export function MeterSegments({ label, value, max = 100, tone = 'neutral', round
   const ratio = meterFraction(value, max);
   const count = 28;
   const filled = ratio === null ? 0 : rounding === 'down' ? Math.floor(ratio * count) : Math.round(ratio * count);
-  const reduce = useReducedMotion() ?? false;
+  const reduce = useReducedMotionPreference();
   const canAnimate = animateFill && ratio !== null;
   const fillProgress = useMotionValue(canAnimate && !reduce && !paused ? 0 : 1);
   const clipPath = useTransform(fillProgress, current => `inset(0 ${Math.max(0, 100 - current * 100)}% 0 0)`);

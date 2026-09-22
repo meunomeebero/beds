@@ -19,7 +19,7 @@ const probeSource = `
     const [rejectedCalls, setRejectedCalls] = useState(0);
     const [submitCount, setSubmitCount] = useState(0);
     const [resetCount, setResetCount] = useState(0);
-    return <DesignSystemProvider theme="light">
+    return <DesignSystemProvider brandColor="#d0f300" theme="light">
       <main>
         <form onSubmit={event => { event.preventDefault(); setSubmitCount(value => value + 1); }} onReset={() => setResetCount(value => value + 1)}>
           <Button label="Submit example" type="submit" onClick={() => undefined} />

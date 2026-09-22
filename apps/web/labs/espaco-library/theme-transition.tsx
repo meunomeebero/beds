@@ -82,11 +82,11 @@ function ThemeInspection() {
     <p>24 amostras de frames da navegação; não representa uma auditoria de contraste de todos os componentes.</p>
     <button type="button" disabled={running} onClick={() => run(false)}>Alternar e medir</button>
     <button type="button" disabled={running} onClick={() => run(true)}>Alternar rapidamente e medir</button>
-    <div ref={host}><DesignSystemProvider theme={theme}>
+    <div ref={host}><DesignSystemProvider brandColor="#d0f300" theme={theme}>
       <Text variant="section-title">Provider alternado</Text>
       <Sidebar label="Navegação de teste"><NavItem label="Documentos de exemplo" icon="FileText" href="#resultado" /></Sidebar>
     </DesignSystemProvider></div>
-    <div ref={peer}><DesignSystemProvider theme="light"><Text>Provider independente, sempre claro</Text></DesignSystemProvider></div>
+    <div ref={peer}><DesignSystemProvider brandColor="#d0f300" theme="light"><Text>Provider independente, sempre claro</Text></DesignSystemProvider></div>
     <p role="status">{running ? 'Medindo frames' : result ? 'Medição concluída' : 'Aguardando medição'}</p>
     {error && <p role="alert">{error}</p>}
     <pre id="resultado">{JSON.stringify(result, null, 2)}</pre>

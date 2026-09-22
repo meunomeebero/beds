@@ -1,8 +1,9 @@
-import { AnimatePresence, motion, useReducedMotion, type Transition } from 'motion/react';
+import { AnimatePresence, motion, type Transition } from 'motion/react';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Icon, type IconName } from './foundation';
 import { EASE_OUT } from './lib/ease';
 import './toast.css';
+import { useReducedMotionPreference } from './lib/hooks/use-reduced-motion';
 
 const TOAST_EVENT = 'beds:toast';
 const DISMISS_EVENT = 'beds:toast-dismiss';
@@ -84,7 +85,7 @@ const ToastItem = memo(function ToastItem({
   dismissLabel: string;
   onDismiss: (id: string) => void;
 }) {
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionPreference();
   const tone = note.tone ?? 'neutral';
   const icon = iconFor(tone);
   const hasAction = Boolean(note.action);

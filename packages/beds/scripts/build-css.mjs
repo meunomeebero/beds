@@ -5,7 +5,10 @@ import { createRequire } from 'node:module';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const tailwindCli = createRequire(import.meta.url).resolve('@tailwindcss/cli/package.json').replace(/package\.json$/, 'dist/index.mjs');
 // tokens, then component stylesheets, then Tailwind utilities compiled from src/tailwind.css against src/**/*.tsx.
-const order = ['tokens.css','foundation.css','controls.css','range-slider.css','form-fields.css','decisions.css','overlays.css','layout.css','patterns.css','disclosure.css','data.css','feedback.css','chat.css','technical.css','feature-card.css','empty-state-card.css','pricing.css','records.css','input-otp.css','paged-carousel.css','toast.css','collection-controls.css','account-credits.css','forum-topic.css','date-item.css','blog-post.css'];
+// Single source of truth for stylesheet order, shared with build-artifact.test.mjs. Append new component CSS there.
+const order = JSON.parse(await readFile(new URL('./css-order.json', import.meta.url), 'utf8'));
+const unlisted = (await readdir(root + 'src')).filter(name => name.endsWith('.css') && !['reset.css','tailwind.css'].includes(name) && !order.includes(name));
+if (unlisted.length) throw new Error(`Component stylesheet missing from scripts/css-order.json: ${unlisted.join(', ')}`);
 await mkdir(root + 'dist', { recursive:true });
 // These modules moved to app-owned recipes. TypeScript does not remove outputs
 // for deleted sources; do not accidentally ship the previous implementation.

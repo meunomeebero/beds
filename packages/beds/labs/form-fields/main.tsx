@@ -29,7 +29,7 @@ function FormFieldsLab() {
     setFileError('');
   };
 
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme}>
+  return <DesignSystemProvider brandColor="#d0f300" theme={theme} onThemeChange={setTheme}>
     <main>
       <header>
         <Text variant="page-title">Campos de formulário</Text>

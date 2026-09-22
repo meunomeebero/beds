@@ -15,7 +15,21 @@ Read next: [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.
 
 Rollback: select the previous known release URL/integrity, reinstall and rerun app gates. Do not mutate the old release.
 
-## Current candidate — 0.2.0-rc.2
+## Current candidate — 0.2.0-rc.3
+
+Agent-experience release from Hyppo consumer feedback. **Breaking:**
+`DesignSystemProvider` requires `brandColor` (type, runtime error and
+`check-consumer` `BRAND_REQUIRED`); add the product's contrast color when upgrading.
+Adds `beds/manifest.json`, generated from the TypeScript program (props, required
+flags, literal values, object fields, canonical docs, tokens), an Agent quickstart,
+the Contrast color foundation and Promotion candidates. Adds `HandDrawnArrow`,
+bundled Caveat (`--font-hand`, OFL) and `--es-brand-ink`. Components read reduced
+motion through the SSR-safe hook, fixing hydration mismatches in `Select`,
+`SegmentedControl` and eight other components under `prefers-reduced-motion`,
+now covered by a reduced-motion hydration regression. Stylesheet order lives in
+`scripts/css-order.json`, and the build fails on an unlisted component stylesheet.
+
+## Previous candidate — 0.2.0-rc.2
 
 Consumer validation exposed WebKit's native Tab behavior skipping modal buttons
 when full keyboard access is disabled. Modal containment now owns every Tab /

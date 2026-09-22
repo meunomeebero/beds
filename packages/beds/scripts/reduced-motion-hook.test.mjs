@@ -16,3 +16,14 @@ test('reduced-motion hook uses a stable external-store contract with an SSR fals
   assert.match(source, /addListener\?\.\(onChange\)/);
   assert.match(source, /removeListener\?\.\(onChange\)/);
 });
+
+test('components never read motion\'s useReducedMotion, which is null on the server and hydrates differently', async () => {
+  const { readdir } = await import('node:fs/promises');
+  const srcDir = fileURLToPath(new URL('../src/', import.meta.url));
+  const offenders = [];
+  for (const entry of await readdir(srcDir, { recursive: true })) {
+    if (!/\.tsx?$/.test(entry)) continue;
+    if (/\buseReducedMotion\b/.test(await readFile(srcDir + entry, 'utf8'))) offenders.push(entry);
+  }
+  assert.deepEqual(offenders, [], 'use useReducedMotionPreference from lib/hooks/use-reduced-motion');
+});

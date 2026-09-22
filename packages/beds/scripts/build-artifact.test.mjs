@@ -9,7 +9,8 @@ import { fileURLToPath } from 'node:url';
 const script = fileURLToPath(new URL('./build-css.mjs', import.meta.url));
 const realTailwind = fileURLToPath(new URL('../src/tailwind.css', import.meta.url));
 const realNodeModules = fileURLToPath(new URL('../../../node_modules', import.meta.url));
-const order = ['tokens.css','foundation.css','controls.css','range-slider.css','form-fields.css','decisions.css','overlays.css','layout.css','patterns.css','disclosure.css','data.css','feedback.css','chat.css','technical.css','feature-card.css','empty-state-card.css','pricing.css','records.css','input-otp.css','paged-carousel.css','toast.css','collection-controls.css','account-credits.css','forum-topic.css','date-item.css','blog-post.css'];
+const orderFile = fileURLToPath(new URL('./css-order.json', import.meta.url));
+const order = JSON.parse(fs.readFileSync(orderFile, 'utf8'));
 
 
 /** Temp monorepo with the real Tailwind toolchain (symlinked node_modules) and fixture stylesheets. */
@@ -20,6 +21,7 @@ function fixture({ docs = null, sources = {} } = {}) {
  fs.mkdirSync(path.join(fixturePackage, 'src'), { recursive:true });
  fs.symlinkSync(realNodeModules, path.join(directory, 'node_modules'), 'dir');
  fs.copyFileSync(script, path.join(fixturePackage, 'scripts', 'build-css.mjs'));
+ fs.copyFileSync(orderFile, path.join(fixturePackage, 'scripts', 'css-order.json'));
  fs.copyFileSync(realTailwind, path.join(fixturePackage, 'src', 'tailwind.css'));
  for (const name of order) fs.writeFileSync(path.join(fixturePackage, 'src', name), `/* fixture ${name} */`);
  fs.writeFileSync(path.join(fixturePackage, 'src', 'reset.css'), '/* reset */');
@@ -55,5 +57,14 @@ test('package build emits tokens, component CSS, then unlayered Tailwind utiliti
   assert.match(css, /\.rounded-lg\{border-radius:var\(--radius\)\}/);
   assert.match(css, /\.text-sm\{font-size:13px;line-height:var\(--tw-leading,20px\)\}/);
   assert.match(css, /\.bg-primary\{background-color:var\(--primary\)\}/);
+ } finally { cleanup(); }
+});
+
+test('package build fails closed when a component stylesheet is not in css-order.json',()=>{
+ const { run, cleanup } = fixture({ sources:{ 'orphan.css':'.es-root .es-orphan{}' } });
+ try {
+  const result = run();
+  assert.notEqual(result.status,0);
+  assert.match(result.stderr, /missing from scripts\/css-order\.json: orphan\.css/);
  } finally { cleanup(); }
 });

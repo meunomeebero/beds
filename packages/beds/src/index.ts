@@ -46,3 +46,4 @@ export type { InputOTPProps, InputOTPStatus } from './input-otp';
 export { Toaster, toast, dismissToast } from './toast';
 export type { ToastInput, ToastTone, ToastAction } from './toast';
 export { ResultsStatus, CollectionToolbar } from './collection-controls';
+export { HandDrawnArrow, type HandDrawnArrowProps, type HandDrawnArrowDirection, type HandDrawnArrowShape } from './hand-drawn-arrow';

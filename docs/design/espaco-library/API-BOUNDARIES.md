@@ -15,6 +15,7 @@ widget does not endorse all its historical geometry or certify every state.
 | Source family | Exports (including related types) | Ownership decision |
 |---|---|---|
 | foundation | `DesignSystemProvider`, `useDesignSystem`, `Icon`, `Text`, `Avatar`, `TextLink`, `BrandMark`, `ThemeToggle`, `AnimatedNumber`, `IconName`, `Theme`, `TextVariant` | Retain: theme boundary, identity container and individual visual/number primitives. BrandMark requires the caller's image; no embedded product identity. |
+| hand-drawn-arrow | `HandDrawnArrow`, `HandDrawnArrowProps`, `HandDrawnArrowDirection`, `HandDrawnArrowShape` | Retain: one decorative annotation stroke with an optional note. Placement next to the target, copy and meaning stay caller-owned; never the only carrier of meaning. |
 | meter-segments | `MeterSegments` | Retain: one bounded meter/progress representation. Labels, values and units are caller-owned. |
 | number-ticker | `NumberTicker`, `NumberTickerProps` | Retain: changing numeric text, not a score or revenue policy. |
 | tokens | `typography`, `geometry`, `neutrals`, `themes` | Retain: read-only component style metadata. No shell/page-width presets; reading measure is not a mandatory app width. |

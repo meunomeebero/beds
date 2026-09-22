@@ -67,6 +67,7 @@ function prepareRebuild(root) {
     fs.symlinkSync(typescriptNodeModules(), path.join(stagedPackage, 'node_modules'));
     run(process.execPath, [require.resolve('typescript/bin/tsc'), '-p', path.join(stagedPackage, 'tsconfig.build.json')], { cwd:stagedPackage });
     run(process.execPath, [path.join(stagedPackage, 'scripts', 'build-css.mjs')], { cwd:stagedPackage });
+    run(process.execPath, [path.join(stagedPackage, 'scripts', 'build-manifest.mjs')], { cwd:stagedPackage });
     return { temporary, stagedPackage };
   } catch (error) {
     fs.rmSync(temporary, { recursive:true, force:true });
@@ -90,6 +91,7 @@ export function requiredPackagePaths(root) {
     'package/dist/index.d.ts',
     'package/dist/styles.css',
     'package/dist/reset.css',
+    'package/dist/manifest.json',
     ...docs,
     ...fonts,
     ...skills,

@@ -42,6 +42,18 @@ provenance, not universal rules.
 
 ## Migration and verification ledger
 
+### Agent experience — 0.2.0-rc.3, 2026-09-22
+
+The owner asked for fixes to the friction an agent reported while building Hyppo.
+Mandatory contrast color (owner decision): `brandColor` is required everywhere.
+Agents get `beds/manifest.json` and a quickstart instead of reading long history.
+`HandDrawnArrow` is promoted at the owner's explicit request with one product in
+use; the second-product rule is recorded as pending in Promotion candidates.
+Avatar stack, text highlight, rotating headline and expanding CTA remain in Hyppo.
+Reduced-motion hydration is fixed at the hook level. Two mobile `select-beui`
+geometry expectations (36px vs the 44px touch target) failed before this change
+and remain open.
+
 ### Consumer follow-up — 0.2.0-rc.2, 2026-09-22
 
 Curriculol's forum form exposed a WebKit modal Tab escape: buttons may be skipped

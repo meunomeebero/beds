@@ -36,7 +36,7 @@ function DirectionChecks() {
     <p>{mode === 'reduce' || mode === 'standard' ? `Simulated JavaScript preference: ${mode}. CSS media queries and OS settings remain native.` : 'Native browser motion preference.'}</p>
     <div ref={host}>
     {(['ltr', 'rtl'] as const).map(direction => <section key={direction} dir={direction} aria-label={direction} style={{ width: 320, maxWidth: '100%' }}>
-      <DesignSystemProvider theme={theme}>
+      <DesignSystemProvider brandColor="#d0f300" theme={theme}>
         <h2>{direction.toUpperCase()}</h2>
         <Switch label={`${direction} notifications`} description="A deliberately long description to verify wrapping without hiding the switch or losing its label." checked={checked} onChange={setChecked} />
         <Switch label={`${direction} unavailable`} checked={checked} disabled onChange={setChecked} />
