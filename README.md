@@ -78,9 +78,9 @@ set `PLAYWRIGHT_BASE_URL=http://127.0.0.1:5294` for matching tests.
 
 ## Consume
 
-The consolidated mainline is `main`. Version `0.2.0-rc.1` is the breaking,
+The consolidated mainline is `main`. Version `0.2.0-rc.2` is the breaking,
 product-agnostic release candidate. Install the immutable archive from its
-[GitHub release](https://github.com/meunomeebero/beds/releases/tag/v0.2.0-rc.1),
+[GitHub release](https://github.com/meunomeebero/beds/releases/tag/v0.2.0-rc.2),
 checking the release's SHA-256; never install a mutable source branch.
 Consumer migration remains explicit, not automatic.
 The historical [RC16 release](https://github.com/meunomeebero/beds/releases/tag/v0.1.7-rc.16)

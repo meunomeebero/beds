@@ -42,6 +42,16 @@ provenance, not universal rules.
 
 ## Migration and verification ledger
 
+### Consumer follow-up — 0.2.0-rc.2, 2026-09-22
+
+Curriculol's forum form exposed a WebKit modal Tab escape: buttons may be skipped
+by native sequential focus, so a boundary-only trap never reached its last
+button. The shared modal helper now advances through visible, enabled controls
+and treats each named radio group as one stop. Dialog/Drawer visuals and motion
+are unchanged. A dedicated WebKit form regression covers both directions and
+keyboard opener restoration. Existing rc.1 assets remain immutable. This patch
+does not promote Curriculol composition back into the library.
+
 ### Mainline promotion — 2026-09-21
 
 The user authorized consolidation onto `main` and immutable distribution as

@@ -15,7 +15,18 @@ Read next: [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.
 
 Rollback: select the previous known release URL/integrity, reinstall and rerun app gates. Do not mutate the old release.
 
-## Agnostic mainline — 0.2.0-rc.1
+## Current candidate — 0.2.0-rc.2
+
+Consumer validation exposed WebKit's native Tab behavior skipping modal buttons
+when full keyboard access is disabled. Modal containment now owns every Tab /
+Shift+Tab step and preserves one stop per native radio group. No visual tokens,
+geometry, motion timing or public API changes. Native dialog lifetime, nested
+modal behavior and keyboard opener restoration remain in the shared helper.
+The dedicated WebKit form regression complements the existing Dialog/Drawer
+Chromium lifecycle checks. Physical-device and screen-reader speech remain
+unverified; this is not blanket accessibility or aesthetic approval.
+
+## Agnostic mainline promotion — 0.2.0-rc.1
 
 `main` supersedes the historical bootstrap branch as the default. Source starts
 from the reviewed agnostic extraction `fba8fc3`; former branches and releases

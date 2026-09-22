@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, DesignSystemProvider, Dialog, Text } from 'beds';
+import { Button, DesignSystemProvider, Dialog, Text, TextField, TextAreaField } from 'beds';
 import 'beds/styles.css';
 
 export default function DialogHarness() {
@@ -9,6 +9,7 @@ export default function DialogHarness() {
   const [delayedClose, setDelayedClose] = useState(false);
   const [triggerRemoved, setTriggerRemoved] = useState(false);
   const [status, setStatus] = useState('closed');
+  const [draft, setDraft] = useState('');
   const closeTimer = useRef<number | undefined>(undefined);
 
   useEffect(() => () => window.clearTimeout(closeTimer.current), []);
@@ -51,6 +52,8 @@ export default function DialogHarness() {
       <p data-testid="dialog-status">{status}</p>
       <Dialog open={open} onOpenChange={handleOpenChange} title="Harness dialog" description="Controlled lifecycle probe." actions={<Button label="Commit action" onClick={() => handleOpenChange(false)} />}>
         <Text>Primary dialog content.</Text>
+        <TextField label="Draft title" value={draft} onChange={setDraft} />
+        <TextAreaField label="Draft body" value={draft} onChange={setDraft} />
         <Button label={rejectClose ? 'Allow close' : 'Reject close'} onClick={() => setRejectClose(value => !value)} />
         <Button label={delayedClose ? 'Commit close immediately' : 'Delay close'} onClick={() => setDelayedClose(value => !value)} />
         <Button label="Remove trigger" onClick={() => setTriggerRemoved(true)} />

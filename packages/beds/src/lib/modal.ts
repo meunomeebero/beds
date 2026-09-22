@@ -94,18 +94,25 @@ export function dialogShell(event: Pick<MouseEvent<HTMLDialogElement>, 'target' 
 
 export function containModalTab(event: KeyboardEvent<HTMLDialogElement>) {
   if (event.key !== 'Tab' || event.defaultPrevented) return;
-  const controls = [...event.currentTarget.querySelectorAll<HTMLElement>('button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex]')].filter(control => control.tabIndex >= 0 && control.getClientRects().length > 0 && !control.closest('[inert]'));
+  const controls = [...event.currentTarget.querySelectorAll<HTMLElement>('button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex]')].filter(control => control.tabIndex >= 0 && control.getClientRects().length > 0 && !control.closest('[inert]')).filter((control, _index, candidates) => {
+    // A native radio group contributes one Tab stop, not one per option.
+    if (!(control instanceof HTMLInputElement) || control.type !== 'radio' || !control.name) return true;
+    const group = candidates.filter((candidate): candidate is HTMLInputElement => candidate instanceof HTMLInputElement && candidate.type === 'radio' && candidate.name === control.name && candidate.form === control.form);
+    return control === (group.find(candidate => candidate.checked) ?? group[0]);
+  });
   const first = controls[0];
   const last = controls.at(-1);
   if (!first) {
     event.preventDefault();
     return;
   }
-  if (event.shiftKey && document.activeElement === first) {
-    event.preventDefault();
-    last?.focus();
-  } else if (!event.shiftKey && document.activeElement === last) {
-    event.preventDefault();
-    first.focus();
-  }
+  // WebKit can skip buttons when full keyboard access is disabled. Wrapping
+  // only at the last button lets Tab leave a form after its final text field.
+  // Own the whole modal sequence so every supported control remains reachable.
+  const active = event.currentTarget.ownerDocument.activeElement;
+  const index = controls.findIndex(control => control === active);
+  const next = index < 0 ? (event.shiftKey ? last : first)
+    : controls[(index + (event.shiftKey ? -1 : 1) + controls.length) % controls.length];
+  event.preventDefault();
+  next?.focus();
 }
