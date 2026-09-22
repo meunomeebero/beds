@@ -24,6 +24,7 @@ not a template that unrelated apps must inherit.
 
 | Task | Read next |
 |---|---|
+| Make one primary CTA or sign-in stand out with motion | [ExpandingButton](EXPANDING-BUTTON.md): brand chip that fills the pill on hover/focus; `Button` stays the default |
 | Point at a nearby CTA with a handwritten note | [HandDrawnArrow](HAND-DRAWN-ARROW.md): decorative pen stroke, fixed shapes/directions/contexts/tones, draw-in and brand ink |
 | Choose the product's contrast color | [Foundations](FOUNDATIONS.md#contrast-color--mandatory-choice): mandatory `brandColor`, how to pick it and where to use it |
 | Propose a new reusable component | [Promotion candidates](PROMOTION-CANDIDATES.md): app patterns waiting for a second product |

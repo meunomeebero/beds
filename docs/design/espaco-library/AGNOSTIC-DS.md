@@ -42,6 +42,16 @@ provenance, not universal rules.
 
 ## Migration and verification ledger
 
+### ExpandingButton — 0.2.0-rc.4, 2026-09-22
+
+The owner asked to bring Hyppo's expanding sign-in pill into BEDS so other
+products can use it, and to make the system flexible enough for emphasized
+buttons like it. It ships as its own `ExpandingButton` instead of a `Button`
+variant: the fill motion needs pill geometry and a one-per-view rule that the
+general `Button` must not carry. Flexibility is bounded: an optional `mark`
+slot for provider or product logos, colors always from `brandColor`, no
+styling escape. Hyppo migrates its header and panel sign-in to it.
+
 ### Agent experience — 0.2.0-rc.3, 2026-09-22
 
 The owner asked for fixes to the friction an agent reported while building Hyppo.

@@ -78,9 +78,9 @@ set `PLAYWRIGHT_BASE_URL=http://127.0.0.1:5294` for matching tests.
 
 ## Consume
 
-The consolidated mainline is `main`. Version `0.2.0-rc.3` is the breaking,
+The consolidated mainline is `main`. Version `0.2.0-rc.4` is the breaking,
 product-agnostic release candidate. Install the immutable archive from its
-[GitHub release](https://github.com/meunomeebero/beds/releases/tag/v0.2.0-rc.3),
+[GitHub release](https://github.com/meunomeebero/beds/releases/tag/v0.2.0-rc.4),
 checking the release's SHA-256; never install a mutable source branch.
 Consumer migration remains explicit, not automatic.
 The historical [RC16 release](https://github.com/meunomeebero/beds/releases/tag/v0.1.7-rc.16)
@@ -110,6 +110,7 @@ Wrap only explicitly migrated screens; never enclose legacy UI to simulate migra
 | [September15 consolidation](docs/design/espaco-library/CONSOLIDATION-2026-09-15.md) | Historical local.24 checkpoint |
 | [Agent quickstart](docs/design/espaco-library/AGENT-QUICKSTART.md) | Shortest path for agents: manifest, five rules, verification |
 | [Library map](docs/design/espaco-library/README.md) | Routing and boundaries |
+| [ExpandingButton](docs/design/espaco-library/EXPANDING-BUTTON.md) | Pill call to action whose brand chip fills the control on hover or keyboard focus; icon or brand mark, default and hero contexts |
 | [HandDrawnArrow](docs/design/espaco-library/HAND-DRAWN-ARROW.md) | Decorative pen-drawn arrow with an optional handwritten note; fixed shapes, directions, contexts and tones |
 | [Promotion candidates](docs/design/espaco-library/PROMOTION-CANDIDATES.md) | App-owned patterns waiting for a second product before entering BEDS |
 | [Foundations](docs/design/espaco-library/FOUNDATIONS.md) | Approved visual values |

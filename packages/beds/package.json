@@ -1,6 +1,6 @@
 {
   "name": "beds",
-  "version": "0.2.0-rc.3",
+  "version": "0.2.0-rc.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/meunomeebero/beds.git",
@@ -52,7 +52,7 @@
     "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "check": "node scripts/check-library.mjs --tokens src/tokens.css",
     "check:consumer": "node scripts/check-consumer.mjs",
-    "test:guards": "node --test scripts/agnostic-boundary.test.mjs scripts/contracts.test.mjs scripts/visual-audit.test.mjs scripts/package-artifact.test.mjs scripts/build-artifact.test.mjs scripts/docs.test.mjs scripts/reduced-motion-hook.test.mjs scripts/hand-drawn-arrow.test.mjs scripts/manifest.test.mjs scripts/range-slider.test.mjs scripts/chat-workspace.test.mjs scripts/controls-regression.test.mjs scripts/layout-regression.test.mjs",
+    "test:guards": "node --test scripts/agnostic-boundary.test.mjs scripts/contracts.test.mjs scripts/visual-audit.test.mjs scripts/package-artifact.test.mjs scripts/build-artifact.test.mjs scripts/docs.test.mjs scripts/reduced-motion-hook.test.mjs scripts/hand-drawn-arrow.test.mjs scripts/expanding-button.test.mjs scripts/manifest.test.mjs scripts/range-slider.test.mjs scripts/chat-workspace.test.mjs scripts/controls-regression.test.mjs scripts/layout-regression.test.mjs",
     "check:docs": "node scripts/check-docs.mjs",
     "check:visual-baseline": "node scripts/check-visual-baseline.mjs",
     "check:artifact": "node scripts/check-package-artifact.mjs"

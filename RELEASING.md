@@ -15,7 +15,16 @@ Read next: [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.
 
 Rollback: select the previous known release URL/integrity, reinstall and rerun app gates. Do not mutate the old release.
 
-## Current candidate — 0.2.0-rc.3
+## Current candidate — 0.2.0-rc.4
+
+Additive over rc.3. Adds `ExpandingButton`, a pill call to action whose
+brand-colored chip fills the control on fine-pointer hover or `:focus-visible`
+(beUI `expanding-arrow-button`, MIT, via Hyppo). Optional decorative `mark`
+slot for provider or product logos, `default`/`hero` contexts, 44px on touch
+screens, instant under reduced motion, forced-colors fallback. No changes to
+existing components or tokens.
+
+## Previous candidate — 0.2.0-rc.3
 
 Agent-experience release from Hyppo consumer feedback. **Breaking:**
 `DesignSystemProvider` requires `brandColor` (type, runtime error and
@@ -29,7 +38,7 @@ motion through the SSR-safe hook, fixing hydration mismatches in `Select`,
 now covered by a reduced-motion hydration regression. Stylesheet order lives in
 `scripts/css-order.json`, and the build fails on an unlisted component stylesheet.
 
-## Previous candidate — 0.2.0-rc.2
+## Older candidate — 0.2.0-rc.2
 
 Consumer validation exposed WebKit's native Tab behavior skipping modal buttons
 when full keyboard access is disabled. Modal containment now owns every Tab /
