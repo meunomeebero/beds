@@ -84,6 +84,7 @@ Known tensions,not automatic waivers:compact editable text/touch targets require
 2. Inspect rendered geometry,type,contrast,keyboard,zoom and relevant states;capture evidence. Source reading alone cannot certify appearance or screen-reader behavior.
 3. Record each domain as inspected,findings,or not verified. Consolidate shared causes once.
 4. Map the upstream verdict to the local delivery states below;do not overwrite visual baselines to obtain a pass.
+5. Check the [personality layers](FOUNDATIONS.md#personality-layers--a-correct-screen-is-not-a-finished-screen) on every consuming screen: product voice in headings and empty states, one focal CTA, the contrast color on a few meaningful spots, hierarchy through type and hairlines, one signature motion, a preview instead of an icon tile. A screen that passes every technical check but reads as a gray template is reported as `PASS_WITH_NOTES` with a "generic" finding, not `PASS`.
 
 | Local result | Meaning |
 |---|---|

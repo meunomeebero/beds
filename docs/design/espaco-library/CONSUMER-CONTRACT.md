@@ -37,8 +37,10 @@ Report unavailable skills and unverified checks instead of claiming approval.
 ## Provider and data
 
 `DesignSystemProvider` accepts a controlled `light` or `dark` theme, an optional
-`onThemeChange`, and an optional six-digit `#RRGGBB` brand color.
-The default accent remains `#d0f300`; apps own any named presets.
+`onThemeChange`, and a **required** six-digit `#RRGGBB` `brandColor` — the product's
+single contrast color. There is no default: pick it deliberately
+([Foundations](FOUNDATIONS.md#contrast-color--mandatory-choice)) and record the
+reason in the app's `AGENTS.md`. Apps own any named presets.
 The provider selects a contrasting foreground internally.
 
 ```tsx
@@ -77,7 +79,7 @@ node packages/beds/scripts/check-consumer.mjs path/to/consumer-ui
 | Inputs | Missing paths, empty scopes and parse errors fail; relative dependencies are followed |
 | BEDS imports | Legacy aliases and private subpaths fail; public component and stylesheet entries are supported |
 | BEDS props | Visual escape props and spreads fail; supported spacing enums are checked |
-| Brand | Provider-only static six-digit literal or same-file constant/preset is checked |
+| Brand | Required on the provider (`BRAND_REQUIRED`); provider-only static six-digit literal or same-file constant/preset is checked |
 | App CSS | Native elements, app styles, SVG and external components are allowed; private selectors and token declarations fail |
 | Dependencies | Nonliteral dynamic imports fail because their dependencies cannot be audited |
 

@@ -1,6 +1,6 @@
 /** UI authoring requires the skills linked in ../docs/INTERFACE-QUALITY.md. */
-export { DesignSystemProvider, useDesignSystem, Icon, Text, Avatar, TextLink, BrandMark, ThemeToggle, AnimatedNumber } from './foundation';
-export type { IconName, Theme, TextVariant } from './foundation';
+export { DesignSystemProvider, useDesignSystem, Icon, Text, Avatar, TextLink, LinkButton, BrandMark, ThemeToggle, AnimatedNumber } from './foundation';
+export type { IconName, Theme, TextVariant, TextLinkPurpose } from './foundation';
 export { MeterSegments } from './meter-segments';
 export { NumberTicker, type NumberTickerProps } from './number-ticker';
 export { typography, geometry, neutrals, themes } from './tokens';
@@ -46,3 +46,5 @@ export type { InputOTPProps, InputOTPStatus } from './input-otp';
 export { Toaster, toast, dismissToast } from './toast';
 export type { ToastInput, ToastTone, ToastAction } from './toast';
 export { ResultsStatus, CollectionToolbar } from './collection-controls';
+export { ExpandingButton, type ExpandingButtonProps } from './expanding-button';
+export { HandDrawnArrow, type HandDrawnArrowProps, type HandDrawnArrowDirection, type HandDrawnArrowShape } from './hand-drawn-arrow';

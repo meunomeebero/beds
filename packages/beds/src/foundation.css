@@ -30,8 +30,17 @@
 .es-root .es-avatar--profile{width:64px;height:64px;font-size:20px;line-height:24px;border-radius:12px}
 .es-root .es-avatar--forum{width:40px;height:40px;font-size:13px;line-height:20px;border-radius:8px;outline:1px solid var(--es-image-outline);outline-offset:-1px}
 .es-root .es-text-link{color:inherit;text-decoration:underline;text-decoration-color:var(--es-border);text-underline-offset:2px;border-radius:2px}
-.es-root .es-text-link>svg{width:12px;height:12px;stroke-width:1.5;vertical-align:-1px;margin-left:2px}
+.es-root .es-text-link>svg{width:12px;height:12px;stroke-width:1.5;vertical-align:-1px;margin-inline-start:2px}
 .es-root .es-text-link:hover{text-decoration-color:var(--es-text)}
+.es-root .es-text-link:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
+.es-root .es-text-link[data-purpose=nav]{display:inline-flex;align-items:center;white-space:nowrap}
+.es-root .es-link-button{display:inline;margin:0;padding:0;border:0;background:none;font:inherit;line-height:inherit;text-align:start;cursor:pointer}
+.es-root .es-link-button:disabled{color:var(--es-secondary);cursor:not-allowed}
+.es-root .es-text-link[data-purpose=nav]{text-decoration:none}
+.es-root .es-text-link[data-purpose=nav]>.es-text-link-label{padding-block-end:2px;background-image:linear-gradient(currentColor,currentColor);background-repeat:no-repeat;background-position:0 100%;background-size:0% 1.5px}
+.es-root .es-text-link[data-purpose=nav]:dir(rtl)>.es-text-link-label{background-position:100% 100%}
+.es-root .es-text-link[data-purpose=nav]:disabled>.es-text-link-label{background-image:none}
+@media (forced-colors:active){.es-root .es-text-link[data-purpose=nav]>.es-text-link-label[data-active]{text-decoration:underline}}
 .es-root .es-brand-mark{display:block;width:18px;height:18px;flex:none;object-fit:contain}
 .es-root .es-theme-toggle{display:inline-flex;inline-size:fit-content;max-inline-size:100%;flex-wrap:wrap;align-items:center;gap:2px;padding:2px;border-radius:var(--es-radius-full);background:var(--es-subtle)}
 .es-root .es-theme-toggle button{border:0;background:var(--es-transparent);border-radius:var(--es-radius-full);min-block-size:32px;min-inline-size:32px;max-inline-size:100%;padding:6px 10px;font-size:12px;line-height:1.4;font-weight:500;color:var(--es-secondary);overflow-wrap:anywhere;touch-action:manipulation}

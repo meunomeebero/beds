@@ -1,11 +1,13 @@
 @font-face{font-family:'Espaco Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url('../fonts/InterVariable.woff2') format('woff2')}
 @font-face{font-family:'Espaco Inter';font-style:italic;font-weight:100 900;font-display:swap;src:url('../fonts/InterVariable-Italic.woff2') format('woff2')}
+@font-face{font-family:'Espaco Caveat';font-style:normal;font-weight:400 700;font-display:swap;src:url('../fonts/CaveatVariable.woff2') format('woff2')}
 @font-face{font-family:'Espaco Geist Mono';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/GeistMono-Regular.woff2') format('woff2')}
 /* Token contract = shadcn naming, BEDS values. Theme blocks declare the shadcn vocabulary
    (background/foreground/primary/muted/…); the historical --es-* names below are aliases kept
    only until each component migrates to utilities, then deleted. See FOUNDATIONS.md "Token contract". */
 .es-root {
  --font-mono:'Espaco Geist Mono',ui-monospace,monospace;
+ --font-hand:'Espaco Caveat','Segoe Print','Bradley Hand',cursive;
  --font-sans:'Espaco Inter',Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
  --radius:8px;
  --info:#0077e6;--success:#15b042;--warning:#e87800;--destructive:#e83535;--destructive-foreground:#ffffff;
@@ -41,7 +43,7 @@
  --es-shadow-account:0 0 0 1px #0000000f,0 20px 25px -5px #0000001f,0 8px 10px -6px #00000029;
  --es-glass:#00000008;--es-glass-border:#0000001f;--es-shadow-dialog:0 1px 2px #0000000a,0 8px 24px #0000000f;
  --es-selected:var(--sidebar-accent);--es-composer-surface:#ffffff;
- --es-composer-context:#fbfaf9;--es-composer-border:#0000000f;--es-composer-focus:#787775;--es-control:var(--secondary);--es-heading:#37352e;--es-input-text:#37352e;--es-badge:#edece9;--es-on-badge:#6a6966;--es-send:#202020;--es-on-send:#ffffff;
+ --es-composer-context:#fbfaf9;--es-composer-border:#0000000f;--es-composer-focus:#787775;--es-control:var(--secondary);--es-heading:#37352e;--es-brand-ink:color-mix(in oklab,var(--es-brand) 70%,var(--es-heading));--es-input-text:#37352e;--es-badge:#edece9;--es-on-badge:#6a6966;--es-send:#202020;--es-on-send:#ffffff;
 }
 .es-root[data-theme='dark'] {
  color-scheme:dark;
@@ -63,5 +65,5 @@
  --es-shadow-account:0 1px 2px #00000044,0 8px 24px #00000044;
  --es-glass:#ffffff02;--es-glass-border:#ffffff13;--es-shadow-dialog:0 1px 1px #0000001f,0 12px 32px #00000024;
  --es-selected:var(--sidebar-accent);--es-composer-surface:#191919;--es-overlay:#080808a8;
- --es-composer-context:#222222;--es-composer-border:#ffffff04;--es-composer-focus:#ffffff17;--es-control:var(--secondary);--es-heading:#d4d4d4;--es-input-text:#d0d0d0;--es-badge:#414141;--es-on-badge:#e5e5e5;--es-send:#dedede;--es-on-send:#292929;
+ --es-composer-context:#222222;--es-composer-border:#ffffff04;--es-composer-focus:#ffffff17;--es-control:var(--secondary);--es-heading:#d4d4d4;--es-brand-ink:var(--es-brand);--es-input-text:#d0d0d0;--es-badge:#414141;--es-on-badge:#e5e5e5;--es-send:#dedede;--es-on-send:#292929;
 }

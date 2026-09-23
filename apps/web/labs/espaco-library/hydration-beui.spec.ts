@@ -62,3 +62,31 @@ test('AppShell hydrates on a mobile matchMedia snapshot without mismatch errors'
     await (server as ViteDevServer).close();
   }
 });
+
+test('Select and SegmentedControl hydrate under prefers-reduced-motion without mismatch errors', async ({ page }) => {
+  const server = await createServer({ root: repoRoot, configFile: viteConfig, server: { host: '127.0.0.1', port: 0, strictPort: false } });
+  await server.listen();
+  try {
+    const module = await server.ssrLoadModule('/apps/web/labs/espaco-library/hydration-server.ts') as { renderHydrationProbe: () => string };
+    const address = server.httpServer?.address();
+    if (!address || typeof address === 'string') throw new Error('Expected the hydration Vite server to expose a TCP address.');
+    const errors: string[] = [];
+    page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
+    page.on('pageerror', error => errors.push(error.message));
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(`http://127.0.0.1:${address.port}${hydrationPage}`);
+    await page.evaluate(markup => {
+      document.getElementById('hydration-root')!.innerHTML = markup;
+      (window as Window & { __bedsHydrationMarkupReady?: boolean }).__bedsHydrationMarkupReady = true;
+      window.dispatchEvent(new Event('beds-hydration-markup-ready'));
+    }, module.renderHydrationProbe());
+    await page.waitForFunction(() => (window as Window & { __bedsHydrationComplete?: boolean }).__bedsHydrationComplete === true);
+    const period = page.getByRole('button', { name: /Hydration period/ }).first();
+    await period.click();
+    await page.getByRole('option', { name: 'Last 7 days', exact: true }).click();
+    await expect(period).toContainText('Last 7 days');
+    expect(errors.filter(error => /hydrat|mismatch|did not match|didn't match/i.test(error))).toEqual([]);
+  } finally {
+    await (server as ViteDevServer).close();
+  }
+});

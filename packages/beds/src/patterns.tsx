@@ -1,11 +1,12 @@
 import { useEffect, useId, useRef, useState, type ComponentProps, type KeyboardEvent, type ReactNode } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
 import { Icon } from './foundation';
 import { Button, SegmentedControl } from './controls';
 import { SegmentedMeter } from './feedback';
 import { useAnchoredPopup } from './lib/anchored-popup';
 import { EASE_OUT, SPRING_LAYOUT } from './lib/ease';
 import './patterns.css';
+import { useReducedMotionPreference } from './lib/hooks/use-reduced-motion';
 
 type IconName = ComponentProps<typeof Icon>['name'];
 type NavigationAction = { href: string; onClick?: never } | { href?: never; onClick: () => void };
@@ -71,7 +72,7 @@ export function AccountMenu({ open, onOpenChange, trigger, identity, actions, on
   const anchor = useRef<HTMLDivElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const id = useId();
-  const reduce = useReducedMotion() ?? false;
+  const reduce = useReducedMotionPreference();
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const typeahead = useRef('');
   const typeaheadTimer = useRef<ReturnType<typeof setTimeout> | null>(null);

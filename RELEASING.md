@@ -15,7 +15,49 @@ Read next: [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.
 
 Rollback: select the previous known release URL/integrity, reinstall and rerun app gates. Do not mutate the old release.
 
-## Current candidate — 0.2.0-rc.2
+## Current candidate — 0.2.0-rc.6
+
+Additive over rc.5. `TextLink` gains `purpose: 'inline' | 'nav'`; `nav` has no
+underline at rest and draws a 1.5px underline from the inline start on hover or
+keyboard focus (motion/react, 220ms, instant under reduced motion). New
+`LinkButton` renders a native button with the same look for in-page actions among
+links. Foundations adds "Personality layers": the checklist that turns a correct
+screen into a product (voice, one focal CTA, contrast color on few spots, type and
+hairline hierarchy, one signature motion, preview over icon tile), plus a table
+mapping each layer to `ExpandingButton`, `TextLink`/`LinkButton`, `HandDrawnArrow`
+and the quiet `Dialog`. No changes to existing defaults.
+
+## Previous candidate — 0.2.0-rc.5
+
+Visual change over rc.4. `Dialog` drops the beUI center-morph clip unfold after
+owner review found it showy. Entry is now a quiet 180ms fade with a 0.97→1
+scale, exit 150ms, reduced motion 140ms opacity only. Focus, inert gating and
+native lifecycle are unchanged. No API or token changes.
+
+## Earlier candidate — 0.2.0-rc.4
+
+Additive over rc.3. Adds `ExpandingButton`, a pill call to action whose
+brand-colored chip fills the control on fine-pointer hover or `:focus-visible`
+(beUI `expanding-arrow-button`, MIT, via Hyppo). Optional decorative `mark`
+slot for provider or product logos, `default`/`hero` contexts, 44px on touch
+screens, instant under reduced motion, forced-colors fallback. No changes to
+existing components or tokens.
+
+## Earlier candidate — 0.2.0-rc.3
+
+Agent-experience release from Hyppo consumer feedback. **Breaking:**
+`DesignSystemProvider` requires `brandColor` (type, runtime error and
+`check-consumer` `BRAND_REQUIRED`); add the product's contrast color when upgrading.
+Adds `beds/manifest.json`, generated from the TypeScript program (props, required
+flags, literal values, object fields, canonical docs, tokens), an Agent quickstart,
+the Contrast color foundation and Promotion candidates. Adds `HandDrawnArrow`,
+bundled Caveat (`--font-hand`, OFL) and `--es-brand-ink`. Components read reduced
+motion through the SSR-safe hook, fixing hydration mismatches in `Select`,
+`SegmentedControl` and eight other components under `prefers-reduced-motion`,
+now covered by a reduced-motion hydration regression. Stylesheet order lives in
+`scripts/css-order.json`, and the build fails on an unlisted component stylesheet.
+
+## Older candidate — 0.2.0-rc.2
 
 Consumer validation exposed WebKit's native Tab behavior skipping modal buttons
 when full keyboard access is disabled. Modal containment now owns every Tab /

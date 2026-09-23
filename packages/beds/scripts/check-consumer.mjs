@@ -81,8 +81,8 @@ export function checkConsumerPaths(inputs) {
     const issue = (node, code, message) => report(file, code, message, source, node);
     const registerImport = (specifier, node) => {
       if (specifier === '@espaco/ui' || specifier.startsWith('@espaco/ui/')) issue(node, 'LEGACY_PACKAGE_IMPORT', 'Import from beds; the previous package name is not an alias.');
-      if (specifier === 'beds/styles.css' || specifier === 'beds/reset.css' || specifier === 'beds/tokens') return;
-      if (specifier.startsWith('beds/')) issue(node, 'PRIVATE_LIBRARY_IMPORT', 'Use the public beds entry, beds/tokens metadata, or fixed styles.css/reset.css exports.');
+      if (specifier === 'beds/styles.css' || specifier === 'beds/reset.css' || specifier === 'beds/tokens' || specifier === 'beds/manifest.json') return;
+      if (specifier.startsWith('beds/')) issue(node, 'PRIVATE_LIBRARY_IMPORT', 'Use the public beds entry, beds/tokens metadata, beds/manifest.json, or fixed styles.css/reset.css exports.');
       if (specifier.startsWith('.')) {
         const resolved = resolveLocal(file, specifier);
         if (!resolved) issue(node, 'UNRESOLVED_LOCAL_IMPORT', `Cannot audit local dependency ${specifier}.`);
@@ -146,6 +146,7 @@ export function checkConsumerPaths(inputs) {
       // A DS is not the owner of every HTML element in the application.
       // Native layout, identity artwork and app-owned compositions are allowed.
       if (info?.module !== 'beds') return;
+      if (isProvider(tag) && !node.attributes.properties.some(attribute => !ts.isJsxSpreadAttribute(attribute) && attribute.name.getText(source) === 'brandColor')) issue(tag, 'BRAND_REQUIRED', 'DesignSystemProvider needs brandColor: choose this product\'s contrast color (FOUNDATIONS.md, "Contrast color — mandatory choice").');
       for (const attribute of node.attributes.properties) {
         if (ts.isJsxSpreadAttribute(attribute)) { issue(attribute, 'JSX_SPREAD', 'Use explicit props; spreads can hide visual escape hatches.'); continue; }
         const name = attribute.name.getText(source);

@@ -11,6 +11,20 @@ layout into the library. App identity, brand presets and page hierarchy are
 consumer-owned. Preserve existing consumers until an explicit migration; do not
 interpret legacy exports or guards as approval to expand product coupling.
 
+## Start here
+
+Read [Agent quickstart](docs/design/espaco-library/AGENT-QUICKSTART.md). Query
+`packages/beds/dist/manifest.json` (built) for the exact public API instead of
+guessing props from memory.
+
+## Contrast color — mandatory for every product
+
+Owner decision, 2026-09-22: a pure black-and-white product looks raw. Every
+consumer passes one deliberate `brandColor`; the provider has no default. When the
+user has not chosen one, pick it from the feeling the product should give its
+customers, state the reason in one sentence and record it in the product's
+`AGENTS.md`. Follow [Contrast color](docs/design/espaco-library/FOUNDATIONS.md#contrast-color--mandatory-choice).
+
 ## Automatic Better skill routing — mandatory
 
 For every BEDS UI task, automatically load and apply `better-interface` and all six owners before design/code decisions: `better-accessibility`, `better-layout`, `better-writing`, `better-typography`, `better-colors`, `better-ui`. Do not wait for the user to name a skill. Read their complete entrypoints and task-relevant references; announcing a skill is not using it. Follow [Interface quality](docs/design/espaco-library/INTERFACE-QUALITY.md) for the workflow, conflicts and required evidence.

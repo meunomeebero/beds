@@ -1,0 +1,72 @@
+.es-expanding-button {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  max-inline-size: 100%;
+  block-size: 40px;
+  padding: 4px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--es-primary);
+  color: var(--es-on-primary);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.es-expanding-button[data-context='hero'] { block-size: 48px; padding: 5px; font-size: 15px; }
+.es-expanding-button:focus-visible { outline: 2px solid var(--es-focus); outline-offset: 3px; }
+.es-expanding-button:disabled { cursor: not-allowed; opacity: .5; }
+.es-expanding-button-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  block-size: 100%;
+  padding-inline-end: 16px;
+  white-space: nowrap;
+}
+.es-expanding-button[data-context='hero'] .es-expanding-button-content { gap: 12px; padding-inline-end: 22px; }
+.es-expanding-button-label { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; }
+.es-expanding-button-chip {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  block-size: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--es-brand);
+  color: var(--es-on-brand);
+}
+.es-expanding-button-chip svg { inline-size: 14px; block-size: 14px; }
+.es-expanding-button[data-context='hero'] .es-expanding-button-chip svg { inline-size: 16px; block-size: 16px; }
+.es-expanding-button-accent {
+  position: absolute;
+  inset-block: 4px;
+  inset-inline-start: 4px;
+  inline-size: 32px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--es-brand);
+  color: var(--es-on-brand);
+  pointer-events: none;
+}
+.es-expanding-button[data-context='hero'] .es-expanding-button-accent { inset-block: 5px; inset-inline-start: 5px; inline-size: 38px; }
+.es-expanding-button-accent .es-expanding-button-content { position: absolute; inset-block: 0; inset-inline-start: 0; max-inline-size: none; }
+.es-expanding-button-accent .es-expanding-button-chip { background: transparent; }
+@media (pointer: coarse) {
+  .es-expanding-button[data-context='default'] { block-size: 44px; }
+  .es-expanding-button[data-context='default'] .es-expanding-button-accent { inline-size: 36px; }
+}
+@media (forced-colors: active) {
+  .es-expanding-button { border: 1px solid ButtonText; }
+  .es-expanding-button:focus-visible { outline-color: Highlight; }
+  .es-expanding-button-accent { display: none; }
+}

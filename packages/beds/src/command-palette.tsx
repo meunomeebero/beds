@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { useCallback, useId, useLayoutEffect, useMemo, useRef, type KeyboardEvent } from "react";
 import { Icon, type IconName } from "./foundation";
 import { IconButton } from "./controls";
@@ -11,6 +11,7 @@ import { useTouchCapable } from "./lib/hooks/use-touch-capable";
 import { containModalTab, outsideDialog, useModal } from "./lib/modal";
 import { searchCommands } from "./lib/command-search";
 import "./overlays.css";
+import { useReducedMotionPreference } from "./lib/hooks/use-reduced-motion";
 
 export type CommandPaletteItem = {
   id: string;
@@ -40,7 +41,7 @@ export function CommandPalette({ open, onOpenChange, label, query, onQueryChange
   const id = useId();
   const dialog = useRef<HTMLDialogElement>(null);
   const input = useRef<HTMLInputElement>(null);
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionPreference();
   const canTouch = useTouchCapable();
 
   const searchableItems = useMemo(() => items.map((item) => ({

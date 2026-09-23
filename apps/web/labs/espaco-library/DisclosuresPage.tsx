@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Avatar, BrandMark, Button, DisclosureText, DisclosedRecords, DesignSystemProvider, LabelField, NavItem, PageHeader, SidebarFooter, SidebarHeader, SidebarSection, Stack, Text, TextLink, type Theme } from 'beds';
+import { Avatar, BrandMark, Button, DisclosureText, DisclosedRecords, DesignSystemProvider, Inline, LabelField, LinkButton, NavItem, PageHeader, SidebarFooter, SidebarHeader, SidebarSection, Stack, Text, TextLink, type Theme } from 'beds';
 import { AppShell } from './recipes';
 
 const longAbout = 'Linha um com bastante texto para garantir que o parágrafo realmente transborde o limite configurado de linhas visíveis. '.repeat(6);
@@ -26,6 +26,7 @@ function AvatarProbe({ src }: { src?: string }) {
 export default function DisclosuresPage() {
   const [theme, setTheme] = useState<Theme>((new URLSearchParams(location.search).get('theme') === 'light' ? 'light' : 'dark'));
   const [collapsed, setCollapsed] = useState(false);
+  const [linkClicks, setLinkClicks] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
   return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <AppShell contentWidth="dashboard" collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} navigationLabel="Navegação" sidebar={<>
@@ -64,6 +65,12 @@ export default function DisclosuresPage() {
               <Text><TextLink href="https://example.com/perfil" external>Perfil público</TextLink></Text>
               <Text><TextLink href="/interna">Página interna</TextLink></Text>
               <Text><TextLink href="tel:+5511999999999">+55 11 99999-9999</TextLink></Text>
+            </Stack>
+            <Stack gap="tight">
+              <Text variant="section-title">TextLink e LinkButton de navegação</Text>
+              <Text>Em header, rodapé e listas de links o sublinhado surge da esquerda ao passar o mouse ou focar pelo teclado.</Text>
+              <nav aria-label="Exemplo de navegação"><Inline gap="default"><TextLink href="#como-funciona" purpose="nav">Como funciona</TextLink><TextLink href="https://example.com/blog" purpose="nav" external>Blog</TextLink><LinkButton label="Abrir ajuda" purpose="nav" onClick={() => setLinkClicks(count => count + 1)} /><LinkButton label="Indisponível" purpose="nav" disabled onClick={() => undefined} /></Inline></nav>
+              <p role="status">Ajuda aberta: {linkClicks}</p>
             </Stack>
             <Stack gap="tight"><BrandMark src="/demo-brand.svg" label="Curriculol" /></Stack>
           </Stack>

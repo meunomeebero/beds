@@ -1,10 +1,11 @@
 "use client";
 // beui.dev/components/motion/number-ticker (MIT)
 
-import { animate, motion, useInView, useReducedMotion } from "motion/react";
+import { animate, motion, useInView } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { EASE_OUT } from "./lib/ease";
 import { cn } from "./lib/utils";
+import { useReducedMotionPreference } from "./lib/hooks/use-reduced-motion";
 
 export interface NumberTickerProps {
   value: number;
@@ -120,7 +121,7 @@ function Digit({
   duration: number;
   blur: boolean;
 }) {
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionPreference();
   const columnRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {

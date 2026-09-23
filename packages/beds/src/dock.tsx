@@ -1,10 +1,11 @@
 "use client";
 // beui.dev/components/motion/dock (MIT)
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { createContext, useContext, useId, useMemo, type ReactNode } from "react";
 import { SPRING_LAYOUT } from "./lib/ease";
 import { cn } from "./lib/utils";
+import { useReducedMotionPreference } from "./lib/hooks/use-reduced-motion";
 
 type DockContextValue = {
   size: number;
@@ -54,7 +55,7 @@ export function DockItem({
   ...rest
 }: DockItemProps) {
   const dock = useContext(DockContext);
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionPreference();
   const size = dock?.size ?? 44;
   const pillLayoutId = dock?.pillLayoutId ?? "dock-pill";
 

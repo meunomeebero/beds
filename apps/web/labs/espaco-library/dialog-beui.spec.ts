@@ -1,8 +1,24 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
+
+async function recordExitDurations(page: Page) {
+  await page.evaluate(() => {
+    const shell = document.querySelector<HTMLDialogElement>('dialog.es-dialog-shell');
+    const win = window as unknown as { exitDurations?: Promise<(number | string | null)[]> };
+    win.exitDurations = new Promise(resolve => {
+      const observer = new MutationObserver(() => {
+        if (shell?.dataset.phase !== 'exiting') return;
+        observer.disconnect();
+        requestAnimationFrame(() => resolve(document.querySelector<HTMLElement>('.es-dialog-surface')?.getAnimations().map(animation => animation.effect instanceof KeyframeEffect ? Number(animation.effect.getTiming().duration) : null) ?? []));
+      });
+      if (shell) observer.observe(shell, { attributes: true, attributeFilter: ['data-phase'] });
+    });
+  });
+}
+const readExitDurations = (page: Page) => page.evaluate(() => (window as unknown as { exitDurations: Promise<(number | null)[]> }).exitDurations);
 
 const probe = '/dialog-harness.html';
 
-test.describe('Dialog center-morph native lifecycle', () => {
+test.describe('Dialog quiet-fade native lifecycle', () => {
   test.beforeEach(async ({ page }) => {
     page.on('pageerror', error => { throw error; });
     await page.goto(probe);
@@ -85,15 +101,15 @@ test.describe('Dialog center-morph native lifecycle', () => {
       const animation = document.querySelector<HTMLElement>('.es-dialog-surface')?.getAnimations()[0];
       return animation?.effect instanceof KeyframeEffect ? animation.effect.getTiming().duration : null;
     });
-    expect(fullMotionDuration).toBe(430);
+    expect(fullMotionDuration).toBe(180);
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await expect(dialog).toHaveAttribute('data-motion', 'reduced');
     await expect(surface).toHaveAttribute('data-phase', 'settled');
     await expect(surface).not.toHaveAttribute('inert');
     await expect(surface).toHaveCSS('pointer-events', 'auto');
+    await recordExitDurations(page);
     await page.keyboard.press('Escape');
-    const reducedMotionExitDurations = await page.evaluate(() => document.querySelector<HTMLElement>('.es-dialog-surface')?.getAnimations().map(animation => animation.effect instanceof KeyframeEffect ? animation.effect.getTiming().duration : null) ?? []);
-    expect(reducedMotionExitDurations).toContain(140);
+    expect(await readExitDurations(page)).toContain(140);
     await expect(dialog).not.toBeVisible();
     await expect(trigger).toBeFocused();
 
@@ -103,10 +119,9 @@ test.describe('Dialog center-morph native lifecycle', () => {
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await expect(dialog).toHaveAttribute('data-motion', 'full');
     await expect(surface).toHaveAttribute('data-phase', 'settled');
+    await recordExitDurations(page);
     await page.keyboard.press('Escape');
-    await expect(dialog).toHaveAttribute('data-phase', 'exiting');
-    const fullMotionExitDurations = await page.evaluate(() => document.querySelector<HTMLElement>('.es-dialog-surface')?.getAnimations().map(animation => animation.effect instanceof KeyframeEffect ? animation.effect.getTiming().duration : null) ?? []);
-    expect(fullMotionExitDurations).toContain(430);
+    expect(await readExitDurations(page)).toContain(150);
     await expect(dialog).not.toBeVisible();
     await expect(trigger).toBeFocused();
   });
@@ -135,18 +150,32 @@ test.describe('Dialog center-morph native lifecycle', () => {
     const surface = dialog.locator(':scope > .es-dialog-surface');
     await expect(surface).toHaveAttribute('data-phase', 'settled');
     await dialog.getByRole('button', { name: 'Delay close', exact: true }).click();
+    // The exit is short; reopen from inside the page the moment it starts so the
+    // assertion does not race the animation.
+    const reopenedDuringExit = page.evaluate(() => new Promise<{ committed: boolean; open: boolean }>(resolve => {
+      const shell = document.querySelector<HTMLDialogElement>('dialog.es-dialog-shell')!;
+      const observer = new MutationObserver(() => {
+        if (shell.dataset.phase !== 'exiting') return;
+        observer.disconnect();
+        const state = { committed: document.querySelector('[data-testid="dialog-status"]')?.textContent === 'close-committed', open: shell.open };
+        const surface = shell.querySelector<HTMLElement>(':scope > .es-dialog-surface')!;
+        const phases: string[] = [];
+        (window as unknown as { surfacePhases: string[] }).surfacePhases = phases;
+        new MutationObserver(() => { phases.push(surface.dataset.phase ?? ''); }).observe(surface, { attributes: true, attributeFilter: ['data-phase'] });
+        Array.from(document.querySelectorAll('button')).find(button => button.textContent === 'Reopen during exit')?.click();
+        resolve(state);
+      });
+      observer.observe(shell, { attributes: true, attributeFilter: ['data-phase'] });
+    }));
     await page.keyboard.press('Escape');
     await expect(page.getByTestId('dialog-status')).toHaveText('close-requested');
-    await expect(dialog).toHaveAttribute('data-phase', 'exiting');
-    await expect(page.getByTestId('dialog-status')).toHaveText('close-committed');
-    await expect(dialog).toBeVisible();
-    await page.getByRole('button', { name: 'Reopen during exit', exact: true }).evaluate(button => (button as HTMLButtonElement).click());
+    expect(await reopenedDuringExit).toEqual({ committed: true, open: true });
     await expect(page.getByTestId('dialog-status')).toHaveText('reopened');
     await expect(dialog).toBeVisible();
     expect(await page.evaluate(() => document.activeElement !== document.querySelector<HTMLButtonElement>('button[aria-label="Open harness dialog"]'))).toBe(true);
     await expect.poll(() => page.locator('dialog.es-dialog-shell[open]').count()).toBe(1);
-    await expect(surface).toHaveAttribute('data-phase', 'entry-inert');
     await expect(surface).toHaveAttribute('data-phase', 'settled');
+    expect(await page.evaluate(() => (window as unknown as { surfacePhases: string[] }).surfacePhases)).toContain('entry-inert');
     await expect(surface).not.toHaveAttribute('inert');
     await expect(surface).toHaveCSS('pointer-events', 'auto');
   });

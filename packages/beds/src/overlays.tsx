@@ -255,8 +255,8 @@ export function Tooltip({ label, children }: { label: string; children: ReactEle
   return <TooltipPrimitive content={label} side="bottom">{children}</TooltipPrimitive>;
 }
 
-const DIALOG_UNFOLD_EASE = [0.2, 0, 0.2, 1] as const;
-const DIALOG_UNFOLD_TRANSITION = { duration: 0.43, ease: DIALOG_UNFOLD_EASE } as const;
+const DIALOG_ENTER_TRANSITION = { duration: 0.18, ease: [0.23, 1, 0.32, 1] } as const;
+const DIALOG_EXIT_TRANSITION = { duration: 0.15, ease: EASE_OUT } as const;
 const DIALOG_REDUCED_TRANSITION = { duration: 0.14, ease: EASE_OUT } as const;
 
 export function Dialog({ open, onOpenChange, title, description, children, actions, variant = 'standard', artwork }: {
@@ -266,9 +266,6 @@ export function Dialog({ open, onOpenChange, title, description, children, actio
   const dialog = useRef<HTMLDialogElement>(null);
   const shellPointer = useRef(false);
   const reduce = useReducedMotionPreference();
-  const radius = variant === 'welcome' ? 24 : 14;
-  const foldedClip = `inset(48% 48% 48% 48% round ${radius}px)`;
-  const openClip = `inset(0% 0% 0% 0% round ${radius}px)`;
   const [present, setPresent] = useState(open);
   const [settled, setSettled] = useState(() => open && reduce);
   const presentRef = useRef(present);
@@ -314,9 +311,9 @@ export function Dialog({ open, onOpenChange, title, description, children, actio
     onPointerDown={event => { shellPointer.current = dialogShell(event); }}
     onClick={event => { const shell = shellPointer.current && dialogShell(event); shellPointer.current = false; if (open && shell) onOpenChange(false); }}>
     <motion.div className="es-dialog-surface" data-phase={open ? (interactive ? 'settled' : 'entry-inert') : 'exit-inert'} inert={!interactive} style={{ pointerEvents: interactive ? 'auto' : 'none' }}
-      initial={reduce ? { opacity: 0, clipPath: openClip } : { opacity: 1, clipPath: foldedClip }}
-      animate={open ? (reduce ? { opacity: 1, clipPath: openClip } : { opacity: 1, clipPath: openClip }) : (reduce ? { opacity: 0, clipPath: openClip } : { opacity: 1, clipPath: foldedClip })}
-      transition={reduce ? DIALOG_REDUCED_TRANSITION : DIALOG_UNFOLD_TRANSITION}
+      initial={reduce ? { opacity: 0, scale: 1 } : { opacity: 0, scale: 0.97 }}
+      animate={open ? { opacity: 1, scale: 1 } : (reduce ? { opacity: 0, scale: 1 } : { opacity: 0, scale: 0.97 })}
+      transition={reduce ? DIALOG_REDUCED_TRANSITION : open ? DIALOG_ENTER_TRANSITION : DIALOG_EXIT_TRANSITION}
       onAnimationComplete={() => {
         if (phaseRef.current === 'open') setSettled(true);
         else if (presentRef.current) setPresent(false);

@@ -46,7 +46,7 @@ test('package manifest ships every skill file and the layout gate detects any om
  writeFixture(root, 'README.md', '[skill](skills/example/SKILL.md)');
  writeFixture(root, 'AGENTS.md', '[docs](docs/README.md)');
  writeFixture(root, 'docs/README.md', '[skill](../skills/example/SKILL.md)');
- for (const file of ['index.js', 'index.d.ts', 'styles.css', 'reset.css']) writeFixture(root, `dist/${file}`);
+ for (const file of ['index.js', 'index.d.ts', 'styles.css', 'reset.css', 'manifest.json']) writeFixture(root, `dist/${file}`);
  const skillFiles = [
   ['skills/example/SKILL.md', '[principles](references/principles.md)'],
   ['skills/example/references/principles.md', '[example](../assets/example.txt) [docs](../../../docs/README.md)'],

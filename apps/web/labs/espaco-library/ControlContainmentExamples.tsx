@@ -87,7 +87,7 @@ export function ControlContainmentExamples() {
   }
   const [theme, setTheme] = useState<Theme>('light');
   const [activeTab, setActiveTab] = useState('one');
-  return <DesignSystemProvider theme={theme} onThemeChange={setTheme}>
+  return <DesignSystemProvider brandColor="#d0f300" theme={theme} onThemeChange={setTheme}>
     <main dir={direction} style={{ maxWidth: 640, padding: 16 }} onClickCapture={sampleMotion} onKeyDownCapture={event => {
       if (event.key === 'F6') { event.preventDefault(); setTheme(current => current === 'light' ? 'dark' : 'light'); }
       sampleMotion();

@@ -63,6 +63,7 @@ from `tokens.ts`. The light/dark palette remains stable during extraction.
 | Focus | `--es-focus` |
 | Primary action | `--es-primary`, `--es-on-primary` |
 | Caller-owned branded emphasis | `--es-brand`, `--es-on-brand` |
+| Decorative brand stroke (never text) | `--es-brand-ink`: light theme mixes 70% brand with `--es-heading` in oklab so light hues stay visible; dark theme is `--es-brand` |
 | Error text | `--es-error-text` |
 
 Shadcn-style names such as `--background`, `--foreground`, `--card`, `--muted`,
@@ -70,8 +71,8 @@ Shadcn-style names such as `--background`, `--foreground`, `--card`, `--muted`,
 `--es-*` aliases keep component roles compatible; neither naming system implies
 permission to replace component internals with application overrides.
 
-`DesignSystemProvider` accepts an explicit theme and optional six-digit brand
-color. Its default accent is `#d0f300`; there are no named product presets.
+`DesignSystemProvider` accepts an explicit theme and a **required** six-digit
+brand color. There is no default and there are no named product presets.
 `BrandMark` contains a caller-supplied image and requires `src` and `label`.
 It contains no BEDS-owned product logo. Assets and their licenses belong to the
 app. Functional error/success states must not depend on brand color alone.
@@ -81,10 +82,85 @@ A palette value is not a contrast guarantee for every placement. Keep floating
 menus and dialogs on a legible surface; a preference for transparent cards does
 not justify transparent popovers.
 
+## Contrast color — mandatory choice
+
+Owner decision, 2026-09-22. Neutrals give structure; one contrast color gives the
+product its identity. A product with only black, white and gray reads as raw and
+unfinished, so every consumer passes a deliberate `brandColor` (the type and
+`check-consumer` both require it). It is still exactly one color. Functional
+blue, success, warning and error stay separate and never double as the brand.
+
+**Choosing it (agent task when the user has not decided):**
+
+1. Name the feeling the product should give its customers in two or three words,
+   from its audience and promise. Examples: "energy, money, new"; "calm, trust, focus".
+2. Pick a hue that carries that feeling and stays distinct from functional colors.
+   Starting points, not rules: electric lime or yellow for energy, speed and money
+   (Hyppo `#d0f300`); orange for warmth and optimism (Curriculol `#ffa133`); violet
+   for creativity and premium; teal or green for growth and health; pink or coral
+   for playful and social. Avoid link-like blues and red, which read as links and errors.
+3. Prefer saturated colors with presence on both `#ffffff` and `#191919`. BEDS
+   derives black or white foreground on brand fills; `--es-brand-ink` keeps light
+   brands visible as decoration on light surfaces.
+4. Record the color and a one-sentence reason in the product's `AGENTS.md`.
+
+**Using it:** primary CTAs and their hover fills, selected or active states, small
+identity marks (logo accent, highlighter under key headline words, decorative
+strokes such as `HandDrawnArrow`) and progress. Keep it to a few focal points per
+screen. Never use it for body text, large page backgrounds or several competing
+CTAs. Brand is never the only carrier of meaning.
+
+## Personality layers — a correct screen is not a finished screen
+
+Owner decision, 2026-09-22. A screen built only from correct BEDS controls on a
+neutral background still reads as generic: gray empty states, gray icon tiles,
+one filled button, no voice. Before calling a screen done, give it the product's
+personality in these layers, in this order. Each one is small; together they are
+the difference between "a template" and "a product".
+
+1. **Voice first.** Rewrite headings and empty states as the product speaking to
+   one person about their next win, not as system status. "Nenhum processo em
+   andamento" becomes the promise plus the next step. Never invent counts,
+   testimonials or urgency; label demo data as demo.
+2. **One focal point per view.** Decide the single thing the user should do and
+   make it visibly the primary action: `ExpandingButton` (at most one per screen)
+   or a primary `Button`, with value stated before the ask. Everything else is
+   secondary, ghost or a `LinkButton`.
+3. **Contrast color on few, meaningful spots.** The primary CTA fill, a
+   highlighter under one or two key headline words, the logo accent, active or
+   selected state, progress and small decorative strokes (`HandDrawnArrow`). Never
+   body text, large backgrounds or gradients.
+4. **Hierarchy through type and hairlines, not boxes.** One large headline with
+   tight tracking; big numbers for the metric that matters; 1px `--es-border`
+   rules between groups instead of gray filled panels, shadows or glows.
+5. **One signature motion.** Pick one or two motions that express the product
+   (word-by-word headline reveal, a drawn arrow toward the CTA, the pill fill) and
+   reuse them everywhere. Motion explains or rewards; it never decorates for its
+   own sake, and each has a reduced-motion path.
+6. **Show, don't frame.** Prefer a preview of the real output (the post, the
+   résumé, the job card) over an icon tile describing it. An empty state shows what
+   the filled state will look like, or the one step that fills it.
+
+What personality is **not**: gradients, neon, glow, heavy shadows, glassmorphism,
+several accent colors, confetti, or motion on every element. Those read as
+generated. Elegant restraint with one confident accent beats decoration.
+
+### Building blocks for these layers
+
+| Need | Use |
+|---|---|
+| The one primary CTA with brand fill on hover | `ExpandingButton` (one per screen; `mark` for a provider logo) |
+| Header, footer and link-list items | `TextLink purpose="nav"` (URL) or `LinkButton purpose="nav"` (in-page action): no underline at rest, a drawn underline on hover and keyboard focus |
+| Links inside prose | `TextLink` (default `inline`), always underlined |
+| A handwritten note pointing at the CTA | `HandDrawnArrow` with a short note |
+| Modal content | `Dialog`: quiet fade and slight scale, no morph. Do not add a second entrance animation around it |
+| Highlighter, rotating headline, avatar stack | App-owned for now; see [Promotion candidates](PROMOTION-CANDIDATES.md) |
+
 ## Typography
 
 The current component family uses bundled Inter for interface text and Geist
-Mono for code. Preserve font licenses. Runtime Text roles are:
+Mono for code. Caveat (`--font-hand`) is bundled only for short handwritten
+`HandDrawnArrow` notes; never use it for interface text. Preserve font licenses. Runtime Text roles are:
 
 | Role | Size / line height | Weight |
 |---|---|---|

@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
-import { motion, useReducedMotion, type Transition } from 'motion/react';
+import { motion, type Transition } from 'motion/react';
 import { Button } from './controls';
 import { cn } from './lib/utils';
 import './disclosure.css';
+import { useReducedMotionPreference } from './lib/hooks/use-reduced-motion';
 
 const DISCLOSURE_OPEN_TRANSITION: Transition = { type: 'spring', duration: .58, bounce: .32 };
 const DISCLOSURE_CLOSE_TRANSITION: Transition = { type: 'spring', duration: .46, bounce: .26 };
@@ -17,7 +18,7 @@ export function DisclosureText({ lines = 3, moreLabel, lessLabel, children }: {
 }) {
   const textId = useId();
   const ref = useRef<HTMLParagraphElement>(null);
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionPreference();
   const [expanded, setExpanded] = useState(false);
   const [overflows, setOverflows] = useState(false);
   const [heights, setHeights] = useState({ clamped: 0, full: 0 });
@@ -72,7 +73,7 @@ export function LabelField({ labels, initialRows = 3, moreLabel, lessLabel }: {
   const listId = useId();
   const listRef = useRef<HTMLUListElement>(null);
   const restRef = useRef<HTMLUListElement>(null);
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionPreference();
   const [cut, setCut] = useState<number | null>(null);
   const [expanded, setExpanded] = useState(false);
   const [restHeight, setRestHeight] = useState(0);
@@ -151,7 +152,7 @@ export function DisclosedRecords<T>({ records, visibleCount, moreLabel, lessLabe
   render: (records: readonly T[]) => ReactNode;
 }) {
   const regionId = useId();
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionPreference();
   const [expanded, setExpanded] = useState(false);
   if (records.length <= visibleCount) return <>{render(records)}</>;
   const visible = expanded ? records : records.slice(0, visibleCount);
