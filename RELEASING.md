@@ -15,7 +15,14 @@ Read next: [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.
 
 Rollback: select the previous known release URL/integrity, reinstall and rerun app gates. Do not mutate the old release.
 
-## Current candidate — 0.2.0-rc.4
+## Current candidate — 0.2.0-rc.5
+
+Visual change over rc.4. `Dialog` drops the beUI center-morph clip unfold after
+owner review found it showy. Entry is now a quiet 180ms fade with a 0.97→1
+scale, exit 150ms, reduced motion 140ms opacity only. Focus, inert gating and
+native lifecycle are unchanged. No API or token changes.
+
+## Previous candidate — 0.2.0-rc.4
 
 Additive over rc.3. Adds `ExpandingButton`, a pill call to action whose
 brand-colored chip fills the control on fine-pointer hover or `:focus-visible`
@@ -24,7 +31,7 @@ slot for provider or product logos, `default`/`hero` contexts, 44px on touch
 screens, instant under reduced motion, forced-colors fallback. No changes to
 existing components or tokens.
 
-## Previous candidate — 0.2.0-rc.3
+## Earlier candidate — 0.2.0-rc.3
 
 Agent-experience release from Hyppo consumer feedback. **Breaking:**
 `DesignSystemProvider` requires `brandColor` (type, runtime error and

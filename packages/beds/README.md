@@ -6,7 +6,7 @@ Reusable React 19 components and a product-agnostic style guide. Two themes; one
 
 Install an explicitly selected local/package candidate. Read its version from package metadata and evidence from [Validation](docs/VALIDATION.md); source aliases are not package-portability evidence.
 
-Version `0.2.0-rc.4` consolidates the breaking, product-agnostic migration on `main`. It requires a deliberate `brandColor`, ships `beds/manifest.json` for agents and adds `HandDrawnArrow` and `ExpandingButton`. Use the immutable archive and SHA-256 from the [release](https://github.com/meunomeebero/beds/releases/tag/v0.2.0-rc.4). Agents start with [Agent quickstart](docs/AGENT-QUICKSTART.md). Follow [Agnostic DS](docs/AGNOSTIC-DS.md) and [API boundaries](docs/API-BOUNDARIES.md). Do not upgrade existing consumers implicitly. Historical 0.1 releases expose a different API.
+Version `0.2.0-rc.5` consolidates the breaking, product-agnostic migration on `main`. It requires a deliberate `brandColor`, ships `beds/manifest.json` for agents and adds `HandDrawnArrow` and `ExpandingButton`. Use the immutable archive and SHA-256 from the [release](https://github.com/meunomeebero/beds/releases/tag/v0.2.0-rc.5). Agents start with [Agent quickstart](docs/AGENT-QUICKSTART.md). Follow [Agnostic DS](docs/AGNOSTIC-DS.md) and [API boundaries](docs/API-BOUNDARIES.md). Do not upgrade existing consumers implicitly. Historical 0.1 releases expose a different API.
 
 ```tsx
 import { DesignSystemProvider, Text } from 'beds';

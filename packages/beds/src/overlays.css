@@ -41,7 +41,7 @@
 .es-root .es-dialog-shell:not([open]){display:none}
 .es-root .es-dialog-shell::backdrop{background:var(--es-overlay)}
 .es-root .es-dialog-shell:focus-visible .es-dialog-surface{outline:2px solid var(--es-focus);outline-offset:3px}
-.es-root .es-dialog-surface{width:100%;max-height:calc(100dvh - 32px);padding:0;overflow:auto;overscroll-behavior:contain;border:1px solid var(--es-border);border-radius:14px;background:var(--es-surface);color:var(--es-text);box-shadow:var(--es-shadow-popup);font-family:var(--es-font);will-change:clip-path}
+.es-root .es-dialog-surface{width:100%;max-height:calc(100dvh - 32px);padding:0;overflow:auto;overscroll-behavior:contain;border:1px solid var(--es-border);border-radius:14px;background:var(--es-surface);color:var(--es-text);box-shadow:var(--es-shadow-popup);font-family:var(--es-font);will-change:opacity,transform}
 .es-root .es-dialog-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px 24px 16px;border-bottom:1px solid var(--es-border-subtle)}
 .es-root .es-dialog-header>div{min-width:0}
 .es-root .es-dialog-header h2{margin:0;color:var(--es-text);font:500 16px/24px var(--es-font);letter-spacing:-.1px}

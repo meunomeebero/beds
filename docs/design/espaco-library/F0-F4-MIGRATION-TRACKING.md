@@ -71,9 +71,9 @@ These are completed decisions and must not be represented as pending work:
 
 - `Dialog` versus full `morphing-modal`: the upstream lifecycle and geometry
   would replace native BEDS modal semantics and add a second focus/scroll state
-  machine. BER35 separately adopts only the approved `center-morph-modal`
-  clip/opacity visual subset on the existing controlled native Dialog; it adds
-  no new public API, portal lifecycle or body-scroll owner.
+  machine. BER35 adopted a `center-morph-modal` clip subset, which 0.2.0-rc.5
+  removed after owner visual review; Dialog now uses a BEDS-original quiet
+  fade + scale with no new public API, portal lifecycle or body-scroll owner.
 - `SearchDialog` versus `morphing-search`: the source owns an uncontrolled
   trigger morph, local filtering and public style/role escapes; BEDS owns a
   controlled native dialog with caller-owned async state and focus recovery.
