@@ -1,6 +1,6 @@
 /** UI authoring requires the skills linked in ../docs/INTERFACE-QUALITY.md. */
-export { DesignSystemProvider, useDesignSystem, Icon, Text, Avatar, TextLink, BrandMark, ThemeToggle, AnimatedNumber } from './foundation';
-export type { IconName, Theme, TextVariant } from './foundation';
+export { DesignSystemProvider, useDesignSystem, Icon, Text, Avatar, TextLink, LinkButton, BrandMark, ThemeToggle, AnimatedNumber } from './foundation';
+export type { IconName, Theme, TextVariant, TextLinkPurpose } from './foundation';
 export { MeterSegments } from './meter-segments';
 export { NumberTicker, type NumberTickerProps } from './number-ticker';
 export { typography, geometry, neutrals, themes } from './tokens';

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
-import { animate, useInView } from 'motion/react';
+import { animate, motion, useInView } from 'motion/react';
 import { Inbox } from 'lucide-react';
 import { Home, Activity, BarChart3, Plug, Folder, MessageSquare, Plus, Search, PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, Check, X, Settings2, CircleHelp, Sun, Moon, LogOut, MoreHorizontal, ArrowUp, ArrowRight, ArrowUpRight, Paperclip, Command, FileText, CheckCircle2, AlertCircle, Info, Loader2, User, Sparkles, Globe, Bell, Copy, CreditCard, House, MessageCircle, ChartColumn, UserRound, Briefcase, Coins, ScanText, Bookmark, CalendarDays, ChevronsUpDown, Play, Pause, ArrowLeft, ShieldCheck, Image, Table2 } from 'lucide-react';
 import { useReducedMotionPreference } from './lib/hooks/use-reduced-motion';
@@ -130,10 +130,49 @@ export function Avatar({ name, src, purpose = 'account' }: { name: string; src?:
 }
 
 /** Text-level link with the shared hover/focus contract. External links open a new context safely. */
-export function TextLink({ href, children, external = false, ariaLabel }: { href: string; children: ReactNode; external?: boolean; ariaLabel?: string }) {
-  return <a className="es-text-link" href={href} aria-label={ariaLabel} {...external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}>
-    {children}{external && <Icon name="ArrowUpRight" purpose="small" />}
+export type TextLinkPurpose = 'inline' | 'nav';
+
+/**
+ * Text-level native link. `inline` (default) stays underlined inside prose so it
+ * is recognizable without color. `nav` is for headers, footers and link lists
+ * whose position already says "link": no underline at rest, a 1.5px underline
+ * draws from the inline start on hover or keyboard focus. Instant under reduced motion.
+ */
+const UNDERLINE_EASE = [0.23, 1, 0.32, 1] as const;
+
+function useDrawnUnderline(purpose: TextLinkPurpose) {
+  const reduce = useReducedMotionPreference();
+  const [active, setActive] = useState(false);
+  const handlers = purpose === 'nav' ? {
+    onPointerEnter: (event: React.PointerEvent) => { if (event.pointerType === 'mouse') setActive(true); },
+    onPointerLeave: () => setActive(false),
+    onFocus: (event: React.FocusEvent<HTMLElement>) => setActive(event.currentTarget.matches(':focus-visible')),
+    onBlur: () => setActive(false),
+  } : {};
+  const label = (content: ReactNode) => purpose === 'nav'
+    ? <motion.span className="es-text-link-label" data-active={active || undefined} initial={false} animate={{ backgroundSize: active ? '100% 1.5px' : '0% 1.5px' }} transition={reduce ? { duration: 0 } : { duration: 0.22, ease: UNDERLINE_EASE }}>{content}</motion.span>
+    : <span className="es-text-link-label">{content}</span>;
+  return { handlers, label };
+}
+
+export function TextLink({ href, children, external = false, ariaLabel, purpose = 'inline' }: { href: string; children: ReactNode; external?: boolean; ariaLabel?: string; purpose?: TextLinkPurpose }) {
+  const { handlers, label } = useDrawnUnderline(purpose);
+  return <a className="es-text-link" data-purpose={purpose} href={href} aria-label={ariaLabel} {...handlers} {...external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}>
+    {label(children)}{external && <Icon name="ArrowUpRight" purpose="small" />}
   </a>;
+}
+
+/**
+ * A button that reads as a link: for in-page actions (open a dialog, switch a
+ * view) placed among links, where a filled or ghost button would compete with
+ * the page's one primary CTA. Same `purpose` contract and focus ring as TextLink.
+ * Navigation to a URL must use TextLink.
+ */
+export function LinkButton({ label, onClick, purpose = 'inline', disabled = false }: { label: string; onClick: () => void; purpose?: TextLinkPurpose; disabled?: boolean }) {
+  const underline = useDrawnUnderline(disabled ? 'inline' : purpose);
+  return <button type="button" className="es-text-link es-link-button" data-purpose={purpose} onClick={onClick} disabled={disabled} {...underline.handlers}>
+    {underline.label(label)}
+  </button>;
 }
 
 /**

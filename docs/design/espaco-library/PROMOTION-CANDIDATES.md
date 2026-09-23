@@ -19,5 +19,7 @@ appears, then promote.
 
 | Component | Promoted | Note |
 |---|---|---|
+| `LinkButton`, `TextLink purpose="nav"` | 0.2.0-rc.6 | From Hyppo header "Como funciona" and footer link lists, where a ghost button's hover fill clashed with the pill CTA. Owner explicit request; second product is Curriculol's redesign (sidebar/footer links) |
+| `Dialog` quiet entry | 0.2.0-rc.5 | Not a promotion: the beUI center-morph was removed after owner review; recorded here so agents do not re-add a morph around Dialog |
 | `ExpandingButton` | 0.2.0-rc.4 | Promoted at the owner's explicit request from Hyppo `XLoginButton`; kept separate from `Button` because its motion needs its own geometry and a single-instance rule. Second product pending |
 | `HandDrawnArrow` | 0.2.0-rc.3 | Promoted at the owner's explicit request with one product in use (Hyppo); treat the second-product rule as pending confirmation |

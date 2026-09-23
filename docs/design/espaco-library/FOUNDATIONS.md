@@ -110,6 +110,52 @@ strokes such as `HandDrawnArrow`) and progress. Keep it to a few focal points pe
 screen. Never use it for body text, large page backgrounds or several competing
 CTAs. Brand is never the only carrier of meaning.
 
+## Personality layers — a correct screen is not a finished screen
+
+Owner decision, 2026-09-22. A screen built only from correct BEDS controls on a
+neutral background still reads as generic: gray empty states, gray icon tiles,
+one filled button, no voice. Before calling a screen done, give it the product's
+personality in these layers, in this order. Each one is small; together they are
+the difference between "a template" and "a product".
+
+1. **Voice first.** Rewrite headings and empty states as the product speaking to
+   one person about their next win, not as system status. "Nenhum processo em
+   andamento" becomes the promise plus the next step. Never invent counts,
+   testimonials or urgency; label demo data as demo.
+2. **One focal point per view.** Decide the single thing the user should do and
+   make it visibly the primary action: `ExpandingButton` (at most one per screen)
+   or a primary `Button`, with value stated before the ask. Everything else is
+   secondary, ghost or a `LinkButton`.
+3. **Contrast color on few, meaningful spots.** The primary CTA fill, a
+   highlighter under one or two key headline words, the logo accent, active or
+   selected state, progress and small decorative strokes (`HandDrawnArrow`). Never
+   body text, large backgrounds or gradients.
+4. **Hierarchy through type and hairlines, not boxes.** One large headline with
+   tight tracking; big numbers for the metric that matters; 1px `--es-border`
+   rules between groups instead of gray filled panels, shadows or glows.
+5. **One signature motion.** Pick one or two motions that express the product
+   (word-by-word headline reveal, a drawn arrow toward the CTA, the pill fill) and
+   reuse them everywhere. Motion explains or rewards; it never decorates for its
+   own sake, and each has a reduced-motion path.
+6. **Show, don't frame.** Prefer a preview of the real output (the post, the
+   résumé, the job card) over an icon tile describing it. An empty state shows what
+   the filled state will look like, or the one step that fills it.
+
+What personality is **not**: gradients, neon, glow, heavy shadows, glassmorphism,
+several accent colors, confetti, or motion on every element. Those read as
+generated. Elegant restraint with one confident accent beats decoration.
+
+### Building blocks for these layers
+
+| Need | Use |
+|---|---|
+| The one primary CTA with brand fill on hover | `ExpandingButton` (one per screen; `mark` for a provider logo) |
+| Header, footer and link-list items | `TextLink purpose="nav"` (URL) or `LinkButton purpose="nav"` (in-page action): no underline at rest, a drawn underline on hover and keyboard focus |
+| Links inside prose | `TextLink` (default `inline`), always underlined |
+| A handwritten note pointing at the CTA | `HandDrawnArrow` with a short note |
+| Modal content | `Dialog`: quiet fade and slight scale, no morph. Do not add a second entrance animation around it |
+| Highlighter, rotating headline, avatar stack | App-owned for now; see [Promotion candidates](PROMOTION-CANDIDATES.md) |
+
 ## Typography
 
 The current component family uses bundled Inter for interface text and Geist

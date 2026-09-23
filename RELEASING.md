@@ -15,14 +15,26 @@ Read next: [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.
 
 Rollback: select the previous known release URL/integrity, reinstall and rerun app gates. Do not mutate the old release.
 
-## Current candidate — 0.2.0-rc.5
+## Current candidate — 0.2.0-rc.6
+
+Additive over rc.5. `TextLink` gains `purpose: 'inline' | 'nav'`; `nav` has no
+underline at rest and draws a 1.5px underline from the inline start on hover or
+keyboard focus (motion/react, 220ms, instant under reduced motion). New
+`LinkButton` renders a native button with the same look for in-page actions among
+links. Foundations adds "Personality layers": the checklist that turns a correct
+screen into a product (voice, one focal CTA, contrast color on few spots, type and
+hairline hierarchy, one signature motion, preview over icon tile), plus a table
+mapping each layer to `ExpandingButton`, `TextLink`/`LinkButton`, `HandDrawnArrow`
+and the quiet `Dialog`. No changes to existing defaults.
+
+## Previous candidate — 0.2.0-rc.5
 
 Visual change over rc.4. `Dialog` drops the beUI center-morph clip unfold after
 owner review found it showy. Entry is now a quiet 180ms fade with a 0.97→1
 scale, exit 150ms, reduced motion 140ms opacity only. Focus, inert gating and
 native lifecycle are unchanged. No API or token changes.
 
-## Previous candidate — 0.2.0-rc.4
+## Earlier candidate — 0.2.0-rc.4
 
 Additive over rc.3. Adds `ExpandingButton`, a pill call to action whose
 brand-colored chip fills the control on fine-pointer hover or `:focus-visible`

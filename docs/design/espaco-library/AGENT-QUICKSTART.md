@@ -19,7 +19,7 @@ node -e "const m=require('beds/manifest.json');console.log(JSON.stringify(m.comp
 If a prop or value is not in the manifest, it does not exist. Do not add
 `className`, `style`, spreads or wrapper CSS to change a BEDS component.
 
-## 2. Five rules that most often fail review
+## 2. Six rules that most often fail review
 
 1. **Choose a contrast color.** `DesignSystemProvider` needs `theme` and a
    deliberate `brandColor`; there is no default. Pick it from the feeling the
@@ -36,7 +36,13 @@ If a prop or value is not in the manifest, it does not exist. Do not add
 4. **Every motion has a reduced-motion path**, and it must render the same markup
    on the server and the client. Inside BEDS use `useReducedMotionPreference`,
    never motion's `useReducedMotion` (it is `null` on the server).
-5. **Look at it.** Check desktop and 320px, light and dark, keyboard focus and
+5. **Correct is not finished.** Before calling a screen done, apply the
+   [personality layers](FOUNDATIONS.md#personality-layers--a-correct-screen-is-not-a-finished-screen):
+   voice, one focal CTA, the contrast color on a few spots, hierarchy through type
+   and hairlines, one signature motion, a preview instead of an icon tile.
+   Use `ExpandingButton` for the one primary CTA and `TextLink`/`LinkButton`
+   `purpose="nav"` for header and footer links. No gradients, glow or shadows.
+6. **Look at it.** Check desktop and 320px, light and dark, keyboard focus and
    reduced motion in a real browser. Passing checks are not visual review.
 
 ## 3. Verify
