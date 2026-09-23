@@ -1,10 +1,10 @@
-import { useEffect, useId, useRef, useState, type ComponentProps, type KeyboardEvent, type ReactNode } from 'react';
-import { motion } from 'motion/react';
+import { useEffect, useId, useLayoutEffect, useRef, useState, type ComponentProps, type KeyboardEvent, type ReactNode } from 'react';
+import { motion, useAnimationControls } from 'motion/react';
 import { Icon } from './foundation';
 import { Button, SegmentedControl } from './controls';
 import { SegmentedMeter } from './feedback';
 import { useAnchoredPopup } from './lib/anchored-popup';
-import { EASE_OUT, SPRING_LAYOUT } from './lib/ease';
+import { EASE_OUT, SPRING_LAYOUT, SPRING_PANEL } from './lib/ease';
 import './patterns.css';
 import { useReducedMotionPreference } from './lib/hooks/use-reduced-motion';
 
@@ -59,6 +59,23 @@ function accountMenuTypeaheadLabel(control: HTMLElement) {
   return (control.closest('label')?.textContent ?? control.textContent ?? '').trim().toLocaleLowerCase();
 }
 
+// Corner clip adapted from beUI popover-morph (MIT), https://beui.dev/r/popover-morph/raw, retrieved 2026-09-23.
+// Keep AccountMenu's native popover, controlled API, focus behavior and BEDS geometry.
+type AccountMenuOrigin = { side: 'top' | 'bottom'; align: 'start' | 'end' };
+function accountMenuClipHidden({ side, align }: AccountMenuOrigin) {
+  return `inset(${side === 'bottom' ? '0%' : '92%'} ${align === 'end' ? '0%' : '92%'} ${side === 'bottom' ? '92%' : '0%'} ${align === 'end' ? '92%' : '0%'} round 12px)`;
+}
+const accountMenuClipShown = 'inset(0% 0% 0% 0% round 12px)';
+
+function accountMenuOrigin(anchor: HTMLElement, panel: HTMLElement): AccountMenuOrigin {
+  const trigger = anchor.getBoundingClientRect();
+  const menu = panel.getBoundingClientRect();
+  return {
+    side: trigger.top + trigger.height / 2 <= menu.top + menu.height / 2 ? 'bottom' : 'top',
+    align: trigger.left + trigger.width / 2 <= menu.left + menu.width / 2 ? 'start' : 'end',
+  };
+}
+
 export function AccountMenu({ open, onOpenChange, trigger, identity, actions, onAction, workspaces = [], activeWorkspace, onWorkspaceChange, theme, onThemeChange, allWorkspaces, footer, label = 'Account menu', appearanceLabel = 'Appearance', lightLabel = 'Light', darkLabel = 'Dark' }: {
   open: boolean; onOpenChange: (open: boolean) => void; trigger: ReactNode;
   identity: { name: string; description?: string; avatar?: ReactNode };
@@ -73,10 +90,46 @@ export function AccountMenu({ open, onOpenChange, trigger, identity, actions, on
   const panel = useRef<HTMLDivElement>(null);
   const id = useId();
   const reduce = useReducedMotionPreference();
+  const [present, setPresent] = useState(open);
+  const morph = useAnimationControls();
+  const hasEntered = useRef(false);
+  const origin = useRef<AccountMenuOrigin>({ side: 'bottom', align: 'end' });
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const typeahead = useRef('');
   const typeaheadTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useAnchoredPopup({ open, anchor, panel, onOpenChange, width: 280, initialFocus: 'first-control' });
+  useAnchoredPopup({ open: present, anchor, panel, onOpenChange, width: 280, initialFocus: 'first-control' });
+
+  useLayoutEffect(() => { if (open && !present) setPresent(true); }, [open, present]);
+
+  useLayoutEffect(() => {
+    if (!present || !panel.current) return;
+    let cancelled = false;
+    const element = panel.current;
+    if (open) {
+      // A quick reopen can interrupt the exit while the native popover is still mounted.
+      // The positioning hook only focuses on mount, so restore its first-control contract here too.
+      element.querySelector<HTMLElement>('button:not(:disabled),input:not(:disabled),a[href],[tabindex="0"]')?.focus({ preventScroll: true });
+      if (!hasEntered.current && anchor.current) {
+        origin.current = accountMenuOrigin(anchor.current, element);
+        element.style.transformOrigin = `${origin.current.side === 'bottom' ? 'top' : 'bottom'} ${origin.current.align === 'end' ? 'right' : 'left'}`;
+        morph.set(reduce
+          ? { clipPath: accountMenuClipShown, opacity: 0, scale: 1 }
+          : { clipPath: accountMenuClipHidden(origin.current), opacity: 0, scale: 0.96 });
+      }
+      hasEntered.current = true;
+      void morph.start(reduce
+        ? { clipPath: accountMenuClipShown, opacity: 1, scale: 1, transition: { duration: 0.12, ease: EASE_OUT } }
+        : { clipPath: accountMenuClipShown, opacity: 1, scale: 1, transition: { clipPath: { duration: 0.32, ease: EASE_OUT }, opacity: SPRING_PANEL, scale: SPRING_PANEL } });
+    } else {
+      const focused = document.activeElement;
+      if (focused instanceof HTMLElement && element.contains(focused)) anchor.current?.querySelector<HTMLElement>('button,a[href],[tabindex="0"]')?.focus({ preventScroll: true });
+      void morph.start(reduce
+        ? { opacity: 0, transition: { duration: 0.12, ease: EASE_OUT } }
+        : { clipPath: accountMenuClipHidden(origin.current), opacity: 0, scale: 0.96, transition: { clipPath: { duration: 0.32, ease: EASE_OUT }, opacity: SPRING_PANEL, scale: SPRING_PANEL } })
+        .then(() => { if (!cancelled) { hasEntered.current = false; setPresent(false); } });
+    }
+    return () => { cancelled = true; };
+  }, [open, present, reduce, morph]);
 
   useEffect(() => {
     if (!open) {
@@ -125,7 +178,7 @@ export function AccountMenu({ open, onOpenChange, trigger, identity, actions, on
   const primaryActions = actions.filter(action => action !== signOutAction);
   return <div className="es-account-anchor" ref={anchor}>
     {trigger}
-    <motion.div ref={panel} id={id} className="es-account-menu" popover="manual" role="dialog" aria-label={label} initial={false} animate={open ? { opacity: 1 } : { opacity: 0 }} transition={reduce ? { duration: 0 } : { duration: 0.18, ease: EASE_OUT }} onFocusCapture={event => { if (!(event.target as HTMLElement).closest('.es-account-action')) setActiveItem(null); }} onKeyDown={moveAccountFocus}>
+    <motion.div ref={panel} id={id} className="es-account-menu" popover="manual" role="dialog" aria-label={label} aria-hidden={!open || undefined} inert={!open} initial={false} animate={morph} onFocusCapture={event => { if (!(event.target as HTMLElement).closest('.es-account-action')) setActiveItem(null); }} onKeyDown={moveAccountFocus}>
       <div className="es-account-identity"><span className="es-account-avatar" aria-hidden="true">{identity.avatar ?? identity.name.slice(0, 1)}</span><div><strong>{identity.name}</strong>{identity.description && <p>{identity.description}</p>}</div></div>
       <div className="es-account-group">
         {primaryActions.map(actionButton)}
