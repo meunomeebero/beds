@@ -15,7 +15,16 @@ Read next: [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.
 
 Rollback: select the previous known release URL/integrity, reinstall and rerun app gates. Do not mutate the old release.
 
-## Current candidate — 0.2.0-rc.6
+## Current candidate — 0.2.0-rc.7
+
+Motion-only change over rc.6. `AccountMenu` opens and closes with the beUI
+Popover Morph corner clip (320ms) plus the panel spring, anchored to the corner
+nearest its trigger; reduced motion uses a 120ms fade. The menu stays mounted
+through exit and focus returns to the trigger on dismissal. Native popover
+positioning, controlled API, keyboard behavior and geometry are unchanged. No
+API, token or default changes. Provenance in `THIRD-PARTY-NOTICES.md`.
+
+## Previous candidate — 0.2.0-rc.6
 
 Additive over rc.5. `TextLink` gains `purpose: 'inline' | 'nav'`; `nav` has no
 underline at rest and draws a 1.5px underline from the inline start on hover or
@@ -27,7 +36,7 @@ hairline hierarchy, one signature motion, preview over icon tile), plus a table
 mapping each layer to `ExpandingButton`, `TextLink`/`LinkButton`, `HandDrawnArrow`
 and the quiet `Dialog`. No changes to existing defaults.
 
-## Previous candidate — 0.2.0-rc.5
+## Earlier candidate — 0.2.0-rc.5
 
 Visual change over rc.4. `Dialog` drops the beUI center-morph clip unfold after
 owner review found it showy. Entry is now a quiet 180ms fade with a 0.97→1

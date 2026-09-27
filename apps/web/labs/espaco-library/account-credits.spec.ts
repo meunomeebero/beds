@@ -37,7 +37,8 @@ test('account footer anatomy, both themes, keyboard recovery and local action', 
     const action = menu.getByRole('button', { name: 'Ver créditos', exact: true });
     await action.focus();
     await expect(action).toHaveCSS('outline-style', 'solid');
-    expect((await action.boundingBox())!.height).toBeGreaterThanOrEqual(info.project.name === 'mobile' ? 44 : 36);
+    // Settled geometry: the rc.7 entrance springs scale .96 → 1 before the target reaches full size.
+    await expect.poll(async () => (await action.boundingBox())!.height).toBeGreaterThanOrEqual(info.project.name === 'mobile' ? 44 : 36);
     await action.press('Enter');
     await expect(menu).toBeHidden();
     await expect(page.getByRole('status').filter({ hasText: 'Nenhuma compra' })).toBeVisible();

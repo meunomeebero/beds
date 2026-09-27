@@ -97,7 +97,8 @@ export function AccountMenu({ open, onOpenChange, trigger, identity, actions, on
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const typeahead = useRef('');
   const typeaheadTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useAnchoredPopup({ open: present, anchor, panel, onOpenChange, width: 280, initialFocus: 'first-control' });
+  // Mounted through the exit morph; dismissal listeners only while actually open.
+  useAnchoredPopup({ open: present, dismissible: open, anchor, panel, onOpenChange, width: 280, initialFocus: 'first-control' });
 
   useLayoutEffect(() => { if (open && !present) setPresent(true); }, [open, present]);
 

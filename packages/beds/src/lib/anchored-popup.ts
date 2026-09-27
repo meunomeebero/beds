@@ -9,11 +9,13 @@ function effectiveCssZoom(element: HTMLElement) {
   return zoom;
 }
 
-/** Internal positioning/focus primitive. Public components expose no geometry override. */
-export function useAnchoredPopup({ open, anchor, panel, onOpenChange, width = 260, initialFocus = 'panel', placement = 'below' }: {
+/** Internal positioning/focus primitive. Public components expose no geometry override.
+ *  `dismissible` (default: `open`) gates Escape/outside dismissal separately from the mounted
+ *  popover, so an exit animation keeps its position without swallowing the next Escape. */
+export function useAnchoredPopup({ open, anchor, panel, onOpenChange, width = 260, initialFocus = 'panel', placement = 'below', dismissible = open }: {
   open: boolean; anchor: RefObject<HTMLElement | null>; panel: RefObject<HTMLElement | null>;
   onOpenChange: (open: boolean) => void; width?: number | 'content'; initialFocus?: 'panel' | 'first-control' | 'none';
-  placement?: 'above' | 'below';
+  placement?: 'above' | 'below'; dismissible?: boolean;
 }) {
   const change = useRef(onOpenChange);
   change.current = onOpenChange;
@@ -51,6 +53,25 @@ export function useAnchoredPopup({ open, anchor, panel, onOpenChange, width = 26
     position();
     if (initialFocus === 'first-control') element.querySelector<HTMLElement>('button:not(:disabled),input:not(:disabled),a[href],[tabindex="0"]')?.focus({ preventScroll: true });
     if (initialFocus === 'panel') element.focus({ preventScroll: true });
+    window.addEventListener('resize', position);
+    window.addEventListener('scroll', position, true);
+    window.visualViewport?.addEventListener('resize', position);
+    window.visualViewport?.addEventListener('scroll', position);
+    return () => {
+      const restore = initialFocus !== 'none' && (element.contains(document.activeElement) || document.activeElement === document.body);
+      if (element.isConnected && element.matches(':popover-open')) element.hidePopover();
+      if (restore && focusTarget?.isConnected) focusTarget.focus({ preventScroll: true });
+      window.removeEventListener('resize', position);
+      window.removeEventListener('scroll', position, true);
+      window.visualViewport?.removeEventListener('resize', position);
+      window.visualViewport?.removeEventListener('scroll', position);
+    };
+  }, [open, anchor, panel, width, initialFocus, placement]);
+
+  useLayoutEffect(() => {
+    const element = panel.current;
+    const trigger = anchor.current;
+    if (!open || !dismissible || !element || !trigger) return;
     const outside = (event: PointerEvent) => {
       if (!element.contains(event.target as Node) && !trigger.contains(event.target as Node)) change.current(false);
     };
@@ -63,21 +84,10 @@ export function useAnchoredPopup({ open, anchor, panel, onOpenChange, width = 26
     document.addEventListener('pointerdown', outside, true);
     element.addEventListener('keydown', escape);
     trigger.addEventListener('keydown', escape);
-    window.addEventListener('resize', position);
-    window.addEventListener('scroll', position, true);
-    window.visualViewport?.addEventListener('resize', position);
-    window.visualViewport?.addEventListener('scroll', position);
     return () => {
-      const restore = initialFocus !== 'none' && (element.contains(document.activeElement) || document.activeElement === document.body);
-      if (element.isConnected && element.matches(':popover-open')) element.hidePopover();
-      if (restore && focusTarget?.isConnected) focusTarget.focus({ preventScroll: true });
       document.removeEventListener('pointerdown', outside, true);
       element.removeEventListener('keydown', escape);
       trigger.removeEventListener('keydown', escape);
-      window.removeEventListener('resize', position);
-      window.removeEventListener('scroll', position, true);
-      window.visualViewport?.removeEventListener('resize', position);
-      window.visualViewport?.removeEventListener('scroll', position);
     };
-  }, [open, anchor, panel, width, initialFocus, placement]);
+  }, [open, dismissible, anchor, panel]);
 }
