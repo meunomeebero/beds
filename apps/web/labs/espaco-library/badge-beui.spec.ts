@@ -39,6 +39,20 @@ for (const theme of ['light', 'dark'] as const) {
       await expect(status.locator('.es-badge-marker')).toHaveCount(1);
       await expect(status.locator('.es-badge-marker-dot')).toHaveCount(1);
       await expect(status.locator('.es-badge-marker-dot')).toHaveCSS('width', '6px');
+      // The dot must actually be visible: the marker is a span inside .es-badge-label, and a
+      // generic `.es-badge-label>span` rule once out-ranked it (block instead of inline-flex),
+      // which pushed the dot below its own overflow:hidden box.
+      const dotVisible = await status.evaluate(element => {
+        const marker = element.querySelector<HTMLElement>('.es-badge-marker')!.getBoundingClientRect();
+        const dot = element.querySelector<HTMLElement>('.es-badge-marker-dot')!.getBoundingClientRect();
+        const label = element.querySelector<HTMLElement>('.es-badge-label > span:not(.es-badge-marker)')!.getBoundingClientRect();
+        return {
+          inside: dot.top >= marker.top - 0.5 && dot.bottom <= marker.bottom + 0.5 && dot.left >= marker.left - 0.5 && dot.right <= marker.right + 0.5,
+          centeredOnFirstLine: Math.abs((dot.top + dot.height / 2) - (label.top + 9)) <= 2,
+        };
+      });
+      expect(dotVisible.inside).toBe(true);
+      expect(dotVisible.centeredOnFirstLine).toBe(true);
       await expect(status).toHaveCSS('box-shadow', 'none');
       const markerState = await status.evaluate(element => {
         const pseudo = getComputedStyle(element, '::before');

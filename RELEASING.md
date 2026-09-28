@@ -15,7 +15,19 @@ Read next: [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.
 
 Rollback: select the previous known release URL/integrity, reinstall and rerun app gates. Do not mutate the old release.
 
-## Current candidate — 0.2.0-rc.9
+## Current candidate — 0.2.0-rc.10
+
+Fix only, over rc.9. The `Badge` status marker (the 6px tone dot before the
+label) was invisible: the generic `.es-badge-label>span` rule (specificity
+0,2,1) out-ranked `.es-badge-marker` (0,2,0), because the marker is itself a
+span child of the label. The marker fell back from `inline-flex` to block, its
+dot shifted down inside a 6px `overflow:hidden` box and was clipped, leaving
+only the 12px gap. The label rule now excludes the marker
+(`.es-badge-label>span:not(.es-badge-marker)`). The badge lab spec asserts the
+dot sits inside its marker and on the first text line. No API, token or
+default changes.
+
+## Previous candidate — 0.2.0-rc.9
 
 Fix plus one additive variant over rc.8. `SegmentedControl` and `RadioGroup`
 option faces no longer join the tab order: their `.92` press came from Motion
