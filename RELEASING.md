@@ -15,7 +15,18 @@ Read next: [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.
 
 Rollback: select the previous known release URL/integrity, reinstall and rerun app gates. Do not mutate the old release.
 
-## Current candidate — 0.2.0-rc.8
+## Current candidate — 0.2.0-rc.9
+
+Fix plus one additive variant over rc.8. `SegmentedControl` and `RadioGroup`
+option faces no longer join the tab order: their `.92` press came from Motion
+`whileTap`, which gives any element that is not natively focusable `tabindex=0`,
+so every option added an inert extra tab stop beside its radio. The press is now
+a pointer-state spring with the same value and curve. `Select` gains
+`variant="input"`: the 44px pill, 14px inline padding and 16px text of
+`TextField purpose="field"`, full width, so a select sits flush in the same
+form. No default, token or other API changes.
+
+## Previous candidate — 0.2.0-rc.8
 
 Additive over rc.7. `TextField`, `DateField` and `TextAreaField` accept
 `purpose="field"`: the beUI `input` anatomy for product forms (44px pill,
@@ -24,7 +35,7 @@ the text area keeps a 20px radius). Functional-contrast border, focus ring,
 error nudge and settled error message are unchanged. `settings` remains the
 default density and `connection` keeps its measured geometry.
 
-## Previous candidate — 0.2.0-rc.7
+## Earlier candidate — 0.2.0-rc.7
 
 Motion-only change over rc.6. `AccountMenu` opens and closes with the beUI
 Popover Morph corner clip (320ms) plus the panel spring, anchored to the corner

@@ -20,6 +20,9 @@
 @media(prefers-reduced-motion:reduce){.es-root .es-select-trigger,.es-root .es-select-option,.es-root .es-menu-item,.es-root .es-help-label-trigger{transition:none}}
 .es-root .es-select[data-variant="field"]{width:224px}
 .es-root .es-select[data-variant="field"]>.es-select-trigger{justify-content:space-between;width:100%;min-height:36px;padding:7px 8px 7px 10px;gap:6px;border:1px solid var(--es-control-border);border-radius:8px;background:var(--es-field);font-weight:400;line-height:20px;text-align:left}
+/* input: the beUI input anatomy of TextField purpose="field" (44px pill, 14px inline padding, 16px text) so a select sits flush in the same form. */
+.es-root .es-select[data-variant="input"]{width:100%}
+.es-root .es-select[data-variant="input"]>.es-select-trigger{justify-content:space-between;width:100%;min-height:44px;padding:0 12px 0 14px;gap:8px;border:1px solid var(--es-control-border);border-radius:22px;background:var(--es-field);font:400 16px/24px var(--es-font);letter-spacing:0;text-align:left}
 .es-root .es-select-popup,.es-root .es-menu-popup{position:fixed;inset:auto;margin:0;overflow-y:auto;overscroll-behavior:contain;border:1px solid var(--es-border);background:var(--es-surface);color:var(--es-text);box-shadow:var(--es-shadow-popup);font:450 13px/16px var(--es-font);letter-spacing:-.1px}
 .es-root .es-select-popup{width:260px;padding:8px;border-radius:10px}
 .es-root .es-select-option{display:flex;align-items:center;gap:10px;min-height:28px;padding:4px 6px;border-radius:7px;cursor:pointer}

@@ -170,6 +170,12 @@ for (const theme of ['light', 'dark'] as const) {
       const productNote = page.getByRole('textbox', { name: 'Nota do produto (exemplo)', exact: true });
       await expect(productNote).toHaveCSS('border-radius', '20px');
       await expect(productNote).toHaveCSS('font-size', '16px');
+      const stage = page.getByRole('button', { name: /^Etapa do produto \(exemplo\):/ });
+      expect((await stage.boundingBox())!.height).toBe(44); // Select input variant sits flush with purpose="field"
+      await expect(stage).toHaveCSS('font-size', '16px');
+      expect(await stage.evaluate(element => parseFloat(getComputedStyle(element).borderTopLeftRadius) >= 22)).toBe(true);
+      // Choice faces animate on press without joining the tab order: only the radios are focusable.
+      await expect(page.locator('.es-segmented-control [tabindex]:not(input), .es-radio-group [tabindex]:not(input)')).toHaveCount(0);
       const field = page.getByRole('textbox', { name: 'Endereço do exemplo', exact: true });
       expect((await field.boundingBox())!.height).toBe(40); // connection variant keeps its contextual 40px; 16px touch font still applies
       await expect(field).toHaveCSS('border-radius', '10px');

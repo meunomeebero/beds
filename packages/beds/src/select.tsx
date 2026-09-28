@@ -40,7 +40,7 @@ export interface SelectProps {
   onChange: (value: string) => void;
   disabled?: boolean;
   icon?: IconName;
-  variant?: "compact" | "field" | "context" | "filter";
+  variant?: "compact" | "field" | "input" | "context" | "filter";
 }
 
 /**
@@ -136,10 +136,10 @@ export function Select({ label, value, options, onChange, disabled, icon, varian
       }}
       initial={false}
       animate={{
-        borderTopLeftRadius: variant === "compact" ? 6 : 8,
-        borderTopRightRadius: variant === "compact" ? 6 : 8,
-        borderBottomLeftRadius: variant === "compact" ? 6 : 8,
-        borderBottomRightRadius: variant === "compact" ? 6 : 8,
+        borderTopLeftRadius: variant === "compact" ? 6 : variant === "input" ? 22 : 8,
+        borderTopRightRadius: variant === "compact" ? 6 : variant === "input" ? 22 : 8,
+        borderBottomLeftRadius: variant === "compact" ? 6 : variant === "input" ? 22 : 8,
+        borderBottomRightRadius: variant === "compact" ? 6 : variant === "input" ? 22 : 8,
       }}
       transition={reduce ? INSTANT_TRANSITION : { duration: 0.18, ease: EASE_OUT }}
     >

@@ -5,6 +5,7 @@ import { cn } from './lib/utils';
 import { EASE_OUT, SPRING_LAYOUT, SPRING_PRESS } from './lib/ease';
 import { useHoverCapable } from './lib/hooks/use-hover-capable';
 import { useReducedMotionPreference } from './lib/hooks/use-reduced-motion';
+import { usePressScale } from './lib/hooks/use-press-scale';
 import './controls.css';
 
 type ButtonProps = {
@@ -365,6 +366,11 @@ function getScrollBounds(group: HTMLDivElement, rtl: boolean) {
   return { min: Math.min(positive, negative), max: Math.max(positive, negative) };
 }
 
+function SegmentedFace({ pressable, className, children }: { pressable: boolean; className: string; children: ReactNode }) {
+  const press = usePressScale(0.92, pressable, SPRING_PRESS);
+  return <motion.span {...press} className={className}>{children}</motion.span>;
+}
+
 export function SegmentedControl({ label, value, options, onChange, variant = 'pill' }: {
   label: string; value: string; options: Choice[]; onChange: (value: string) => void; variant?: 'pill' | 'joined';
 }) {
@@ -438,7 +444,7 @@ export function SegmentedControl({ label, value, options, onChange, variant = 'p
   const spanCls = variant === 'joined' ? SEGMENTED_SPAN_JOINED : SEGMENTED_SPAN_PILL;
   return <LayoutGroup id={`${name}-layout`}><div ref={groupRef} className={cn('es-segmented-control', listCls)} data-variant={variant} role="radiogroup" aria-label={label}>{options.map(option => {
     const selected = value === option.id;
-    return <label key={option.id} onPointerDown={clearKeyboardTarget} className={SEGMENTED_CHOICE}><input ref={input => { inputRefs.current[option.id] = input; }} type="radio" name={name} value={option.id} checked={selected} disabled={option.disabled} onChange={() => onChange(option.id)} onKeyDown={event => navigate(event, option.id)} onBlur={event => { if (!groupRef.current?.contains(event.relatedTarget as Node | null)) clearKeyboardTarget(); }} className="absolute w-px h-px p-0 m-0 opacity-0 peer" /><motion.span whileTap={reduce || option.disabled ? undefined : { scale: 0.92 }} transition={SPRING_PRESS} className={cn(spanCls, selected && SEGMENTED_SPAN_CHECKED)}>{selected && <motion.span layoutId={`${name}-indicator`} initial={false} transition={reduce || keyboardTarget === value ? { duration: 0 } : SPRING_LAYOUT} className={SEGMENTED_INDICATOR} aria-hidden="true" data-segmented-indicator /> }<span className="relative z-10">{option.label}</span></motion.span></label>;
+    return <label key={option.id} onPointerDown={clearKeyboardTarget} className={SEGMENTED_CHOICE}><input ref={input => { inputRefs.current[option.id] = input; }} type="radio" name={name} value={option.id} checked={selected} disabled={option.disabled} onChange={() => onChange(option.id)} onKeyDown={event => navigate(event, option.id)} onBlur={event => { if (!groupRef.current?.contains(event.relatedTarget as Node | null)) clearKeyboardTarget(); }} className="absolute w-px h-px p-0 m-0 opacity-0 peer" /><SegmentedFace pressable={!reduce && !option.disabled} className={cn(spanCls, selected && SEGMENTED_SPAN_CHECKED)}>{selected && <motion.span layoutId={`${name}-indicator`} initial={false} transition={reduce || keyboardTarget === value ? { duration: 0 } : SPRING_LAYOUT} className={SEGMENTED_INDICATOR} aria-hidden="true" data-segmented-indicator /> }<span className="relative z-10">{option.label}</span></SegmentedFace></label>;
   })}</div></LayoutGroup>;
 }
 

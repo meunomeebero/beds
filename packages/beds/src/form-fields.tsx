@@ -1,8 +1,9 @@
 import { motion } from 'motion/react';
-import { useEffect, useId, useLayoutEffect, useRef, useState, type ChangeEvent, type DragEvent, type KeyboardEvent as ReactKeyboardEvent } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef, useState, type ChangeEvent, type DragEvent, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
 import { Icon } from './foundation';
 import { SPRING_LAYOUT, SPRING_PRESS } from './lib/ease';
 import { useReducedMotionPreference } from './lib/hooks/use-reduced-motion';
+import { usePressScale } from './lib/hooks/use-press-scale';
 import './form-fields.css';
 
 export type RadioOption = {
@@ -66,6 +67,24 @@ function nextRadioId(options: readonly RadioOption[], current: string, key: stri
 
 function isRadioNavigationKey(key: string) {
   return key === 'ArrowRight' || key === 'ArrowLeft' || key === 'ArrowDown' || key === 'ArrowUp' || key === 'Home' || key === 'End';
+}
+
+function RadioOptionLabel({ pressable, disabled, onPointerDown, onPointerUp, onPointerCancel, onBlur, children }: {
+  pressable: boolean; disabled: boolean; onPointerDown: () => void; onPointerUp: () => void; onPointerCancel: () => void; onBlur: () => void; children: ReactNode;
+}) {
+  const press = usePressScale(0.92, pressable, SPRING_PRESS);
+  return <motion.label
+    className="es-radio-option"
+    data-disabled={disabled || undefined}
+    style={press.style}
+    onPointerDown={() => { press.onPointerDown(); onPointerDown(); }}
+    onPointerUp={() => { press.onPointerUp(); onPointerUp(); }}
+    onPointerLeave={press.onPointerLeave}
+    onPointerCancel={() => { press.onPointerCancel(); onPointerCancel(); }}
+    onBlur={onBlur}
+  >
+    {children}
+  </motion.label>;
 }
 
 export function RadioGroup({ label, value, options, onChange, description, error, disabled, name, purpose = 'default' }: RadioGroupProps) {
@@ -160,23 +179,21 @@ export function RadioGroup({ label, value, options, onChange, description, error
       </label>;
     }
 
-    return <motion.label
+    return <RadioOptionLabel
       key={option.id}
-      className="es-radio-option"
-      data-disabled={optionDisabled || undefined}
+      pressable={!reduceMotion && !optionDisabled}
+      disabled={optionDisabled}
       onPointerDown={() => markPointer(option)}
       onPointerUp={clearPointerActivation}
       onPointerCancel={() => { activation.current = null; }}
       onBlur={clearPointerActivation}
-      whileTap={reduceMotion || optionDisabled ? undefined : { scale: 0.92 }}
-      transition={SPRING_PRESS}
     >
       {input}
       <span className="es-radio-indicator" aria-hidden="true">
         {selected && <motion.span className="es-radio-dot" layoutId={`${groupId}-selected-dot`} transition={reduceMotion || pointerTarget !== value ? { duration: 0 } : SPRING_LAYOUT} />}
       </span>
       <span>{option.label}</span>
-    </motion.label>;
+    </RadioOptionLabel>;
   };
 
   const optionsMarkup = options.map(renderOption);
