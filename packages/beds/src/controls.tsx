@@ -160,7 +160,9 @@ type FieldProps = {
   reserveErrorLine?: boolean;
 };
 
-type TextFieldProps = FieldProps & { purpose?: 'settings' | 'connection'; type?: 'text' | 'email' | 'url' | 'tel' | 'password' };
+/** `settings` = dense settings rows (default); `connection` = measured connection flows; `field` = product form field with the beUI `input` anatomy (44px pill, 16px text). */
+type TextFieldProps = FieldProps & { purpose?: 'settings' | 'connection' | 'field'; type?: 'text' | 'email' | 'url' | 'tel' | 'password' };
+type TextAreaFieldProps = FieldProps & { purpose?: 'settings' | 'field' };
 
 type DateFieldProps = Omit<FieldProps, 'placeholder' | 'inputMode' | 'spellCheck'> & {
   /** Inclusive ISO-8601 calendar-date bounds delegated to the native date input. */
@@ -168,6 +170,7 @@ type DateFieldProps = Omit<FieldProps, 'placeholder' | 'inputMode' | 'spellCheck
   max?: string;
   /** Native required semantics; validation and recovery remain caller-owned. */
   required?: boolean;
+  purpose?: 'settings' | 'field';
 };
 
 function setForwardedRef<T>(ref: ForwardedRef<T>, node: T | null) {
@@ -192,11 +195,11 @@ function useFieldIds(description?: string, error?: string) {
   return { id, describedBy };
 }
 
-function FieldNotes({ id, description, error, reserveErrorLine }: { id: string; description?: string; error?: string; reserveErrorLine?: boolean }) {
+function FieldNotes({ id, description, error, reserveErrorLine, inset }: { id: string; description?: string; error?: string; reserveErrorLine?: boolean; inset?: boolean }) {
   const reduce = useReducedMotionPreference();
   const showError = Boolean(error) || Boolean(reserveErrorLine);
   return <>
-    {description && <p id={`${id}-description`} className="text-xs leading-[18px] text-muted-foreground">{description}</p>}
+    {description && <p id={`${id}-description`} className={cn('text-xs leading-[18px] text-muted-foreground', inset && 'px-1')}>{description}</p>}
     <div className={cn(reserveErrorLine ? 'min-h-4' : 'contents')}>
       <AnimatePresence initial={false}>
         {error ? <motion.p
@@ -206,7 +209,7 @@ function FieldNotes({ id, description, error, reserveErrorLine }: { id: string; 
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           exit={reduce ? { opacity: 0 } : { opacity: 0, y: -2, filter: 'blur(4px)' }}
           transition={{ duration: 0.18, ease: EASE_OUT }}
-          className="flex items-baseline gap-1 text-xs leading-[18px] text-[color:var(--es-error-text)]"
+          className={cn('flex items-baseline gap-1 text-xs leading-[18px] text-[color:var(--es-error-text)]', inset && 'px-1')}
         ><Icon name="AlertCircle" purpose="small" />{error}</motion.p> : null}
       </AnimatePresence>
     </div>
@@ -216,6 +219,10 @@ function FieldNotes({ id, description, error, reserveErrorLine }: { id: string; 
 const TEXT_INPUT_BASE = 'box-border w-full min-w-0 px-2.5 text-sm leading-[20px] tracking-normal border border-input rounded-lg bg-field text-input-text placeholder:text-muted-foreground disabled:opacity-50 disabled:cursor-not-allowed read-only:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-transparent focus-visible:border-ring focus-visible:shadow-[0_0_0_3px_var(--es-focus-ring)] aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-visible:border-destructive aria-[invalid=true]:focus-visible:shadow-[0_0_0_3px_var(--es-error-ring)]';
 const TEXT_INPUT_SETTINGS = 'h-9 py-1 pointer-coarse:h-11 pointer-coarse:py-0 pointer-coarse:text-lg pointer-coarse:leading-6';
 const TEXT_INPUT_CONNECTION = 'h-10 py-1 px-4 text-[14px] leading-4 rounded-xl pointer-coarse:h-10 pointer-coarse:text-lg pointer-coarse:leading-6';
+/** beUI `input` anatomy (https://beui.dev/r/input): 44px pill, 14px inline padding, 16px text on every pointer. */
+const TEXT_INPUT_FIELD = 'h-11 py-0 px-3.5 text-[16px] leading-6 rounded-full pointer-coarse:h-11 pointer-coarse:text-[16px] pointer-coarse:leading-6';
+const TEXT_AREA_FIELD = 'min-h-25 py-2.5 px-3.5 text-[16px] leading-6 rounded-[20px] pointer-coarse:text-[16px] pointer-coarse:leading-6';
+const FIELD_LABEL = 'text-sm font-medium leading-4 tracking-normal text-foreground';
 
 /** Shake the field once when a new error appears — adopted from beUI `input` (state intent + reduce-motion guard). */
 function useErrorShake<T extends HTMLElement>(error?: string) {
@@ -232,11 +239,12 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
   const { id, describedBy } = useFieldIds(description, error);
   const inputRef = useErrorFocus<HTMLInputElement>(error, focusOnError);
   const shakeRef = useErrorShake<HTMLDivElement>(error);
-  const sizeClass = purpose === 'connection' ? TEXT_INPUT_CONNECTION : TEXT_INPUT_SETTINGS;
+  const sizeClass = purpose === 'connection' ? TEXT_INPUT_CONNECTION : purpose === 'field' ? TEXT_INPUT_FIELD : TEXT_INPUT_SETTINGS;
+  const inset = purpose === 'field';
   return <div className="grid gap-2 min-w-0" ref={shakeRef}>
-    <label htmlFor={id} className="text-sm font-medium leading-4 tracking-normal text-foreground">{label}</label>
+    <label htmlFor={id} className={cn(FIELD_LABEL, inset && 'px-1')}>{label}</label>
     <input ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} type={type} name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} data-purpose={purpose} value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} className={cn(TEXT_INPUT_BASE, sizeClass)} />
-    <FieldNotes id={id} description={description} error={error} reserveErrorLine={reserveErrorLine} />
+    <FieldNotes id={id} description={description} error={error} reserveErrorLine={reserveErrorLine} inset={inset} />
   </div>;
 });
 TextField.displayName = 'TextField';
@@ -249,26 +257,28 @@ TextField.displayName = 'TextField';
  * The visual/error anatomy is the beUI `input` adaptation already used by
  * TextField; beUI's wheel-picker was a no-fit for this native form control.
  */
-export const DateField = forwardRef<HTMLInputElement, DateFieldProps>(function DateField({ label, value, onChange, description, error, disabled, readOnly, name, autoComplete, focusOnError, reserveErrorLine, min, max, required }, forwardedRef) {
+export const DateField = forwardRef<HTMLInputElement, DateFieldProps>(function DateField({ label, value, onChange, description, error, disabled, readOnly, name, autoComplete, focusOnError, reserveErrorLine, min, max, required, purpose = 'settings' }, forwardedRef) {
   const { id, describedBy } = useFieldIds(description, error);
   const inputRef = useErrorFocus<HTMLInputElement>(error, focusOnError);
   const shakeRef = useErrorShake<HTMLDivElement>(error);
+  const inset = purpose === 'field';
   return <div className="grid gap-2 min-w-0" ref={shakeRef}>
-    <label htmlFor={id} className="text-sm font-medium leading-4 tracking-normal text-foreground">{label}</label>
-    <input ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} type="date" name={name} autoComplete={autoComplete} value={value} onChange={event => onChange(event.target.value)} min={min} max={max} required={required} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} className={cn(TEXT_INPUT_BASE, TEXT_INPUT_SETTINGS)} />
-    <FieldNotes id={id} description={description} error={error} reserveErrorLine={reserveErrorLine} />
+    <label htmlFor={id} className={cn(FIELD_LABEL, inset && 'px-1')}>{label}</label>
+    <input ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} type="date" name={name} autoComplete={autoComplete} value={value} onChange={event => onChange(event.target.value)} min={min} max={max} required={required} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} className={cn(TEXT_INPUT_BASE, inset ? TEXT_INPUT_FIELD : TEXT_INPUT_SETTINGS)} />
+    <FieldNotes id={id} description={description} error={error} reserveErrorLine={reserveErrorLine} inset={inset} />
   </div>;
 });
 DateField.displayName = 'DateField';
 
-export const TextAreaField = forwardRef<HTMLTextAreaElement, FieldProps>(function TextAreaField({ label, value, onChange, description, error, placeholder, disabled, readOnly, name, autoComplete, inputMode, spellCheck, focusOnError, reserveErrorLine }, forwardedRef) {
+export const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(function TextAreaField({ label, value, onChange, description, error, placeholder, disabled, readOnly, name, autoComplete, inputMode, spellCheck, focusOnError, reserveErrorLine, purpose = 'settings' }, forwardedRef) {
   const { id, describedBy } = useFieldIds(description, error);
   const inputRef = useErrorFocus<HTMLTextAreaElement>(error, focusOnError);
   const shakeRef = useErrorShake<HTMLDivElement>(error);
+  const inset = purpose === 'field';
   return <div className="grid gap-2 min-w-0" ref={shakeRef}>
-    <label htmlFor={id} className="text-sm font-medium leading-4 tracking-normal text-foreground">{label}</label>
-    <textarea ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} className={cn(TEXT_INPUT_BASE, 'min-h-25 py-2 resize-y align-top')} />
-    <FieldNotes id={id} description={description} error={error} reserveErrorLine={reserveErrorLine} />
+    <label htmlFor={id} className={cn(FIELD_LABEL, inset && 'px-1')}>{label}</label>
+    <textarea ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} className={cn(TEXT_INPUT_BASE, inset ? TEXT_AREA_FIELD : 'min-h-25 py-2', 'resize-y align-top')} />
+    <FieldNotes id={id} description={description} error={error} reserveErrorLine={reserveErrorLine} inset={inset} />
   </div>;
 });
 TextAreaField.displayName = 'TextAreaField';

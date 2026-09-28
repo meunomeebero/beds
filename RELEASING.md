@@ -15,7 +15,16 @@ Read next: [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.
 
 Rollback: select the previous known release URL/integrity, reinstall and rerun app gates. Do not mutate the old release.
 
-## Current candidate — 0.2.0-rc.7
+## Current candidate — 0.2.0-rc.8
+
+Additive over rc.7. `TextField`, `DateField` and `TextAreaField` accept
+`purpose="field"`: the beUI `input` anatomy for product forms (44px pill,
+14px inline padding, 16px text on every pointer, label and notes inset 4px;
+the text area keeps a 20px radius). Functional-contrast border, focus ring,
+error nudge and settled error message are unchanged. `settings` remains the
+default density and `connection` keeps its measured geometry.
+
+## Previous candidate — 0.2.0-rc.7
 
 Motion-only change over rc.6. `AccountMenu` opens and closes with the beUI
 Popover Morph corner clip (320ms) plus the panel spring, anchored to the corner
@@ -24,7 +33,7 @@ through exit and focus returns to the trigger on dismissal. Native popover
 positioning, controlled API, keyboard behavior and geometry are unchanged. No
 API, token or default changes. Provenance in `THIRD-PARTY-NOTICES.md`.
 
-## Previous candidate — 0.2.0-rc.6
+## Earlier candidate — 0.2.0-rc.6
 
 Additive over rc.5. `TextLink` gains `purpose: 'inline' | 'nav'`; `nav` has no
 underline at rest and draws a 1.5px underline from the inline start on hover or

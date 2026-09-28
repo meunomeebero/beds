@@ -163,6 +163,13 @@ for (const theme of ['light', 'dark'] as const) {
       expect((await connection.boundingBox())!.height).toBe(36); // connection strip keeps contextual density on touch
       await connection.getByRole('tab', { name: 'Web', exact: true }).click();
       await expect(page.getByRole('tabpanel', { name: 'Web', exact: true })).toBeVisible();
+      const product = page.getByRole('textbox', { name: 'Nome do produto (exemplo)', exact: true });
+      expect((await product.boundingBox())!.height).toBe(44); // beUI input anatomy on every pointer
+      await expect(product).toHaveCSS('font-size', '16px');
+      expect(await product.evaluate(element => parseFloat(getComputedStyle(element).borderTopLeftRadius) >= 22)).toBe(true);
+      const productNote = page.getByRole('textbox', { name: 'Nota do produto (exemplo)', exact: true });
+      await expect(productNote).toHaveCSS('border-radius', '20px');
+      await expect(productNote).toHaveCSS('font-size', '16px');
       const field = page.getByRole('textbox', { name: 'Endereço do exemplo', exact: true });
       expect((await field.boundingBox())!.height).toBe(40); // connection variant keeps its contextual 40px; 16px touch font still applies
       await expect(field).toHaveCSS('border-radius', '10px');
