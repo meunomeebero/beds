@@ -2,7 +2,7 @@
 .es-root .es-otp-label{color:var(--es-text);font:500 13px/20px var(--es-font);overflow-wrap:anywhere}
 .es-root .es-otp{position:relative;display:flex;align-items:center;gap:12px;width:100%;max-width:440px;min-width:0}
 .es-root .es-otp-group{display:flex;flex:1;gap:12px;min-width:0}
-.es-root .es-otp-slot{position:relative;display:grid;place-items:center;flex:1;min-width:0;max-width:56px;aspect-ratio:1;border:1px solid var(--es-control-border);border-radius:12px;background:var(--es-subtle);color:var(--es-text);font:600 clamp(16px,5vw,24px)/1 var(--es-font);font-variant-numeric:tabular-nums;overflow:hidden}
+.es-root .es-otp-slot{position:relative;display:grid;place-items:center;flex:1;min-width:0;max-width:56px;aspect-ratio:1;border:1px solid var(--es-field-border);border-radius:12px;background:var(--es-subtle);color:var(--es-text);font:600 clamp(16px,5vw,24px)/1 var(--es-font);font-variant-numeric:tabular-nums;overflow:hidden}
 .es-root .es-otp-slot[data-active="true"]{outline:2px solid var(--es-focus);outline-offset:2px;background:var(--es-selected)}
 .es-root .es-otp-slot[data-status="error"]{border-color:var(--es-badge-error-marker)}
 .es-root .es-otp-slot[data-status="success"]{border-color:var(--es-badge-success-marker)}

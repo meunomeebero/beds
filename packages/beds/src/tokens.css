@@ -37,7 +37,7 @@
  --chart-1:#0077e6;--chart-2:#15b042;--chart-3:#e87800;--chart-4:#e83535;--chart-5:#6a6966;
  --es-bg:var(--background);--es-sidebar:var(--sidebar);--es-surface:var(--card);--es-subtle:var(--muted);--es-raised:#edece9;--es-hover:var(--accent);--es-pressed:#dbd8d2;
  --es-text:var(--foreground);--es-secondary:var(--muted-foreground);--es-placeholder:#6a6966;--es-inverse:#191919;--es-border:var(--border);--es-border-subtle:#0000000f;--es-border-strong:#0000001f;
- --es-control-border:var(--input);--es-error-text:#c52a2a;--es-focus-ring:#0077e63d;--es-error-ring:#e8353533;
+ --es-control-border:var(--input);--es-field-border:var(--input);--es-error-text:#c52a2a;--es-focus-ring:#0077e63d;--es-error-ring:#e8353533;
  --es-primary:var(--primary);--es-on-primary:var(--primary-foreground);--es-field:#ffffff;--es-message-user:#edece9;--es-switch-off:#787775;--es-switch-thumb:#ffffff;
  --es-success-subtle:#caface;--es-error-subtle:#ffe4e0;--es-badge-success-marker:#0b7a2b;--es-badge-warning-marker:#a54f00;--es-badge-error-marker:#c52a2a;--es-badge-info-marker:#0066c2;
  --es-shadow-account:0 0 0 1px #0000000f,0 20px 25px -5px #0000001f,0 8px 10px -6px #00000029;
@@ -59,7 +59,7 @@
  --es-image-outline:rgba(255,255,255,.1);
  --es-bg:var(--background);--es-sidebar:var(--sidebar);--es-surface:var(--card);--es-subtle:var(--muted);--es-raised:#272727;--es-hover:var(--accent);--es-pressed:#ffffff0c;
  --es-text:var(--foreground);--es-secondary:var(--muted-foreground);--es-placeholder:#949494;--es-inverse:#f1f1f1;--es-border:var(--border);--es-border-subtle:#ffffff06;--es-border-strong:#ffffff13;
- --es-control-border:var(--input);--es-error-text:#ff7b7b;--es-focus-ring:#b9b9b93d;--es-error-ring:#e8353547;
+ --es-control-border:var(--input);--es-field-border:var(--input);--es-error-text:#ff7b7b;--es-focus-ring:#b9b9b93d;--es-error-ring:#e8353547;
  --es-primary:var(--primary);--es-on-primary:var(--primary-foreground);--es-field:#191919;--es-message-user:#232323;--es-switch-off:#414141;--es-switch-thumb:#c8c8c8;
  --es-success-subtle:#053818;--es-error-subtle:#570808;--es-badge-success-marker:#49c670;--es-badge-warning-marker:#ff9f32;--es-badge-error-marker:#ff7b7b;--es-badge-info-marker:#5aaaff;
  --es-shadow-account:0 1px 2px #00000044,0 8px 24px #00000044;
@@ -67,3 +67,5 @@
  --es-selected:var(--sidebar-accent);--es-composer-surface:#191919;--es-overlay:#080808a8;
  --es-composer-context:#222222;--es-composer-border:#ffffff04;--es-composer-focus:#ffffff17;--es-control:var(--secondary);--es-heading:#d4d4d4;--es-brand-ink:var(--es-brand);--es-input-text:#d0d0d0;--es-badge:#414141;--es-on-badge:#e5e5e5;--es-send:#dedede;--es-on-send:#292929;
 }
+/* Provider opt-in `fieldBorder="soft"`: text-entry controls (fields, text areas, selects, OTP slots, dropzone) take the structural card border. Checkbox/radio/switch keep --es-control-border. */
+.es-root[data-field-border="soft"]{--es-field-border:var(--es-border)}

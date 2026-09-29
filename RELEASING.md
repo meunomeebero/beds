@@ -15,7 +15,22 @@ Read next: [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.
 
 Rollback: select the previous known release URL/integrity, reinstall and rerun app gates. Do not mutate the old release.
 
-## Current candidate — 0.2.0-rc.10
+## Current candidate — 0.2.0-rc.11
+
+Additive over rc.10. `DesignSystemProvider` accepts `fieldBorder: 'default' | 'soft'`
+(default `default`, so nothing changes unless a product opts in). Text-entry
+controls (`TextField`, `TextAreaField`, `DateField`, `SearchField`, `Select` field and
+input variants, `InputOTP` slots and the generic file dropzone) now draw their
+boundary with the new `--es-field-border` token, which equals `--es-control-border`
+by default. `soft` maps it to `--es-border`, the card border, for products that want
+delicate fields; checkbox, radio and switch marks always keep the functional
+boundary, and focus and error borders are unchanged. `soft` gives up the 3:1
+outline on text-entry controls: the field is identified by label, fill,
+placeholder and focus ring. New lab spec `field-border.spec.ts` covers both modes,
+the marks, focus and error, OTP and the dropzone. No default, token value or other
+API changes.
+
+## Previous candidate — 0.2.0-rc.10
 
 Fix only, over rc.9. The `Badge` status marker (the 6px tone dot before the
 label) was invisible: the generic `.es-badge-label>span` rule (specificity

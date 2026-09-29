@@ -217,7 +217,7 @@ function FieldNotes({ id, description, error, reserveErrorLine, inset }: { id: s
   </>;
 }
 
-const TEXT_INPUT_BASE = 'box-border w-full min-w-0 px-2.5 text-sm leading-[20px] tracking-normal border border-input rounded-lg bg-field text-input-text placeholder:text-muted-foreground disabled:opacity-50 disabled:cursor-not-allowed read-only:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-transparent focus-visible:border-ring focus-visible:shadow-[0_0_0_3px_var(--es-focus-ring)] aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-visible:border-destructive aria-[invalid=true]:focus-visible:shadow-[0_0_0_3px_var(--es-error-ring)]';
+const TEXT_INPUT_BASE = 'box-border w-full min-w-0 px-2.5 text-sm leading-[20px] tracking-normal border border-field-border rounded-lg bg-field text-input-text placeholder:text-muted-foreground disabled:opacity-50 disabled:cursor-not-allowed read-only:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-transparent focus-visible:border-ring focus-visible:shadow-[0_0_0_3px_var(--es-focus-ring)] aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-visible:border-destructive aria-[invalid=true]:focus-visible:shadow-[0_0_0_3px_var(--es-error-ring)]';
 const TEXT_INPUT_SETTINGS = 'h-9 py-1 pointer-coarse:h-11 pointer-coarse:py-0 pointer-coarse:text-lg pointer-coarse:leading-6';
 const TEXT_INPUT_CONNECTION = 'h-10 py-1 px-4 text-[14px] leading-4 rounded-xl pointer-coarse:h-10 pointer-coarse:text-lg pointer-coarse:leading-6';
 /** beUI `input` anatomy (https://beui.dev/r/input): 44px pill, 14px inline padding, 16px text on every pointer. */
@@ -289,7 +289,7 @@ export const SearchField = forwardRef<HTMLInputElement, {
   name?: string; autoComplete?: string; inputMode?: InputHTMLAttributes<HTMLInputElement>['inputMode']; spellCheck?: boolean;
 }>(function SearchField({ label, value, onChange, placeholder, disabled, name, autoComplete, inputMode, spellCheck }, forwardedRef) {
   const id = useId();
-  return <label htmlFor={id} className={cn('box-border flex items-center gap-2 h-8 min-w-0 px-2.5 border border-input rounded-lg bg-surface text-sm leading-5 tracking-normal', 'transition-colors focus-within:border-ring focus-within:shadow-[0_0_0_3px_var(--es-focus-ring)] focus-within:outline-transparent', 'has-[input:disabled]:opacity-50 pointer-coarse:h-11')}>
+  return <label htmlFor={id} className={cn('box-border flex items-center gap-2 h-8 min-w-0 px-2.5 border border-field-border rounded-lg bg-surface text-sm leading-5 tracking-normal', 'transition-colors focus-within:border-ring focus-within:shadow-[0_0_0_3px_var(--es-focus-ring)] focus-within:outline-transparent', 'has-[input:disabled]:opacity-50 pointer-coarse:h-11')}>
     <span aria-hidden className="flex items-center text-muted-foreground"><Icon name="Search" purpose="action" /></span>
     <span className="sr-only">{label}</span>
     <input ref={forwardedRef} id={id} type="search" name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} className="min-w-0 w-full h-full p-0 border-0 bg-transparent text-sm leading-5 text-foreground placeholder:text-muted-foreground focus:outline-none" />

@@ -43,6 +43,7 @@
   --color-info: var(--info);
   --color-border: var(--border);
   --color-input: var(--input);
+  --color-field-border: var(--es-field-border);
   --color-ring: var(--ring);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);

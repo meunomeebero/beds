@@ -60,6 +60,7 @@ from `tokens.ts`. The light/dark palette remains stable during extraction.
 | Secondary copy and headings | `--es-secondary`, `--es-heading` |
 | Contained and subtle surfaces | `--es-surface`, `--es-subtle` |
 | Structural border and control boundary | `--es-border`, `--es-control-border` |
+| Text-entry boundary (fields, text areas, selects, OTP slots, file dropzone) | `--es-field-border`: equals `--es-control-border` by default; `DesignSystemProvider fieldBorder="soft"` makes it `--es-border` |
 | Focus | `--es-focus` |
 | Primary action | `--es-primary`, `--es-on-primary` |
 | Caller-owned branded emphasis | `--es-brand`, `--es-on-brand` |
@@ -76,6 +77,15 @@ brand color. There is no default and there are no named product presets.
 `BrandMark` contains a caller-supplied image and requires `src` and `label`.
 It contains no BEDS-owned product logo. Assets and their licenses belong to the
 app. Functional error/success states must not depend on brand color alone.
+
+`DesignSystemProvider` also accepts `fieldBorder: 'default' | 'soft'`. `default`
+keeps the functional-contrast boundary (`--es-control-border`, at least 3:1) on
+every text-entry control. `soft` is a product-level opt-in that gives fields,
+text areas, selects, OTP slots and the file dropzone the structural card border
+(`--es-border`); those controls are then identified by label, fill, placeholder
+and the focus ring instead of a high-contrast outline. Checkbox, radio and switch
+marks never soften, and focus and error borders keep their own colors. Choose
+`soft` knowingly, and record why in the product's AGENTS.md.
 
 Choose actual foreground/background pairs and inspect contrast in both themes.
 A palette value is not a contrast guarantee for every placement. Keep floating

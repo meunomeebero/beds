@@ -7,6 +7,7 @@ import {
   TextField, ThemeToggle, Tooltip, WorkspaceTrigger, geometry, neutrals, themes, typography,
   type IconName, type TextVariant, type Theme,
 } from 'beds';
+import { fieldBorderFromUrl } from './lab-options';
 import { AppShell, PageContentHeader } from './recipes';
 import './catalog.css';
 import { ChatLayout } from './recipes';
@@ -221,7 +222,7 @@ export default function Catalog() {
     replaceCatalogQuery({ brand: next });
   }
 
-  return <DesignSystemProvider theme={theme} brandColor={brand === 'orange' ? '#ffa133' : '#d0f300'} onThemeChange={changeTheme}>
+  return <DesignSystemProvider theme={theme} brandColor={brand === 'orange' ? '#ffa133' : '#d0f300'} fieldBorder={fieldBorderFromUrl()} onThemeChange={changeTheme}>
     <AppShell collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} contentWidth={view === 'chat' || view === 'decisions' ? 'chat' : view === 'empty-state' || view === 'pricing' || view === 'records' ? 'home' : view === 'feature-card' ? 'dashboard' : 'full'}
       sidebar={<>
         <SidebarHeader search={{ label: 'Buscar no catálogo', onClick: () => setNavigationSearchOpen(true) }}><AccountMenu open={accountOpen} onOpenChange={setAccountOpen} trigger={<WorkspaceTrigger name={workspace === 'workspace' ? 'Workspace' : 'Example studio'} mark={<Avatar name={workspace === 'workspace' ? 'Workspace' : 'Example studio'} purpose="workspace" />} expanded={accountOpen} onClick={() => setAccountOpen(!accountOpen)} />} identity={{ name: 'Alex Morgan', description: 'Local example', avatar: <Avatar name="Alex Morgan" /> }} actions={accountActions} onAction={id => setStatus(`Ação demonstrativa: ${accountActions.find(action => action.id === id)?.label}.`)} workspaces={[{ id: 'workspace', label: 'Workspace', mark: <Avatar name="Workspace" purpose="workspace" /> }, { id: 'studio', label: 'Example studio', mark: <Avatar name="Example studio" purpose="workspace" /> }]} activeWorkspace={workspace} onWorkspaceChange={setWorkspace} theme={theme} onThemeChange={changeTheme} allWorkspaces={{ label: 'All workspaces', onClick: () => setStatus('Os dois workspaces deste catálogo são exemplos locais.') }} footer={<PlanCard title="Example plan" usage={{ label: 'Sample units', value: 18, max: 28 }} action={{ label: 'View example', onClick: () => { setAccountOpen(false); setStatus('Plano demonstrativo: nenhuma assinatura ou compra será realizada.'); } }} />} /></SidebarHeader>
