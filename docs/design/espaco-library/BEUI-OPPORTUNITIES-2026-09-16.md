@@ -66,7 +66,7 @@ Same anatomy we already own, plus motion we never wrote.
 
 ## New capability BEDS lacks entirely
 
-`wheel-picker` `dynamic-island` `bloom-menu` `range-slider` `multi-select` `combobox` `file-tree` `infinite-masonry` `pull-to-refresh` `shader-background` `feedback-widget` `image-generation` `ai-sidebar` `chat-app` `project-folder` `card-folder`
+`wheel-picker` `dynamic-island` `bloom-menu` `range-slider` `multi-select` `combobox` `file-tree` `infinite-masonry` `pull-to-refresh` `shader-background` `feedback-widget` `image-generation` `ai-sidebar` `project-folder` `card-folder`
 
 Charts → BEDS has none. `heat-calendar` is the only broadly reusable one.
 
@@ -75,6 +75,7 @@ Charts → BEDS has none. `heat-calendar` is the only broadly reusable one.
 | Component | Source | Status |
 |---|---|---|
 | `AnimatedNumber` | `number` (MIT, `https://beui.dev/r/number/raw`, 2026-09-16) | In `foundation.tsx`, exported. Null/non-finite value never animates toward a fabricated number; reduced motion jumps to the final value; integer targets snap per frame. Not yet wired to a surface — see the ATS finding |
+| `ChatWorkspace` | `chat-app` (MIT, `https://beui.dev/r/chat-app/raw`, 2026-09-20) | In `chat-workspace.tsx`, exported. Bounded shell/transcript/composer adaptation only: controlled message IDs support incremental assistant content; stream/cancel/error/retry are supplied by the host. Raw SHA-256 `1cdd61e981ec04933357997277d99a2a5b918be1cb71c38b360bbd8b0ce8c45e`; registry metadata SHA-256 `5fa25847e0a302f34107a1bf46d35e98068ab3d79eb1861815aee648aea5325d`. No runtime beUI import, `shiki`, planning/tools/code/media/citations/sidebar or transport policy. [Contract](CHAT-WORKSPACE.md) |
 
 ## Needs owner decision before adoption
 
@@ -89,4 +90,4 @@ Charts → BEDS has none. `heat-calendar` is the only broadly reusable one.
 
 ## Not adopting
 
-`knockout-bracket` `prediction-market` `swap` `returns-calendar` `price-target-fan` → wrong domain (tournaments, trading, crypto). `chat-app`,`ai-sidebar` → whole-app compositions that would dictate our layout rather than fill a gap; harvest their parts instead.
+`knockout-bracket` `prediction-market` `swap` `returns-calendar` `price-target-fan` → wrong domain (tournaments, trading, crypto). `ai-sidebar` remains a whole-app composition that would dictate resource navigation rather than fill a named BEDS gap. The full `chat-app` remains excluded: only its bounded conversation anatomy is adopted by `ChatWorkspace`.

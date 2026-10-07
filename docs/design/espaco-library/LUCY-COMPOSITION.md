@@ -57,8 +57,10 @@ bubble border,user keeps the existing message bubble. Default bubble unchanged.
 Guided composer adds visible label,error focus and visible perimeter;empty submit
 reaches host validation. Enter submits,Shift+Enter inserts newline,IME composition
 does not submit. Default composer keeps the existing empty-disabled behavior.
-Busy disables editable state;optional cancel remains enabled. Label props localize
-controls without changing existing English defaults.
+Busy disables editable state;optional cancel remains enabled. `sendLabel` and
+`attachLabel` retain their host-owned override contract. When omitted, BEDS uses
+the PT-BR fallbacks `Enviar mensagem` and `Adicionar anexo ou contexto`; it does
+not inspect the host locale or force a product translation.
 
 ## Entry → transition → recovery
 

@@ -5,6 +5,7 @@ Independent from the legacy5282 Home/Lucy preview.
 | Route | Purpose |
 |---|---|
 |`http://127.0.0.1:5283/?view=chat` |Source-style chat composition |
+|`?view=chat-workspace` |Controlled beUI-derived transcript/composer fixture; no session, AI or network |
 |`?view=components` |Public components and contextual variants;inventory owned by the package checks |
 |`?view=tokens` |Fixed semantic colors,typography and geometry |
 |`?view=mcp` |MCP/OAuth setup composition using the same library primitives |

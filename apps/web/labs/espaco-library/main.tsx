@@ -9,6 +9,7 @@ import OtpPage from './OtpPage';
 import PagedCarouselPage from './PagedCarouselPage';
 import ToastPage from './ToastPage';
 import ConversationPage from './ConversationPage';
+import ChatWorkspacePage from './ChatWorkspacePage';
 import ApplicationCardPage from './ApplicationCardPage';
 import SettingsFormPage from './SettingsFormPage';
 import SettingsPage from './SettingsPage';
@@ -54,6 +55,7 @@ const pages: Record<string, React.ComponentType> = {
   settings: SettingsPage,
   'application-card': ApplicationCardPage,
   conversation: ConversationPage,
+  'chat-workspace': ChatWorkspacePage,
   toast: ToastPage,
   'paged-carousel': PagedCarouselPage,
   otp: OtpPage,

@@ -74,7 +74,7 @@ export function Badge({ label, tone = 'neutral', purpose = 'tag' }: { label: str
 export function StatusDot({ label, status }: { label: string; status: 'success' | 'warning' | 'error' | 'neutral' }) {
   return <span className="es-status-dot" data-status={status} role="img" aria-label={label} />;
 }
-export function Notice({ title, description, tone = 'info', onDismiss, dismissLabel = 'Dismiss notification' }: { title: string; description?: string; tone?: Exclude<Tone,'neutral'>; onDismiss?: () => void; dismissLabel?: string }) {
+export function Notice({ title, description, tone = 'info', onDismiss, dismissLabel = 'Dispensar notificação' }: { title: string; description?: string; tone?: Exclude<Tone,'neutral'>; onDismiss?: () => void; dismissLabel?: string }) {
   const id = useId();
   const glyph = tone === 'success' ? 'CheckCircle2' : tone === 'info' ? 'Info' : 'AlertCircle';
   return <div className="es-notice" data-tone={tone} role={tone === 'error' ? 'alert' : 'status'} aria-labelledby={`${id}-title`} aria-describedby={description ? `${id}-description` : undefined}>

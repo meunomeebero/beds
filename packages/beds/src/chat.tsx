@@ -26,7 +26,7 @@ const attachmentIcons: Record<ComposerAttachment['kind'], IconName> = {
   document: 'FileText', image: 'Image', spreadsheet: 'Table2', folder: 'Folder', file: 'Paperclip',
 };
 
-export function ChatComposer({ label, value, onChange, onSubmit, placeholder = 'Ask anything or @ to add context', context, tools, busy = false, disabled = false, onAttach, onCancel, error, purpose = 'default', sendLabel = 'Send message', attachLabel = 'Add attachment or context', cancelLabel = 'Stop response', attachments = [], attachmentsLabel = 'Attachments', onRemoveAttachment, attachmentPicker }: {
+export function ChatComposer({ label, value, onChange, onSubmit, placeholder = 'Ask anything or @ to add context', context, tools, busy = false, disabled = false, onAttach, onCancel, error, purpose = 'default', sendLabel = 'Enviar mensagem', attachLabel = 'Adicionar anexo ou contexto', cancelLabel = 'Stop response', attachments = [], attachmentsLabel = 'Attachments', onRemoveAttachment, attachmentPicker }: {
   label: string; value: string; onChange: (value: string) => void; onSubmit: () => void; placeholder?: string; context?: ReactNode; tools?: ReactNode; busy?: boolean; disabled?: boolean; onAttach?: () => void; onCancel?: () => void; error?: string; purpose?: 'default' | 'guided'; sendLabel?: string; attachLabel?: string; cancelLabel?: string;
   attachments?: readonly ComposerAttachment[]; attachmentsLabel?: string; onRemoveAttachment?: (id: string) => void; attachmentPicker?: ComposerAttachmentPicker;
 }) {

@@ -34,6 +34,7 @@ Canonical library: `beds`. React 19; two fixed themes; one brand color. Independ
 | Compose onboarding | [Onboarding](ONBOARDING.md): focused form,live decorative preview,controlled validation and feedback |
 | Select a resume/document | [Document upload](DOCUMENT-UPLOAD.md): illustrated drop field,local selection,recovery and full filenames |
 | Show dated entries | [Date item](DATE-ITEM.md): mini calendar,title,status and native/static rows |
+| Compose a controlled agent conversation | [Chat workspace](CHAT-WORKSPACE.md): transcript,composer,streaming and recovery presentation;no transport or policy |
 | Confirm an already-paid purchase | [Payment confirmation](PAYMENT-CONFIRMATION.md): animated paper receipt,separate invoice states and host-owned actions |
 | Show account credits | [Account credits](ACCOUNT-CREDITS.md): compact menu footer,truthful balance/limit,retry and host-owned action |
 | Show forum topics | [Forum topics](FORUM-TOPICS.md): avatar rows,unread/current state,full-text recovery and native destinations |

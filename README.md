@@ -30,6 +30,8 @@ Catalog: `http://127.0.0.1:5283/?view=components&theme=dark`.
 Curriculol landing candidate: `?view=landing&theme=light` (product demo,
 benefits, credits, FAQ and native local-preview CTAs; no production integration).
 Use `?view=lucy`, `?view=mcp`, `?view=feature-card` or `?view=tokens`.
+Chat workspace contract: [controlled transcript/composer](docs/design/espaco-library/CHAT-WORKSPACE.md); it is a package primitive only and does not call an agent service.
+Catalog fixture: `?view=chat-workspace` (controlled transcript, streaming/cancel/error/retry states; no session, AI or network).
 Settings form example: `?view=settings-form` (native Enter submission,
 caller validation/focus, light/dark; no account request).
 Global search example: `?view=search` (currículos/vagas fixtures, categories,
@@ -101,6 +103,7 @@ Wrap only explicitly migrated screens; never enclose legacy UI to simulate migra
 | [Library map](docs/design/espaco-library/README.md) | Routing and boundaries |
 | [Foundations](docs/design/espaco-library/FOUNDATIONS.md) | Approved visual values |
 | [Components](docs/design/espaco-library/COMPONENTS.md) | Public component anatomy |
+| [Chat workspace](docs/design/espaco-library/CHAT-WORKSPACE.md) | Controlled transcript, composer, streaming and recoverable error presentation |
 | [InputOTP](docs/design/espaco-library/INPUT-OTP.md) | Controlled 4/6/8 digit entry, caller-owned status, motion and evidence |
 | [Document upload](docs/design/espaco-library/DOCUMENT-UPLOAD.md) | Illustrated drop field, controlled selection and recovery |
 | [Date item](docs/design/espaco-library/DATE-ITEM.md) | Mini calendar, dated rows and optional native destinations |

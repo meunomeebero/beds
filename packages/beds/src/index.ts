@@ -21,6 +21,8 @@ export type { ResultLayoutProps, ResultScoreProps, ResultFindingsProps, ResultSe
 export { CheckoutLayout, OrderSummary, CheckoutSection } from './checkout';
 export type { CheckoutLayoutProps, OrderSummaryProps, CheckoutSectionProps } from './checkout';
 export { Conversation, ConversationBubble, ChatLayout, ChatComposer, SuggestionRow, ChatMessage, ChatThread, ChatOptions, type ChatOption, type ComposerAttachment, type ComposerAttachmentPicker } from './chat';
+export { ChatWorkspace } from './chat-workspace';
+export type { ChatWorkspaceProps, ChatWorkspaceMessage, ChatWorkspaceError } from './chat-workspace';
 export { CodeSnippet, type CodeSnippetMessages } from './technical';
 export { FeatureCard, type FeatureCardProps } from './feature-card';
 export { Onboarding, type OnboardingProps } from './onboarding';
