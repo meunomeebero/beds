@@ -163,7 +163,7 @@ generated. Elegant restraint with one confident accent beats decoration.
 | Header, footer and link-list items | `TextLink purpose="nav"` (URL) or `LinkButton purpose="nav"` (in-page action): no underline at rest, a drawn underline on hover and keyboard focus |
 | Links inside prose | `TextLink` (default `inline`), always underlined |
 | A handwritten note pointing at the CTA | `HandDrawnArrow` with a short note |
-| Modal content | `Dialog`: quiet fade and slight scale, no morph. Do not add a second entrance animation around it |
+| Modal content | `Dialog`: quiet fade and slight scale by default, no morph. `motionPreset="elastic"` opts into a bounded 260ms spring with 4px lift and .97→1 scale. Do not add a second entrance animation around it |
 | Highlighter, rotating headline, avatar stack | App-owned for now; see [Promotion candidates](PROMOTION-CANDIDATES.md) |
 
 ## Typography

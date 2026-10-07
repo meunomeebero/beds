@@ -3,6 +3,7 @@ import { Button, DesignSystemProvider, Dialog, Text, TextField, TextAreaField } 
 import 'beds/styles.css';
 
 export default function DialogHarness() {
+  const motionPreset = new URLSearchParams(location.search).get('motionPreset') === 'elastic' ? 'elastic' : 'default';
   const [open, setOpen] = useState(false);
   const [nestedOpen, setNestedOpen] = useState(false);
   const [rejectClose, setRejectClose] = useState(false);
@@ -50,7 +51,7 @@ export default function DialogHarness() {
       <Button label={rejectClose ? 'Allow close' : 'Reject close'} onClick={() => setRejectClose(value => !value)} />
       <Button label={delayedClose ? 'Commit close immediately' : 'Delay close'} onClick={() => setDelayedClose(value => !value)} />
       <p data-testid="dialog-status">{status}</p>
-      <Dialog open={open} onOpenChange={handleOpenChange} title="Harness dialog" description="Controlled lifecycle probe." actions={<Button label="Commit action" onClick={() => handleOpenChange(false)} />}>
+      <Dialog open={open} onOpenChange={handleOpenChange} title="Harness dialog" description="Controlled lifecycle probe." motionPreset={motionPreset} actions={<Button label="Commit action" onClick={() => handleOpenChange(false)} />}>
         <Text>Primary dialog content.</Text>
         <TextField label="Draft title" value={draft} onChange={setDraft} />
         <TextAreaField label="Draft body" value={draft} onChange={setDraft} />
@@ -59,7 +60,7 @@ export default function DialogHarness() {
         <Button label="Remove trigger" onClick={() => setTriggerRemoved(true)} />
         <Button label="Reopen during exit" onClick={reopenDuringExit} />
         <Button label="Open nested dialog" onClick={() => { setNestedOpen(true); setStatus('nested-open'); }} />
-        <Dialog open={nestedOpen} onOpenChange={value => { setNestedOpen(value); setStatus(value ? 'nested-open' : 'open'); }} title="Nested harness dialog">
+        <Dialog open={nestedOpen} onOpenChange={value => { setNestedOpen(value); setStatus(value ? 'nested-open' : 'open'); }} title="Nested harness dialog" motionPreset={motionPreset}>
           <Text>Nested dialog content.</Text>
         </Dialog>
       </Dialog>

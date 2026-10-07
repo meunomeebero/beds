@@ -29,3 +29,13 @@ test('manifest never advertises styling escapes and lists declared tokens', () =
   for (const entry of manifest.components) for (const prop of entry.props) assert.ok(!['className', 'style'].includes(prop.name), `${entry.name}.${prop.name}`);
   for (const token of ['--es-brand', '--es-brand-ink', '--font-hand']) assert.ok(manifest.tokens.includes(token), token);
 });
+
+test('modal motion is a bounded optional preset, not an arbitrary transition API', () => {
+  for (const name of ['Dialog', 'Drawer']) {
+    const props = component(name).props;
+    const preset = props.find(prop => prop.name === 'motionPreset');
+    assert.equal(preset?.required, false, name);
+    assert.deepEqual(preset?.values, ['default', 'elastic'], name);
+    assert.equal(props.some(prop => ['transition', 'initial', 'animate', 'duration', 'bounce'].includes(prop.name)), false, name);
+  }
+});
