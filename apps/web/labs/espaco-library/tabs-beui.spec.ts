@@ -132,6 +132,21 @@ for (const theme of ['light', 'dark'] as const) {
       await expect(fixture.getByRole('tab', { name: 'Expanded', exact: true })).toHaveCount(0);
     });
 
+    test('connection tabs own their transparent surface and muted idle text without a host reset', async ({ page }) => {
+      const tabs = page.getByRole('tablist', { name: 'Clientes do exemplo' });
+      await expect(tabs).toBeVisible();
+      const styles = await tabs.getByRole('tab').evaluateAll(elements => elements.map(element => {
+        (element as HTMLElement).style.transition = 'none';
+        const style = getComputedStyle(element);
+        return { selected: element.getAttribute('aria-selected') === 'true', background: style.backgroundColor, color: style.color };
+      }));
+      const idle = styles.filter(style => !style.selected);
+      const active = styles.find(style => style.selected);
+      expect(idle.length).toBeGreaterThan(0);
+      for (const style of styles) expect(style.background).toBe('rgba(0, 0, 0, 0)');
+      for (const style of idle) expect(style.color).not.toBe(active?.color);
+    });
+
     test('keeps tab lanes bounded at supported widths', async ({ page }) => {
       for (const width of [320, 360, 390, 768, 1280, 1440]) {
         await page.setViewportSize({ width, height: 900 });

@@ -120,3 +120,20 @@ test('Portuguese copy feedback recovers without clipped keyboard focus', async (
   await expect(live).toContainText('Copiado para a área de transferência');
   await expect(page.getByRole('alert')).toHaveCount(0);
 });
+
+test('code snippets keep every monospace cell, including spaces before CLI flags', async ({ page }) => {
+  await ready(page, 'light');
+  const cells = await page.locator('.es-code-snippet>code').first().evaluate(code => {
+    const measure = (text: string) => {
+      const probe = document.createElement('span');
+      probe.style.whiteSpace = 'pre';
+      probe.textContent = text;
+      code.appendChild(probe);
+      const width = probe.getBoundingClientRect().width;
+      probe.remove();
+      return width;
+    };
+    return { cell: measure('a'), flag: measure(' --') };
+  });
+  expect(cells.flag).toBeCloseTo(cells.cell * 3, 1);
+});
