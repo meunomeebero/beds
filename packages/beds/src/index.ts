@@ -46,4 +46,4 @@ export { Toaster, toast, dismissToast } from './toast';
 export type { ToastInput, ToastTone, ToastAction } from './toast';
 export { ApplicationCard, ResultsStatus, CollectionToolbar } from './application-card';
 export type { ApplicationCardProps, ApplicationScore } from './application-card';
-export { ApplicationBoard, type ApplicationBoardColumn, type ApplicationBoardItem } from './application-board';
+export { ApplicationBoard, type ApplicationBoardColumn, type ApplicationBoardDestination, type ApplicationBoardItem } from './application-board';

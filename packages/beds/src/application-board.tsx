@@ -18,10 +18,15 @@ export type ApplicationBoardColumn = {
   items: readonly ApplicationBoardItem[];
 };
 
+/** Host-owned destinations may include statuses that do not have a visible board column. */
+export type ApplicationBoardDestination = { id: string; label: string };
+
 /** Controlled board. Moving requests a host update; it never sends an application. */
-export function ApplicationBoard({ label, columns, onMove, announcement = '', emptyLabel = 'Nenhuma vaga nesta etapa' }: {
+export function ApplicationBoard({ label, columns, destinations, onMove, announcement = '', emptyLabel = 'Nenhuma vaga nesta etapa' }: {
   label: string;
   columns: readonly ApplicationBoardColumn[];
+  /** Optional host catalog. Without it, visible columns preserve the legacy destination fallback. */
+  destinations?: readonly ApplicationBoardDestination[];
   onMove?: (itemId: string, columnId: string) => void;
   /** Host-confirmed update or recovery copy, not an optimistic success. */
   announcement?: string;
@@ -30,8 +35,10 @@ export function ApplicationBoard({ label, columns, onMove, announcement = '', em
   const id = useId();
   const viewport = useRef<HTMLDivElement>(null);
   const cards = useRef(new Map<string, HTMLLIElement>());
-  const pendingFocus = useRef<{ itemId: string; columnId: string } | null>(null);
+  const headings = useRef(new Map<string, HTMLHeadingElement>());
+  const pendingFocus = useRef<{ itemId: string; sourceColumnId: string; destinationId: string } | null>(null);
   const [overflows, setOverflows] = useState(false);
+  const destinationCatalog = destinations ?? columns.map(column => ({ id: column.id, label: column.label }));
 
   useLayoutEffect(() => {
     const element = viewport.current;
@@ -47,14 +54,19 @@ export function ApplicationBoard({ label, columns, onMove, announcement = '', em
   useLayoutEffect(() => {
     const pending = pendingFocus.current;
     if (!pending) return;
-    const hasMoved = columns.some(column => column.id === pending.columnId && column.items.some(item => item.id === pending.itemId));
-    if (!hasMoved) return;
     const card = cards.current.get(pending.itemId);
     // A delayed host update must not steal focus from another task/control.
     if (document.activeElement === document.body || card?.contains(document.activeElement)) {
-      const target = card?.querySelector<HTMLButtonElement>('.es-dropdown > button') ?? card?.querySelector<HTMLButtonElement>('h3 > button');
-      target?.focus({ preventScroll: true });
-      target?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      const reachedDestination = columns.some(column => column.id === pending.destinationId && column.items.some(item => item.id === pending.itemId));
+      if (reachedDestination && card) {
+        const target = card.querySelector<HTMLButtonElement>('.es-dropdown > button') ?? card.querySelector<HTMLButtonElement>('h3 > button');
+        target?.focus({ preventScroll: true });
+        target?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      } else if (!card) {
+        const fallback = headings.current.get(pending.sourceColumnId);
+        fallback?.focus({ preventScroll: true });
+        fallback?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      }
     }
     pendingFocus.current = null;
   }, [columns]);
@@ -63,18 +75,18 @@ export function ApplicationBoard({ label, columns, onMove, announcement = '', em
     <div ref={viewport} className="es-application-board-viewport" role="region" aria-label={label} tabIndex={overflows ? 0 : undefined}>
       {columns.map((column, index) => <section key={column.id} className="es-application-board-column" aria-labelledby={`${id}-${index}`}>
         <header className="es-application-board-heading">
-          <h2 id={`${id}-${index}`}><Badge label={column.label} tone={column.tone} purpose="status" /></h2>
+          <h2 id={`${id}-${index}`} tabIndex={-1} ref={element => { if (element) headings.current.set(column.id, element); else headings.current.delete(column.id); }}><Badge label={column.label} tone={column.tone} purpose="status" /></h2>
           <span className="es-application-board-count">{column.items.length}<span className="es-visually-hidden"> {column.items.length === 1 ? 'vaga' : 'vagas'}</span></span>
         </header>
         {column.items.length === 0 ? <p className="es-application-board-empty">{column.emptyLabel ?? emptyLabel}</p> : <ul className="es-application-board-list">
           {column.items.map(({ id: itemId, moveTo, ...card }) => {
-            const editable = Boolean(onMove && moveTo?.some(target => target !== column.id && columns.some(item => item.id === target)));
-            const options = columns.filter(target => target.id === column.id || moveTo?.includes(target.id)).map(target => ({ id: target.id, label: target.label }));
+            const options = destinationCatalog.filter(destination => destination.id !== column.id && moveTo?.includes(destination.id));
+            const editable = Boolean(onMove && options.length > 0);
             return <li key={itemId} ref={element => { if (element) cards.current.set(itemId, element); else cards.current.delete(itemId); }}>
               <ApplicationCard {...card} purpose="kanban" status={{ id: column.id, label: column.label, tone: column.tone }} statusOptions={editable ? options : undefined}
                 onStatusChange={editable ? target => {
-                  if (target === column.id || !moveTo?.includes(target) || !columns.some(item => item.id === target)) return;
-                  pendingFocus.current = { itemId, columnId: target };
+                  if (!options.some(option => option.id === target)) return;
+                  pendingFocus.current = { itemId, sourceColumnId: column.id, destinationId: target };
                   onMove?.(itemId, target);
                 } : undefined} />
             </li>;
