@@ -1,9 +1,49 @@
-import { expect, test, type Page } from '@playwright/test';
+import { createServer, type ViteDevServer } from 'vite';
+import react from '@vitejs/plugin-react';
+import { mkdtemp, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { expect, test, type Page } from '@playwright/test';
 
 const evidence = fileURLToPath(new URL('./evidence/blog-post/', import.meta.url));
+const repoRoot = fileURLToPath(new URL('../../../../', import.meta.url));
 const feed = (page: Page) => page.getByRole('list', { name: 'Artigos de demonstração' });
 const firstTitle = 'Um currículo que conta a sua história';
+
+async function renderEmptyList() {
+  const cacheDir = await mkdtemp(join(tmpdir(), 'beds-ber52-blog-'));
+  let server: ViteDevServer | undefined;
+  try {
+    let cssModuleId = 0;
+    server = await createServer({
+      root: repoRoot,
+      configFile: false,
+      cacheDir,
+      plugins: [react(), {
+        name: 'ber52-blog-css-stub',
+        enforce: 'pre',
+        resolveId(source) { return source.endsWith('.css') ? `\0ber52-blog-css-${cssModuleId++}` : undefined; },
+        load(id) { return id.startsWith('\0ber52-blog-css-') ? 'export default {};' : undefined; },
+      }],
+      resolve: { dedupe: ['react', 'react-dom'] },
+    });
+    const module = await server.ssrLoadModule('/packages/beds/src/index.ts') as Record<string, any>;
+    return renderToStaticMarkup(React.createElement(module.BlogPostList, { label: 'Artigos vazios' }));
+  } finally {
+    if (server) await server.close();
+    await rm(cacheDir, { recursive: true, force: true });
+  }
+}
+
+async function assertListContract(page: Page, expectedInteractiveCounts: number[]) {
+  const list = feed(page);
+  await expect(list.locator(':scope>li')).toHaveCount(expectedInteractiveCounts.length);
+  expect(await list.locator(':scope>li').evaluateAll(items => items.map(item => item.querySelectorAll('a,button,input,select,textarea,[tabindex]:not([tabindex="-1"])').length))).toEqual(expectedInteractiveCounts);
+  await expect(list.locator('a a,a button,button a,button button')).toHaveCount(0);
+}
 
 async function contrast(page: Page) {
   return feed(page).locator('h2,p,time,bdi,.es-blog-post-meta>span,.es-blog-post-tags>li').evaluateAll(elements => elements.map(element => {
@@ -18,10 +58,19 @@ async function contrast(page: Page) {
   }));
 }
 
+test('SSR keeps an empty public list named with no list items', async () => {
+  const markup = await renderEmptyList();
+  expect(markup).toContain('<ul');
+  expect(markup).toContain('aria-label="Artigos vazios"');
+  expect(markup.match(/<li\b/g) ?? []).toHaveLength(0);
+});
+
 test('catalog entry, native article links, semantic metadata and full text recovery', async ({ page, context }, info) => {
   const errors: string[] = [];
+  const consoleMessages: string[] = [];
   const writes: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
+  page.on('console', message => { if (message.type() === 'warning' || message.type() === 'error') consoleMessages.push(message.text()); });
   page.on('request', request => { if (request.method() !== 'GET') writes.push(request.url()); });
   for (const theme of ['light', 'dark']) {
     await page.goto('/?view=chat&theme=' + theme);
@@ -29,7 +78,7 @@ test('catalog entry, native article links, semantic metadata and full text recov
     await page.getByRole('link', { name: 'Posts do blog', exact: true }).click();
     const links = feed(page).getByRole('link');
     await expect(links).toHaveCount(3);
-    await expect(feed(page).locator(':scope>li')).toHaveCount(3);
+    await assertListContract(page, [1, 1, 1]);
     await expect(feed(page).getByRole('heading', { level: 2 })).toHaveCount(3);
     await expect(feed(page).locator('time').first()).toHaveAttribute('datetime', '2026-09-15');
     await expect(feed(page).getByRole('img')).toHaveCount(0);
@@ -58,6 +107,7 @@ test('catalog entry, native article links, semantic metadata and full text recov
     await popup.close();
   }
   expect(errors).toEqual([]);
+  expect(consoleMessages).toEqual([]);
   expect(writes).toEqual([]);
 });
 

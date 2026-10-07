@@ -6,6 +6,10 @@ const evidence = fileURLToPath(new URL('./evidence/drawer/', import.meta.url));
 const launch = async (page: Page) => {
   await page.getByRole('button', { name: 'Ver detalhes', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Fechar detalhes' })).toBeFocused();
+  await expect.poll(() => page.locator('.es-drawer').evaluate(element => {
+    const transform = getComputedStyle(element).transform;
+    return transform === 'none' || transform === 'matrix(1, 0, 0, 1, 0, 0)';
+  })).toBe(true);
 };
 const scenario = async (page: Page, label: string) => {
   await page.getByRole('button', { name: 'Estado da demonstração' }).click();
@@ -26,6 +30,7 @@ test('drawer entry, local save, keyboard containment, nested dialog and focus re
   await page.getByRole('button', { name: 'Ver origem' }).click();
   const nested = page.getByRole('dialog', { name: 'Origem da oportunidade' });
   await expect(nested).toBeVisible();
+  await expect(nested.locator(':scope > .es-dialog-surface')).toHaveAttribute('data-phase', 'settled');
   await page.keyboard.press('Tab');
   await expect(nested.getByRole('button', { name: 'Fechar', exact: true })).toBeFocused();
   await page.keyboard.press('Escape');

@@ -16,6 +16,20 @@ import RecordExamples from './RecordExamples';
 
 type View = 'chat' | 'components' | 'tokens' | 'feature-card' | 'empty-state' | 'decisions' | 'pricing' | 'records';
 const views: { id: View; label: string; icon: IconName }[] = [{ id: 'chat', label: 'Chat', icon: 'MessageSquare' }, { id: 'components', label: 'Componentes', icon: 'Plug' }, { id: 'tokens', label: 'Tokens', icon: 'Settings2' }, { id: 'feature-card', label: 'Card de apresentação', icon: 'FileText' }, { id: 'empty-state', label: 'Estado vazio', icon: 'Inbox' }, { id: 'decisions', label: 'Perguntas e aprovações', icon: 'ShieldCheck' }, { id: 'pricing', label: 'Precificação', icon: 'CreditCard' }, { id: 'records', label: 'Dados e opções', icon: 'Folder' }];
+
+function catalogHref(view: string, theme: Theme) {
+  const params = new URLSearchParams(window.location.search);
+  params.set('view', view);
+  params.set('theme', theme);
+  return `?${params.toString()}`;
+}
+
+function replaceCatalogQuery(updates: Record<string, string>) {
+  const url = new URL(window.location.href);
+  for (const [key, value] of Object.entries(updates)) url.searchParams.set(key, value);
+  window.history.replaceState(null, '', url);
+}
+
 const accountActions: { id: string; label: string; icon: IconName }[] = [{ id: 'settings', label: 'Account settings', icon: 'Settings2' }, { id: 'integrations', label: 'Integrations', icon: 'Plug' }, { id: 'support', label: 'Support', icon: 'CircleHelp' }, { id: 'sign-out', label: 'Sign Out', icon: 'LogOut' }];
 const textExamples: { variant: TextVariant; label: string }[] = [
   { variant: 'page-title', label: 'Page title · 16 / 20' }, { variant: 'section-title', label: 'Section title · 13 / 20' },
@@ -36,7 +50,38 @@ function Demo({ title, description, children }: { title: string; description?: s
   return <Surface><Stack><SectionHeader title={title} description={description} />{children}</Stack></Surface>;
 }
 
-function ComponentsView({ announce }: { announce: (message: string) => void }) {
+function SegmentedControlRegressionFixture() {
+  const [delayed, setDelayed] = useState('first');
+  const [rejected, setRejected] = useState('first');
+  const [rejectedThenPointer, setRejectedThenPointer] = useState('first');
+  const [rejectNext, setRejectNext] = useState(true);
+  const [regular, setRegular] = useState('first');
+  const [sibling, setSibling] = useState('first');
+  const [longLabel, setLongLabel] = useState('short');
+  const [oversizedLabel, setOversizedLabel] = useState('short');
+  const acceptLater = (next: string) => { window.setTimeout(() => setDelayed(next), 180); };
+  const rejectOnceThenAccept = (next: string) => { if (rejectNext) { setRejectNext(false); return; } setRejectedThenPointer(next); };
+  return <div className="w-[calc(100vw-32px)] min-w-0 max-w-full" role="region" aria-label="BER-10 regression fixtures" data-testid="ber10-fixture"><Text variant="section-title">BER-10 regression fixtures</Text><Text tone="secondary">Synthetic states.</Text><SegmentedControl label="BER-10 disabled skip" value={regular} options={[{ id: 'first', label: 'First' }, { id: 'blocked', label: 'Blocked', disabled: true }, { id: 'last', label: 'Last' }]} onChange={setRegular} /><SegmentedControl label="BER-10 delayed acceptance" value={delayed} options={[{ id: 'first', label: 'First' }, { id: 'second', label: 'Second' }]} onChange={acceptLater} /><SegmentedControl label="BER-10 rejection" value={rejected} options={[{ id: 'first', label: 'First' }, { id: 'second', label: 'Second' }]} onChange={() => setRejected('first')} /><SegmentedControl label="BER-10 rejected keyboard then pointer" value={rejectedThenPointer} options={[{ id: 'first', label: 'First' }, { id: 'second', label: 'Second' }]} onChange={rejectOnceThenAccept} /><SegmentedControl label="BER-10 sibling instance" value={sibling} options={[{ id: 'first', label: 'First' }, { id: 'second', label: 'Second' }]} onChange={setSibling} /><SegmentedControl label="BER-10 long labels" variant="joined" value={longLabel} options={[{ id: 'short', label: 'Short' }, { id: 'middle', label: 'Long localized choice' }, { id: 'long', label: 'Another localized choice' }]} onChange={setLongLabel} /><SegmentedControl label="BER-10 oversized label" value={oversizedLabel} options={[{ id: 'short', label: 'Short' }, { id: 'long', label: 'An intentionally oversized localized label wider than the narrow lane' }]} onChange={setOversizedLabel} /></div>;
+}
+
+function TabsRegressionFixture() {
+  const [pointer, setPointer] = useState('first');
+  const [delayed, setDelayed] = useState('first');
+  const [rejected, setRejected] = useState('first');
+  const [rejectNext, setRejectNext] = useState(true);
+  const [rejectionCalls, setRejectionCalls] = useState(0);
+  const [detailZero, setDetailZero] = useState('first');
+  const [detailZeroRejected, setDetailZeroRejected] = useState(false);
+  const [detailZeroCalls, setDetailZeroCalls] = useState(0);
+  const [extra, setExtra] = useState(false);
+  const items = [{ id: 'first', label: 'First', content: <Text>First panel content.</Text> }, { id: 'second', label: 'Second', content: <Text>Second panel content.</Text> }, { id: 'blocked', label: 'Blocked', disabled: true, content: <Text>Blocked panel content.</Text> }, ...(extra ? [{ id: 'expanded', label: 'Expanded', content: <Text>Expanded panel content.</Text> }] : [])];
+  const acceptLater = (next: string) => { window.setTimeout(() => setDelayed(next), 180); };
+  const rejectOnceThenAccept = (next: string) => { setRejectionCalls(current => current + 1); if (rejectNext) { setRejectNext(false); return; } setRejected(next); };
+  const rejectSpaceThenAcceptDetailZero = (next: string) => { setDetailZeroCalls(current => current + 1); if (!detailZeroRejected) { setDetailZeroRejected(true); return; } setDetailZero(next); };
+  return <div className="w-[calc(100vw-32px)] min-w-0 max-w-full" role="region" aria-label="BER-11 regression fixtures" data-testid="ber11-fixture"><Text variant="section-title">BER-11 regression fixtures</Text><Text tone="secondary">Synthetic controlled, rejection and motion states.</Text><Button label={extra ? 'Remover aba de teste' : 'Adicionar aba de teste'} compact onClick={() => setExtra(current => !current)} /><span data-testid="ber11-rejection-calls">{rejectionCalls}</span><span data-testid="ber11-detail-zero-calls">{detailZeroCalls}</span><Tabs label="BER-11 pointer motion" value={pointer} items={items} onChange={setPointer} /><Tabs label="BER-11 delayed acceptance" value={delayed} items={items} onChange={acceptLater} /><Tabs label="BER-11 rejection" value={rejected} items={items} onChange={rejectOnceThenAccept} /><Tabs label="BER-11 detail-zero rejection" value={detailZero} items={items} onChange={rejectSpaceThenAcceptDetailZero} /><Tabs label="BER-11 sibling instance" value="first" items={items} onChange={() => undefined} /></div>;
+}
+
+function ComponentsView({ announce, ber10, ber11, theme }: { announce: (message: string) => void; ber10?: boolean; ber11?: boolean; theme: Theme }) {
   const [name, setName] = useState('Projeto exemplo');
   const [notes, setNotes] = useState('Um exemplo local, sem dados da conta de referência.');
   const [query, setQuery] = useState('');
@@ -68,12 +113,14 @@ function ComponentsView({ announce }: { announce: (message: string) => void }) {
 
   return <div className="esl-document"><Stack gap="section">
     <PageHeader title="Componentes" description="Peças reutilizáveis, com dimensões fixas e estados que você pode conferir. Ações e dados desta página são demonstrativos." />
+    {ber10 && <SegmentedControlRegressionFixture />}
+    {ber11 && <TabsRegressionFixture />}
     <section><Stack><SectionHeader title="Fundação e estrutura" description="Inter, hierarquia compacta, ícones por função e uma única cor de marca configurável." />
       <div className="esl-demo-grid">
         <Demo title="Text"><Stack gap="tight">{textExamples.map(item => <Text key={item.variant} variant={item.variant}>{item.label}</Text>)}</Stack></Demo>
         <Demo title="Icon · Avatar · BrandMark"><Stack><Inline><Icon name="Home" purpose="navigation" /><Icon name="Plus" purpose="action" /><Icon name="ChevronRight" purpose="small" /><Icon name="Sparkles" purpose="feature" /></Inline><Inline><Avatar name="Alex Morgan" /><Avatar name="Workspace" purpose="workspace" /><BrandMark label="Marca do exemplo" /></Inline><Text tone="secondary">Ícones: 14 / 16 / 12 / 20 px. Avatar: 28 px. Marca: 18 px.</Text><ThemeToggle /></Stack></Demo>
       </div>
-      <Demo title="ContentHeader · Breadcrumbs"><ContentHeader actions={<IconButton label="Ação do cabeçalho" icon="MoreHorizontal" onClick={() => announce('Ação do cabeçalho demonstrada.')} />}><Breadcrumbs label="Caminho demonstrativo" items={[{ id: 'library', label: 'Biblioteca', href: '?view=components' }, { id: 'current', label: 'Componente' }]} /></ContentHeader></Demo>
+      <Demo title="ContentHeader · Breadcrumbs"><ContentHeader actions={<IconButton label="Ação do cabeçalho" icon="MoreHorizontal" onClick={() => announce('Ação do cabeçalho demonstrada.')} />}><Breadcrumbs label="Caminho demonstrativo" items={[{ id: 'library', label: 'Biblioteca', href: catalogHref('components', theme) }, { id: 'current', label: 'Componente' }]} /></ContentHeader></Demo>
       <Demo title="PageContentHeader"><PageContentHeader title="Identidade da página" description="Cabeçalho medido para uma tela com título, contexto e ação." leading={<Icon name="Plug" purpose="feature" />} actions={<Button label="Ação" compact onClick={() => announce('Ação de cabeçalho demonstrada.')} />} /></Demo>
       <Demo title="Stack · Inline · Divider · Surface"><Stack><Inline align="between"><Text>Alinhamento e espaçamento</Text><Badge label="16 px" /></Inline><Divider /><Surface role="subtle"><Text tone="secondary">Superfície sutil</Text></Surface><Surface role="raised"><Text>Superfície elevada</Text></Surface></Stack></Demo>
       <Demo title="ResponsiveGrid" description="Duas colunas relacionadas no desktop; uma coluna no breakpoint compartilhado."><ResponsiveGrid><Surface role="subtle"><Stack gap="tight"><Text variant="section-title">Primeiro painel</Text><Text tone="secondary">A grade não cria estado nem interação próprios.</Text><Button label="Abrir primeiro painel" compact onClick={() => announce('Primeiro painel da grade acionado.')} /></Stack></Surface><Surface role="raised"><Stack gap="tight"><Text variant="section-title">Segundo painel</Text><Text tone="secondary">Filhos preservam a semântica e o foco que já possuem.</Text><Button label="Abrir segundo painel" compact onClick={() => announce('Segundo painel da grade acionado.')} /></Stack></Surface></ResponsiveGrid></Demo>
@@ -107,7 +154,7 @@ function ComponentsView({ announce }: { announce: (message: string) => void }) {
 
     <section><Stack><SectionHeader title="Feedback" description="Estado, resultado, erro e ausência de dados ficam explícitos sem depender apenas da cor." />
       <Demo title="Badge · StatusDot · Notice"><Stack><Inline>{(['neutral', 'success', 'warning', 'error', 'info'] as const).map(tone => <Badge key={tone} label={tone} tone={tone} />)}</Inline><Inline><StatusDot label="Disponível" status="success" /><StatusDot label="Atenção" status="warning" /><StatusDot label="Erro" status="error" /><StatusDot label="Inativo" status="neutral" /></Inline>{noticeVisible ? <Notice title="Estado demonstrativo" description="Esta mensagem pode ser dispensada." tone="info" onDismiss={() => setNoticeVisible(false)} /> : <Button label="Mostrar aviso" onClick={() => setNoticeVisible(true)} />}</Stack></Demo>
-      <div className="esl-demo-grid"><Demo title="ProgressBar · SegmentedMeter"><Stack><ProgressBar label="Progresso do exemplo" value={value} tone="brand" /><SegmentedMeter label="Medidor neutro" value={value} /><SegmentedMeter label="Medidor de marca" value={value} tone="brand" /><SegmentedMeter label="Medidor de uso" value={value} tone="success" /><Inline><Button label="Zero" compact onClick={() => setValue(0)} /><Button label="Máximo" compact onClick={() => setValue(100)} /><Button label="Sem dado" compact onClick={() => setValue(null)} /><Button label="68 de 100" compact onClick={() => setValue(68)} /></Inline></Stack></Demo><Demo title="Metric · LoadingIndicator · Skeleton"><Stack><Metric label="Valor ilustrativo" value="128" description="Sem vínculo com dados reais." /><LoadingIndicator label="Carregamento demonstrativo" /><Skeleton purpose="line" /><Skeleton purpose="avatar" /><Skeleton purpose="card" /></Stack></Demo></div>
+      <div className="esl-demo-grid"><Demo title="ProgressBar · SegmentedMeter"><Stack><ProgressBar label="Progresso do exemplo" value={value} tone="brand" /><SegmentedMeter label="Medidor neutro" value={value} /><SegmentedMeter label="Medidor de marca" value={value} tone="brand" /><SegmentedMeter label="Medidor de uso" value={value} tone="success" /><Inline><Button label="Zero" compact onClick={() => setValue(0)} /><Button label="Máximo" compact onClick={() => setValue(100)} /><Button label="Sem dado" compact onClick={() => setValue(null)} /><Button label="68 de 100" compact onClick={() => setValue(68)} /></Inline></Stack></Demo><Demo title="Metric · LoadingIndicator · Skeleton"><Stack><Metric label="Valor ilustrativo" value="128" numericValue={128} formatValue={metricValue => metricValue.toLocaleString('pt-BR')} description="Sem vínculo com dados reais." /><LoadingIndicator label="Carregamento demonstrativo" /><Skeleton purpose="line" /><Skeleton purpose="avatar" /><Skeleton purpose="card" /></Stack></Demo></div>
       <Demo title="EmptyState"><EmptyState title="Nenhum item neste exemplo" description="Adicione um item para conferir a ação de recuperação." icon="Folder" action={{ label: 'Adicionar item de exemplo', onClick: () => announce('Item de exemplo adicionado localmente.') }} /></Demo>
     </Stack></section>
 
@@ -135,6 +182,8 @@ function TokensView({ theme }: { theme: Theme }) {
 export default function Catalog() {
   const initial = new URLSearchParams(window.location.search);
   const initialView = initial.get('view');
+  const ber10 = initial.get('ber10') === '1';
+  const ber11 = initial.get('ber11') === '1';
   const [view, setView] = useState<View>(initialView === 'components' || initialView === 'tokens' || initialView === 'feature-card' || initialView === 'empty-state' || initialView === 'decisions' || initialView === 'pricing' || initialView === 'records' ? initialView : 'chat');
   const [theme, setTheme] = useState<Theme>(initial.get('theme') === 'light' ? 'light' : 'dark');
   const [brand, setBrand] = useState<'reference' | 'curriculol'>(initial.get('brand') === 'curriculol' ? 'curriculol' : 'reference');
@@ -153,13 +202,23 @@ export default function Catalog() {
 
   function navigate(next: View) {
     setView(next); setMobileOpen(false); setStatus('');
-    const url = new URL(window.location.href); url.searchParams.set('view', next); window.history.replaceState(null, '', url);
+    replaceCatalogQuery({ view: next });
   }
 
-  return <DesignSystemProvider theme={theme} brandColor={brands[brand]} onThemeChange={setTheme}>
+  function changeTheme(next: Theme) {
+    setTheme(next);
+    replaceCatalogQuery({ theme: next });
+  }
+
+  function changeBrand(next: 'reference' | 'curriculol') {
+    setBrand(next);
+    replaceCatalogQuery({ brand: next });
+  }
+
+  return <DesignSystemProvider theme={theme} brandColor={brands[brand]} onThemeChange={changeTheme}>
     <AppShell collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} contentWidth={view === 'chat' || view === 'decisions' ? 'chat' : view === 'empty-state' || view === 'pricing' || view === 'records' ? 'home' : view === 'feature-card' ? 'dashboard' : 'full'}
       sidebar={<>
-        <SidebarHeader search={{ label: 'Buscar no catálogo', onClick: () => setNavigationSearchOpen(true) }}><AccountMenu open={accountOpen} onOpenChange={setAccountOpen} trigger={<WorkspaceTrigger name={workspace === 'workspace' ? 'Workspace' : 'Example studio'} mark={<Avatar name={workspace === 'workspace' ? 'Workspace' : 'Example studio'} purpose="workspace" />} expanded={accountOpen} onClick={() => setAccountOpen(!accountOpen)} />} identity={{ name: 'Alex Morgan', description: 'Local example', avatar: <Avatar name="Alex Morgan" /> }} actions={accountActions} onAction={id => setStatus(`Ação demonstrativa: ${accountActions.find(action => action.id === id)?.label}.`)} workspaces={[{ id: 'workspace', label: 'Workspace', mark: <Avatar name="Workspace" purpose="workspace" /> }, { id: 'studio', label: 'Example studio', mark: <Avatar name="Example studio" purpose="workspace" /> }]} activeWorkspace={workspace} onWorkspaceChange={setWorkspace} theme={theme} onThemeChange={setTheme} allWorkspaces={{ label: 'All workspaces', onClick: () => setStatus('Os dois workspaces deste catálogo são exemplos locais.') }} footer={<PlanCard title="Example plan" usage={{ label: 'Sample units', value: 18, max: 28 }} action={{ label: 'View example', onClick: () => { setAccountOpen(false); setStatus('Plano demonstrativo: nenhuma assinatura ou compra será realizada.'); } }} />} /></SidebarHeader>
+        <SidebarHeader search={{ label: 'Buscar no catálogo', onClick: () => setNavigationSearchOpen(true) }}><AccountMenu open={accountOpen} onOpenChange={setAccountOpen} trigger={<WorkspaceTrigger name={workspace === 'workspace' ? 'Workspace' : 'Example studio'} mark={<Avatar name={workspace === 'workspace' ? 'Workspace' : 'Example studio'} purpose="workspace" />} expanded={accountOpen} onClick={() => setAccountOpen(!accountOpen)} />} identity={{ name: 'Alex Morgan', description: 'Local example', avatar: <Avatar name="Alex Morgan" /> }} actions={accountActions} onAction={id => setStatus(`Ação demonstrativa: ${accountActions.find(action => action.id === id)?.label}.`)} workspaces={[{ id: 'workspace', label: 'Workspace', mark: <Avatar name="Workspace" purpose="workspace" /> }, { id: 'studio', label: 'Example studio', mark: <Avatar name="Example studio" purpose="workspace" /> }]} activeWorkspace={workspace} onWorkspaceChange={setWorkspace} theme={theme} onThemeChange={changeTheme} allWorkspaces={{ label: 'All workspaces', onClick: () => setStatus('Os dois workspaces deste catálogo são exemplos locais.') }} footer={<PlanCard title="Example plan" usage={{ label: 'Sample units', value: 18, max: 28 }} action={{ label: 'View example', onClick: () => { setAccountOpen(false); setStatus('Plano demonstrativo: nenhuma assinatura ou compra será realizada.'); } }} />} /></SidebarHeader>
         <SidebarSection purpose="primary">{views.filter(item => item.id === 'chat' || item.id === 'components').map(item => <NavItem key={item.id} label={item.label} icon={item.icon} active={view === item.id} onClick={() => navigate(item.id)} />)}</SidebarSection>
         <SidebarSection label="Biblioteca">
           <NavItem label="Tokens" icon="Settings2" active={view === 'tokens'} onClick={() => navigate('tokens')} />
@@ -169,36 +228,36 @@ export default function Catalog() {
           <NavItem label="Perguntas e aprovações" icon="ShieldCheck" active={view === 'decisions'} onClick={() => navigate('decisions')} />
           <NavItem label="Precificação" icon="CreditCard" active={view === 'pricing'} onClick={() => navigate('pricing')} />
           <NavItem label="Dados e opções" icon="Folder" active={view === 'records'} onClick={() => navigate('records')} />
-          <NavItem label="Onboarding" icon="UserRound" href={`?view=onboarding&theme=${theme}`} />
-          <NavItem label="Upload de currículo" icon="FileText" href={`?view=upload&theme=${theme}`} />
-          <NavItem label="Itens com data" icon="CalendarDays" href={`?view=date-item&theme=${theme}`} />
-          <NavItem label="Posts do blog" icon="FileText" href={`?view=blog-post&theme=${theme}`} />
-          <NavItem label="Rodapé da landing" icon="Globe" href={`?view=landing-footer&theme=${theme}`} />
-          <NavItem label="Landing do Curriculol" icon="Globe" href={`?view=landing&theme=${theme}`} />
-          <NavItem label="Análise em andamento" icon="ScanText" href={`?view=analysis-loading&theme=${theme}`} />
-          <NavItem label="Otimização em andamento" icon="FileText" href={`?view=optimization-loading&theme=${theme}`} />
-          <NavItem label="Resultado da análise" icon="BarChart3" href={`?view=analysis-result&theme=${theme}`} />
-          <NavItem label="Checkout" icon="CreditCard" href={`?view=checkout&theme=${theme}`} />
-          <NavItem label="Resultado da otimização" icon="FileText" href={`?view=optimization-result&theme=${theme}`} />
-          <NavItem label="Vantagens da landing" icon="Sparkles" href={`?view=benefits&theme=${theme}`} />
-          <NavItem label="Configurações" icon="Settings2" href={`?view=settings&theme=${theme}`} />
-          <NavItem label="Quadro de vagas" icon="Briefcase" href={`?view=kanban&theme=${theme}`} />
-          <NavItem label="Pagamento confirmado" icon="CreditCard" href={`?view=payment-confirmation&theme=${theme}`} />
-          <NavItem label="Créditos no menu" icon="Coins" href={`?view=account-credits&theme=${theme}`} />
-          <NavItem label="Cards do fórum" icon="MessageCircle" href={`?view=forum&theme=${theme}`} />
+          <NavItem label="Onboarding" icon="UserRound" href={catalogHref('onboarding', theme)} />
+          <NavItem label="Upload de currículo" icon="FileText" href={catalogHref('upload', theme)} />
+          <NavItem label="Itens com data" icon="CalendarDays" href={catalogHref('date-item', theme)} />
+          <NavItem label="Posts do blog" icon="FileText" href={catalogHref('blog-post', theme)} />
+          <NavItem label="Rodapé da landing" icon="Globe" href={catalogHref('landing-footer', theme)} />
+          <NavItem label="Landing do Curriculol" icon="Globe" href={catalogHref('landing', theme)} />
+          <NavItem label="Análise em andamento" icon="ScanText" href={catalogHref('analysis-loading', theme)} />
+          <NavItem label="Otimização em andamento" icon="FileText" href={catalogHref('optimization-loading', theme)} />
+          <NavItem label="Resultado da análise" icon="BarChart3" href={catalogHref('analysis-result', theme)} />
+          <NavItem label="Checkout" icon="CreditCard" href={catalogHref('checkout', theme)} />
+          <NavItem label="Resultado da otimização" icon="FileText" href={catalogHref('optimization-result', theme)} />
+          <NavItem label="Vantagens da landing" icon="Sparkles" href={catalogHref('benefits', theme)} />
+          <NavItem label="Configurações" icon="Settings2" href={catalogHref('settings', theme)} />
+          <NavItem label="Quadro de vagas" icon="Briefcase" href={catalogHref('kanban', theme)} />
+          <NavItem label="Pagamento confirmado" icon="CreditCard" href={catalogHref('payment-confirmation', theme)} />
+          <NavItem label="Créditos no menu" icon="Coins" href={catalogHref('account-credits', theme)} />
+          <NavItem label="Cards do fórum" icon="MessageCircle" href={catalogHref('forum', theme)} />
           <NavItem label="Medidas da referência" icon="BarChart3" onClick={() => navigate('tokens')} />
-          <NavItem label="Página da Lucy" icon="MessageSquare" href="?view=lucy" />
-          <NavItem label="Página MCP" icon="Plug" href="?view=mcp" />
+          <NavItem label="Página da Lucy" icon="MessageSquare" href={catalogHref('lucy', theme)} />
+          <NavItem label="Página MCP" icon="Plug" href={catalogHref('mcp', theme)} />
         </SidebarSection>
         <SidebarFooter><NavItem label="Sobre esta demonstração" icon="CircleHelp" onClick={() => setStatus('Biblioteca portátil extraída da referência. Todos os dados desta prévia são sintéticos.')} /></SidebarFooter>
       </>}
-      header={<ContentHeader actions={<Inline gap="tight"><ThemeToggle /><Select label="Cor da marca" value={brand} options={[{ id: 'reference', label: 'Referência' }, { id: 'curriculol', label: 'Curriculol' }]} onChange={value => setBrand(value === 'curriculol' ? 'curriculol' : 'reference')} /></Inline>}><Breadcrumbs items={[{ id: 'catalog', label: view === 'chat' ? 'Chat' : 'Biblioteca', href: '?view=chat' }, { id: 'view', label: view === 'chat' ? 'Getting started' : views.find(item => item.id === view)!.label }]} /></ContentHeader>}>
+      header={<ContentHeader actions={<Inline gap="tight"><ThemeToggle /><Select label="Cor da marca" value={brand} options={[{ id: 'reference', label: 'Referência' }, { id: 'curriculol', label: 'Curriculol' }]} onChange={value => changeBrand(value === 'curriculol' ? 'curriculol' : 'reference')} /></Inline>}><Breadcrumbs items={[{ id: 'catalog', label: view === 'chat' ? 'Chat' : 'Biblioteca', href: catalogHref('chat', theme) }, { id: 'view', label: view === 'chat' ? 'Getting started' : views.find(item => item.id === view)!.label }]} /></ContentHeader>}>
       <Stack gap="section">
         {status && <Notice title="Demonstração local" description={status} onDismiss={() => setStatus('')} />}
         {view === 'chat' && <ChatLayout title="How can I help you today?" mark={<BrandMark />} suggestions={<><SuggestionRow icon="Search" title="Research" description="Research competitors’ ads" onClick={() => setMessage('Research competitors’ ads')} /><SuggestionRow icon="Sparkles" title="Optimize" description="Find & fix wasted budget" onClick={() => setMessage('Find & fix wasted budget')} /><SuggestionRow icon="Globe" title="Plan" description="Draft a campaign plan" onClick={() => setMessage('Draft a campaign plan')} /></>} recent={<Stack gap="section"><SectionHeader title="Recent tasks" actions={<Button label="View more" variant="ghost" compact onClick={() => setStatus('Nenhuma tarefa real foi consultada; esta é uma composição de referência.')} />} />{messages.length ? <RecentItem title="Local conversation" description="A conversa desta demonstração." onClick={() => setStatus('Você está na conversa local mais recente.')} /> : <Text tone="secondary">No recent agent tasks yet.</Text>}</Stack>}>
           <Stack>{messages.map((sent, index) => <ChatMessage key={`${index}-${sent}`} role="user" status="sent">{sent}</ChatMessage>)}{messages.length > 0 && <ChatMessage role="assistant">Mensagem recebida nesta demonstração local. Nenhum serviço de IA foi acionado.</ChatMessage>}<ChatComposer label="Chat message" value={message} onChange={setMessage} onSubmit={() => { if (message.trim()) { setMessages(previous => [...previous, message]); setMessage(''); } }} placeholder="Ask anything or @ to add context" context={<Inline gap="tight"><Select label="Working mode" variant="context" value={chatMode} options={workModes} onChange={setChatMode} />{context && <Badge label="Example context" />}</Inline>} tools={<Select label="Example model" value={model} options={[{ id: 'example', label: 'Example model' }, { id: 'alternate', label: 'Alternate example' }]} onChange={setModel} />} onAttach={() => setContext(!context)} /></Stack>
         </ChatLayout>}
-        {view === 'components' && <ComponentsView announce={setStatus} />}
+        {view === 'components' && <ComponentsView announce={setStatus} ber10={ber10} ber11={ber11} theme={theme} />}
         {view === 'tokens' && <TokensView theme={theme} />}
         {view === 'feature-card' && <FeatureCardExamples />}
         {view === 'empty-state' && <EmptyStateExamples />}

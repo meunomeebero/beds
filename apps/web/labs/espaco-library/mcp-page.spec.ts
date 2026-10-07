@@ -44,6 +44,22 @@ test('MCP composition keeps the DS shell and its measured connection anatomy in 
     await expect(connectionTabs.getByRole('tabpanel')).toHaveCSS('padding-left', info.project.name === 'mobile' ? '16px' : '32px');
     const tabWidths = await connectionTabs.getByRole('tab').evaluateAll(tabs => tabs.map(tab => tab.getBoundingClientRect().width));
     expect(Math.max(...tabWidths) - Math.min(...tabWidths)).toBeLessThan(1);
+    const edgeLeft = connectionTabs.getByRole('button', { name: 'Rolar abas para a esquerda', exact: true });
+    const edgeRight = connectionTabs.getByRole('button', { name: 'Rolar abas para a direita', exact: true });
+    if (info.project.name === 'mobile') {
+      await expect(edgeLeft).toBeVisible();
+      await expect(edgeRight).toBeVisible();
+      await expect(edgeLeft).toBeDisabled();
+      await expect(edgeRight).toBeEnabled();
+      expect((await edgeRight.boundingBox())!.width).toBeGreaterThanOrEqual(44);
+      await edgeRight.click();
+      await expect(edgeLeft).toBeEnabled();
+      await edgeLeft.click();
+      await expect(edgeLeft).toBeDisabled();
+    } else {
+      await expect(edgeLeft).toHaveCount(0);
+      await expect(edgeRight).toHaveCount(0);
+    }
     await expect(page.getByText('A escolha desta tela não é salva.', { exact: true })).toHaveCount(0);
     await capture(page, info, `mcp-content-${theme}`);
     await openNavigation(page);

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ApprovalCard, Button, DecisionStatus, Inline, PageHeader, QuestionCard, RadioGroup, Stack, Switch, Text, type DecisionState } from 'beds';
+import { ApprovalCard, Button, DecisionStatus, Inline, PageHeader, QuestionCard, RadioGroup, ResultsStatus, Stack, Switch, Text, type DecisionState } from 'beds';
 
 const labels: Record<DecisionState, string> = { approval: 'Aprovação', confirmation: 'Confirmação', processing: 'Confirmando', success: 'Confirmado', skipped: 'Pulado', denied: 'Negado', error: 'Não confirmado' };
 type ExampleState = { state: DecisionState; feedback: string };
@@ -15,6 +15,10 @@ export default function DecisionExamples() {
   const [long, setLong] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
   const [classic, setClassic] = useState('email');
+  const [radioValue, setRadioValue] = useState('remote');
+  const [radioMode, setRadioMode] = useState<'accept' | 'lag' | 'reject'>('accept');
+  const [radioChanges, setRadioChanges] = useState(0);
+  const [radioFeedback, setRadioFeedback] = useState('A próxima escolha é aceita imediatamente.');
   const options = unavailable ? [] : [
     { id: 'remote', label: long ? 'Trabalho remoto com colaboração entre equipes distribuídas em diferentes regiões' : 'Remoto' },
     { id: 'hybrid', label: long ? 'Modelo híbrido com encontros presenciais previamente combinados com a equipe' : 'Híbrido' },
@@ -24,6 +28,21 @@ export default function DecisionExamples() {
   const start = (set: (value: ExampleState) => void) => set({ state: 'processing', feedback: 'Aguardando o resultado simulado. Nenhuma operação real foi iniciada.' });
   const settle = (set: (value: ExampleState) => void, failed = false) => set({ state: failed ? 'error' : 'success', feedback: failed ? 'Não foi possível confirmar o exemplo. Tente novamente; nenhuma operação foi realizada.' : 'Confirmado somente nesta demonstração. Nenhuma operação real foi realizada.' });
   const status = (state: DecisionState) => ({ state, label: long && state === 'approval' ? 'Aguardando aprovação para continuar esta atividade' : labels[state] });
+  const radioOptions = [{ id: 'remote', label: 'Remoto' }, { id: 'hybrid', label: 'Híbrido' }, { id: 'office', label: 'Presencial' }, { id: 'later', label: 'A definir — indisponível neste exemplo', disabled: true }];
+  const changeRadio = (next: string) => {
+    setRadioChanges(count => count + 1);
+    if (radioMode === 'reject') {
+      setRadioFeedback(`Escolha rejeitada; valor mantido em ${radioOptions.find(option => option.id === radioValue)?.label}.`);
+      return;
+    }
+    if (radioMode === 'lag') {
+      setRadioFeedback('Escolha aguardando aceitação controlada.');
+      window.setTimeout(() => { setRadioValue(next); setRadioFeedback(`Escolha aceita: ${radioOptions.find(option => option.id === next)?.label}.`); }, 180);
+      return;
+    }
+    setRadioValue(next);
+    setRadioFeedback(`Escolha aceita: ${radioOptions.find(option => option.id === next)?.label}.`);
+  };
   return <Stack gap="section">
     <PageHeader purpose="home" title="Uma decisão de cada vez" description="Perguntas e aprovações com contexto. Todos os exemplos são locais; nenhuma permissão ou operação é executada." />
     <Stack>
@@ -59,6 +78,19 @@ export default function DecisionExamples() {
       <Switch label="Testar pergunta sem opções" checked={unavailable} onChange={next => { setUnavailable(next); setError(''); }} />
       <Button label="Restaurar exemplos" variant="ghost" onClick={() => { setAccess(initialApproval); setBatch(initialApproval); setQuestion(initialQuestion); setValue(null); setError(''); setLong(false); setUnavailable(false); }} />
       <RadioGroup label="Controle compacto existente" value={classic} onChange={setClassic} options={[{ id: 'email', label: 'E-mail' }, { id: 'phone', label: 'Telefone' }]} />
+    </Stack>
+    <Stack>
+      <Text variant="section-title">RadioGroup controlado</Text>
+      <Text tone="secondary">Fixture local para aceitação imediata, atraso e rejeição; nenhuma escolha é enviada.</Text>
+      <Inline gap="tight">
+        <Button label="Aceitar agora" compact onClick={() => { setRadioMode('accept'); setRadioFeedback('A próxima escolha é aceita imediatamente.'); }} />
+        <Button label="Atrasar escolha" compact onClick={() => { setRadioMode('lag'); setRadioFeedback('A próxima escolha aguarda 180 ms.'); }} />
+        <Button label="Rejeitar escolha" compact onClick={() => { setRadioMode('reject'); setRadioFeedback('A próxima escolha será rejeitada.'); }} />
+        <Button label="Definir presencial externamente" compact onClick={() => { setRadioMode('accept'); setRadioValue('office'); setRadioFeedback('Escolha externa: Presencial.'); }} />
+      </Inline>
+      <RadioGroup label="Preferência controlada com nome explícito" name="ber30-custom-name" value={radioValue} onChange={changeRadio} options={radioOptions} />
+      <RadioGroup label="Segunda instância com nome gerado" value={radioValue} onChange={changeRadio} options={radioOptions} />
+      <ResultsStatus>{`${radioFeedback} Tentativas de callback: ${radioChanges}.`}</ResultsStatus>
     </Stack>
   </Stack>;
 }

@@ -3,6 +3,9 @@ import { BrandMark, Button, Inline, PricingSection, Select, Stack, Switch, Text,
 
 const starterArt = new URL('./assets/pricing-starter.svg?no-inline', import.meta.url).href;
 const proArt = new URL('./assets/pricing-pro.svg?no-inline', import.meta.url).href;
+const formatProPrice = (value: number) => value < 100
+  ? `R$ ${Math.round(value)}/mês`
+  : `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} por mês`;
 
 type DemoState = 'idle' | 'busy' | 'success' | 'error';
 type DemoResult = { id: string; state: DemoState; message: string };
@@ -36,7 +39,7 @@ export default function PricingExamples() {
       id: 'pro', title: long ? 'Pro para equipes com vários projetos em andamento' : 'Pro', featured: true,
       description: long ? 'Mais espaço para trabalhar com sua equipe, organizar cada projeto e acompanhar as entregas em um só lugar.' : 'Mais espaço para trabalhar em equipe e acompanhar cada entrega.',
       image: { src: source(proArt), alt: '' },
-      price: { label: long ? 'R$ 1.249,90 por mês' : 'R$ 49/mês', description: 'Cobrança mensal. Valor demonstrativo.' },
+      price: { label: long ? 'R$ 1.249,90 por mês' : 'R$ 49/mês', amount: { value: long ? 1249.9 : 49, format: formatProPrice }, description: 'Cobrança mensal. Valor demonstrativo.' },
       featuresLabel: 'Tudo do Essencial, mais',
       features: empty ? [] : [
         { id: 'team', text: '5 pessoas no espaço de trabalho' },

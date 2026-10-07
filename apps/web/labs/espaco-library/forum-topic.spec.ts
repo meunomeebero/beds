@@ -1,8 +1,48 @@
-import { expect, test, type Page } from '@playwright/test';
+import { createServer, type ViteDevServer } from 'vite';
+import react from '@vitejs/plugin-react';
+import { mkdtemp, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { expect, test, type Page } from '@playwright/test';
 const evidence = fileURLToPath(new URL('./evidence/forum-topic/', import.meta.url));
+const repoRoot = fileURLToPath(new URL('../../../../', import.meta.url));
 const topicTitle = 'O que vocês priorizam em um portfólio?';
 const list = (page: Page) => page.getByRole('list', { name: 'Conversas da comunidade', exact: true });
+
+async function renderEmptyList() {
+  const cacheDir = await mkdtemp(join(tmpdir(), 'beds-ber52-forum-'));
+  let server: ViteDevServer | undefined;
+  try {
+    let cssModuleId = 0;
+    server = await createServer({
+      root: repoRoot,
+      configFile: false,
+      cacheDir,
+      plugins: [react(), {
+        name: 'ber52-forum-css-stub',
+        enforce: 'pre',
+        resolveId(source) { return source.endsWith('.css') ? `\0ber52-forum-css-${cssModuleId++}` : undefined; },
+        load(id) { return id.startsWith('\0ber52-forum-css-') ? 'export default {};' : undefined; },
+      }],
+      resolve: { dedupe: ['react', 'react-dom'] },
+    });
+    const module = await server.ssrLoadModule('/packages/beds/src/index.ts') as Record<string, any>;
+    return renderToStaticMarkup(React.createElement(module.ForumTopicList, { label: 'Conversas vazias' }));
+  } finally {
+    if (server) await server.close();
+    await rm(cacheDir, { recursive: true, force: true });
+  }
+}
+
+async function assertListContract(page: Page, expectedInteractiveCounts: number[]) {
+  const topics = list(page);
+  await expect(topics.locator(':scope > li')).toHaveCount(expectedInteractiveCounts.length);
+  expect(await topics.locator(':scope > li').evaluateAll(items => items.map(item => item.querySelectorAll('a,button,input,select,textarea,[tabindex]:not([tabindex="-1"])').length))).toEqual(expectedInteractiveCounts);
+  await expect(topics.locator('a a,a button,button a,button button')).toHaveCount(0);
+}
 
 async function example(page: Page, name: string) {
   await page.getByRole('button', { name: /^Estado do exemplo:/ }).click();
@@ -24,15 +64,24 @@ async function contrast(page: Page) {
   });
 }
 
+test('SSR keeps an empty public list named with no list items', async () => {
+  const markup = await renderEmptyList();
+  expect(markup).toContain('<ul');
+  expect(markup).toContain('aria-label="Conversas vazias"');
+  expect(markup.match(/<li\b/g) ?? []).toHaveLength(0);
+});
+
 test('catalog entry, portraits, keyboard detail, selection and native link', async ({ page }, info) => {
   const errors: string[] = [];
+  const consoleMessages: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
+  page.on('console', message => { if (message.type() === 'warning' || message.type() === 'error') consoleMessages.push(message.text()); });
   for (const theme of ['light', 'dark']) {
     await page.goto('/?view=chat&theme=' + theme);
     if (info.project.name === 'mobile') await page.getByRole('button', { name: 'Navigation', exact: true }).click();
     await page.getByRole('link', { name: 'Cards do fórum', exact: true }).click();
     await expect(page.getByRole('heading', { name: 'Fórum', exact: true })).toBeVisible();
-    await expect(list(page).getByRole('listitem')).toHaveCount(4);
+    await assertListContract(page, [1, 1, 1, 1]);
     const first = list(page).getByRole('button', { name: topicTitle, exact: true });
     await expect(first).toHaveAccessibleDescription(/Marina Costa Não lido/);
     await expect(first.locator('img')).toHaveJSProperty('complete', true);
@@ -77,6 +126,7 @@ test('catalog entry, portraits, keyboard detail, selection and native link', asy
     await expect(page.getByRole('dialog', { name: topicTitle, exact: true })).toBeVisible();
   }
   expect(errors).toEqual([]);
+  expect(consoleMessages).toEqual([]);
 });
 
 test('image failure and recovery; loading, empty and error states', async ({ page }) => {
@@ -91,8 +141,9 @@ test('image failure and recovery; loading, empty and error states', async ({ pag
   await expect(page.getByText('Carregando conversas…', { exact: true })).toBeVisible();
   await expect(list(page)).toHaveCount(0);
   await example(page, 'Vazio');
+  await expect(list(page)).toHaveCount(0);
   await page.getByRole('button', { name: 'Restaurar tópicos', exact: true }).click();
-  await expect(list(page).getByRole('listitem')).toHaveCount(4);
+  await assertListContract(page, [1, 1, 1, 1]);
   await example(page, 'Erro recuperável');
   await expect(page.getByText(/Tente novamente para recuperar/)).toBeVisible();
   await page.getByRole('button', { name: 'Tentar novamente', exact: true }).click();
@@ -124,7 +175,9 @@ test('320px reflow, long content, RTL, zoom and forced colors', async ({ page },
   await page.evaluate(() => { document.documentElement.dir = 'ltr'; document.documentElement.style.zoom = '2'; });
   await page.setViewportSize({ width: 800, height: 1000 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
-  await list(page).getByRole('button').first().click();
+  const first = list(page).getByRole('button').first();
+  await first.focus();
+  await page.keyboard.press('Enter');
   await expect(page.getByRole('dialog')).toBeVisible();
   await page.keyboard.press('Escape');
   await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });

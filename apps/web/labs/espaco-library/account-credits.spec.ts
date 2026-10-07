@@ -21,6 +21,7 @@ test('account footer anatomy, both themes, keyboard recovery and local action', 
     const menu = await openMenu(page);
     const credits = menu.getByRole('region', { name: 'Plano de exemplo', exact: true });
     await expect(credits.getByText('12.500', { exact: true })).toBeVisible();
+    await expect(credits.locator('.es-animated-number')).toHaveCount(0);
     const meter = credits.getByRole('meter', { name: 'Créditos', exact: true });
     await expect(meter).toHaveAttribute('aria-valuenow', '12500');
     await expect(meter).toHaveAttribute('aria-valuemax', '20000');
@@ -56,6 +57,7 @@ test('zero, unknown quota, unavailable, loading, error recovery and invalid numb
     const menu = await openMenu(page);
     const credits = menu.locator('.es-account-credits');
     await expect(credits).toContainText(text);
+    if (choice === 'Saldo zero') await expect(credits.locator('.es-animated-number')).toHaveCount(1);
     await expect(credits.getByRole('meter')).toHaveCount(count);
     if (choice === 'Saldo zero') {
       await expect(credits.getByRole('meter')).toHaveAttribute('aria-valuenow', '0');

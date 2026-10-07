@@ -1,5 +1,5 @@
 /* Button / IconButton / IconToggleButton: migrated to Tailwind + motion in controls.tsx (Fable F1 — beUI `button`, 2026-09-17).
-   Geometry preserved (32/28/40px, r=8/6/12/10px), motion press scale(.97) per BEDS easing, focus visible ring (no offset gap). */
+   Geometry preserved (32/28/40px, r=8/6/12/10px), pointer press scale(.97) on an inert child, focus visible ring. */
 
 /* TextField / TextAreaField / SearchField: migrated to Tailwind + motion in controls.tsx (Fable F1 — beUI `input`, 2026-09-17).
    Geometry preserved (36/40px, r=8/10px), focus border + soft ring replaces offset outline, error shake uses motion `animate`
@@ -13,8 +13,22 @@
 .es-root .es-tabs{min-width:0}
 .es-root .es-tabs[data-variant="activity"] .es-tabs-list{flex-wrap:wrap}
 .es-root .es-tabs[data-variant="activity"] .es-tabs-list>[role="tab"]{flex:0 0 auto;max-width:100%;white-space:normal;overflow-wrap:anywhere}
-.es-root .es-tab-panel{margin-top:16px;min-width:0}
+.es-root .es-tabs-list-shell{position:relative;display:flex;align-items:center;width:100%;max-width:100%;min-width:0}
+.es-root .es-tabs-list-shell[data-variant="activity"]{--es-tabs-fade:var(--es-subtle);width:max-content}
+.es-root .es-tabs-list-shell[data-variant="connection"]{--es-tabs-fade:var(--es-subtle)}
+.es-root .es-tabs-list-shell[data-variant="settings"]{--es-tabs-fade:var(--es-bg)}
+.es-root .es-tabs-edge-fade{position:absolute;inset-block:0;z-index:10;width:44px;pointer-events:none}
+.es-root .es-tabs-edge-fade[data-edge="left"]{left:0;background:linear-gradient(to right,var(--es-tabs-fade),transparent)}
+.es-root .es-tabs-edge-fade[data-edge="right"]{right:0;background:linear-gradient(to left,var(--es-tabs-fade),transparent)}
+.es-root .es-tabs-edge-button{position:absolute;inset-block:0;z-index:20;display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0;border:0;border-radius:var(--es-radius-8);background:transparent;color:var(--es-text);cursor:pointer}
+.es-root .es-tabs-edge-button[data-edge="left"]{left:0}
+.es-root .es-tabs-edge-button[data-edge="right"]{right:0}
+.es-root .es-tabs-edge-button:disabled{pointer-events:none;opacity:0}
+.es-root .es-tabs-edge-button:focus-visible{outline:2px solid var(--es-focus);outline-offset:-2px}
+.es-root .es-tab-panel{min-width:0}
 .es-root :where(button[aria-pressed],button:not([aria-pressed]):not([aria-label]),.es-icon-button,.es-icon-toggle-button,.es-tabs-list>[role="tab"],.es-tab-panel):focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
+@media(forced-colors:active){.es-root :where(.es-button,.es-icon-button,.es-icon-toggle-button):focus-visible{outline:2px solid Highlight;outline-offset:2px}}
+@media(pointer:coarse){.es-root .es-button,.es-root :where(.es-icon-button,.es-icon-toggle-button){min-height:44px}.es-root :where(.es-icon-button,.es-icon-toggle-button){min-width:44px}}
 /* Fields now own their focus idiom via Tailwind utilities (border-ring + shadow-[0_0_0_3px_var(--es-focus-ring)]); forced-colors
    paints Highlight through the explicit `outline:transparent` set on focus. */
 /* Field transitions removed — TextField/TextAreaField/SearchField now use Tailwind transition-colors + motion for shake. */
@@ -36,24 +50,20 @@
   .es-root .es-segmented-choice>input:not(:disabled):not(:checked)+span:hover{color:var(--es-text)}
 }
 
+/* Segmented pills keep their 24px lane: the keyboard ring is painted inside the 22px visual, so overflow clipping cannot hide it. */
+.es-root .es-segmented-choice>input:focus-visible+.es-segmented-choice-span{outline-offset:-2px}
+@media(forced-colors:active){.es-root .es-segmented-choice>input:focus-visible+.es-segmented-choice-span{outline-color:Highlight}}
+/* RTL scroll ranges round fractional label widths to whole CSS pixels; one logical end pixel keeps the focused item fully revealable. */
+.es-root .es-segmented-control:dir(rtl){padding-inline-end:2px}
+
 /* Fixed dark selection roles adopted from the Lucy preview — scoped to the segmented control
    so the dialog and other data-variant surfaces keep their token background. */
 .es-root[data-theme=dark] .es-segmented-control:not([data-variant=joined]){background:var(--es-control)}
 
-/* Settings navigation: intrinsic labels, quiet selection, one scrollable row. */
-
-/* Settings navigation: intrinsic labels, quiet selection, one scrollable row.
-   Settings tabs are a deferred migration — the layout, the inline label pill, the bottom
-   underline and the dark variant all live here until the settings variant is ported to Tailwind. */
-.es-root .es-tabs[data-variant="settings"] .es-tabs-list{display:flex;align-items:stretch;gap:var(--es-space-2);width:100%;min-width:0;padding:var(--es-space-2) var(--es-space-2) 0;border:0;border-bottom:1px solid var(--es-border);border-radius:0;background:transparent;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;scroll-padding-inline:var(--es-space-2)}
-.es-root .es-tabs[data-variant="settings"] .es-tabs-list>[role="tab"]{position:relative;flex:0 0 auto;min-height:48px;padding:var(--es-space-1) 0 var(--es-space-4);border-radius:var(--es-radius-6);background:transparent;box-shadow:none;font:400 13px/20px var(--es-font)}
-.es-root .es-tabs[data-variant="settings"] .es-settings-tab-label{display:block;padding:var(--es-space-2) var(--es-space-5);border-radius:var(--es-radius-6)}
 .es-root .es-tabs[data-variant="settings"] [aria-selected="true"] .es-settings-tab-label{background:var(--es-selected);color:var(--es-text)}
-.es-root .es-tabs[data-variant="settings"] [aria-selected="true"]::after{content:"";position:absolute;inset-inline:var(--es-space-1);inset-block-end:0;block-size:2px;border-radius:var(--es-radius-full);background:var(--es-text)}
+.es-root .es-tabs[data-variant="settings"] .es-settings-tab-indicator{position:absolute;inset-inline:var(--es-space-1);inset-block-end:0;block-size:2px;border-radius:var(--es-radius-full);background:var(--es-text);pointer-events:none}
 .es-root .es-tabs[data-variant="settings"] .es-tabs-list>[role="tab"]:focus-visible{outline-offset:-2px}
-.es-root .es-tabs[data-variant="settings"] .es-tab-panel{margin-top:var(--es-space-10)}
-.es-root .es-tabs[data-variant="settings"] button:not([aria-label]){min-height:36px}
 .es-root .es-tabs[data-variant="settings"] .es-switch{min-height:44px}
-@media(hover:hover){.es-root .es-tabs[data-variant="settings"] .es-tabs-list>[role="tab"]:not(:disabled):not([aria-selected="true"]):hover{background:transparent}.es-root .es-tabs[data-variant="settings"] [role="tab"]:not(:disabled):not([aria-selected="true"]):hover .es-settings-tab-label{background:var(--es-hover)}}
-@media(max-width:767px){.es-root .es-tabs[data-variant="settings"] button:not([aria-label]){min-height:44px}.es-root .es-tabs[data-variant="settings"] :where(input,select,textarea){font-size:16px}.es-root .es-tabs[data-variant="settings"] :where(.es-select-trigger,.es-theme-toggle>button){min-height:44px}.es-root .es-tabs[data-variant="settings"] .es-text-link{display:inline-flex;align-items:center;min-height:44px}}
-@media(forced-colors:active){.es-root .es-tabs[data-variant="settings"] [aria-selected="true"]::after{background:Highlight}.es-root .es-tabs[data-variant="settings"] [aria-selected="true"] .es-settings-tab-label{outline:1px solid Highlight}}
+@media(hover:hover){.es-root .es-tabs[data-variant="settings"] [role="tab"]:not(:disabled):not([aria-selected="true"]):hover{background:transparent}.es-root .es-tabs[data-variant="settings"] [role="tab"]:not(:disabled):not([aria-selected="true"]):hover .es-settings-tab-label{background:var(--es-hover)}}
+@media(max-width:767px){.es-root .es-tabs[data-variant="settings"] :where(input,select,textarea){font-size:16px}.es-root .es-tabs[data-variant="settings"] :where(.es-select-trigger,.es-theme-toggle>button){min-height:44px}.es-root .es-tabs[data-variant="settings"] .es-text-link{display:inline-flex;align-items:center;min-height:44px}}
+@media(forced-colors:active){.es-root .es-tabs[data-variant="settings"] .es-settings-tab-indicator{background:Highlight}.es-root .es-tabs[data-variant="settings"] [aria-selected="true"] .es-settings-tab-label{outline:1px solid Highlight}}

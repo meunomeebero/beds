@@ -1,6 +1,6 @@
-import { useId, type ReactNode } from 'react';
+import { useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { Button } from './controls';
-import { Icon } from './foundation';
+import { AnimatedNumber, Icon } from './foundation';
 import { CardMedia } from './card-media';
 import './pricing.css';
 
@@ -8,7 +8,13 @@ export type PricingCardProps = {
   title: string;
   description: string;
   image: { src: string; alt: string; fallbackLabel?: string };
-  price: { label: string; description?: string };
+  price: {
+    /** Complete localized price label used for the initial and static state. */
+    label: string;
+    description?: string;
+    /** Optional authoritative amount. Animation requires this value and its formatter; label is never parsed. */
+    amount?: { value: number; format: (value: number) => string };
+  };
   featuresLabel: string;
   features: readonly { id: string; text: string }[];
   action: { label: string } & (
@@ -21,6 +27,30 @@ export type PricingCardProps = {
   headingLevel?: 2 | 3;
 };
 
+function PricingAmount({ label, amount }: { label: string; amount: PricingCardProps['price']['amount'] }) {
+  const previous = useRef<number | null>(null);
+  const [animatedFrom, setAnimatedFrom] = useState<number | null>(null);
+  const value = amount?.value;
+  const format = amount?.format;
+  const valid = value !== undefined && Number.isFinite(value) && format !== undefined;
+
+  useLayoutEffect(() => {
+    if (!valid || value === undefined) {
+      previous.current = null;
+      setAnimatedFrom(null);
+      return;
+    }
+
+    const prior = previous.current;
+    previous.current = value;
+    if (prior !== null && prior !== value) setAnimatedFrom(prior);
+    else if (prior === null) setAnimatedFrom(null);
+  }, [format, valid, value]);
+
+  if (!valid || value === undefined || format === undefined || animatedFrom === null) return <bdi>{label}</bdi>;
+  return <bdi><AnimatedNumber value={value} initialValue={animatedFrom} format={format} fallback={label} /></bdi>;
+}
+
 /** Display only: hosts supply complete prices, billing terms and actual outcomes. */
 export function PricingCard({ title, description, image, price, featuresLabel, features, action, actionNote, feedback, featured = false, headingLevel = 2 }: PricingCardProps) {
   const id = useId();
@@ -30,7 +60,7 @@ export function PricingCard({ title, description, image, price, featuresLabel, f
     <CardMedia key={image.src} purpose="pricing" src={image.src} alt={image.alt} fallbackLabel={image.fallbackLabel} />
     <div className="es-pricing-content">
       <div className="es-pricing-copy">
-        <div className="es-pricing-heading"><Heading id={`${id}-title`}>{title}</Heading><span className="es-pricing-price"><bdi>{price.label}</bdi></span></div>
+        <div className="es-pricing-heading"><Heading id={`${id}-title`}>{title}</Heading><span className="es-pricing-price"><PricingAmount label={price.label} amount={price.amount} /></span></div>
         {price.description && <p className="es-pricing-billing" id={`${id}-billing`}>{price.description}</p>}
         <p className="es-pricing-description" id={`${id}-description`}>{description}</p>
       </div>
