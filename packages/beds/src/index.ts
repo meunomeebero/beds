@@ -5,6 +5,8 @@ export { typography, geometry, neutrals, themes } from './tokens';
 export { Button, IconButton, IconToggleButton, TextField, TextAreaField, SearchField, Checkbox, Switch, SegmentedControl, Tabs } from './controls';
 export { RadioGroup, FileUploadField } from './form-fields';
 export type { RadioOption, RadioGroupProps, FileUploadFieldProps } from './form-fields';
+export { RangeSlider } from './range-slider';
+export type { RangeSliderProps } from './range-slider';
 export { Select, FilterSelect, HelpLabel, DropdownMenu, Tooltip, Dialog, Drawer, DrawerSection, CommandPalette, SearchDialog } from './overlays';
 export type { FilterSelectProps, SelectOption, SelectProps } from './select';
 export type { SearchResult } from './overlays';

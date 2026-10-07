@@ -11,6 +11,7 @@ Canonical library: `beds`. React 19; two fixed themes; one brand color. Independ
 | Compose an application | [Consumer contract](CONSUMER-CONTRACT.md) → relevant [Components](COMPONENTS.md) / [States](STATES.md) entries |
 | Build or change a primitive | [Foundations](FOUNDATIONS.md) → relevant component/state contract → [Governance](GOVERNANCE.md) |
 | Build or review an OTP input | [InputOTP](INPUT-OTP.md): controlled 4/6/8 digit entry, caller-owned status, motion and evidence |
+| Build a generic numeric range | [RangeSlider](RANGE-SLIDER.md): native single-value range, controlled/uncontrolled contract, keyboard/RTL and no product pricing policy |
 | Need a pattern BEDS lacks | [External component sourcing](EXTERNAL-COMPONENT-SOURCING.md): search beUI before building from scratch;MIT adapt-never-install contract,provenance and attribution |
 | Track F2 beUI migration | [F2 migration tracking](F2-MIGRATION-TRACKING.md): implementation status, helper dependencies, extraction boundary and restart point |
 | Track F3 numeric/data decisions | [F3 decisions](F3-MIGRATION-DECISIONS.md): typed numeric motion adoption and explicit no-fit provenance |

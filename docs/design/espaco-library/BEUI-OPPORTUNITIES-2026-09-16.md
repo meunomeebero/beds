@@ -66,7 +66,7 @@ Same anatomy we already own, plus motion we never wrote.
 
 ## New capability BEDS lacks entirely
 
-`wheel-picker` `dynamic-island` `bloom-menu` `range-slider` `multi-select` `combobox` `file-tree` `infinite-masonry` `pull-to-refresh` `shader-background` `feedback-widget` `image-generation` `ai-sidebar` `chat-app` `project-folder` `card-folder`
+`wheel-picker` `dynamic-island` `bloom-menu` `multi-select` `combobox` `file-tree` `infinite-masonry` `pull-to-refresh` `shader-background` `feedback-widget` `image-generation` `ai-sidebar` `chat-app` `project-folder` `card-folder`
 
 Charts → BEDS has none. `heat-calendar` is the only broadly reusable one.
 
@@ -75,6 +75,7 @@ Charts → BEDS has none. `heat-calendar` is the only broadly reusable one.
 | Component | Source | Status |
 |---|---|---|
 | `AnimatedNumber` | `number` (MIT, `https://beui.dev/r/number/raw`, 2026-09-16) | In `foundation.tsx`, exported. Null/non-finite value never animates toward a fabricated number; reduced motion jumps to the final value; integer targets snap per frame. Not yet wired to a surface — see the ATS finding |
+| `RangeSlider` | `range-slider` (MIT, `https://beui.dev/r/range-slider/raw`, 2026-09-20) | In `range-slider.tsx`, exported. Generic native single-value range; controlled/uncontrolled bounds, optional value formatter and decorative bounded ticks. The host owns quantities, promotions, prices, checkout and persistence. [Contract](RANGE-SLIDER.md) |
 
 ## Needs owner decision before adoption
 

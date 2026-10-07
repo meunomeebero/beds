@@ -496,6 +496,7 @@ not measured CSS from the supplied raster. Existing CommandPalette unchanged.
 | Welcome dialog | 480px maximum; r24; 200px artwork; 24px content inset; height follows content |
 | Button | Default min32px/r8; compact min28px/r6; welcome min40px/r12; connection min40px/r10 |
 | Field / field selector | Settings min36px/r8; field selector width224px; connection field min40px/r10 |
+| RangeSlider | Native range input;40px track target/44px coarse;4px visual rail;4×24px thumb;focus perimeter2px;logical fill/RTL;value and label use existing text roles |
 | Theme / pill segment | 24px group; 22px options; 1px inset/2px gap. Account overrides are scoped above. |
 | Activity tabs | 30px minimum group; 24px minimum tabs; 2px inset/gap; r8/r6 |
 | Connection tabs | 16px shell radius; 53px strip; 8px inset; distributed 36px tablist/r10; 28px options. Desktop panel16/32/32px; mobile16/16/24px. |
