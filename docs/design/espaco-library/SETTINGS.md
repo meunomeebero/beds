@@ -4,6 +4,12 @@ Scope: `Tabs variant="settings"`, `SettingsGroup variant="section"`, isolated
 `?view=settings` catalog. No product integration or real account mutations.
 Existing `activity`/`connection` tabs and default settings panels remain unchanged.
 
+**0.3 — Curriculol patterns (2026-10-18).** The settings tab strip (48px boxed
+tabs with a 2px underline) is retired: every `Tabs` variant renders the shared
+tab pill (40px track, 32px options, primary pill with clipped label). `settings`
+keeps its 24px panel gap and instant panel swap. Text fields default to the
+product `field` purpose; pass `purpose="settings"` for dense 36px rows.
+
 ## Current ownership
 
 SettingsPage is an app-owned example, not a public page template. Its section

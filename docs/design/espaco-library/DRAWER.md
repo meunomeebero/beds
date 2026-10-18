@@ -3,6 +3,18 @@
 Scope: `Drawer` + `DrawerSection`; catalog `?view=drawer`. Synthetic vacancy
 details only. No product integration, router, API, storage or external action.
 
+**0.3 — Curriculol patterns (2026-10-18).** The panel no longer resizes its
+children: the rule that forced every descendant button to 40px (44px on phones)
+and made labels wrap is gone, so chips, × controls and sm pills keep their own
+geometry (Curriculol had to counter it in its profile editor). Only the close
+control keeps 40/44px. Buttons inside are the shared pills; footer actions stack
+full width with the primary first at 480px and below; text entry inside the
+panel is outlined without a fill. Content anatomy that proved itself in
+Curriculol's detail drawers (one framed summary block at 16px radius, a
+label-over-value facts sheet, a quiet note beside the footer action) stays an
+app composition built from `DrawerSection`, `DefinitionTable`, `Surface` and
+native layout; no new Drawer props.
+
 ## API
 
 ```tsx

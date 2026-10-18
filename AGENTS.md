@@ -11,6 +11,16 @@ layout into the library. App identity, brand presets and page hierarchy are
 consumer-owned. Preserve existing consumers until an explicit migration; do not
 interpret legacy exports or guards as approval to expand product coupling.
 
+## Visual source of truth — Curriculol (owner, 2026-10-18)
+
+"Os padrões atuais do Curriculol são os padrões que adotaremos como verdade absoluta."
+Where BEDS and Curriculol differ, follow what Curriculol ships (its beUI ports in
+`apps/web/src/vendor/beui/` and compositions in `apps/web/src/sections/beds/`):
+pill buttons md 40 / sm 32, soft text-entry borders with a soft 2px focus ring
+(never a hard outline), one 40px tab pill, outline calls to action (no brand-filled
+buttons) and the [proportions](docs/design/espaco-library/FOUNDATIONS.md#proportions--the-curriculol-finish).
+Product-specific compositions still stay in the app.
+
 ## Start here
 
 Read [Agent quickstart](docs/design/espaco-library/AGENT-QUICKSTART.md). Query

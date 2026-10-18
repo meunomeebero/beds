@@ -89,9 +89,10 @@ if (process.argv[1] && fs.existsSync(process.argv[1]) && fs.realpathSync(process
       ? checkDocs({ inputs: explicit })
       : checkDocs({
           inputs: [...packageDocInputs(packageRoot), ...(hasCanonical ? [canonical] : [])],
+          // The library map is the one index of every canonical contract; the root README links the map
+          // instead of repeating the full list.
           indexes: hasCanonical ? [
             { index: path.join(canonical, 'README.md'), directory: canonical },
-            { index: path.resolve(packageRoot, '../../README.md'), directory: canonical },
           ] : [],
         });
     for (const issue of result.issues) console.error(`[${issue.code}] ${issue.path}`);

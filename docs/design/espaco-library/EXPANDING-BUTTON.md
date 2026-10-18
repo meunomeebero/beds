@@ -1,10 +1,16 @@
 # ExpandingButton
 
-`ExpandingButton` is a pill call to action whose brand-colored chip grows to
-fill the whole control on hover or keyboard focus. Use it for the one primary
-action in a header, a sign-in entry point or beside a hero headline, where a
-little motion helps the action stand out. Use `Button` everywhere else: forms,
-dialogs, toolbars, lists and secondary actions.
+**0.3 — Curriculol patterns (2026-10-18).** `ExpandingButton` now renders the
+shared `Button` pill in the beUI `outline` variant with a trailing `ArrowRight`:
+md 40px (44px on touch), transparent with a hairline, neutral hover, pointer-only
+.97 press. The owner reviewed both expanding-chip CTAs in Curriculol and chose the
+beUI StatefulButton instead ("muito exagerado, use o Stateful Button ... que é o
+botão normal", 2026-09-28) and then outline over brand fills (2026-09-29). Props
+are unchanged so existing consumers keep compiling: `icon` other than
+`ArrowRight` is dropped, `mark` renders as a decorative leading glyph and
+`context` no longer changes geometry. Prefer `Button variant="outline"
+icon="ArrowRight" iconPosition="end"` in new code; it also supports async
+`state`. The history below describes the retired chip anatomy.
 
 Adapted from beUI `expanding-arrow-button`
 (`https://beui.dev/components/motion/expanding-arrow-button`, retrieved

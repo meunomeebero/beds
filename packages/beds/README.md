@@ -1,12 +1,18 @@
 # beds
 
-Reusable React 19 components and a product-agnostic style guide. Two themes; one caller-owned brand color. Applications own identity and page composition.
+Reusable React 19 components and a product-agnostic style guide: two themes, one
+caller-owned brand color, semantic variants instead of style props. The defaults
+follow the patterns proven in Curriculol: pill buttons (md 40px, sm 32px), soft
+text fields with a soft focus ring, one 40px tab pill and outline calls to action.
+Applications own identity, page layout and business logic.
+
+## Install
+
+Install the immutable `.tgz` from a GitHub release of
+[meunomeebero/beds](https://github.com/meunomeebero/beds/releases) and check its
+SHA-256. Never depend on a mutable source branch; upgrade consumers explicitly.
 
 ## Use
-
-Install an explicitly selected local/package candidate. Read its version from package metadata and evidence from [Validation](docs/VALIDATION.md); source aliases are not package-portability evidence.
-
-Version `0.2.0-rc.11` consolidates the breaking, product-agnostic migration on `main`. It requires a deliberate `brandColor`, ships `beds/manifest.json` for agents and adds `HandDrawnArrow`, `ExpandingButton`, `LinkButton`, the `nav` purpose for `TextLink`, the corner-morph `AccountMenu` motion the beUI `field` purpose for text fields and its `input` variant for `Select`. Screens are not done until they pass the Personality layers in Foundations. Use the immutable archive and SHA-256 from the [release](https://github.com/meunomeebero/beds/releases/tag/v0.2.0-rc.8). Agents start with [Agent quickstart](docs/AGENT-QUICKSTART.md). Follow [Agnostic DS](docs/AGNOSTIC-DS.md) and [API boundaries](docs/API-BOUNDARIES.md). Do not upgrade existing consumers implicitly. Historical 0.1 releases expose a different API.
 
 ```tsx
 import { DesignSystemProvider, Text } from 'beds';
@@ -19,43 +25,46 @@ import 'beds/styles.css';
 </DesignSystemProvider>
 ```
 
-- Theme is controlled. Brand accepts one six-digit hex value; foreground is derived internally.
-- `styles.css` owns component styling and licensed fonts; `reset.css` is the fixed full-page reset.
-- Import `reset.css` only in an isolated full-page preview;not implicitly into an existing application.
-- Apps may use semantic HTML, layout CSS, icons and their own identity assets. `app-layout` above is an app-owned class, not a BEDS preset.
-- BEDS components expose semantic variants, not public `className`/`style` escape hatches. Read tokens without overriding private `.es-*` selectors or redefining `--es-*` properties.
-- Full pages and product-specific compositions belong in the app. Optional catalog recipes are editable examples, not runtime exports or mandatory layouts.
-- Callers own content, data, routing, persistence and recovery. No AI, billing, account or router dependency.
-- React/ReactDOM are peers. TypeScript 5.9+ supports declarations and checks. Native Dialog/Popover required; tested engine scope is recorded, not presumed universal.
+- `theme` is controlled; `brandColor` is one required six-digit hex value and the
+  provider derives its foreground. `fieldBorder` defaults to `soft`; pass `strong`
+  only when text fields need the 3:1 outline.
+- `styles.css` owns component styles and licensed fonts. Import `reset.css` only in
+  an isolated full-page app, never implicitly into an existing one.
+- `app-layout` is an app-owned class. Apps use their own semantic HTML, layout CSS,
+  icons and identity assets around BEDS components.
+- Components expose semantic variants, not `className`/`style`. Read `--es-*`
+  tokens; do not target `.es-*` selectors or redefine tokens.
+- Callers own content, data, routing, persistence and recovery. No AI, billing,
+  account or router dependency.
+- React/ReactDOM 19 are peers; TypeScript 5.9+ for declarations. Native Dialog and
+  Popover are required.
 
-## What belongs in BEDS
+Agents start with the [Agent quickstart](docs/AGENT-QUICKSTART.md) and look up
+exact props in `beds/manifest.json`.
 
-Promote only components with one clear responsibility and credible reuse across
-distinct products—not every UI created while building an app. Record at least
-two unrelated product uses before proposing a shared API. Repetition within one
-app, a generic name or moving CSS into the package is not sufficient evidence.
-Keep logos, page compositions and business flows in their owning app. When reuse
-is unclear, keep the implementation local until the shared need is demonstrated.
-Follow [component admission](docs/GOVERNANCE.md#component-admission).
-
-## Rules and checks
-
-[Documentation map](docs/README.md) · [Consumer contract](docs/CONSUMER-CONTRACT.md) · [Governance](docs/GOVERNANCE.md) · [Package rules](AGENTS.md)
-
-The package includes source, declarations, fonts/licenses, portable documentation, evidence and audit scripts. For every BEDS UI task, agents must automatically use `better-interface` and its six owners before design/code decisions and before handoff,without waiting for a user invocation. Better skills are installed separately; [Interface quality](docs/INTERFACE-QUALITY.md) pins their source and supplies the required consumer `AGENTS.md` routing. No automatic background auditor or skill installation is implied.
-
-The [marc-lou-landing-page skill](skills/marc-lou-landing-page/SKILL.md) is bundled
-with its references and agent metadata. It adds a landing-specific product/copy
-lens, not a new visual system or a conversion guarantee. Follow
-[Landing-page routing](docs/LANDING-PAGE-SKILL.md) for automatic consumer use and
-optional native discovery. Added after RC16; the published RC16 archive above
-does not include this source addition. No global installation or auto-upgrade.
+## Check a consumer
 
 ```sh
 node node_modules/beds/scripts/check-consumer.mjs src/ui
 ```
 
-Pass every relevant UI root. The check follows local imports; a passing partial directory says nothing about excluded UI or host CSS.
+Pass every UI root. The check follows local imports; a passing partial directory
+says nothing about excluded UI or host CSS, and it is not visual review.
+
+## Rules
+
+[Documentation map](docs/README.md) · [Foundations](docs/FOUNDATIONS.md) ·
+[Components](docs/COMPONENTS.md) · [Consumer contract](docs/CONSUMER-CONTRACT.md) ·
+[Governance](docs/GOVERNANCE.md) · [Package rules](AGENTS.md)
+
+UI work in a consumer routes `better-interface` and its six domain skills before
+design and code decisions ([Interface quality](docs/INTERFACE-QUALITY.md)); the
+skills are installed separately. Landing work can also use the bundled
+[marc-lou-landing-page skill](skills/marc-lou-landing-page/SKILL.md)
+([routing](docs/LANDING-PAGE-SKILL.md)).
+
+Promote a component into BEDS only when it has one clear job and credible use in
+unrelated products ([component admission](docs/GOVERNANCE.md#component-admission)).
 
 ## Maintain
 
@@ -69,6 +78,7 @@ npm run test:guards
 npm run check:artifact
 ```
 
-Edit repository canonical docs, never the generated mirror. Build emits ESM, declarations, styles and portable docs. The docs check includes untracked files; artifact validation rebuilds and tests an unpacked consumer. Standalone consumers can run the shipped `scripts/check-docs.mjs` against explicit document paths, without the source repository.
-
-[Foundations](docs/FOUNDATIONS.md) owns component/style guidance; [Components](docs/COMPONENTS.md) describes reusable APIs. Apps decide page hierarchy and composition. Fonts: official Inter 4.1 and Geist Mono; source revisions and OFL notices in [Provenance](docs/PROVENANCE.md). Product identity is supplied by callers, never embedded in the runtime.
+Edit the repository's canonical docs, never the generated `docs/` mirror. The build
+emits ESM, declarations, styles, `manifest.json` and the portable docs. Fonts are
+Inter 4.1, Geist Mono and Caveat under the OFL; provenance is in
+[Provenance](docs/PROVENANCE.md).

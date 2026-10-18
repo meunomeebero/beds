@@ -8,6 +8,12 @@ The [agnostic migration ledger](AGNOSTIC-DS.md) records extraction, scoped
 verification and residual acceptance limits; [API boundaries](API-BOUNDARIES.md)
 classifies every current export.
 
+**Source of truth for visual defaults (owner decision, 2026-10-18):** the patterns
+Curriculol ships are the reference. Where BEDS and Curriculol differed, BEDS now
+follows Curriculol: pill buttons (md 40 / sm 32), soft text-entry borders with a
+soft focus ring, one proportional tab pill, outline calls to action and the
+layout proportions in [Proportions](#proportions--the-curriculol-finish).
+
 ## Required authoring skills
 
 Before constructing UI, read [Interface quality](INTERFACE-QUALITY.md), its direct
@@ -59,8 +65,10 @@ from `tokens.ts`. The light/dark palette remains stable during extraction.
 | Canvas and primary text | `--es-bg`, `--es-text` |
 | Secondary copy and headings | `--es-secondary`, `--es-heading` |
 | Contained and subtle surfaces | `--es-surface`, `--es-subtle` |
-| Structural border and control boundary | `--es-border`, `--es-control-border` |
-| Text-entry boundary (fields, text areas, selects, OTP slots, file dropzone) | `--es-field-border`: equals `--es-control-border` by default; `DesignSystemProvider fieldBorder="soft"` makes it `--es-border` |
+| Structural border and mark boundary (checkbox, radio, switch) | `--es-border`, `--es-control-border` |
+| Text-entry boundary (fields, text areas, selects, OTP slots, file dropzone) | `--es-field-border`: equals `--es-border` (soft) by default; `DesignSystemProvider fieldBorder="strong"` makes it `--es-control-border` |
+| Text-entry focus and error | `--es-field-focus-border` (heading at 40%), `--es-focus-ring` (focus at 40%, 2px), `--es-error-ring` (error at 25%, 2px) |
+| Quiet interaction tints | `--es-hover-soft` (outline/ghost pills, chips), `--es-remove-hover` (round ×), `--es-destructive-border` |
 | Focus | `--es-focus` |
 | Primary action | `--es-primary`, `--es-on-primary` |
 | Caller-owned branded emphasis | `--es-brand`, `--es-on-brand` |
@@ -78,14 +86,17 @@ brand color. There is no default and there are no named product presets.
 It contains no BEDS-owned product logo. Assets and their licenses belong to the
 app. Functional error/success states must not depend on brand color alone.
 
-`DesignSystemProvider` also accepts `fieldBorder: 'default' | 'soft'`. `default`
-keeps the functional-contrast boundary (`--es-control-border`, at least 3:1) on
-every text-entry control. `soft` is a product-level opt-in that gives fields,
-text areas, selects, OTP slots and the file dropzone the structural card border
-(`--es-border`); those controls are then identified by label, fill, placeholder
-and the focus ring instead of a high-contrast outline. Checkbox, radio and switch
-marks never soften, and focus and error borders keep their own colors. Choose
-`soft` knowingly, and record why in the product's AGENTS.md.
+`DesignSystemProvider` also accepts `fieldBorder: 'soft' | 'strong'`. `soft` is
+the default since 0.3 (owner, about Curriculol: "não gosto de input com borda
+grossa, gosto com borda suave"): fields, text areas, selects, OTP slots and the
+file dropzone draw the structural card border (`--es-border`) and are identified by
+their visible label, placeholder and the soft focus ring. `strong` restores the
+functional-contrast outline (`--es-control-border`, at least 3:1) for products that
+need it; `default` is accepted as a deprecated alias of `strong`. Checkbox, radio
+and switch marks never soften, and focus and error keep their own colors. Focus on
+text entry is never a hard outline: the border turns `--es-field-focus-border` and
+a 2px `--es-focus-ring` surrounds the control. Inside dialogs and drawers text
+entry is outlined without a fill.
 
 Choose actual foreground/background pairs and inspect contrast in both themes.
 A palette value is not a contrast guarantee for every placement. Keep floating
@@ -106,7 +117,7 @@ blue, success, warning and error stay separate and never double as the brand.
    from its audience and promise. Examples: "energy, money, new"; "calm, trust, focus".
 2. Pick a hue that carries that feeling and stays distinct from functional colors.
    Starting points, not rules: electric lime or yellow for energy, speed and money
-   (Hyppo `#d0f300`); orange for warmth and optimism (Curriculol `#ffa133`); violet
+   (Hyppo `#d0f300`); orange for warmth and optimism (Curriculol `#ff5a00`); violet
    for creativity and premium; teal or green for growth and health; pink or coral
    for playful and social. Avoid link-like blues and red, which read as links and errors.
 3. Prefer saturated colors with presence on both `#ffffff` and `#191919`. BEDS
@@ -114,11 +125,14 @@ blue, success, warning and error stay separate and never double as the brand.
    brands visible as decoration on light surfaces.
 4. Record the color and a one-sentence reason in the product's `AGENTS.md`.
 
-**Using it:** primary CTAs and their hover fills, selected or active states, small
-identity marks (logo accent, highlighter under key headline words, decorative
-strokes such as `HandDrawnArrow`) and progress. Keep it to a few focal points per
-screen. Never use it for body text, large page backgrounds or several competing
-CTAs. Brand is never the only carrier of meaning.
+**Using it:** selected or active marks, progress and meters, small identity marks
+(logo accent, highlighter under key headline words, decorative strokes such as
+`HandDrawnArrow`) and illustrations. Keep it to a few focal points per screen.
+Buttons are not brand-filled (Curriculol decision, 2026-09-29: orange fills with
+black labels read loud; the focal action is the outline pill with a trailing arrow
+and the filled action is the neutral `primary`). Never use brand for body text,
+large page backgrounds or several competing accents. Brand is never the only
+carrier of meaning.
 
 ## Personality layers — a correct screen is not a finished screen
 
@@ -133,9 +147,12 @@ the difference between "a template" and "a product".
    andamento" becomes the promise plus the next step. Never invent counts,
    testimonials or urgency; label demo data as demo.
 2. **One focal point per view.** Decide the single thing the user should do and
-   make it visibly the primary action: `ExpandingButton` (at most one per screen)
-   or a primary `Button`, with value stated before the ask. Everything else is
-   secondary, ghost or a `LinkButton`.
+   make it visibly the primary action: the outline pill with a trailing arrow
+   (`Button variant="outline" icon="ArrowRight" iconPosition="end"`, or
+   `ExpandingButton`, which now renders exactly that), at most one per screen, with
+   value stated before the ask. Everything else is secondary, ghost or a
+   `LinkButton`. Async work uses the button's `state` (spinner slot and rolling
+   label), never a hand-swapped label.
 3. **Contrast color on few, meaningful spots.** The primary CTA fill, a
    highlighter under one or two key headline words, the logo accent, active or
    selected state, progress and small decorative strokes (`HandDrawnArrow`). Never
@@ -159,12 +176,37 @@ generated. Elegant restraint with one confident accent beats decoration.
 
 | Need | Use |
 |---|---|
-| The one primary CTA with brand fill on hover | `ExpandingButton` (one per screen; `mark` for a provider logo) |
+| The one focal call to action | `Button variant="outline"` with a trailing `ArrowRight`, or `ExpandingButton` (same pill; `mark` for a provider logo) |
+| A value the person added, removable | `Chip` with `onRemove` (quiet round ×) |
 | Header, footer and link-list items | `TextLink purpose="nav"` (URL) or `LinkButton purpose="nav"` (in-page action): no underline at rest, a drawn underline on hover and keyboard focus |
 | Links inside prose | `TextLink` (default `inline`), always underlined |
 | A handwritten note pointing at the CTA | `HandDrawnArrow` with a short note |
 | Modal content | `Dialog`: quiet fade and slight scale by default, no morph. `motionPreset="elastic"` opts into a bounded 260ms spring with 4px lift and .97→1 scale. Do not add a second entrance animation around it |
 | Highlighter, rotating headline, avatar stack | App-owned for now; see [Promotion candidates](PROMOTION-CANDIDATES.md) |
+
+## Proportions — the Curriculol finish
+
+Owner review, 2026-09-28: per-component fidelity is not enough; the product is
+read as a whole against pro.beui.dev. Oversized CTAs (48–64px), 48px tabs with a
+box and an underline, mixed content widths, ragged left edges and display
+headlines inside in-page prompts read as amateur. The components carry the first
+four rows; the rest are app-owned layout values Curriculol proved, recommended for
+any BEDS product (copy the values into the app's own layout CSS, never into BEDS
+tokens).
+
+| Axis | Rule |
+|---|---|
+| Buttons | One geometry: pill md 40px (44px touch), sm 32px, 14/12px medium. No 48–64px CTAs. One focal action per view (outline + arrow); the filled action is neutral `primary`, never brand |
+| Tabs and filters | One tab pill: 40px track, 32px options (`SegmentedControl`, `Tabs`). No boxed or underlined tab strips |
+| Fields | 44px pill, 16px text, label 14/20px inset 4px, soft border, soft 2px focus ring; dense 36px rows only in admin/settings |
+| Chips and dismiss | 28px pill, 13px text, round 24px × with a quiet tint; toasts and notices share the × |
+| Cards | One anatomy per product: 1px `--es-border`, 16px radius, 24px inset (20px on phones), a surface step instead of a shadow; collection/job cards may use the 24px card radius. No card inside a card; hairline-divided panes instead |
+| Content width | Signed-in pages: `wide` 1040px (lists, boards, search) and `compact` 760px (profile, forum, settings); both centered with the same top rhythm and fluid 16–40px gutters. Public/landing frame: 1216px outer, 32px gutter (20px on phones) |
+| Rhythm | Page header → content 48px (the header owns no bottom padding); landing sections 112px (80px on phones); section head = quiet 14px eyebrow, 36px/500 title, 16px lead, 48px to content |
+| Page identity | One H1 per page: 30/36px medium, tracking -0.025em (26/32px on phones), lead 15/22px secondary at 60ch (`PageHeader`). In-page prompts use a 16px card title, never a display headline |
+| Navigation | Rows 36px (44px touch), 16px icons, 10px gap, 10px radius (`NavItem`); breadcrumbs and the first control's glyph sit on the content's left edge (optical alignment, not box alignment) |
+| Empty states | Message first: round 40px icon tile or the product's own artwork, 18px title, 14px reason at 52ch, one outline action (`EmptyState`) |
+| Motion | Press .97 with a short spring release on pointer only (Curriculol's tuned value; beUI upstream uses .93 and better-ui suggests .96); state changes swap in place; reduced motion jumps to the end state |
 
 ## Typography
 
@@ -224,9 +266,11 @@ and license records in [Provenance](PROVENANCE.md).
 - Keep disabled actions inactive, including secondary actions such as cancellation.
 - Keep selection legible without motion. Reduced motion changes the transition,
   not the final checked/selected state.
-- Provide generous non-overlapping hit areas. Current RadioGroup and ThemeToggle
-  targets are at least 32px on desktop and 44px for coarse pointers; this is not
-  a claim that all legacy components have completed their target audit.
+- Provide generous non-overlapping hit areas. The md button, fields, tab options
+  and nav rows grow to 44px on coarse pointers; the sm button and the chip × keep
+  their visual size and pad their hit area instead. RadioGroup and ThemeToggle
+  targets are at least 32px on desktop and 44px for coarse pointers; this is not a
+  claim that all legacy components have completed their target audit.
 - Use motion to explain change, not to occupy attention. Favor interruptible,
   brief feedback for frequent interactions; avoid decorative animation by default.
 - Restore focus deliberately when a triggering action disappears. The app owns

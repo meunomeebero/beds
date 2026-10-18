@@ -5,6 +5,10 @@ controlled native `<input type="date">`, not a custom calendar, date picker or
 wheel selector. It exists for flows that capture one calendar date while leaving
 product policy outside BEDS.
 
+**0.3 — Curriculol patterns (2026-10-18).** `purpose` defaults to `field` (44px
+pill, 16px text, soft border and focus ring); pass `purpose="settings"` for the
+dense 36px row.
+
 ## Public contract
 
 ```tsx

@@ -19,7 +19,16 @@ node -e "const m=require('beds/manifest.json');console.log(JSON.stringify(m.comp
 If a prop or value is not in the manifest, it does not exist. Do not add
 `className`, `style`, spreads or wrapper CSS to change a BEDS component.
 
-## 2. Six rules that most often fail review
+## 2. Defaults you get for free (0.3, Curriculol patterns)
+
+Buttons are pills (md 40px, `compact` sm 32px); the focal action is
+`variant="outline"` with `icon="ArrowRight" iconPosition="end"`; async actions pass
+`state`. Fields are 44px pills with a soft border and a soft focus ring; pass
+`purpose="settings"` only for dense admin rows. `Select` defaults to the 44px
+`input` pill; toolbars pass `variant="compact"`. `SegmentedControl` and `Tabs`
+render one 40px tab pill. Do not resize, recolor or outline these in app CSS.
+
+## 3. Six rules that most often fail review
 
 1. **Choose a contrast color.** `DesignSystemProvider` needs `theme` and a
    deliberate `brandColor`; there is no default. Pick it from the feeling the
@@ -40,12 +49,14 @@ If a prop or value is not in the manifest, it does not exist. Do not add
    [personality layers](FOUNDATIONS.md#personality-layers--a-correct-screen-is-not-a-finished-screen):
    voice, one focal CTA, the contrast color on a few spots, hierarchy through type
    and hairlines, one signature motion, a preview instead of an icon tile.
-   Use `ExpandingButton` for the one primary CTA and `TextLink`/`LinkButton`
-   `purpose="nav"` for header and footer links. No gradients, glow or shadows.
+   Use the outline pill with a trailing arrow for the one focal CTA (no brand-filled
+   buttons) and `TextLink`/`LinkButton` `purpose="nav"` for header and footer links.
+   Follow [Proportions](FOUNDATIONS.md#proportions--the-curriculol-finish) for widths,
+   rhythm and card anatomy. No gradients, glow or shadows.
 6. **Look at it.** Check desktop and 320px, light and dark, keyboard focus and
    reduced motion in a real browser. Passing checks are not visual review.
 
-## 3. Verify
+## 4. Verify
 
 In a consumer app:
 
@@ -56,7 +67,7 @@ node node_modules/beds/scripts/check-consumer.mjs <every UI root and new compone
 Then run the app's typecheck, lint, tests and build. In this repository,
 `npm run verify` runs every gate, including the manifest test.
 
-## 4. Where to go next
+## 5. Where to go next
 
 | Need | Read |
 |---|---|

@@ -15,7 +15,7 @@ widget does not endorse all its historical geometry or certify every state.
 | Source family | Exports (including related types) | Ownership decision |
 |---|---|---|
 | foundation | `DesignSystemProvider`, `useDesignSystem`, `Icon`, `Text`, `Avatar`, `TextLink`, `LinkButton`, `BrandMark`, `ThemeToggle`, `AnimatedNumber`, `IconName`, `Theme`, `TextVariant`, `TextLinkPurpose` | Retain: theme boundary, identity container and individual visual/number primitives. BrandMark requires the caller's image; no embedded product identity. |
-| expanding-button | `ExpandingButton`, `ExpandingButtonProps` | Retain: one emphasized call to action with brand-fill motion. Colors come from the provider brand; the caller owns the label, the optional brand mark and where the single instance goes. |
+| expanding-button | `ExpandingButton`, `ExpandingButtonProps` | Retain for compatibility: since 0.3 it renders the shared outline pill with a trailing arrow (the Curriculol focal action). The caller owns the label, the optional brand mark and where the single instance goes; new code may use `Button variant="outline"` directly. |
 | hand-drawn-arrow | `HandDrawnArrow`, `HandDrawnArrowProps`, `HandDrawnArrowDirection`, `HandDrawnArrowShape` | Retain: one decorative annotation stroke with an optional note. Placement next to the target, copy and meaning stay caller-owned; never the only carrier of meaning. |
 | meter-segments | `MeterSegments` | Retain: one bounded meter/progress representation. Labels, values and units are caller-owned. |
 | number-ticker | `NumberTicker`, `NumberTickerProps` | Retain: changing numeric text, not a score or revenue policy. |
@@ -33,6 +33,7 @@ widget does not endorse all its historical geometry or certify every state.
 | disclosure | `DisclosureText`, `LabelField`, `DisclosedRecords` | Retain: measured content disclosure. No domain records or fetching. |
 | patterns | `SettingsForm`, `SettingsRow`, `SettingsGroup`, `IntegrationRow`, `RecentItem`, `PlanCard`, `AccountMenu` | Retain: form/row/group semantics, individual integration/recent/usage cards and an account popup. No account backend, settings page, pricing plan or authentication workflow. |
 | feedback | `Badge`, `StatusDot`, `Notice`, `EmptyState`, `Skeleton`, `LoadingIndicator`, `ProgressBar`, `SegmentedMeter`, `Metric`, `DataList`, `MetricProps` | Retain: individual status, empty, loading and numeric feedback. No synthetic successful operations. |
+| chip | `Chip`, `ChipProps` | Retain: one removable value pill (skills, filters, recipients). Admitted from Curriculol's profile editor with credible reuse in filters and multi-value inputs of unrelated products; list semantics, removal and focus destination stay caller-owned. |
 | chat | `Conversation`, `ConversationBubble`, `ChatComposer`, `SuggestionRow`, `ChatMessage`, `ChatOptions`, `ChatOption`, `ComposerAttachment`, `ComposerAttachmentPicker` | Retain: transcript/bubble/composer/choice primitives. No complete workspace, guided page, provider transport or step policy. |
 | technical | `CodeSnippet`, `CodeSnippetMessages` | Retain: selectable code and copy feedback; caller owns content and localized messages. |
 | feature-card | `FeatureCard`, `FeatureCardProps` | Retain: one image-led card, not a landing section or onboarding page. |

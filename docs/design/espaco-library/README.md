@@ -20,11 +20,12 @@ chat requires explicit selection. The orange color example is caller-owned, not
 a named product preset. Existing product pages remain available as examples,
 not a template that unrelated apps must inherit.
 
-**Agents: start with [Agent quickstart](AGENT-QUICKSTART.md)** — the short path, the machine-readable `beds/manifest.json` and the five rules that most often fail review.
+**Agents: start with [Agent quickstart](AGENT-QUICKSTART.md)** — the short path, the machine-readable `beds/manifest.json`, the defaults you get for free and the rules that most often fail review.
 
 | Task | Read next |
 |---|---|
-| Make one primary CTA or sign-in stand out with motion | [ExpandingButton](EXPANDING-BUTTON.md): brand chip that fills the pill on hover/focus; `Button` stays the default |
+| Know the visual defaults (0.3, Curriculol patterns) | [Foundations](FOUNDATIONS.md#proportions--the-curriculol-finish): pill buttons md 40 / sm 32, soft fields with a soft focus ring, one 40px tab pill, card and layout proportions |
+| Make the one focal CTA | `Button variant="outline"` with a trailing arrow; [ExpandingButton](EXPANDING-BUTTON.md) now renders the same pill |
 | Point at a nearby CTA with a handwritten note | [HandDrawnArrow](HAND-DRAWN-ARROW.md): decorative pen stroke, fixed shapes/directions/contexts/tones, draw-in and brand ink |
 | Choose the product's contrast color | [Foundations](FOUNDATIONS.md#contrast-color--mandatory-choice): mandatory `brandColor`, how to pick it and where to use it |
 | Propose a new reusable component | [Promotion candidates](PROMOTION-CANDIDATES.md): app patterns waiting for a second product |

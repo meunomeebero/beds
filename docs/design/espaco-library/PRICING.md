@@ -7,6 +7,11 @@ of `beds`. The catalog demonstrates the recipe at `?view=pricing` with fictional
 offers. Comparison columns, introductory identity and which plan to emphasize
 are consumer decisions, not universal DS rules.
 
+**0.3 — Curriculol patterns (2026-10-18).** The card action is the shared md pill
+at full width: the featured plan uses the neutral `primary` fill and the others
+the `outline` pill; href actions mirror it. Brand-filled actions are retired (see
+Foundations, contrast color). Older measurements below are historical.
+
 ## API / boundaries
 
 ```tsx

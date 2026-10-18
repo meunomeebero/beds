@@ -10,6 +10,11 @@ entrypoints linked in [Interface quality](INTERFACE-QUALITY.md) before building 
 controls. It can serve, for example, document-library navigation or inventory
 administration without knowing either product's routes or domain models.
 
+**0.3 — Curriculol patterns (2026-10-18).** `NavItem` rows follow the beUI
+ai-sidebar rows Curriculol ships: 36px (44px on touch), 14/20px medium, 16px
+icon, 10px gap, 10px radius, heading text when active; section labels sit on the
+row text edge (10px inset) at 12/16px medium.
+
 Required props: `label` and `children`. Optional `collapsed` is controlled and
 defaults to false. Supplying `onCollapsedChange` enables the header's collapse
 control. Supplying `onDismiss` replaces that control with a close action, useful

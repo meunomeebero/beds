@@ -3,6 +3,12 @@
 Scope: portable BEDS component;catalog `?view=empty-state`;synthetic data only.
 No Curriculol route,query,queue,storage or production integration.
 
+**0.3 — Curriculol patterns (2026-10-18).** `EmptyStateCard` actions are the
+shared pill button; its own geometry is unchanged. The compact `EmptyState` now
+follows Curriculol's empty-state anatomy: round 40px icon tile, 18px/1.4 balanced
+title, 14px/1.6 secondary reason capped at 52ch, 20px rhythm, 40/24px padding
+(32/16px on phones) and one outline action with a trailing arrow.
+
 ## Use / API
 
 ```tsx
