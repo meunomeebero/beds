@@ -111,9 +111,12 @@ test('drawer light/dark, 320px, long labels, RTL, zoom and reduced motion', asyn
       await expect(close).toHaveCSS('outline-style', 'solid');
       await expect(close).toHaveCSS('outline-width', '2px');
       if (width < 768) {
-        for (const name of ['Fechar detalhes', 'Ver origem', 'Salvar vaga']) {
-          const target = await page.getByRole('button', { name, exact: true }).boundingBox();
-          expect(target!.height).toBeGreaterThanOrEqual(44);
+        // Since 0.3 the drawer no longer resizes its children: the close control keeps 44px on narrow
+        // screens, md pills reach 44px on coarse pointers and the sm header action keeps its 32px pill.
+        expect((await close.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+        if (info.project.name === 'mobile') {
+          expect((await page.getByRole('button', { name: 'Salvar vaga', exact: true }).boundingBox())!.height).toBeGreaterThanOrEqual(44);
+          expect((await page.getByRole('button', { name: 'Ver origem', exact: true }).boundingBox())!.height).toBeGreaterThanOrEqual(32);
         }
       }
       if (width === 390 || width === 1440) await page.screenshot({ path: `${evidence}/${info.project.name}-${theme}-${width}.png` });

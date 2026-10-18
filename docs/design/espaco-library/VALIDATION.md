@@ -7,6 +7,24 @@ Canonical repository:`meunomeebero/beds`. Historical release candidate:
 belong to an immutable GitHub prerelease;this record describes source validation,
 not deployment or release acceptance.
 
+## Branch `beds-curriculol-patterns` — 2026-10-18 (proposed 0.3.0-rc.1, unreleased)
+
+Scope: Curriculol patterns as defaults (pill buttons, soft fields and focus ring,
+one tab pill, outline CTA, Chip, EmptyState, NavItem, PageHeader, Select labels,
+Drawer children geometry). Base: rc.11 + Curriculol's elastic patch.
+
+| Gate | Result |
+|---|---|
+| `npm run verify` | Pass: build, package + lab typecheck, library contract (115 components, 220 tokens, 0 violations), docs (126 files, 0 violations), 36 example consumer roots (0 violations), 88 guard + 26 recipe/routing tests, artifact parity and fresh-consumer smoke |
+| Lab Playwright, changed components (Chromium desktop + mobile) | `field-border` 20/20, `button` 6/6, `drawer` 6/6, `controls` 31/33 plus the 24 SegmentedControl cases re-run serially 24/24. The remaining failure (Command search `End` → last option, desktop and mobile) also fails on the untouched base: the spec predates rc.11's native Home/End contract |
+| Rendered review | Fresh Opus review at 1440/390/360/320px, both themes, keyboard, coarse pointer, reduced motion and forced colors: three HIGH findings (segmented focus ring under the pill, page overflow from the tab strip at 320/360px, `input` Select without a visible label) and two MEDIUM (focus lost while loading, sm pill 34px with an icon) fixed and re-checked; the LOW footer `column-reverse` focus order (Curriculol's behavior) stays open |
+| 320px overflow sweep | 17 catalog views, dark theme: no horizontal overflow |
+
+Geometry pins in lab specs were updated or removed where 0.3 changes the contract;
+`expanding-button.spec.ts` was deleted with the retired chip anatomy. Not verified:
+Safari/Firefox, physical devices, screen-reader speech of the Button live region,
+and the lab specs outside the changed components (many still pin pre-0.3 geometry).
+
 ## Current local candidate — September 20
 
 `beds@0.1.7-rc.21` is a local, uncommitted candidate. It adds

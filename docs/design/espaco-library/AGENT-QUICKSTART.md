@@ -25,7 +25,8 @@ Buttons are pills (md 40px, `compact` sm 32px); the focal action is
 `variant="outline"` with `icon="ArrowRight" iconPosition="end"`; async actions pass
 `state`. Fields are 44px pills with a soft border and a soft focus ring; pass
 `purpose="settings"` only for dense admin rows. `Select` defaults to the 44px
-`input` pill; toolbars pass `variant="compact"`. `SegmentedControl` and `Tabs`
+`input` pill with a visible label; toolbars pass `variant="compact"` and filter bars
+`hideLabel`. `SegmentedControl` and `Tabs`
 render one 40px tab pill. Do not resize, recolor or outline these in app CSS.
 
 ## 3. Six rules that most often fail review

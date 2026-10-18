@@ -55,6 +55,8 @@ test('receipt forwards caller-controlled busy and disabled actions', () => {
     continueAction: { label: 'Continue', onClick() {}, disabled: true },
   });
   assert.equal((markup.match(/<button\b/g) ?? []).length, 2);
-  assert.equal((markup.match(/ disabled=""/g) ?? []).length, 2);
+  // Busy keeps the button focusable but inert (aria-disabled + aria-busy); disabled stays native.
+  assert.equal((markup.match(/ disabled=""/g) ?? []).length, 1);
+  assert.match(markup, /aria-disabled="true" aria-busy="true"/);
   assert.match(markup, /aria-describedby="[^"]+-invoice"/);
 });

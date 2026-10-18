@@ -15,6 +15,60 @@ Read next: [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.
 
 Rollback: select the previous known release URL/integrity, reinstall and rerun app gates. Do not mutate the old release.
 
+## Proposed, not released — 0.3.0-rc.1 (Curriculol patterns)
+
+Branch `beds-curriculol-patterns`, based on the exact rc.11-elastic.2 source
+Curriculol installs (rc.11 `b52ab01` + Curriculol's
+`vendor/beds-elastic-source.patch`). Needs the owner's OK before any version
+bump, tag, archive or consumer upgrade. Owner rule (2026-10-18): Curriculol's
+shipped patterns are the visual source of truth. A minor bump because default
+visuals change (0.x semver).
+
+**Breaking (visual defaults; APIs still compile):**
+
+- `Button`: beUI StatefulButton pill, md 40px (44px touch), `compact` sm 32px,
+  14/12px medium; `secondary` default; `destructive` is an error outline (no red
+  fill); `purpose` no longer changes geometry.
+- `ExpandingButton`: renders the outline pill with a trailing arrow; `context`
+  ignored; no brand chip.
+- Text entry: `fieldBorder` defaults to `soft`; `TextField`/`TextAreaField`/
+  `DateField` default to `purpose="field"` (44px pill); `SearchField` defaults to
+  the 44px search pill; focus is a soft 2px ring, never an outline; `--es-focus-ring`
+  is now focus at 40% (was 24%) and `--es-error-ring` error-text at 25%.
+- `Select` defaults to `variant="input"` and form variants now render a visible
+  label (`hideLabel` opts out); `compact` is a 32px pill, `filter` a 40px pill.
+- `SegmentedControl` (both variants) and every `Tabs` variant render one 40px tab
+  pill; the settings underline strip is gone.
+- `EmptyState`, `NavItem` (36px rows), `PageHeader` (30/36px H1), `PricingCard`
+  actions (featured neutral `primary`, others `outline`), toast action, file upload
+  browse/remove, Drawer children (no forced 40/44px buttons).
+
+**Added:** `Select` `hideLabel`; `Button` `variant="outline"`, `state`, `loadingLabel`, `successLabel`,
+`errorLabel`, `iconPosition`, `accessibleLabel`; `Chip`/`ChipProps`; `TextField`
+`maxLength`, `enterKeyHint`, `type="search"`; `TextAreaField` `maxLength`;
+`SearchField` `purpose`, `maxLength`; `fieldBorder="strong"`; tokens
+`--es-field-focus-border`, `--es-placeholder-soft`, `--es-hover-soft`,
+`--es-remove-hover`, `--es-destructive-border`; geometry metadata
+`touchButton`, `settingsField`, `segmented`, `segmentedOption`. Includes the
+rc.11-elastic.2 `Dialog`/`Drawer` `motionPreset`.
+
+**Deprecated:** `Button purpose`, `ExpandingButton context`, `fieldBorder="default"`
+(alias of `strong`), `SegmentedControl variant="joined"` (renders the pill).
+
+**Consumer migration:** dense admin/settings screens pass `purpose="settings"` to
+fields and search and `variant="compact"` to toolbar selects; selects that already
+sit beside a visible label (or in a filter bar) pass `hideLabel`; products that need
+the 3:1 field outline pass `fieldBorder="strong"`. Curriculol can retire its
+vendored beUI button/input/sliding-choices ports screen by screen; hyppoapp and
+berobid (rc.7) should review their `ExpandingButton` and `Select` uses.
+
+**Release steps when authorized:** set `packages/beds/package.json` to
+`0.3.0-rc.1`; `npm ci --ignore-scripts`; `npm run verify`; update or delete the
+lab Playwright specs that pin pre-0.3 geometry (many assert 32/28/36px buttons,
+24px segmented lanes or underlined settings tabs) and run the specs for changed
+components; pack, inspect, record SHA-256; tag `v0.3.0-rc.1`, attach the `.tgz` to
+a GitHub prerelease; verify a fresh consumer; upgrade consumers one at a time.
+
 ## Local-only candidate — 0.2.0-rc.11-elastic.2
 
 Based exactly on rc.11 (`b52ab01479f6c072017816845181052864e1f60f`). Additive

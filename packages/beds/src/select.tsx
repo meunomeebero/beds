@@ -43,6 +43,9 @@ export interface SelectProps {
   /** `input` (default) = the 44px pill that sits flush with TextField; `field` = the 36px row beside settings-density fields;
    *  `compact` = the 32px toolbar pill (sm button height); `filter` = the 40px bordered toolbar pill; `context` = inline context switch. */
   variant?: "compact" | "field" | "input" | "context" | "filter";
+  /** Form variants (`input`, `field`) show `label` above the trigger, like TextField. Pass `hideLabel` only when the
+   *  select sits in a filter bar or next to a visible label the caller already renders; the name stays accessible. */
+  hideLabel?: boolean;
 }
 
 /** Trigger radius per variant: pills match the button family, rows match settings fields. */
@@ -53,8 +56,9 @@ const TRIGGER_RADIUS: Record<NonNullable<SelectProps["variant"]>, number> = { in
  * existing controlled API, native manual popover and fixed BEDS geometry.
  * Search, filtering policy and option data remain caller-owned.
  */
-export function Select({ label, value, options, onChange, disabled, icon, variant = "input" }: SelectProps) {
+export function Select({ label, value, options, onChange, disabled, icon, variant = "input", hideLabel = false }: SelectProps) {
   const id = useId();
+  const visibleLabel = !hideLabel && (variant === "input" || variant === "field");
   const anchor = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
@@ -122,9 +126,11 @@ export function Select({ label, value, options, onChange, disabled, icon, varian
     }
   };
 
-  return <div className="es-select" data-variant={variant}>
+  return <div className="es-select" data-variant={variant} data-labelled={visibleLabel || undefined}>
+    {visibleLabel && <label htmlFor={`${id}-trigger`} className="es-select-label">{label}</label>}
     <motion.button
       ref={anchor}
+      id={`${id}-trigger`}
       type="button"
       className="es-select-trigger"
       aria-label={`${label}: ${selected?.label ?? value}`}

@@ -8,7 +8,9 @@
 
 /* SegmentedControl / Tabs: one tab pill (beUI Tabs `pill`, as Curriculol ships it), see controls.tsx. */
 
-.es-root .es-tabs{min-width:0}
+/* A one-column grid lets the scrolling tab strip shrink below its labels' width inside flex columns,
+   so a long tab set scrolls in place instead of widening the page at 320px. */
+.es-root .es-tabs{display:grid;grid-template-columns:minmax(0,1fr);min-width:0}
 .es-root .es-tabs-list-shell{position:relative;display:flex;align-items:center;width:100%;max-width:100%;min-width:0}
 .es-root .es-tabs-list-shell{--es-tabs-fade:var(--es-surface)}
 .es-root .es-tabs-list-shell:not([data-variant="connection"]){width:max-content}
@@ -40,8 +42,7 @@
   .es-root .es-segmented-choice>input:not(:disabled):not(:checked)+span:hover{color:var(--es-heading)}
 }
 
-/* The keyboard ring is painted inside each 32px option, so the scrolling track cannot clip it. */
-.es-root .es-segmented-choice>input:focus-visible+.es-segmented-choice-span{outline-offset:-2px}
+/* The keyboard ring sits 2px outside each option, above the primary pill, inside the track's 4px padding (never clipped). */
 @media(forced-colors:active){.es-root .es-segmented-choice>input:focus-visible+.es-segmented-choice-span{outline-color:Highlight}}
 /* RTL scroll ranges round fractional label widths to whole CSS pixels; one logical end pixel keeps the focused item fully revealable. */
 .es-root .es-segmented-control:dir(rtl){padding-inline-end:5px}

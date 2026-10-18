@@ -35,7 +35,7 @@ type ButtonProps = {
 /* beUI Button + StatefulButton (https://beui.dev/r/button-stateful, MIT), as ported and tuned in Curriculol:
    pill md 40 (44 on touch) / sm 32, 14/12px medium, pointer-only .97 press with a short spring release,
    no hover lift, a fixed 24px status slot and a letter roll capped at 60ms. Colors resolve through BEDS tokens. */
-const BUTTON_BASE = 'es-button relative box-border inline-flex shrink-0 items-center justify-center max-w-full m-0 border border-solid border-transparent font-medium tracking-normal text-center no-underline cursor-pointer select-none [-webkit-tap-highlight-color:transparent] transition-[color,background-color,border-color] duration-150 ease-[cubic-bezier(.4,0,.2,1)] motion-reduce:transition-none disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
+const BUTTON_BASE = 'es-button relative box-border inline-flex shrink-0 items-center justify-center max-w-full m-0 border border-solid border-transparent font-medium tracking-normal text-center no-underline cursor-pointer select-none [-webkit-tap-highlight-color:transparent] transition-[color,background-color,border-color] duration-150 ease-[cubic-bezier(.4,0,.2,1)] motion-reduce:transition-none disabled:pointer-events-none disabled:opacity-50 aria-busy:cursor-progress focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
 
 const BUTTON_VARIANT: Record<NonNullable<ButtonProps['variant']>, string> = {
   primary: 'bg-primary text-primary-foreground hover:bg-primary/90',
@@ -48,7 +48,7 @@ const BUTTON_VARIANT: Record<NonNullable<ButtonProps['variant']>, string> = {
 /** md grows to the 44px touch target; sm keeps its 32px pill and pads its hit area vertically (no horizontal overflow). */
 const BUTTON_SIZE = {
   md: 'min-h-10 px-5 py-1.5 gap-2 rounded-full text-[14px] leading-5 pointer-coarse:min-h-11',
-  sm: 'min-h-8 px-3 py-1 gap-1.5 rounded-full text-[12px] leading-4 pointer-coarse:before:absolute pointer-coarse:before:inset-x-0 pointer-coarse:before:-inset-y-1.5 pointer-coarse:before:content-[""]',
+  sm: 'min-h-8 px-3 py-0 gap-1.5 rounded-full text-[12px] leading-4 pointer-coarse:before:absolute pointer-coarse:before:inset-x-0 pointer-coarse:before:-inset-y-1.5 pointer-coarse:before:content-[""]',
 } as const;
 
 const PRESS_IN = { duration: 0.12, ease: EASE_OUT } as const;
@@ -115,13 +115,18 @@ export function ButtonFrame({ label, onClick, type = 'button', variant = 'second
   </span>;
   return <motion.button
     type={type}
-    onClick={event => { setKeyboard(event.detail === 0); onClick?.(); }}
+    onClick={event => {
+      // Loading keeps the button focusable (focus never drops to the body) but inert: no repeat action or form submit.
+      if (loading) { event.preventDefault(); return; }
+      setKeyboard(event.detail === 0); onClick?.();
+    }}
     onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') setKeyboard(true); }}
     onPointerDown={event => { setKeyboard(false); if (event.isPrimary && event.button === 0 && pressable) setPressed(true); }}
     onPointerUp={release}
     onPointerLeave={release}
     onPointerCancel={release}
-    disabled={disabled || loading}
+    disabled={disabled}
+    aria-disabled={loading || undefined}
     aria-busy={loading || undefined}
     aria-label={accessibleLabel}
     aria-describedby={describedBy}
@@ -579,7 +584,7 @@ export function SegmentedControl({ label, value, options, onChange, variant = 'p
   return <LayoutGroup id={`${name}-layout`}><motion.div ref={groupRef} layoutScroll className={cn('es-segmented-control', PILL_TRACK)} data-variant={variant} role="radiogroup" aria-label={label}>{options.map(option => {
     const selected = value === option.id;
     const input = <input ref={element => { inputRefs.current[option.id] = element; }} type="radio" name={name} value={option.id} checked={selected} disabled={option.disabled} onChange={() => onChange(option.id)} onKeyDown={event => navigate(event, option.id)} onBlur={event => { if (!groupRef.current?.contains(event.relatedTarget as Node | null)) clearKeyboardTarget(); }} className="absolute w-px h-px p-0 m-0 opacity-0 peer" />;
-    return <label key={option.id} onPointerDown={clearKeyboardTarget} className={cn(SEGMENTED_CHOICE, option.disabled && 'cursor-not-allowed opacity-50')}>{input}<span className={cn('es-segmented-choice-span', PILL_OPTION, 'peer-focus-visible:outline-2 peer-focus-visible:outline-offset-[-2px] peer-focus-visible:outline-ring')} data-pill-option="" data-selected={selected || undefined}>
+    return <label key={option.id} onPointerDown={clearKeyboardTarget} className={cn(SEGMENTED_CHOICE, option.disabled && 'cursor-not-allowed opacity-50')}>{input}<span className={cn('es-segmented-choice-span', PILL_OPTION, 'peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ring')} data-pill-option="" data-selected={selected || undefined}>
       {selected && <motion.span layoutId={`${name}-indicator`} layoutDependency={value} initial={false} transition={glide} style={{ borderRadius: 9999 }} className={PILL_INDICATOR} aria-hidden="true" data-segmented-indicator data-pill-indicator="" />}
       <span className="relative z-10">{option.label}</span>
       <span aria-hidden="true" data-pill-overlay="" className={PILL_OVERLAY} style={{ clipPath: selected ? 'inset(0)' : 'inset(0 100% 0 0)' }}>{option.label}</span>
@@ -736,7 +741,7 @@ export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
     return <button key={item.id} ref={button => { tabRefs.current[item.id] = button; }} id={tabId} type="button" role="tab" aria-controls={panelId} aria-selected={active} tabIndex={active ? 0 : -1} disabled={item.disabled} data-pill-option="" data-selected={active || undefined}
       onClick={event => { if (event.detail === 0) { const activation = keyboardActivation.current; keyboardActivation.current = null; if (activation?.id === item.id) return; propose(item.id, true); return; } propose(item.id, false); }}
       onKeyDown={event => navigate(event, item.id)}
-      className={cn(PILL_OPTION, 'border-0 bg-transparent cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ring', connection && 'w-full min-w-0')}>
+      className={cn(PILL_OPTION, 'border-0 bg-transparent cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring', connection && 'w-full min-w-0')}>
       {active && <motion.span layoutId={`${id}-indicator`} layoutDependency={selectedId} initial={false} transition={keyboardInstant ? { duration: 0 } : PILL_GLIDE} style={{ borderRadius: 9999 }} className={cn('es-tabs-indicator', PILL_INDICATOR)} data-tabs-indicator data-pill-indicator="" aria-hidden="true" />}
       <span className="relative z-10">{item.label}</span>
       <span aria-hidden="true" data-pill-overlay="" className={PILL_OVERLAY} style={{ clipPath: active ? 'inset(0)' : 'inset(0 100% 0 0)' }}>{item.label}</span>

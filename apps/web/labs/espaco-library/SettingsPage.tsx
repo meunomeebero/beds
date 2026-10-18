@@ -86,7 +86,7 @@ export default function SettingsPage() {
             { id: 'preferences', label: 'Preferências', content: <Stack gap="section">
               <SettingsGroup variant="section" title="Aparência" description="Escolha o tema mais confortável para você."><SettingsRow title="Tema do espaço" description="A mudança é aplicada nesta prévia."><ThemeToggle label="Tema do espaço" lightLabel="Claro" darkLabel="Escuro" /></SettingsRow></SettingsGroup>
               <SettingsGroup variant="section" title="Idioma e áudio">
-                <SettingsRow title="Idioma" description="Preferência demonstrativa. Os textos da prévia continuam em português."><Select label="Idioma da interface" variant="field" value={locale} onChange={value => { setLocale(value); setMessage('Preferência de idioma registrada apenas nesta prévia.'); }} options={[{ id: 'pt-BR', label: 'Português (Brasil)' }, { id: 'en-US', label: 'English (US)' }]} /></SettingsRow>
+                <SettingsRow title="Idioma" description="Preferência demonstrativa. Os textos da prévia continuam em português."><Select label="Idioma da interface" variant="field" hideLabel value={locale} onChange={value => { setLocale(value); setMessage('Preferência de idioma registrada apenas nesta prévia.'); }} options={[{ id: 'pt-BR', label: 'Português (Brasil)' }, { id: 'en-US', label: 'English (US)' }]} /></SettingsRow>
                 <Switch label="Efeitos sonoros" description="Sons ao interagir com a plataforma. Nenhum áudio é reproduzido nesta prévia." checked={sound} onChange={value => { setSound(value); setMessage(`Efeitos sonoros ${value ? 'ativados' : 'desativados'} apenas nesta prévia.`); }} />
               </SettingsGroup>
             </Stack> },
