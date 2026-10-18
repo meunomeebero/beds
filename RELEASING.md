@@ -15,7 +15,23 @@ Read next: [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.
 
 Rollback: select the previous known release URL/integrity, reinstall and rerun app gates. Do not mutate the old release.
 
-## Current candidate — 0.2.0-rc.11
+## Local-only candidate — 0.2.0-rc.11-elastic.2
+
+Based exactly on rc.11 (`b52ab01479f6c072017816845181052864e1f60f`). Additive
+`Dialog`/`Drawer` `motionPreset: 'default' | 'elastic'` retains the existing
+default; elastic is a bounded internal spring with independent fade and short
+ease-out exit. Native modal lifecycle, focus recovery and reduced-motion
+semantics remain owned by BEDS. This candidate is a uniquely named local pack,
+not a publication, tag or replacement of the public rc.11 archive. Source and
+canonical contracts are tracked together; build generates the portable docs
+and public manifest. [Motion contract](docs/design/espaco-library/STATES.md#motion-contract).
+
+Candidate .2 hardens live reduced-motion changes during entry or exit: a distinct
+neutral transform target cancels the running spring, while distinct opacity
+keyframes keep the fade in the replacement completion/presence lifecycle. The
+previous .1 local archive stays immutable; no native modal or focus remount.
+
+## Published baseline — 0.2.0-rc.11
 
 Additive over rc.10. `DesignSystemProvider` accepts `fieldBorder: 'default' | 'soft'`
 (default `default`, so nothing changes unless a product opts in). Text-entry

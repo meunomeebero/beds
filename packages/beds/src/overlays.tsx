@@ -7,7 +7,8 @@ import { useDismiss } from './lib/hooks/use-dismiss';
 import { useHoverGesture } from './lib/hooks/use-hover-gesture';
 import { useTapGesture } from './lib/hooks/use-tap-gesture';
 import { useReducedMotionPreference } from './lib/hooks/use-reduced-motion';
-import { EASE_OUT, SPRING_PANEL } from './lib/ease';
+import { EASE_OUT } from './lib/ease';
+import { dialogMotion, drawerMotion } from './lib/modal-motion';
 import { containModalTab, dialogShell, outsideDialog, useModal, useModalWithInitialFocus } from './lib/modal';
 import { nextOption } from './lib/option-navigation';
 import { useAnchoredPopup } from './lib/anchored-popup';
@@ -255,12 +256,8 @@ export function Tooltip({ label, children }: { label: string; children: ReactEle
   return <TooltipPrimitive content={label} side="bottom">{children}</TooltipPrimitive>;
 }
 
-const DIALOG_ENTER_TRANSITION = { duration: 0.18, ease: [0.23, 1, 0.32, 1] } as const;
-const DIALOG_EXIT_TRANSITION = { duration: 0.15, ease: EASE_OUT } as const;
-const DIALOG_REDUCED_TRANSITION = { duration: 0.14, ease: EASE_OUT } as const;
-
-export function Dialog({ open, onOpenChange, title, description, children, actions, variant = 'standard', artwork }: {
-  open: boolean; onOpenChange: (open: boolean) => void; title: string; description?: string; children?: ReactNode; actions?: ReactNode; variant?: 'standard' | 'welcome'; artwork?: ReactNode;
+export function Dialog({ open, onOpenChange, title, description, children, actions, variant = 'standard', artwork, motionPreset = 'default' }: {
+  open: boolean; onOpenChange: (open: boolean) => void; title: string; description?: string; children?: ReactNode; actions?: ReactNode; variant?: 'standard' | 'welcome'; artwork?: ReactNode; motionPreset?: 'default' | 'elastic';
 }) {
   const id = useId();
   const dialog = useRef<HTMLDialogElement>(null);
@@ -311,9 +308,7 @@ export function Dialog({ open, onOpenChange, title, description, children, actio
     onPointerDown={event => { shellPointer.current = dialogShell(event); }}
     onClick={event => { const shell = shellPointer.current && dialogShell(event); shellPointer.current = false; if (open && shell) onOpenChange(false); }}>
     <motion.div className="es-dialog-surface" data-phase={open ? (interactive ? 'settled' : 'entry-inert') : 'exit-inert'} inert={!interactive} style={{ pointerEvents: interactive ? 'auto' : 'none' }}
-      initial={reduce ? { opacity: 0, scale: 1 } : { opacity: 0, scale: 0.97 }}
-      animate={open ? { opacity: 1, scale: 1 } : (reduce ? { opacity: 0, scale: 1 } : { opacity: 0, scale: 0.97 })}
-      transition={reduce ? DIALOG_REDUCED_TRANSITION : open ? DIALOG_ENTER_TRANSITION : DIALOG_EXIT_TRANSITION}
+      {...dialogMotion(open, reduce, motionPreset)}
       onAnimationComplete={() => {
         if (phaseRef.current === 'open') setSettled(true);
         else if (presentRef.current) setPresent(false);
@@ -328,11 +323,11 @@ export function Dialog({ open, onOpenChange, title, description, children, actio
 
 /** Modal detail panel. Content, requests and any unsaved-change decision belong to the caller. */
 export function Drawer({ open, onOpenChange, title, description, children, actions, headerActions,
-  closeLabel = 'Fechar detalhes', contentLabel = 'Conteúdo dos detalhes',
+  closeLabel = 'Fechar detalhes', contentLabel = 'Conteúdo dos detalhes', motionPreset = 'default',
 }: {
   open: boolean; onOpenChange: (open: boolean) => void; title: string;
   description?: string; children: ReactNode; actions?: ReactNode; headerActions?: ReactNode;
-  closeLabel?: string; contentLabel?: string;
+  closeLabel?: string; contentLabel?: string; motionPreset?: 'default' | 'elastic';
 }) {
   const id = useId();
   const dialog = useRef<HTMLDialogElement>(null);
@@ -369,9 +364,7 @@ export function Drawer({ open, onOpenChange, title, description, children, actio
   return <motion.dialog ref={dialog} className="es-drawer fixed inset-y-0 [inset-inline-start:auto] [inset-inline-end:0] z-50 [&:not([open])]:hidden flex w-[min(var(--es-command-width),100%)] max-w-full h-full max-h-full m-0 p-0 border-0 [border-inline-start:1px_solid_var(--es-border)] rounded-none flex-col overflow-hidden overscroll-contain bg-card text-card-foreground shadow-[var(--es-shadow-dialog)] [font:400_14px/1.5_var(--es-font)] max-[767px]:w-full max-[767px]:[border-inline-start:0] [&_button]:min-h-10 [&_button]:max-w-full [&_button]:h-auto [&_button]:whitespace-normal [&_button]:[overflow-wrap:anywhere] [&_button>span]:min-w-0 [&_button>span]:whitespace-normal [&_button>span]:[overflow-wrap:anywhere] max-[767px]:[&_button]:min-h-11 max-[767px]:[&_button]:min-w-11 pointer-coarse:[&_button]:min-h-11 pointer-coarse:[&_button]:min-w-11" aria-labelledby={`${id}-title`} aria-modal="true"
     aria-describedby={description ? `${id}-description` : undefined}
     inert={!open}
-    initial={reduce ? { opacity: 0, x: 0 } : { x: offscreen }}
-    animate={open ? (reduce ? { opacity: 1, x: 0 } : { x: 0 }) : (reduce ? { opacity: 0, x: 0 } : { x: offscreen })}
-    transition={reduce ? { duration: 0.2, ease: EASE_OUT } : SPRING_PANEL}
+    {...drawerMotion(open, reduce, motionPreset, offscreen)}
     onAnimationComplete={() => { if (!open && present) setPresent(false); }}
     onKeyDown={event => {
       if ((event.target as HTMLElement).closest('dialog') === event.currentTarget) containModalTab(event);

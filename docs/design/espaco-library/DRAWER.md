@@ -18,9 +18,10 @@ import { Button, Drawer, DrawerSection, Text } from 'beds';
 ```
 
 Required: `open/onOpenChange/title/children`. Optional: `description`,
-`headerActions`, `actions`, localized `closeLabel/contentLabel`.
+`headerActions`, `actions`, localized `closeLabel/contentLabel`,
+`motionPreset: 'default' | 'elastic'` (default: `default`).
 `DrawerSection title/children`: named H3 section inside H2 drawer, no card fill.
-No geometry, portal, motion, resize or CSS props. Keep drawer outside repeated
+No geometry, portal, arbitrary motion, resize or CSS props. Keep drawer outside repeated
 carousel children. Caller owns selected item, stale requests, recovery and
 persistence. Editors must protect unsaved changes in `onOpenChange(false)`;
 the shell never discards a draft. Do not bypass controlled state with native
@@ -42,10 +43,14 @@ source CSS. Source chat, artwork and alternate window modes not copied.
 | Narrow |16px inline safe-area inset;44px controls;full width |
 | Growth |Header max40%,footer max35%;each can scroll;sticky close;body consumes remainder |
 | Motion |beUI Drawer adaptation: `SPRING_PANEL` panel entry/exit preserves the source full-travel `±100%` inline-end direction; reduced motion uses an opacity-only transition; native modal, inert background, scroll lock and focus recovery remain BEDS-owned. The earlier 2026-09-15 read-only advisory proposing bounded 16/8px travel was not implemented and is superseded by the later checkpoint approving the beUI/Motion expression |
+| Elastic opt-in |`motionPreset="elastic"`: same spatial travel and geometry;260ms spring,bounce .16;independent140ms ease-out fade;150ms ease-out exit,not another bounce. Reduced motion fades only: distinct `none`/opacity-keyframe targets cancel live spatial motion while retaining fade completion and native exit presence. No remount,second wrapper or animated native backdrop |
 
 Transparent-card rule does not remove opaque overlay surfaces. Existing
 Dialog,SearchDialog,CommandPalette unchanged. No bottom-sheet,drag gesture,
 full-page,pop-up,minimize modes. Geometry owner: [Foundations](FOUNDATIONS.md).
+
+Catalog `?view=drawer&motionPreset=elastic` exercises the opt-in, including its
+nested Dialog. The Dialog lifecycle harness accepts `?motionPreset=elastic`.
 
 ## Flow / accessibility
 

@@ -8,6 +8,7 @@ const longTitle = 'Especialista em pesquisa, acessibilidade e sistemas de design
 const about = 'Você vai ajudar a transformar problemas complexos em experiências simples. No Ateliê Digital, design, produto e engenharia trabalham juntos, da descoberta ao cuidado com cada detalhe da interface.';
 
 export default function DrawerPage() {
+  const motionPreset = new URLSearchParams(location.search).get('motionPreset') === 'elastic' ? 'elastic' : 'default';
   const [theme, setTheme] = useState<'light' | 'dark'>(() => new URLSearchParams(location.search).get('theme') === 'light' ? 'light' : 'dark');
   const [open, setOpen] = useState(false);
   const [sourceOpen, setSourceOpen] = useState(false);
@@ -28,7 +29,7 @@ export default function DrawerPage() {
           <ApplicationCard title={title} company="Ateliê Digital" status={{ id: saved ? 'saved' : 'new', label: saved ? 'Salva' : 'Nova oportunidade' }} location="São Paulo · Híbrido" salary="R$ 12 mil – R$ 16 mil" keywords={['Produto', 'Design systems', 'Figma']} date={{ label: 'Publicada em 13 de set.', dateTime: '2026-09-13' }} onOpen={() => setOpen(true)} />
         </ResponsiveGrid>
       </Stack>
-      <Drawer open={open} onOpenChange={setOpen} title={example === 'long' ? longTitle : title} description="Vaga de demonstração"
+      <Drawer open={open} onOpenChange={setOpen} title={example === 'long' ? longTitle : title} description="Vaga de demonstração" motionPreset={motionPreset}
         headerActions={ready ? <Button label="Ver origem" icon="ArrowUpRight" variant="ghost" onClick={() => setSourceOpen(true)} /> : undefined}
         actions={ready ? <Button label={saved ? 'Remover das salvas' : 'Salvar vaga'} icon="Bookmark" variant={saved ? 'secondary' : 'primary'} onClick={() => {
           setSaved(value => !value); setFeedback(saved ? 'Vaga removida das salvas nesta demonstração.' : 'Vaga salva nesta demonstração.');
@@ -52,7 +53,7 @@ export default function DrawerPage() {
           <Notice tone="error" title="Não foi possível carregar a vaga" description="Tente novamente para ver os detalhes. A lista de vagas continua disponível ao fechar este painel." />
           <Button label="Tentar novamente" onClick={() => { setExample('ready'); }} />
         </Stack> : <EmptyState icon="Briefcase" title="Esta vaga não está disponível" description="Feche os detalhes para explorar outras oportunidades." action={{ label: 'Voltar às vagas', onClick: () => setOpen(false) }} />}
-        <Dialog open={sourceOpen} onOpenChange={setSourceOpen} title="Origem da oportunidade"><Text>Vaga criada para esta demonstração. Não há anúncio externo, coleta de dados ou conexão com uma empresa real.</Text></Dialog>
+        <Dialog open={sourceOpen} onOpenChange={setSourceOpen} title="Origem da oportunidade" motionPreset={motionPreset}><Text>Vaga criada para esta demonstração. Não há anúncio externo, coleta de dados ou conexão com uma empresa real.</Text></Dialog>
       </Drawer>
     </AppShell>
   </DesignSystemProvider>;
