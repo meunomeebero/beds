@@ -1,29 +1,41 @@
 # Espaço library — validation record
 
-Canonical repository:`meunomeebero/beds`. Historical release candidate:
-`beds@0.1.7-rc.16`,2026-09-15. The current local candidate is
-`beds@0.1.7-rc.21`; current migration status is tracked in
-[F0–F4 migration closeout](F0-F4-MIGRATION-TRACKING.md). Publication identity/hash
-belong to an immutable GitHub prerelease;this record describes source validation,
-not deployment or release acceptance.
+Canonical repository: `meunomeebero/beds`. Current published candidate:
+`beds@0.3.0-rc.1` (2026-10-18); every later section is historical (the 0.1.7
+candidates and their [F0–F4 migration closeout](F0-F4-MIGRATION-TRACKING.md)).
+Publication identity/hash belong to an immutable GitHub prerelease; this record
+describes source validation, not deployment or release acceptance.
 
-## Branch `beds-curriculol-patterns` — 2026-10-18 (proposed 0.3.0-rc.1, unreleased)
+## 0.3.0-rc.1 — 2026-10-18 (published candidate)
 
-Scope: Curriculol patterns as defaults (pill buttons, soft fields and focus ring,
+Scope: reference-app patterns as defaults (pill buttons, soft fields and focus ring,
 one tab pill, outline CTA, Chip, EmptyState, NavItem, PageHeader, Select labels,
-Drawer children geometry). Base: rc.11 + Curriculol's elastic patch.
+Drawer children geometry) and the product-agnostic rename of docs, lab and copy.
+Base: rc.11 plus the rc.11-elastic.2 modal motion. Hash and source commit live in
+the GitHub prerelease notes.
 
 | Gate | Result |
 |---|---|
 | `npm run verify` | Pass: build, package + lab typecheck, library contract (115 components, 220 tokens, 0 violations), docs (126 files, 0 violations), 36 example consumer roots (0 violations), 88 guard + 26 recipe/routing tests, artifact parity and fresh-consumer smoke |
-| Lab Playwright, changed components (Chromium desktop + mobile) | `field-border` 20/20, `button` 6/6, `drawer` 6/6, `controls` 31/33 plus the 24 SegmentedControl cases re-run serially 24/24. The remaining failure (Command search `End` → last option, desktop and mobile) also fails on the untouched base: the spec predates rc.11's native Home/End contract |
-| Rendered review | Fresh Opus review at 1440/390/360/320px, both themes, keyboard, coarse pointer, reduced motion and forced colors: three HIGH findings (segmented focus ring under the pill, page overflow from the tab strip at 320/360px, `input` Select without a visible label) and two MEDIUM (focus lost while loading, sm pill 34px with an icon) fixed and re-checked; the LOW footer `column-reverse` focus order (Curriculol's behavior) stays open |
+| Lab Playwright, full suite (Chromium desktop 1440 + mobile 390) | One full run (766 tests): 742 passed, 19 project-scoped skips, 5 failed — two typos from the rename (catalog brand parameter, landing title case) and one page reload caused by an edit during the run. Fixed and re-run with every spec touched after that run started (catalog, landing, controls, results, upload, settings-page, settings-form, shell, account-menu-beui): 123 passed, 9 skips, 0 failed. The untouched base failed 78 tests |
+| Rendered review | Fresh Opus review at 1440/390/360/320px, both themes, keyboard, coarse pointer, reduced motion and forced colors: three HIGH findings (segmented focus ring under the pill, page overflow from the tab strip at 320/360px, `input` Select without a visible label) and two MEDIUM (focus lost while loading, sm pill 34px with an icon) fixed and re-checked; the LOW footer `column-reverse` focus order stays open |
 | 320px overflow sweep | 17 catalog views, dark theme: no horizontal overflow |
+| Product-agnostic grep | No reference-product, persona or specialist names in package, docs, lab, fixtures or copy; no export, prop or CSS class carried one, so no aliases |
 
-Geometry pins in lab specs were updated or removed where 0.3 changes the contract;
-`expanding-button.spec.ts` was deleted with the retired chip anatomy. Not verified:
-Safari/Firefox, physical devices, screen-reader speech of the Button live region,
-and the lab specs outside the changed components (many still pin pre-0.3 geometry).
+Lab notes: specs that pinned pre-0.3 geometry now read the live pointer
+(`touch-target.ts`; Chromium drops the mobile project's `pointer: coarse` after a
+full-page screenshot) and measure dialogs once their surface settles. Stale
+expectations from earlier candidates (pt-BR default labels, renamed lab selectors,
+the rc.11 native Home/End contract, the dialog shell's initial focus) were updated;
+removal checks no longer run under Playwright's fake clock, which never completes
+Motion exits. Component fixes found by the suite: tab edge scroll buttons left the
+Tab order, the button letter roll runs only on status changes (a long caller label
+no longer overflows a 320px card while rolling), active nav rows keep the heading
+colour on hover, pill options drop their transition under reduced motion, and text
+fields regained the transparent focus outline that forced colors paint.
+
+Not verified: Safari/Firefox, physical devices, screen-reader speech of the Button
+live region, real browser zoom (the lab's proxy is CSS zoom at an 800px viewport).
 
 ## Current local candidate — September 20
 
@@ -51,7 +63,7 @@ heading without manufacturing an announcement. It is a new candidate identity:
 
 The candidate is not published or tagged. An approved local immutable archive
 will be created after this candidate's fresh pack and placed read-only at a
-hash-addressed local path for Curriculol construction, not a public release.
+hash-addressed local path for the reference app construction, not a public release.
 Package/static validation is recorded after its fresh run.
 Browser rendering, assistive-technology speech, non-Chromium engines, native
 zoom, physical devices, performance profiling and design-owner aesthetic
@@ -94,7 +106,7 @@ attribute F4 implementation to `03c3256`.
 ## Local checkout — September16
 
 [Checkout contract and Revenue-Centric review](CHECKOUT.md):three reusable
-patterns;one synthetic Curriculol composition. Revenue-Centric/form-CRO drive
+patterns;one synthetic the reference app composition. Revenue-Centric/form-CRO drive
 explicit value,total,conditional fields and recovery;Better covers six domains;
 Emil/review-animations preserve modest selection feedback and truthful receipts.
 No repricing,forced bundle,countdown,provider call or payment inferred from time.
@@ -142,7 +154,7 @@ external/mutating requests. Command:
 
 Shared Dialog focus-after-content-replacement fixed;four existing dropdown/
 dialog desktop/mobile cases rerun and passed,10.6s. Processing and shared-meter
-regressions rerun after full-result navigation and optional-Arya narrative:
+regressions rerun after full-result navigation and optional-the positioning specialist narrative:
 18 passed,0 skips,34.4s. Total scoped browser cases:38 passed. Three new
 server-rendered result guards included in the package verification.
 
@@ -152,7 +164,7 @@ and4 quality-routing tests passed. Fresh package parity and extracted-consumer
 import smoke passed. `git diff --check` clean. The generated archive is a local
 candidate,not a replacement for the immutable published RC16 release.
 
-Independent review:unresolved jobs route and Arya narrative mismatch corrected,
+Independent review:unresolved jobs route and the positioning specialist narrative mismatch corrected,
 then rechecked read-only in code/Chromium. Existing90s/75s cadence preserved.
 Main visual review:both dark desktop results,checkout,light desktop and both
 theme390px captures. No approved screenshot baseline or measured conversion
@@ -166,7 +178,7 @@ performance profiling remain unverified. Published RC16 stays unchanged.
 ## Local processing port — September16
 
 [Source mapping and six-domain review](PROCESSING.md):one shared `ProcessingView`,
-two isolated Curriculol playground hosts. Existing source cadence90s/75s,
+two isolated the reference app playground hosts. Existing source cadence90s/75s,
 five phases,captions,logs and illustrative scores;host-confirmed100% only.
 Better/Emil review applied;idle timer finding fixed and independently rechecked.
 Independent code/selected-render result:PASS_WITH_NOTES,not aesthetic sign-off.
@@ -199,7 +211,7 @@ Safari/Firefox,actual browser zoom and performance profiling remain unverified.
 ## Local landing composition — September16
 
 [Contract and six-domain review](LANDING-PAGE.md):7 reusable components,
-native pricing-link action and Curriculol-only playground composition.
+native pricing-link action and the reference app-only playground composition.
 Marc Lou adaptation guided promise/proof/CTA;Better reviewed all six domains;
 Emil reviewed minimal feedback/reduced motion. No published-version change.
 
@@ -269,8 +281,8 @@ text contrast≥4.5:1. Initial mobile opener-label assertion corrected to observ
 UI;final run passed. Screenshots reviewed;not approved pixel baselines.
 
 Independent/aesthetic acceptance PENDING;screen-reader speech,physical devices,
-Safari/Firefox and actual browser zoom unverified. No publish,version bump,
-Curriculol consumer update or product mutation. Previous settings findings stay
+Safari/Firefox and actual browser zoom unverified. No publish, version bump,
+reference-app consumer update or product mutation. Previous settings findings stay
 open and are not covered by this new section's scoped result.
 
 ## Settings top navigation — September15 adaptation
@@ -390,11 +402,11 @@ host/aesthetic boundaries. No new source aesthetic or product migration.
 | Consumers |20 catalog/package roots,21 transitive files,0 violations;previous four-root blind spot closed |
 | Regression guards |27 contract/artifact/docs guards +4 quality-routing checks passed |
 | Browser |216 passed,6 intentional viewport-contract skips,0 failed;Chromium desktop/mobile;light/dark suites and named320px/zoom/RTL/recovery checks |
-| Changed suites |34 passed;MCP typography/copy/focus,disclosure shell,Lucy glyph/message semantics |
+| Changed suites |34 passed;MCP typography/copy/focus,disclosure shell,the AI chat glyph/message semantics |
 | Artifact |Fresh build/pack/unpacked-consumer smoke passed;final archive checksum recorded by consumer |
-| Render inspection |Fresh MCP dark desktop/light mobile;Lucy guided desktop and attached-input mobile;forum light cards;retained hierarchy and containment |
+| Render inspection |Fresh MCP dark desktop/light mobile;the AI chat guided desktop and attached-input mobile;forum light cards;retained hierarchy and containment |
 
-Initial full run exposed stale Lucy assertions and mid-run changed disclosure
+Initial full run exposed stale AI chat assertions and mid-run changed disclosure
 fixtures;those failures were investigated,not skipped. Final rerun above used
 the finished source. Six skips are desktop-only breakpoint loops or mobile-only
 touch/drawer contracts,not failed tests hidden with conditional skips.
@@ -445,7 +457,7 @@ Source HEAD `514eb21b2b913a41d3ef1a8bfa5e049a868bab04`, dirty local DS tree; HEA
 | Gate | Result |
 |---|---|
 | Library build / static contract | Build passes; 70 public components, 89 tokens, 0 violations. |
-| Consumer contract | Four explicit roots: package example, LucyPage, McpPage, FeatureCardExamples; 4 files, 0 violations. Catalog chrome and all other application roots are not implied covered. |
+| Consumer contract | Four explicit roots: package example, AiChatPage, McpPage, FeatureCardExamples; 4 files, 0 violations. Catalog chrome and all other application roots are not implied covered. |
 | Canonical + packaged docs | Filesystem gate: 32 Markdown files, 241 local targets, 0 violations; includes untracked files and canonical index coverage in library/repository maps. |
 | Guard regressions | 25 passed, 0 failed/skipped; seven new documentation fixtures cover untracked/nested files, local link forms, empty/missing scope, index coverage, package containment and symlink CLI execution. |
 | Package artifact | Fresh isolated rebuild matches generated runtime/docs; extracted-package links and no-alias consumer import pass; RC12, 0 violations. Final archive hash emitted by the gate, outside this self-referential package record. |
@@ -519,7 +531,7 @@ Catalog entry:Library → **Card de apresentação**,`?view=feature-card&theme=l
 
 ## Previous RC9 — transparent surfaces and interaction finish
 
-User-requested reference adaptation:transparent content containers,panel20px/p16,collection card24px/p20;existing Lucy sidebar preserved. FilterSelect,HelpLabel and interruptible Carousel added. Values are explicit local adoption from supplied screenshots,not measurements claimed from source CSS. Opaque popovers,selected controls and inset surfaces remain intentional.
+User-requested reference adaptation:transparent content containers,panel20px/p16,collection card24px/p20;existing AI chat sidebar preserved. FilterSelect,HelpLabel and interruptible Carousel added. Values are explicit local adoption from supplied screenshots,not measurements claimed from source CSS. Opaque popovers,selected controls and inset surfaces remain intentional.
 
 | Gate | Current result |
 |---|---|
@@ -559,7 +571,7 @@ Records below describe their named candidates,not current candidate approval. Or
 | RecentItem touch contrast | RC1 historical baseline |Held real pointer press verifies pressed foreground/background in both themes; not rerun for RC2 |
 | MCP source-geometry flow | RC1 historical baseline |4 passed; not rerun for RC2 |
 | Form primitives | RC1 historical baseline |8 passed; not rerun for RC2 |
-| Lucy visual regression | RC1 historical baseline |4 passed; not rerun for RC2 |
+| AI chat visual regression | RC1 historical baseline |4 passed; not rerun for RC2 |
 | Production catalog build | `vite build apps/web/labs/espaco-library --config apps/web/labs/espaco-library/vite.config.ts` |RC2 passed; fonts bundled locally |
 | Packed consumer |`npm run check:artifact` from `packages/beds`; local tarball extracted outside repository; Node ESM/SSR render; font/doc paths; both guards from extracted package |RC2 passed;61 components;brand validation;0 violations;the handoff records the immutable archive SHA |
 | Documentation links | Repository-wide link gate |Not rerun for RC2; RC4 rerun recorded below |
@@ -625,14 +637,14 @@ All screenshots use synthetic library content, not source account data.
 
 Reviewed refreshed dark desktop and light mobile form captures, plus the MCP desktop/mobile captures. Integrated suite refreshed desktop/mobile chat,account,welcome and component catalog evidence. Retained full catalog captures and JSON test report: `apps/web/labs/espaco-library/evidence/`. Numeric gates verify the exercised constraints; human aesthetic approval remains separate.
 
-## Lucy application composition — prior v0.1.1 baseline
+## AI chat application composition — prior v0.1.1 baseline
 
 The legacy page supplies sidebar labels/groups only. All temporary workspace-specific library changes were removed. At that checkpoint, `@espaco/ui` was version 0.1.1; no new component, font, palette, geometry or variant was introduced for this exercise.
 
 | Gate | Current result |
 |---|---|
-| Source preservation | 21/21 library source files byte-identical to pre-exercise `espaco-ui-0.1.1.tgz`; [hash record](../../../apps/web/labs/espaco-library/evidence/lucy-library-baseline.json) |
-| Consumer guard | `LucyPage.tsx`: 1 file, 0 violations; public components only |
+| Source preservation | 21/21 library source files byte-identical to pre-exercise `espaco-ui-0.1.1.tgz`; [hash record](../../../apps/web/labs/espaco-library/evidence/ai-chat-library-baseline.json) |
+| Consumer guard | `AiChatPage.tsx`: 1 file, 0 violations; public components only |
 | Library guard | 55 public components, 81 tokens, 0 violations |
 | TypeScript / catalog build | Passed after removing workspace adaptations |
 | Complete browser suite | 52 passed, 2 duplicate-viewport skips; 1.5m; Chromium desktop/mobile |
@@ -641,31 +653,31 @@ The legacy page supplies sidebar labels/groups only. All temporary workspace-spe
 
 | Composition capture | Desktop | Mobile |
 |---|---|---|
-| Dark | [Page](../../../apps/web/labs/espaco-library/evidence/lucy-dark-desktop.png) | [Page](../../../apps/web/labs/espaco-library/evidence/lucy-dark-mobile.png) |
-| Light | [Page](../../../apps/web/labs/espaco-library/evidence/lucy-light-desktop.png) | [Page](../../../apps/web/labs/espaco-library/evidence/lucy-light-mobile.png) |
-| Dark account/navigation | [Account](../../../apps/web/labs/espaco-library/evidence/lucy-account-dark-desktop.png) | [Sidebar](../../../apps/web/labs/espaco-library/evidence/lucy-navigation-dark-mobile.png) |
+| Dark | [Page](../../../apps/web/labs/espaco-library/evidence/ai-chat-dark-desktop.png) | [Page](../../../apps/web/labs/espaco-library/evidence/ai-chat-dark-mobile.png) |
+| Light | [Page](../../../apps/web/labs/espaco-library/evidence/ai-chat-light-desktop.png) | [Page](../../../apps/web/labs/espaco-library/evidence/ai-chat-light-mobile.png) |
+| Dark account/navigation | [Account](../../../apps/web/labs/espaco-library/evidence/ai-chat-account-dark-desktop.png) | [Sidebar](../../../apps/web/labs/espaco-library/evidence/ai-chat-navigation-dark-mobile.png) |
 
-These checks validate composition with the existing DS, not visual parity with port 5282. Other sections and all account/credit/chat data are local demonstration fixtures. [Composition contract](LUCY-COMPOSITION.md).
+These checks validate composition with the existing DS, not visual parity with port 5282. Other sections and all account/credit/chat data are local demonstration fixtures. [Composition contract](AI-CHAT-COMPOSITION.md).
 
 ## Iconography adoption — v0.1.2
 
-Latest explicit user request: use the legacy Lucy icon family throughout the DS. Public `Icon` now renders Lucide only, with fixed 1.5 stroke. Existing icon names remain supported; additional registered names supply the old sidebar symbols. No consumer styling option added.
+Latest explicit user request: use the legacy reference-app icon family throughout the DS. Public `Icon` now renders Lucide only, with fixed 1.5 stroke. Existing icon names remain supported; additional registered names supply the old sidebar symbols. No consumer styling option added.
 
 | Gate | Result |
 |---|---|
 | Change boundary | `foundation.tsx` icon registry/renderer; old source glyph implementation moved to historical evidence; all CSS, palette tokens, typography and layout files unchanged from v0.1.1; [scope record](../../../apps/web/labs/espaco-library/evidence/iconography-scope.json) |
-| Library / consumer guards | 55 public components;81 tokens;0 violations; Lucy consumer1 file,0 violations |
+| Library / consumer guards | 55 public components;81 tokens;0 violations; AI chat consumer 1 file,0 violations |
 | Existing browser cases | 52 passed;2 duplicate-viewport skips with the new icons |
 | Focused iconography | 4 passed after correcting a test-only SSR transform issue;desktop/mobile × light/dark;actual Lucide paths,1.5 stroke,fixed14/16/12/20px purposes,16px sidebar,existing aliases and new sidebar mapping |
 | TypeScript | Passed for library and catalog |
-| Visual inspection | Current dark Lucy page inspected in browser; matching source glyph choices, existing layout and colors |
+| Visual inspection | Current dark AI chat page inspected in browser; matching source glyph choices, existing layout and colors |
 | Dead code | Not green: existing consumer sample entry plus2 backend dependencies and7 backend exports reported; no archived glyph runtime left in source |
 
 The previous full-source identity assertion applies to the earlier composition exercise only. The current, explicitly authorized delta is recorded above. Historical Marketer glyph data remains available as [text evidence](../../../packages/beds/evidence/marketer-source-icons.txt). No production integration or publication performed.
 
 ## Account-menu finish — v0.1.3
 
-Live reference inspected in Chrome; source menu280px/r12/1px border/30px rows and regular13/19.5px text. Adopted through AccountMenu CSS and one internal class for All workspaces. Lucy identity is single-line; other optional descriptions and footers remain supported. Existing DS fonts, theme tokens, icons, sidebar, main and other controls unchanged.
+Live reference inspected in Chrome; source menu280px/r12/1px border/30px rows and regular13/19.5px text. Adopted through AccountMenu CSS and one internal class for All workspaces. The AI chat identity is single-line; other optional descriptions and footers remain supported. Existing DS fonts, theme tokens, icons, sidebar, main and other controls unchanged.
 
 | Gate | Result |
 |---|---|
@@ -673,20 +685,20 @@ Live reference inspected in Chrome; source menu280px/r12/1px border/30px rows an
 | Runtime scope |[Version comparison](../../../apps/web/labs/espaco-library/evidence/account-menu-scope.json):only account styling and internal class;all tokens,fonts,icons and layout source unchanged |
 | Menu coverage |Both themes,desktop/mobile,280px width,r12,1px border,regular text,24px avatar,identity/group separators,quiet All workspaces,30/44px actions,20/40px appearance choices |
 | Interaction |Real profile trigger,theme switching,workspace selection,Tab loop,Escape/outside,focus restoration,nested mobile drawer |
-| Guard / types |55 components,81 tokens,0 library violations;1-file Lucy consumer passes;catalog TypeScript passes |
+| Guard / types |55 components,81 tokens,0 library violations;1-file AI chat consumer passes;catalog TypeScript passes |
 | Visual review |Reference dark menu plus updated mobile dark/desktop light screenshots inspected |
 
 Prior version records above are historical checkpoints. The existing semantic shadow tokens remain unchanged; light uses the established library palette rather than introducing new color roles.
 
 ## Selected primary-navigation icon — v0.1.4
 
-User-requested state from the legacy Lucy reference: selected primary-nav SVG uses `fill:currentColor` and `stroke:var(--es-sidebar)`. Inactive icons remain outlined. Only `SidebarSection purpose="primary"` is affected; standard navigation, suggestions and controls keep their existing icon treatment. No geometry, palette, typography or API change.
+User-requested state from the legacy reference app: selected primary-nav SVG uses `fill:currentColor` and `stroke:var(--es-sidebar)`. Inactive icons remain outlined. Only `SidebarSection purpose="primary"` is affected; standard navigation, suggestions and controls keep their existing icon treatment. No geometry, palette, typography or API change.
 
 | Gate | Result |
 |---|---|
-| Focused browser suite |14 passed;9.7s;desktop/mobile;light/dark;Lucy composition,iconography and navigation |
+| Focused browser suite |14 passed;9.7s;desktop/mobile;light/dark;AI chat composition,iconography and navigation |
 | Selection regression |Chat→Components→Chat moves the fill with active/aria-current;inactive sibling returns to none;standard navigation remains outlined |
-| Lucy regression |Selected Lucy filled,inactive Início outlined;existing page/account/chat interactions retained |
+| AI chat regression |Selected assistant item filled,inactive Início outlined;existing page/account/chat interactions retained |
 | Scope |One CSS state rule in layout.css;existing component states and tokens only |
 
 The complete56-pass/2-skip suite above belongs to v0.1.3. This revision reran the14 relevant cases rather than claiming a fresh full-suite run.

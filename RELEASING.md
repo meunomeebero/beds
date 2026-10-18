@@ -15,59 +15,63 @@ Read next: [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.
 
 Rollback: select the previous known release URL/integrity, reinstall and rerun app gates. Do not mutate the old release.
 
-## Proposed, not released — 0.3.0-rc.1 (Curriculol patterns)
+## Published candidate — 0.3.0-rc.1 (reference-app patterns)
 
-Branch `beds-curriculol-patterns`, based on the exact rc.11-elastic.2 source
-Curriculol installs (rc.11 `b52ab01` + Curriculol's
-`vendor/beds-elastic-source.patch`). Needs the owner's OK before any version
-bump, tag, archive or consumer upgrade. Owner rule (2026-10-18): Curriculol's
-shipped patterns are the visual source of truth. A minor bump because default
-visuals change (0.x semver).
+Tag `v0.3.0-rc.1`, GitHub prerelease asset `beds-0.3.0-rc.1.tgz` (SHA-256 and
+source commit in the release notes). Built on rc.11 (`b52ab01`) plus the
+rc.11-elastic.2 modal motion. Owner rules (2026-10-18): the patterns a production
+reference app ships are the visual source of truth, and BEDS stays
+product-agnostic. A minor bump because default visuals change (0.x semver). Not
+published to the npm registry (the `beds` name there belongs to a third party):
+consumers pin the release URL or vendor the asset.
 
 **Breaking (visual defaults; APIs still compile):**
 
-- `Button`: beUI StatefulButton pill, md 40px (44px touch), `compact` sm 32px,
-  14/12px medium; `secondary` default; `destructive` is an error outline (no red
-  fill); `purpose` no longer changes geometry.
+- `Button`: beUI StatefulButton pill, md 40px (44px on coarse pointers), `compact`
+  sm 32px (hit area padded to 44px on touch), 14/12px medium; `secondary` default;
+  `destructive` is an error outline (no red fill); `purpose` no longer changes
+  geometry; the letter roll marks status changes only.
 - `ExpandingButton`: renders the outline pill with a trailing arrow; `context`
   ignored; no brand chip.
 - Text entry: `fieldBorder` defaults to `soft`; `TextField`/`TextAreaField`/
   `DateField` default to `purpose="field"` (44px pill); `SearchField` defaults to
-  the 44px search pill; focus is a soft 2px ring, never an outline; `--es-focus-ring`
-  is now focus at 40% (was 24%) and `--es-error-ring` error-text at 25%.
+  the 44px search pill; focus is a heading-tinted border plus a soft 2px ring (a
+  transparent outline paints only in forced colors); `--es-focus-ring` is now focus
+  at 40% (was 24%) and `--es-error-ring` error-text at 25%.
 - `Select` defaults to `variant="input"` and form variants now render a visible
   label (`hideLabel` opts out); `compact` is a 32px pill, `filter` a 40px pill.
 - `SegmentedControl` (both variants) and every `Tabs` variant render one 40px tab
-  pill; the settings underline strip is gone.
-- `EmptyState`, `NavItem` (36px rows), `PageHeader` (30/36px H1), `PricingCard`
-  actions (featured neutral `primary`, others `outline`), toast action, file upload
-  browse/remove, Drawer children (no forced 40/44px buttons).
+  pill (32px options, 44px on touch); the settings underline strip is gone; tab
+  edge scroll buttons serve pointers only (Tab goes from the tablist to its panel).
+- `EmptyState`, `NavItem` (36px rows, 44px on touch), `PageHeader` (30/36px H1),
+  `PricingCard` actions (featured neutral `primary`, others `outline`), toast
+  action, file upload browse/remove, Drawer children (no forced 40/44px buttons).
 
-**Added:** `Select` `hideLabel`; `Button` `variant="outline"`, `state`, `loadingLabel`, `successLabel`,
-`errorLabel`, `iconPosition`, `accessibleLabel`; `Chip`/`ChipProps`; `TextField`
-`maxLength`, `enterKeyHint`, `type="search"`; `TextAreaField` `maxLength`;
-`SearchField` `purpose`, `maxLength`; `fieldBorder="strong"`; tokens
-`--es-field-focus-border`, `--es-placeholder-soft`, `--es-hover-soft`,
-`--es-remove-hover`, `--es-destructive-border`; geometry metadata
-`touchButton`, `settingsField`, `segmented`, `segmentedOption`. Includes the
-rc.11-elastic.2 `Dialog`/`Drawer` `motionPreset`.
+**Added:** `Select` `hideLabel`; `Button` `variant="outline"`, `state`,
+`loadingLabel`, `successLabel`, `errorLabel`, `iconPosition`, `accessibleLabel`;
+`Chip`/`ChipProps`; `TextField` `maxLength`, `enterKeyHint`, `type="search"`;
+`TextAreaField` `maxLength`; `SearchField` `purpose`, `maxLength`;
+`fieldBorder="strong"`; tokens `--es-field-focus-border`, `--es-placeholder-soft`,
+`--es-hover-soft`, `--es-remove-hover`, `--es-destructive-border`; geometry
+metadata `touchButton`, `settingsField`, `segmented`, `segmentedOption`. Includes
+the rc.11-elastic.2 `Dialog`/`Drawer` `motionPreset`.
 
 **Deprecated:** `Button purpose`, `ExpandingButton context`, `fieldBorder="default"`
 (alias of `strong`), `SegmentedControl variant="joined"` (renders the pill).
 
+**Product-agnostic renames (docs and lab only; no export changed):** the guided
+profile composition is the AI chat composition (`AI-CHAT-COMPOSITION.md`, lab view
+`?view=ai-chat`, `AiChatPage.tsx`, `ai-chat-*.spec.ts`, `ai-chat-*` evidence);
+product, persona and specialist names in docs, fixtures and copy became generic
+roles (reference app, assistant, ATS and career specialists); checkout fixtures
+use fictitious company data.
+
 **Consumer migration:** dense admin/settings screens pass `purpose="settings"` to
 fields and search and `variant="compact"` to toolbar selects; selects that already
 sit beside a visible label (or in a filter bar) pass `hideLabel`; products that need
-the 3:1 field outline pass `fieldBorder="strong"`. Curriculol can retire its
-vendored beUI button/input/sliding-choices ports screen by screen; hyppoapp and
-berobid (rc.7) should review their `ExpandingButton` and `Select` uses.
-
-**Release steps when authorized:** set `packages/beds/package.json` to
-`0.3.0-rc.1`; `npm ci --ignore-scripts`; `npm run verify`; update or delete the
-lab Playwright specs that pin pre-0.3 geometry (many assert 32/28/36px buttons,
-24px segmented lanes or underlined settings tabs) and run the specs for changed
-components; pack, inspect, record SHA-256; tag `v0.3.0-rc.1`, attach the `.tgz` to
-a GitHub prerelease; verify a fresh consumer; upgrade consumers one at a time.
+the 3:1 field outline pass `fieldBorder="strong"`. Apps that vendored beUI
+button/input/sliding-choices ports can retire them screen by screen; older
+consumers should review their `ExpandingButton` and `Select` uses.
 
 ## Local-only candidate — 0.2.0-rc.11-elastic.2
 
@@ -164,14 +168,14 @@ native lifecycle are unchanged. No API or token changes.
 
 Additive over rc.3. Adds `ExpandingButton`, a pill call to action whose
 brand-colored chip fills the control on fine-pointer hover or `:focus-visible`
-(beUI `expanding-arrow-button`, MIT, via Hyppo). Optional decorative `mark`
+(beUI `expanding-arrow-button`, MIT, via a sibling app). Optional decorative `mark`
 slot for provider or product logos, `default`/`hero` contexts, 44px on touch
 screens, instant under reduced motion, forced-colors fallback. No changes to
 existing components or tokens.
 
 ## Earlier candidate — 0.2.0-rc.3
 
-Agent-experience release from Hyppo consumer feedback. **Breaking:**
+Agent-experience release from a sibling app consumer feedback. **Breaking:**
 `DesignSystemProvider` requires `brandColor` (type, runtime error and
 `check-consumer` `BRAND_REQUIRED`); add the product's contrast color when upgrading.
 Adds `beds/manifest.json`, generated from the TypeScript program (props, required
