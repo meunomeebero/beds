@@ -25,7 +25,7 @@ export default function BlogPostPage() {
 
   return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <AppShell contentWidth="chat" collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} navigationLabel="Navegação" closeNavigationLabel="Fechar navegação"
-      sidebar={<><SidebarHeader><Inline gap="tight"><BrandMark src="/demo-brand.svg" label="Curriculol" /><Text>Curriculol</Text></Inline></SidebarHeader><SidebarSection label="Playground"><NavItem label="Componentes" icon="Folder" href={`?view=components&theme=${theme}`} /><NavItem label="Posts do blog" icon="FileText" active href={listHref} /></SidebarSection></>}
+      sidebar={<><SidebarHeader><Inline gap="tight"><BrandMark src="/demo-brand.svg" label="App de exemplo" /><Text>App de exemplo</Text></Inline></SidebarHeader><SidebarSection label="Playground"><NavItem label="Componentes" icon="Folder" href={`?view=components&theme=${theme}`} /><NavItem label="Posts do blog" icon="FileText" active href={listHref} /></SidebarSection></>}
       header={<ContentHeader actions={<ThemeToggle label="Aparência da página" lightLabel="Claro" darkLabel="Escuro" />}><Text>Componentes / Posts do blog</Text></ContentHeader>}>
       {post ? <Stack gap="section">
         <TextLink href={listHref}>Voltar para os artigos</TextLink>

@@ -1,6 +1,7 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { fileURLToPath } from 'node:url';
 import type { ResultMode, ResultPreview } from './results-fixtures';
+import { coarsePointer, hitBox } from './touch-target';
 
 const evidence = fileURLToPath(new URL('./evidence/results/', import.meta.url));
 const buyLabel = 'Comprar 1 crédito por R$ 5,90';
@@ -94,7 +95,7 @@ test('eligible free analysis survives checkout cancellation, failure and one exp
   const proof = (await score.textContent())!;
   const findings = await screen.locator('.recipe-result-findings').allTextContents();
   const originalURL = page.url();
-  await screen.getByRole('tab', { name: 'Vanellope', exact: true }).click();
+  await screen.getByRole('tab', { name: 'Carreira', exact: true }).click();
   const report = (await screen.getByRole('tabpanel').textContent())!;
   const buy = screen.getByRole('button', { name: buyLabel, exact: true });
   await expect(buy).toHaveAccessibleDescription(/R\$ 5,90.*compra única, sem assinatura.*Créditos não expiram/);
@@ -143,13 +144,13 @@ test('anonymous readers see free proof and unlock reports without buying credits
   await account.getByRole('button', { name: 'Simular identificação', exact: true }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
   await expect(page.getByRole('main')).toBeFocused();
-  const anya = screen.getByRole('tab', { name: 'Anya', exact: true });
-  await expect(anya).toHaveAttribute('aria-selected', 'true');
-  await anya.focus();
-  await anya.press('ArrowRight');
-  const vanellope = screen.getByRole('tab', { name: 'Vanellope', exact: true });
-  await expect(vanellope).toBeFocused();
-  await expect(vanellope).toHaveAttribute('aria-selected', 'true');
+  const ats = screen.getByRole('tab', { name: 'ATS', exact: true });
+  await expect(ats).toHaveAttribute('aria-selected', 'true');
+  await ats.focus();
+  await ats.press('ArrowRight');
+  const career = screen.getByRole('tab', { name: 'Carreira', exact: true });
+  await expect(career).toBeFocused();
+  await expect(career).toHaveAttribute('aria-selected', 'true');
   await expect(screen.getByRole('tabpanel')).toContainText('a otimização não cria experiência');
   await expect(screen.getByRole('button', { name: buyLabel, exact: true })).toBeVisible();
   await expect(screen.getByText(/crédito disponível · demonstração/)).toHaveCount(0);
@@ -252,6 +253,8 @@ test('result dialogs are keyboard reachable, trap focus and restore it on Escape
     await expect(dialog).toBeVisible();
     expect(await dialog.evaluate(element => element.matches(':modal')), 'Native dialog must enter the modal top layer').toBe(true);
     expect(await dialog.evaluate(element => element.contains(document.activeElement))).toBe(true);
+    // The surface stays inert while it enters; keyboard order starts once it settles.
+    await expect(dialog.locator('.es-dialog-surface')).toHaveAttribute('data-phase', 'settled');
     const focusable = dialog.locator('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex="0"]');
     await focusable.last().focus();
     await page.keyboard.press('Tab');
@@ -265,18 +268,21 @@ test('result dialogs are keyboard reachable, trap focus and restore it on Escape
   }
 });
 
-test('both themes reflow at desktop, tablet and narrow widths with readable contrast and 44px result actions', async ({ page }, info) => {
+test('both themes reflow at desktop, tablet and narrow widths with readable contrast and touch-sized result actions', async ({ page }, info) => {
   const widths = info.project.name === 'desktop' ? [1440, 768] : [390, 320];
   for (const mode of ['analysis', 'optimization'] as const) for (const theme of ['light', 'dark'] as const) for (const width of widths) {
     await page.setViewportSize({ width, height: 1000 });
     const screen = await openResult(page, mode, 'default', theme);
     await expect(page.locator('.es-root')).toHaveAttribute('data-theme', theme);
     await assertFits(page, screen);
+    const coarse = await coarsePointer(page);
     for (const action of await screen.locator('.es-button').all()) {
-      const bounds = (await action.boundingBox())!;
+      const bounds = await hitBox(action);
+      // Coarse pointers: 44px (md grows, compact extends its hit area). Fine pointers: md 40px, compact 32px.
+      const floor = coarse ? 44 : await action.getAttribute('data-compact') ? 32 : 40;
       // Ignore sub-pixel floating point noise from the entry transform (43.99997px).
-      expect(Math.round(bounds.height * 100) / 100, await action.innerText()).toBeGreaterThanOrEqual(44);
-      expect(Math.round(bounds.width * 100) / 100, await action.innerText()).toBeGreaterThanOrEqual(44);
+      expect(Math.round(bounds.height * 100) / 100, await action.innerText()).toBeGreaterThanOrEqual(floor);
+      expect(Math.round(bounds.width * 100) / 100, await action.innerText()).toBeGreaterThanOrEqual(floor);
     }
     const contrast = await sampledContrast(screen);
     await info.attach(`${mode}-${theme}-${width}-contrast`, { body: JSON.stringify(contrast), contentType: 'application/json' });

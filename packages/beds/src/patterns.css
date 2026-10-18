@@ -58,9 +58,9 @@
 .es-root .es-account-appearance{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:30px;padding:3px 8px}
 .es-root .es-account-appearance>span{display:flex;align-items:center;gap:10px;min-width:0}
 .es-root .es-account-appearance>span>svg{flex-shrink:0}
-.es-root .es-account-appearance .es-segmented-control{padding:2px;gap:0;border-radius:12px}
-.es-root .es-account-appearance .es-segmented-choice>span{min-width:44px;min-height:20px;padding:0 8px;border-radius:12px;font:400 12px/18px var(--es-font);letter-spacing:normal}
-.es-root .es-account-appearance .es-segmented-choice>input:checked+span{background:var(--es-selected);box-shadow:var(--es-shadow-xs)}
+.es-root .es-account-appearance .es-segmented-control{padding:2px;gap:2px;background:var(--es-subtle)}
+/* Compact appearance switch inside the 280px menu: the shared tab pill on a 24px track (20px options); the clipped label copy keeps the same box. */
+.es-root .es-account-appearance :is(.es-segmented-choice>span,.es-pill-overlay){min-width:44px;min-height:20px;padding:0 10px;font:500 12px/18px var(--es-font);letter-spacing:normal}
 .es-root .es-account-footer{padding:8px}
 @media(max-width:767px){.es-root .es-account-action,.es-root .es-account-appearance{min-height:44px}.es-root .es-account-appearance .es-segmented-choice>span{min-height:40px}}
 @media(hover:hover){.es-root .es-recent-item:hover{background:var(--es-hover);color:var(--es-text)}.es-root .es-account-action:not(:disabled):hover{background:var(--es-selected)}.es-root .es-plan-action:hover{opacity:.9}}

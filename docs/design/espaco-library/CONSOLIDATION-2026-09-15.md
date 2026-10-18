@@ -18,13 +18,13 @@ Consumer handoff records the packed archive SHA outside the archive.
 | Canonical docs |This directory;build generates portable `packages/beds/docs`;never edit both |
 | Better routing |Interface quality;seven skill entrypoints,not a runtime service or automatic skill installer |
 | Distribution |Local immutable tarball for this handoff;RC15 release records remain historical |
-| Product behavior |Curriculol;library does not implement auth,queues,billing,uploads or AI |
+| Product behavior |The reference app;library does not implement auth,queues,billing,uploads or AI |
 
 ## Consolidated families
 
 Existing shell/fields/data patterns retained. Candidate includes application
 cards and segmented ATS/FIT meters;OTP;paged and continuous carousels;toasts;
-conversation and guided Lucy attachments;search dialog;drawer;feature and empty
+conversation and guided AI chat attachments;search dialog;drawer;feature and empty
 cards;questions/approvals;pricing;records/disclosures;onboarding;account credits;
 forum avatar cards. All are public exports,documented and catalogued.
 Distinct carousel APIs are intentional:manual paged navigation versus the

@@ -12,7 +12,7 @@
 .es-root .es-sidebar-section{flex-shrink:0;padding:0;margin:17px 0 0}
 .es-root .es-sidebar-section>h2{margin:0 0 6px;padding-inline:10px;color:var(--es-secondary);font:500 12px/16px var(--es-font)}
 .es-root .es-sidebar-items{display:flex;flex-direction:column;gap:2px}
-/* beUI ai-sidebar rows as Curriculol ships them: 36px (44 on touch), 10px radius, 14/20 medium, 16px icons, 10px gap. */
+/* beUI ai-sidebar rows as the reference app ships them: 36px (44 on touch), 10px radius, 14/20 medium, 16px icons, 10px gap. */
 .es-root .es-nav-item{position:relative;isolation:isolate;display:flex;align-items:center;gap:10px;width:100%;min-width:0;min-height:36px;padding:0 10px;border:0;border-radius:10px;background:transparent;color:var(--es-secondary);font:500 14px/20px var(--es-font);letter-spacing:0;text-align:start;text-decoration:none;cursor:pointer}
 .es-root .es-nav-content{position:relative;z-index:1;display:flex;align-items:center;gap:inherit;width:100%;min-width:0}
 .es-root .es-nav-item>svg,.es-root .es-nav-content>svg{flex-shrink:0;width:16px;height:16px;stroke-width:1.5}
@@ -42,7 +42,7 @@
 .es-root .es-breadcrumbs a{color:var(--es-secondary);text-decoration:none}
 .es-root .es-breadcrumbs [aria-current=page]{color:var(--es-text);font-weight:500}
 .es-root .es-breadcrumb-separator{color:var(--es-secondary);flex-shrink:0}
-/* Page identity (Curriculol PageContentHeader): one big tight headline and a quiet lead; actions sit on the headline's baseline row. */
+/* Page identity (the reference app PageContentHeader): one big tight headline and a quiet lead; actions sit on the headline's baseline row. */
 .es-root .es-page-header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;min-width:0}
 .es-root .es-section-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
 .es-root .es-page-heading{display:flex;align-items:flex-start;gap:12px;min-width:0}
@@ -79,7 +79,7 @@
 .es-root .es-activity-panel-header h2>svg{color:var(--es-secondary)}
 .es-root .es-nav-item,.es-root .es-header-action,.es-root .es-workspace-trigger{transition:background-color 150ms ease-out,color 150ms ease-out}
 @media(pointer:coarse){.es-root .es-sidebar-section:not(.es-sidebar-section--primary) .es-nav-item{min-height:44px}}
-@media(hover:hover){.es-root .es-nav-item.es-nav-item--active:hover{background:transparent}.es-root .es-sidebar-section--primary .es-nav-item:hover{background:transparent}.es-root .es-sidebar-section--primary .es-nav-item:not(.es-nav-item--active):hover{background:var(--es-hover)}}
+@media(hover:hover){.es-root .es-nav-item.es-nav-item--active:hover{background:transparent;color:var(--es-heading)}.es-root .es-sidebar-section--primary .es-nav-item:hover{background:transparent}.es-root .es-sidebar-section--primary .es-nav-item:not(.es-nav-item--active):hover{background:var(--es-hover)}}
 @media(prefers-reduced-motion:reduce){.es-root .es-nav-item,.es-root .es-header-action,.es-root .es-workspace-trigger{transition:none}}
 .es-root .es-activity-panel-body{display:flex;flex:1;flex-direction:column;min-width:0;padding-top:12px}
 @media(hover:hover){.es-root .es-header-action:hover,.es-root .es-workspace-trigger:hover,.es-root .es-nav-item:hover{background:var(--es-hover);color:var(--es-text)}.es-root .es-sidebar-section--primary .es-nav-item:hover{background:transparent}.es-root .es-sidebar-section--primary .es-nav-item:not(.es-nav-item--active):hover .es-nav-active-indicator{background:var(--es-hover)}.es-root .es-breadcrumbs a:hover{color:var(--es-text)}}

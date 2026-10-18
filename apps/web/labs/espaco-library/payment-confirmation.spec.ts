@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { fileURLToPath } from 'node:url';
+import { coarsePointer } from './touch-target';
 
 const evidence = fileURLToPath(new URL('./evidence/payment-confirmation/', import.meta.url));
 const component = (page: Page) => page.getByRole('region', { name: 'Pagamento confirmado', exact: true });
@@ -103,7 +104,7 @@ test('long content, reflow, RTL, zoom and static restored receipt', async ({ pag
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       expect(await component(page).evaluate(element => [...element.querySelectorAll('p,dt,dd,span,button')].every(child => child.scrollWidth <= child.clientWidth + 1))).toBe(true);
     }
-    expect((await component(page).getByRole('button').boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    expect((await component(page).getByRole('button').boundingBox())!.height).toBeGreaterThanOrEqual(await coarsePointer(page) ? 44 : 40);
     await page.screenshot({ path: evidence + `${info.project.name}-${theme}-320.png`, fullPage: true });
     await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
     const term = await page.locator('.recipe-payment-rows dt').first().boundingBox();

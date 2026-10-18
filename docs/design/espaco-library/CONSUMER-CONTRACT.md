@@ -42,7 +42,7 @@ single contrast color. There is no default: pick it deliberately
 ([Foundations](FOUNDATIONS.md#contrast-color--mandatory-choice)) and record the
 reason in the app's `AGENTS.md`. Apps own any named presets.
 The provider selects a contrasting foreground internally.
-`fieldBorder` defaults to `soft` (the Curriculol pattern: text entry draws the card
+`fieldBorder` defaults to `soft` (the reference app pattern: text entry draws the card
 border and a soft focus ring); pass `fieldBorder="strong"` only when the product
 needs the 3:1 outline on text fields.
 

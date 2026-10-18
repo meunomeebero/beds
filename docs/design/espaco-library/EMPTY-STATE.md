@@ -1,11 +1,11 @@
 # EmptyStateCard — illustrated empty states
 
 Scope: portable BEDS component;catalog `?view=empty-state`;synthetic data only.
-No Curriculol route,query,queue,storage or production integration.
+No reference-app route,query,queue,storage or production integration.
 
-**0.3 — Curriculol patterns (2026-10-18).** `EmptyStateCard` actions are the
+**0.3 — the reference app patterns (2026-10-18).** `EmptyStateCard` actions are the
 shared pill button; its own geometry is unchanged. The compact `EmptyState` now
-follows Curriculol's empty-state anatomy: round 40px icon tile, 18px/1.4 balanced
+follows the reference app's empty-state anatomy: round 40px icon tile, 18px/1.4 balanced
 title, 14px/1.6 secondary reason capped at 52ch, 20px rhythm, 40/24px padding
 (32/16px on phones) and one outline action with a trailing arrow.
 
@@ -138,7 +138,7 @@ review and owner aesthetic approval remain **PENDING**.
 />
 ```
 
-Preview:`?view=empty-state&preview=folder&theme=dark&brand=curriculol`.
+Preview:`?view=empty-state&preview=folder&theme=dark&brand=orange`.
 Catalog situation selector also offers `Sem vagas`,with `Rever filtros` callback;
 no request,route/filter modification or product integration. Friendly art is
 optional:use plain EmptyState for dense panels,frequent filter changes or
@@ -203,4 +203,4 @@ Static/artifact gate result:see current [Validation](VALIDATION.md) checkpoint.
 Not verified:VoiceOver,physical devices,Safari/Firefox,real OS zoom,actual
 background-tab throttling(hidden event tested synthetically),multi-instance
 frame-time/compositor profiling. No60fps/GPU claim. Independent review and
-owner aesthetic approval **PENDING**;no release or Curriculol integration.
+owner aesthetic approval **PENDING**;no release or reference-app integration.

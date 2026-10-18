@@ -1,6 +1,6 @@
 # Espaço personal-library catalog
 
-Independent from the legacy5282 Home/Lucy preview.
+Independent from the legacy5282 Home/AI chat preview.
 
 | Route | Purpose |
 |---|---|
@@ -9,7 +9,7 @@ Independent from the legacy5282 Home/Lucy preview.
 |`?view=tokens` |Fixed semantic colors,typography and geometry |
 |`?view=mcp` |MCP/OAuth setup composition using the same library primitives |
 |`&theme=light` / `&theme=dark` |Initial controlled theme |
-|`&brand=reference` / `&brand=curriculol` |One-color preset |
+|`&brand=reference` / `&brand=orange` |One-color preset |
 
 From repository root:
 

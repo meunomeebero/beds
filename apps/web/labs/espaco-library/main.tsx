@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import 'beds/styles.css';
 import Catalog from './Catalog';
-import LucyPage from './LucyPage';
+import AiChatPage from './AiChatPage';
 import McpPage from './McpPage';
 import DisclosuresPage from './DisclosuresPage';
 import OtpPage from './OtpPage';
@@ -63,9 +63,9 @@ const pages: Record<string, React.ComponentType> = {
   otp: OtpPage,
   disclosures: DisclosuresPage,
   mcp: McpPage,
-  lucy: LucyPage,
+  'ai-chat': AiChatPage,
 };
 const requestedView = params.get('view') ?? 'components';
-const view = requestedView === 'home' && params.get('tab') === 'lucy' ? 'lucy' : requestedView;
+const view = requestedView === 'home' && params.get('tab') === 'ai-chat' ? 'ai-chat' : requestedView;
 const Page = Object.hasOwn(pages, view) ? pages[view] : Catalog;
 createRoot(document.getElementById('root')!).render(<React.StrictMode><Page /></React.StrictMode>);

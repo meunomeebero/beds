@@ -1,7 +1,7 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
 /**
- * `DesignSystemProvider fieldBorder`: `soft` (default since 0.3, the Curriculol pattern) gives every
+ * `DesignSystemProvider fieldBorder`: `soft` (default since 0.3, the reference-app pattern) gives every
  * text-entry control the structural card border; `strong` restores the functional-contrast outline.
  * Marks (checkbox, switch, radio) always keep the functional boundary, and focus / error stay legible.
  */

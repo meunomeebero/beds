@@ -7,8 +7,8 @@ app-owned page composition. BEDS owns reusable components and style guidance;
 apps own identity, page layout and business policy. Do not add product logos or
 complete screens to the runtime. The migration ledger records unfinished work.
 
-- This portable DS is separate from legacy Curriculol typography/palette and the old Espaço prototype. [Foundations](docs/FOUNDATIONS.md) owns approved visuals; do not mix systems.
-- Visual defaults follow what Curriculol ships (owner, 2026-10-18): pill buttons md 40 / sm 32, soft fields with a soft focus ring, one 40px tab pill, outline calls to action, no brand-filled buttons. See [Foundations](docs/FOUNDATIONS.md) → Proportions.
+- This portable DS is separate from legacy the reference app typography/palette and the old Espaço prototype. [Foundations](docs/FOUNDATIONS.md) owns approved visuals; do not mix systems.
+- Visual defaults follow what the reference app ships (owner, 2026-10-18): pill buttons md 40 / sm 32, soft fields with a soft focus ring, one 40px tab pill, outline calls to action, no brand-filled buttons. See [Foundations](docs/FOUNDATIONS.md) → Proportions.
 - Two themes; one validated caller-owned provider brand color. Named semantic variants protect BEDS component internals. Apps may use their own semantic HTML, layout CSS, icons and identity assets; they may read tokens but must not override private `.es-*` selectors or redefine `--es-*` properties.
 - Components own presentation and semantics; callers own copy, data, requests, routing and business rules. Use controlled state; never invent successful operations.
 - Keep app-specific patterns and complete pages in the app. A new reusable component requires a single job, two unrelated uses, BEUI sourcing, a shared contract/API, catalog example, states and focused light/dark responsive evidence. App layout styling is expected, not a workaround.

@@ -52,7 +52,7 @@ test('Feedback states retain redundant names and honest indeterminate semantics'
   await expect(notice).toHaveRole('status');
   await expect(notice).toHaveAccessibleName('Estado demonstrativo');
   await expect(notice).toHaveAccessibleDescription('Esta mensagem pode ser dispensada.');
-  const dismiss = notice.getByRole('button', { name: 'Dismiss notification', exact: true });
+  const dismiss = notice.getByRole('button', { name: 'Dispensar notificação', exact: true });
   await dismiss.focus();
   await expect(dismiss).toBeFocused();
   await page.keyboard.press('Enter');

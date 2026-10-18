@@ -40,7 +40,7 @@ export default function OnboardingPage() {
   }
 
   return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
-    <Onboarding title="Prepare seu espaço" description="Comece pelo básico. Você pode ajustar depois." brandMark={<BrandMark src="/demo-brand.svg" label="Curriculol" />} submitLabel="Continuar" onSubmit={submit} busy={busy} feedback={feedback}
+    <Onboarding title="Prepare seu espaço" description="Comece pelo básico. Você pode ajustar depois." brandMark={<BrandMark src="/demo-brand.svg" label="App de exemplo" />} submitLabel="Continuar" onSubmit={submit} busy={busy} feedback={feedback}
       preview={{ name: name.trim() || 'Seu espaço', detail: headline.trim() || 'Seu próximo passo', sections: [{ id: 'career', label: 'Sua carreira' }, { id: 'account', label: 'Sua conta' }, { id: 'recent', label: 'Recentes' }] }}
       footer={<Inline><Text variant="caption" tone="secondary">Demonstração local, sem cadastro.</Text><ThemeToggle label="Aparência" lightLabel="Claro" darkLabel="Escuro" /><Select label="Resultado simulado" value={result} options={[{ id: 'success', label: 'Sucesso' }, { id: 'error', label: 'Erro' }, { id: 'pending', label: 'Aguardando' }]} onChange={value => setResult(value === 'error' ? 'error' : value === 'pending' ? 'pending' : 'success')} />{busy && <Button label="Concluir simulação" onClick={complete} />}</Inline>}>
       <TextField ref={nameInput} label="Nome" name="name" autoComplete="name" placeholder="Luísa Costa" value={name} onChange={value => { setName(value); if (error) setError(''); if (feedback) setFeedback(undefined); }} error={error || undefined} />

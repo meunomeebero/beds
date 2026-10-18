@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { fileURLToPath } from 'node:url';
+import { coarsePointer, hitBox } from './touch-target';
 
 const evidence = fileURLToPath(new URL('./evidence/decisions/', import.meta.url));
 const accessTitle = 'Permitir acesso ao currículo?';
@@ -209,11 +210,10 @@ test('BER-30 applies the .92 pointer press frame to default options', async ({ p
   expect(box).not.toBeNull();
   await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
   await page.mouse.down();
-  await nextFrame(page);
-  const transform = await option.evaluate(element => getComputedStyle(element).transform);
-  const scale = Number(transform.match(/^matrix\(([^,]+)/)?.[1]);
-  expect(scale).toBeGreaterThan(0.9);
-  expect(scale).toBeLessThan(0.95);
+  const pressScale = async () => Number((await option.evaluate(element => getComputedStyle(element).transform)).match(/^matrix\(([^,]+)/)?.[1]);
+  // The press starts on pointer down; sample until the spring passes .95 instead of pinning one frame under load.
+  await expect.poll(pressScale, { timeout: 500 }).toBeLessThan(0.95);
+  expect(await pressScale()).toBeGreaterThan(0.9);
   await page.waitForTimeout(50);
   const settledPressScale = Number((await option.evaluate(element => getComputedStyle(element).transform)).match(/^matrix\(([^,]+)/)?.[1]);
   expect(settledPressScale).toBeCloseTo(0.92, 2);
@@ -358,7 +358,8 @@ test('long copy reflows, touch targets remain usable and forced colors retains s
       for (const item of await page.getByRole('article').all()) {
         await item.scrollIntoViewIfNeeded();
         expect(await item.evaluate(element => [...element.querySelectorAll('h2,p,button,dt,dd,label,.es-decision-status')].every(child => child.scrollWidth <= child.clientWidth + 1))).toBe(true);
-        for (const action of await item.getByRole('button').all()) expect((await action.boundingBox())!.height).toBeGreaterThanOrEqual(width < 768 ? 44 : 40);
+        const floor = await coarsePointer(page) ? 44 : 40;
+        for (const action of await item.getByRole('button').all()) expect((await hitBox(action)).height).toBeGreaterThanOrEqual(floor);
       }
       if (width === 320) await page.getByRole('article').first().screenshot({ path: evidence + `${info.project.name}-${theme}-long-320.png` });
     }

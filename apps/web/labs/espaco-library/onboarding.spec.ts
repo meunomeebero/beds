@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { fileURLToPath } from 'node:url';
+import { coarsePointer } from './touch-target';
 
 const evidence = fileURLToPath(new URL('./evidence/onboarding/', import.meta.url));
 
@@ -45,7 +46,7 @@ test('catalog entry, both themes, keyboard validation and exact live preview', a
     await expect(name).toHaveValue('Luísa Costa');
     await expect(page.locator('.recipe-onboarding-card')).toHaveCSS('border-radius', '24px');
     await expect(page.locator('.recipe-onboarding-card')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
-    expect((await submit.boundingBox())!.height).toBeGreaterThanOrEqual(info.project.name === 'mobile' ? 44 : 40);
+    expect((await submit.boundingBox())!.height).toBeGreaterThanOrEqual(await coarsePointer(page) ? 44 : 40);
     await page.screenshot({ path: evidence + `${info.project.name}-${theme}.png`, fullPage: true });
   }
   expect(errors).toEqual([]);

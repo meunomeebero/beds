@@ -1,9 +1,9 @@
 # ExpandingButton
 
-**0.3 — Curriculol patterns (2026-10-18).** `ExpandingButton` now renders the
+**0.3 — the reference app patterns (2026-10-18).** `ExpandingButton` now renders the
 shared `Button` pill in the beUI `outline` variant with a trailing `ArrowRight`:
 md 40px (44px on touch), transparent with a hairline, neutral hover, pointer-only
-.97 press. The owner reviewed both expanding-chip CTAs in Curriculol and chose the
+.97 press. The owner reviewed both expanding-chip CTAs in the reference app and chose the
 beUI StatefulButton instead ("muito exagerado, use o Stateful Button ... que é o
 botão normal", 2026-09-28) and then outline over brand fills (2026-09-29). Props
 are unchanged so existing consumers keep compiling: `icon` other than
@@ -14,7 +14,7 @@ icon="ArrowRight" iconPosition="end"` in new code; it also supports async
 
 Adapted from beUI `expanding-arrow-button`
 (`https://beui.dev/components/motion/expanding-arrow-button`, retrieved
-2026-09-22, MIT). First built in Hyppo (`XLoginButton`) and promoted at the
+2026-09-22, MIT). First built in a sibling app (`XLoginButton`) and promoted at the
 owner's explicit request.
 
 ## Public contract

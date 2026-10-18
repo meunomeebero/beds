@@ -82,8 +82,8 @@ test('drop, invalid replacements, cancel and recovery preserve the selected docu
   await expect(page.locator('.es-file-upload-list')).toHaveCount(0);
 });
 
-test('Lucy resume choice uses document field and accepts DOCX without a real import', async ({ page }) => {
-  await page.goto('/?view=lucy&theme=dark');
+test('AI chat resume choice uses document field and accepts DOCX without a real import', async ({ page }) => {
+  await page.goto('/?view=ai-chat&theme=dark');
   await page.getByRole('button', { name: /Importar currículo/ }).click();
   await expect(page.locator('.es-file-upload')).toHaveAttribute('data-purpose', 'document');
   await page.locator('input[type=file]').setInputFiles(docx);

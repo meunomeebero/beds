@@ -10,15 +10,15 @@ const benefitItems = [
   { id: 'documents', title: 'A mesma história. O foco certo para cada vaga.', description: 'Prepare um currículo e uma carta que relacionam sua experiência ao que a empresa procura.', illustration: <BenefitIllustration kind="documents" /> },
   { id: 'profile', title: 'Sem recomeçar a cada candidatura.', description: 'Reúna seu currículo, os dados do LinkedIn e suas experiências em um perfil.', illustration: <BenefitIllustration kind="profile" /> },
   { id: 'match', title: 'Saiba onde seu perfil combina.', description: 'Explore vagas e entenda os pontos de compatibilidade antes de preparar seus documentos.', illustration: <BenefitIllustration kind="match" /> },
-  { id: 'lucy', title: 'Uma conversa ajuda a organizar.', description: 'Conte sua trajetória para a Lucy. Ela ajuda a dar forma às experiências que você quer destacar.', illustration: <BenefitIllustration kind="conversation" /> },
+  { id: 'assistant', title: 'Uma conversa ajuda a organizar.', description: 'Conte sua trajetória para a assistente. Ela ajuda a dar forma às experiências que você quer destacar.', illustration: <BenefitIllustration kind="conversation" /> },
   { id: 'board', title: 'O próximo passo fica à vista.', description: 'Acompanhe os status, as anotações e os documentos de cada candidatura no mesmo lugar.', illustration: <BenefitIllustration kind="board" /> },
 ];
 
 const questions = [
   { id: 'free', question: 'O que posso fazer de graça?', answer: 'Analisar seu currículo para uma vaga e buscar oportunidades. Para iniciar a análise, você confirma seu e-mail. A geração de um currículo e uma carta para a mesma vaga custa 1 crédito.' },
-  { id: 'start', question: 'Preciso ter um currículo pronto?', answer: 'Não. Você pode importar um currículo, usar os dados do seu LinkedIn ou descrever suas experiências com a ajuda da Lucy para montar seu perfil.' },
+  { id: 'start', question: 'Preciso ter um currículo pronto?', answer: 'Não. Você pode importar um currículo, usar os dados do seu LinkedIn ou descrever suas experiências com a ajuda da assistente para montar seu perfil.' },
   { id: 'credits', question: 'Como funcionam os créditos?', answer: 'Para uma vaga, 1 crédito prepara um currículo e uma carta de apresentação. Você compra quando precisar, sem assinatura. Os créditos não expiram enquanto a conta existir. Também há pacotes de 10 créditos por R$ 27,90 e 50 por R$ 55,90.' },
-  { id: 'review', question: 'O Curriculol envia a candidatura por mim?', answer: 'Preparar os documentos não envia uma candidatura. Você revisa o conteúdo e decide o próximo passo. Nenhum envio acontece só por gerar um currículo ou uma carta.' },
+  { id: 'review', question: 'O app de exemplo envia a candidatura por mim?', answer: 'Preparar os documentos não envia uma candidatura. Você revisa o conteúdo e decide o próximo passo. Nenhum envio acontece só por gerar um currículo ou uma carta.' },
   { id: 'guarantee', question: 'Uma boa análise garante uma entrevista?', answer: 'Não. A análise ajuda a identificar ajustes e a apresentar sua experiência com mais clareza, mas não garante aprovação por sistemas de triagem, entrevistas ou contratação.' },
 ];
 
@@ -31,7 +31,7 @@ export default function LandingPage() {
   useEffect(() => {
     const previousTitle = window.document.title;
     const previousLanguage = window.document.documentElement.lang;
-    window.document.title = 'Curriculol — sua experiência, para a vaga certa';
+    window.document.title = 'App de exemplo — sua experiência, para a vaga certa';
     window.document.documentElement.lang = 'pt-BR';
     return () => { window.document.title = previousTitle; window.document.documentElement.lang = previousLanguage; };
   }, []);
@@ -41,15 +41,15 @@ export default function LandingPage() {
     const url = new URL(location.href); url.searchParams.set('theme', next); history.replaceState(null, '', url);
   }
   return <DesignSystemProvider theme={theme} brandColor={"#ffa133"}>
-    <LandingPageLayout brandName="Curriculol" brandMark={<BrandMark src="/demo-brand.svg" label="Curriculol" />} homeHref={local('landing')} skipLabel="Pular para o conteúdo"
+    <LandingPageLayout brandName="App de exemplo" brandMark={<BrandMark src="/demo-brand.svg" label="App de exemplo" />} homeHref={local('landing')} skipLabel="Pular para o conteúdo"
       navigationLabel="Navegação principal" menuLabel="Menu" navigation={[{ label: 'Como funciona', href: '#como-funciona' }, { label: 'Vantagens', href: '#vantagens' }, { label: 'Créditos', href: '#creditos' }]}
       accountLink={{ label: 'Entrar', href: local('otp') }}
       appearance={<IconButton label={theme === 'light' ? 'Usar tema escuro' : 'Usar tema claro'} icon={theme === 'light' ? 'Moon' : 'Sun'} onClick={changeTheme} />}
-      footer={<LandingFooter brandName="Curriculol" brandMark={<BrandMark src="/demo-brand.svg" label="Curriculol" />} title="Sua próxima candidatura começa com a sua história."
+      footer={<LandingFooter brandName="App de exemplo" brandMark={<BrandMark src="/demo-brand.svg" label="App de exemplo" />} title="Sua próxima candidatura começa com a sua história."
         description="Descubra o que seu currículo já comunica bem — e o que pode ficar mais claro para a vaga que você quer." action={start}
         groups={[{ id: 'product', label: 'Seu próximo passo', links: [{ id: 'profile', label: 'Preparar meu perfil', href: local('onboarding') }, { id: 'applications', label: 'Conhecer o quadro de vagas', href: local('kanban') }, { id: 'faq', label: 'Tirar uma dúvida', href: '#perguntas' }] }]}
         legal={{ label: 'Sobre a prévia', links: [{ id: 'catalog', label: 'Ver componentes no BEDS', href: local('components') }] }}
-        note="Prévia de design do Curriculol. Dados ilustrativos; links abrem demonstrações locais. Sem análise, autenticação, envio ou cobrança real." />}
+        note="Prévia de design do app de exemplo. Dados ilustrativos; links abrem demonstrações locais. Sem análise, autenticação, envio ou cobrança real." />}
     >
       <LandingHero eyebrow="Sua experiência, para a vaga certa." title="A vaga muda. Seu currículo também."
         description="Entenda o que falta no seu currículo e prepare uma versão com foco na vaga — com uma carta de apresentação e a sua história de verdade."
@@ -70,7 +70,7 @@ export default function LandingPage() {
           ]} />
       </LandingHero>
       <LandingSection id="como-funciona"><ProcessSteps title="Da sua história à próxima candidatura." description="Seu perfil é o ponto de partida. A oportunidade dá a direção."
-        steps={[{ id: 'profile', title: 'Traga a sua história', description: 'Importe seu currículo ou organize suas experiências conversando com a Lucy.' }, { id: 'job', title: 'Escolha uma oportunidade', description: 'Encontre uma vaga ou traga a descrição. Veja onde seu currículo pode melhorar.' }, { id: 'review', title: 'Revise e siga em frente', description: 'Se quiser, prepare currículo + carta por 1 crédito. Revise os documentos e acompanhe a candidatura.' }]} /></LandingSection>
+        steps={[{ id: 'profile', title: 'Traga a sua história', description: 'Importe seu currículo ou organize suas experiências conversando com a assistente.' }, { id: 'job', title: 'Escolha uma oportunidade', description: 'Encontre uma vaga ou traga a descrição. Veja onde seu currículo pode melhorar.' }, { id: 'review', title: 'Revise e siga em frente', description: 'Se quiser, prepare currículo + carta por 1 crédito. Revise os documentos e acompanhe a candidatura.' }]} /></LandingSection>
       <LandingSection id="vantagens"><BenefitsSection title="Tudo conversa com a sua próxima oportunidade." description="Do primeiro rascunho ao acompanhamento da candidatura, sem perder de vista o que faz sua trajetória única." items={benefitItems} /></LandingSection>
       <LandingSection id="creditos"><PricingSection title="Comece grátis. Prepare quando fizer sentido." description="Sem assinatura. Você escolhe quando usar créditos." plans={[
         { id: 'analysis', title: 'Entender seu currículo', description: 'Descubra como seu currículo se relaciona com uma vaga antes de preparar uma nova versão.', image: { src: starterArt, alt: '' }, price: { label: 'Grátis', description: 'Análise de currículo para uma vaga. Sem cartão.' }, featuresLabel: 'Seu primeiro passo', features: [{ id: 'analysis', text: 'Análise com pontos de atenção' }, { id: 'search', text: 'Busca de oportunidades sem créditos' }, { id: 'decision', text: 'Você decide o que fazer depois' }], action: start, featured: true, actionNote: 'A análise no aplicativo requer confirmação por e-mail.' },

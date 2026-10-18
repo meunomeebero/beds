@@ -2,7 +2,7 @@
 
 Reusable React 19 components and a product-agnostic style guide: two themes, one
 caller-owned brand color, semantic variants instead of style props. The defaults
-follow the patterns proven in Curriculol: pill buttons (md 40px, sm 32px), soft
+follow the patterns proven in the reference app: pill buttons (md 40px, sm 32px), soft
 text fields with a soft focus ring, one 40px tab pill and outline calls to action.
 Applications own identity, page layout and business logic.
 

@@ -281,7 +281,7 @@ test('public OptionList keeps independent disclosures through controlled lag, re
 
 test('pricing keeps typed literal terms and caller-owned local outcomes', async ({ page }) => {
   const financialRequests = trackFinancialRequests(page);
-  await page.goto('/?view=pricing&theme=dark&brand=curriculol');
+  await page.goto('/?view=pricing&theme=dark&brand=orange');
 
   const pro = page.locator('.es-pricing-card[data-featured="true"]');
   const starter = page.getByRole('article', { name: 'Essencial', exact: true });

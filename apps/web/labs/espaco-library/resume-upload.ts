@@ -1,5 +1,5 @@
 // Catalog-only policy; the portable field never validates or reads file bytes.
-// Mirrors Curriculol's PDF/DOCX and 5 MiB boundary, not its server parser.
+// Mirrors the reference app's PDF/DOCX and 5 MiB boundary, not its server parser.
 export const resumeAccept = '.pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 const MAX_RESUME_BYTES = 5 * 1024 * 1024;
 

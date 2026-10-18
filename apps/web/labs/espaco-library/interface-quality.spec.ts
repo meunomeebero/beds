@@ -15,9 +15,16 @@ async function contrast(locator: Locator, property: 'color' | 'borderTopColor') 
 
 for (const theme of ['light', 'dark']) {
   test(`shared boundaries and validation remain legible in ${theme}`, async ({ page }, info) => {
-    await page.goto(`/?view=components&theme=${theme}`);
     const measures: Record<string, number> = {};
-    for (const selector of ['input[data-purpose]:not([disabled])', 'textarea', 'label:has(> input[type="search"])', '.es-checkbox-box', '[role="switch"] + span']) {
+    // Text entry is soft by default (label, fill, placeholder and focus ring identify it); the opt-in strong outline keeps 3:1.
+    await page.goto(`/?view=components&theme=${theme}&fieldBorder=strong`);
+    for (const selector of ['input[data-purpose]:not([disabled])', 'textarea', 'label:has(> input[type="search"])']) {
+      measures[selector] = await contrast(page.locator(selector).first(), 'borderTopColor');
+      expect(measures[selector], selector).toBeGreaterThanOrEqual(3);
+    }
+    // Checkbox, radio and switch marks keep the functional boundary in every mode.
+    await page.goto(`/?view=components&theme=${theme}`);
+    for (const selector of ['.es-checkbox-box', '[role="switch"] + span']) {
       const element = page.locator(selector).first();
       if (selector === '.es-checkbox-box') await page.getByRole('checkbox', { name: /^Incluir detalhes/ }).uncheck();
       measures[selector] = await contrast(element, 'borderTopColor');
@@ -59,6 +66,29 @@ for (const theme of ['light', 'dark']) {
 }
 
 test('toast persistence, recovery focus, readable copy and bounded queue', async ({ page }) => {
+  // Removals run on real timers first: Playwright's fake clock (per context) never completes Motion exits.
+  await page.goto('/?view=toast&theme=dark');
+  const saved = page.getByText('Seu currículo foi salvo.', { exact: true });
+  await page.getByRole('button', { name: 'Informação', exact: true }).click();
+  await page.mouse.move(0, 0);
+  await expect(saved).toBeVisible();
+  await page.waitForTimeout(4000);
+  await expect(saved).toBeVisible();
+  await expect(saved).toHaveCount(0, { timeout: 4000 });
+  const width = page.viewportSize()!.width;
+  await page.setViewportSize({ width, height: 600 });
+  await page.getByRole('button', { name: 'Várias notificações' }).click();
+  await page.mouse.move(0, 0);
+  await expect(page.getByRole('alert')).toHaveCount(7);
+  expect(await page.locator('.es-toast-region').evaluate(el => el.scrollHeight > el.clientHeight)).toBe(true);
+  const last = page.getByRole('alert').last();
+  await last.getByRole('button', { name: 'Tentar novamente' }).click();
+  await expect(page.getByRole('alert')).toHaveCount(6);
+  await expect(page.getByText('Nova tentativa iniciada.')).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+
+  // Persistence: actions outlive 12s, and dismissal returns focus to the trigger.
+  await page.setViewportSize({ width, height: 1000 });
   await page.clock.install();
   await page.goto('/?view=toast&theme=dark');
   const action = page.getByRole('button', { name: 'Com ação' });
@@ -68,21 +98,4 @@ test('toast persistence, recovery focus, readable copy and bounded queue', async
   await expect(page.getByRole('alert')).toBeVisible();
   await page.getByRole('button', { name: /^Fechar notificação:/ }).click();
   await expect(action).toBeFocused();
-  await page.getByRole('button', { name: 'Informação', exact: true }).click();
-  await page.mouse.move(0, 0);
-  await page.clock.fastForward(4000);
-  await expect(page.getByText('Seu currículo foi salvo.', { exact: true })).toBeVisible();
-  await page.clock.fastForward(1100);
-  await expect(page.getByText('Seu currículo foi salvo.', { exact: true })).toHaveCount(0);
-  await page.setViewportSize({ width: page.viewportSize()!.width, height: 600 });
-  await page.getByRole('button', { name: 'Várias notificações' }).click();
-  await page.mouse.move(0, 0);
-  await page.clock.fastForward(12000);
-  await expect(page.getByRole('alert')).toHaveCount(7);
-  expect(await page.locator('.es-toast-region').evaluate(el => el.scrollHeight > el.clientHeight)).toBe(true);
-  const last = page.getByRole('alert').last();
-  await last.getByRole('button', { name: 'Tentar novamente' }).click();
-  await expect(page.getByRole('alert')).toHaveCount(6);
-  await expect(page.getByText('Nova tentativa iniciada.')).toBeVisible();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });

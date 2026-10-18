@@ -7,7 +7,7 @@ of `beds`. The catalog demonstrates the recipe at `?view=pricing` with fictional
 offers. Comparison columns, introductory identity and which plan to emphasize
 are consumer decisions, not universal DS rules.
 
-**0.3 — Curriculol patterns (2026-10-18).** The card action is the shared md pill
+**0.3 — the reference app patterns (2026-10-18).** The card action is the shared md pill
 at full width: the featured plan uses the neutral `primary` fill and the others
 the `outline` pill; href actions mirror it. Brand-filled actions are retired (see
 Foundations, contrast color). Older measurements below are historical.
@@ -52,8 +52,8 @@ explain loading/unavailability and provide appropriate recovery outside it.
 Keep billing period,renewal,total obligations and relevant conditions visible
 beside the price using price.description/actionNote. Do not advertise a monthly
 equivalent as the actual bill or invent "free/no card required" claims.
-Standalone pricing-catalog amounts and benefits are fixtures,not proposed
-Curriculol policy. The separate [Curriculol landing](LANDING-PAGE.md) records
+Standalone pricing-catalog amounts and benefits are fixtures, not proposed
+reference-app policy. The separate [reference landing](LANDING-PAGE.md) records
 its product-evidence snapshot; no billing logic moves into the library.
 
 `amount` keeps the initial price literal and animates only after the controlled
@@ -118,7 +118,7 @@ consumer upgrade. Seven Better skills +frontend-design/ui-skills-root read.
 | Body,terms,benefits / canvas |5.49:1 |5.80:1 |
 | Price / subtle pill |10.39:1 |9.99:1 |
 | Neutral action |10.39:1 |9.62:1 |
-| Curriculol featured action |10.40:1 |10.40:1 |
+| The reference app featured action |10.40:1 |10.40:1 |
 | Focus / canvas |4.39:1 |8.96:1 |
 
 Featured hover/pressed keeps brand/on-brand opacity intact;1px/2px inset ring

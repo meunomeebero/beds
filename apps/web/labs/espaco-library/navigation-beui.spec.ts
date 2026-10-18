@@ -30,13 +30,15 @@ for (const theme of ['light', 'dark'] as const) {
     const longLabel = sidebar.getByRole('link', { name: 'Resultado da otimização', exact: true });
     await expect(longLabel.locator('.es-nav-label')).toHaveCSS('text-overflow', 'ellipsis');
     await expect(longLabel.locator('.es-nav-label')).toHaveCSS('overflow', 'hidden');
+    // Section rows (outside the primary rail) paint hover and press on the row itself; the selected indicator stays clear.
     await inactive.hover();
-    expect(await inactiveIndicator.evaluate(element => getComputedStyle(element).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
+    await expect.poll(() => inactive.evaluate(element => getComputedStyle(element).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
+    expect(await inactiveIndicator.evaluate(element => getComputedStyle(element).backgroundColor)).toBe('rgba(0, 0, 0, 0)');
     const box = await inactive.boundingBox();
     expect(box).not.toBeNull();
     await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
     await page.mouse.down();
-    expect(await inactiveIndicator.evaluate(element => getComputedStyle(element).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
+    await expect.poll(() => inactive.evaluate(element => getComputedStyle(element).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
     await page.mouse.up();
 
     await page.goto(`/?view=components&theme=${theme}`);
@@ -78,7 +80,9 @@ for (const theme of ['light', 'dark'] as const) {
     await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
     const logical = await sidebar.evaluate(element => {
       const style = getComputedStyle(element);
-      return { left: style.left, right: style.right, borderInlineEnd: style.borderInlineEndWidth };
+      // The rail inside the drawer draws the logical edge.
+      const rail = element.querySelector('.es-sidebar') ?? element;
+      return { left: style.left, right: style.right, borderInlineEnd: getComputedStyle(rail).borderInlineEndWidth };
     });
     expect(logical.left).toBe(`${page.viewportSize()!.width - 264}px`);
     expect(logical.right).toBe('0px');

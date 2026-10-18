@@ -84,7 +84,7 @@ export function Notice({ title, description, tone = 'info', onDismiss, dismissLa
     {onDismiss && <button type="button" aria-label={dismissLabel} onClick={onDismiss}><Icon name="X" /></button>}
   </div>;
 }
-/** Message-first empty state (Curriculol pattern): round icon tile, 18px title, a 52ch reason and one outline call to action with a trailing arrow. */
+/** Message-first empty state (the reference app pattern): round icon tile, 18px title, a 52ch reason and one outline call to action with a trailing arrow. */
 export function EmptyState({ title, description, icon = 'Folder', action, headingLevel = 3 }: { title: string; description?: string; icon?: IconName; action?: { label: string; onClick: () => void }; headingLevel?: 2 | 3 | 4 }) {
   const Heading = headingLevel === 2 ? 'h2' : headingLevel === 4 ? 'h4' : 'h3';
   return <div className="es-empty-state"><span className="es-empty-icon" aria-hidden="true"><Icon name={icon} purpose="feature" /></span><div className="es-empty-copy"><Heading>{title}</Heading>{description && <p>{description}</p>}</div>{action && <Button label={action.label} onClick={action.onClick} variant="outline" icon="ArrowRight" iconPosition="end" />}</div>;

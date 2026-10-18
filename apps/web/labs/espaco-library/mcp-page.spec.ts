@@ -1,5 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { expect, test, type Page, type TestInfo } from '@playwright/test';
+import { coarsePointer } from './touch-target';
 
 const themes = ['dark', 'light'] as const;
 type Theme = typeof themes[number];
@@ -7,7 +8,7 @@ const evidenceDirectory = fileURLToPath(new URL('./evidence/', import.meta.url))
 
 async function ready(page: Page, theme: Theme) {
   await page.goto(`/?view=mcp&theme=${theme}`);
-  await expect(page.getByRole('heading', { name: 'MCP do Curriculol', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'MCP do app de exemplo', exact: true })).toBeVisible();
   await page.evaluate(() => document.fonts.ready);
 }
 
@@ -29,37 +30,28 @@ test('MCP composition keeps the DS shell and its measured connection anatomy in 
     const shell = page.locator('.recipe-app-shell');
     await expect(root).toHaveAttribute('data-theme', theme);
     await expect(shell).toHaveCSS('background-color', theme === 'dark' ? 'rgb(25, 25, 25)' : 'rgb(255, 255, 255)');
-    await expect(page.locator('.es-page')).toHaveCSS('max-width', '720px');
-    await expect(page.getByRole('heading', { name: 'MCP do Curriculol', exact: true })).toHaveCSS('font-size', '15px');
-    await expect(page.getByRole('heading', { name: 'MCP do Curriculol', exact: true })).toHaveCSS('line-height', '24px');
-    await expect(page.locator('.es-page-outer')).toHaveCSS('padding-top', '16px');
+    await expect(page.locator('.recipe-page')).toHaveCSS('max-width', '720px');
+    await expect(page.getByRole('heading', { name: 'MCP do app de exemplo', exact: true })).toHaveCSS('font-size', '15px');
+    await expect(page.getByRole('heading', { name: 'MCP do app de exemplo', exact: true })).toHaveCSS('line-height', '24px');
+    await expect(page.locator('.recipe-page-outer')).toHaveCSS('padding-top', '16px');
     await expect(page.getByRole('radio', { name: 'Pedir aprovação', exact: true })).toBeChecked();
     await expect(page.getByRole('tab', { name: 'Claude', exact: true })).toHaveAttribute('aria-selected', 'true');
     const connectionTabs = page.locator('.es-tabs[data-variant="connection"]');
     await expect(connectionTabs).toHaveCSS('border-top-left-radius', '16px');
     await expect(connectionTabs.locator('.es-tabs-connection-strip')).toHaveCSS('padding-top', '8px');
-    await expect(connectionTabs.getByRole('tablist')).toHaveCSS('border-top-left-radius', '10px');
-    await expect(connectionTabs.getByRole('tablist')).toHaveCSS('min-height', '36px');
+    // The shared tab pill: a fully rounded 40px track (52px with 44px touch options).
+    const lane = await connectionTabs.getByRole('tablist').evaluate(element => ({ radius: parseFloat(getComputedStyle(element).borderTopLeftRadius), height: element.getBoundingClientRect().height }));
+    expect(lane.height).toBe(await coarsePointer(page) ? 52 : 40);
+    expect(lane.radius).toBeGreaterThanOrEqual(lane.height / 2);
     await expect(connectionTabs.getByRole('tabpanel')).toHaveCSS('padding-top', '16px');
     await expect(connectionTabs.getByRole('tabpanel')).toHaveCSS('padding-left', info.project.name === 'mobile' ? '16px' : '32px');
     const tabWidths = await connectionTabs.getByRole('tab').evaluateAll(tabs => tabs.map(tab => tab.getBoundingClientRect().width));
     expect(Math.max(...tabWidths) - Math.min(...tabWidths)).toBeLessThan(1);
     const edgeLeft = connectionTabs.getByRole('button', { name: 'Rolar abas para a esquerda', exact: true });
     const edgeRight = connectionTabs.getByRole('button', { name: 'Rolar abas para a direita', exact: true });
-    if (info.project.name === 'mobile') {
-      await expect(edgeLeft).toBeVisible();
-      await expect(edgeRight).toBeVisible();
-      await expect(edgeLeft).toBeDisabled();
-      await expect(edgeRight).toBeEnabled();
-      expect((await edgeRight.boundingBox())!.width).toBeGreaterThanOrEqual(44);
-      await edgeRight.click();
-      await expect(edgeLeft).toBeEnabled();
-      await edgeLeft.click();
-      await expect(edgeLeft).toBeDisabled();
-    } else {
-      await expect(edgeLeft).toHaveCount(0);
-      await expect(edgeRight).toHaveCount(0);
-    }
+    // Equal-width connection tabs always fit their card, so they never need edge scroll controls.
+    await expect(edgeLeft).toHaveCount(0);
+    await expect(edgeRight).toHaveCount(0);
     await expect(page.getByText('A escolha desta tela não é salva.', { exact: true })).toHaveCount(0);
     await capture(page, info, `mcp-content-${theme}`);
     await openNavigation(page);
@@ -83,9 +75,9 @@ test('MCP client, approval and redirect URL controls are local and require no ne
   await page.getByRole('tab', { name: 'ChatGPT', exact: true }).click();
   await expect(page.getByRole('tabpanel').filter({ hasText: 'Adicione o endpoint remoto ao conector MCP' })).toBeVisible();
   await page.getByRole('tab', { name: 'Codex', exact: true }).click();
-  const codexCommand = page.locator('code').filter({ hasText: "codex mcp add curriculol --url 'https://api.curricu.lol/mcp'" });
+  const codexCommand = page.locator('code').filter({ hasText: "codex mcp add exemplo --url 'https://api.example.com/mcp'" });
   await expect(codexCommand).toBeVisible();
-  await expect(codexCommand).toContainText("codex mcp login curriculol --scopes 'profile.read,credits.read,job.search,job.apply,email.send'");
+  await expect(codexCommand).toContainText("codex mcp login exemplo --scopes 'profile.read,credits.read,job.search,job.apply,email.send'");
   const redirect = page.getByRole('textbox', { name: 'URL de redirecionamento OAuth', exact: true });
   await redirect.fill('not-a-url');
   await page.getByRole('button', { name: 'Adicionar', exact: true }).click();

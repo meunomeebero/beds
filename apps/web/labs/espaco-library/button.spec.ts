@@ -135,7 +135,7 @@ test('Button family preserves native semantics, controlled state and isolated hy
 test('Button family keeps keyboard instant, pointer bounded and motion preference safe', async ({ page }) => {
   const errors = await openProbe(page);
   const button = page.getByRole('button', { name: 'Default example', exact: true });
-  // Since 0.3 the whole pill presses (beUI StatefulButton as Curriculol tuned it), pointer only.
+  // Since 0.3 the whole pill presses (beUI StatefulButton as the reference app tuned it), pointer only.
   const scale = () => button.evaluate(element => {
     const transform = getComputedStyle(element).transform;
     return transform === 'none' ? 1 : new DOMMatrix(transform).a;

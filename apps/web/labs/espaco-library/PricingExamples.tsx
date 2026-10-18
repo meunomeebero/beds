@@ -52,7 +52,7 @@ export default function PricingExamples() {
     },
   ];
   return <Stack gap="section">
-    <PricingSection headingLevel={1} title="Um plano para cada momento" description="Planos e valores demonstrativos. Nenhuma contratação será realizada." mark={<BrandMark src="/demo-brand.svg" label="Curriculol" />} plans={single ? plans.slice(0, 1) : plans} />
+    <PricingSection headingLevel={1} title="Um plano para cada momento" description="Planos e valores demonstrativos. Nenhuma contratação será realizada." mark={<BrandMark src="/demo-brand.svg" label="App de exemplo" />} plans={single ? plans.slice(0, 1) : plans} />
     <Stack>
       <Text variant="section-title">Testar o componente</Text>
       {result.state === 'busy' && <Inline gap="tight">

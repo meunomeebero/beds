@@ -21,7 +21,7 @@ visuals,composition and acceptance.
 
 ## Product parity — read-only snapshot
 
-Curriculol `3b9117f7`,branch `fix/landing-pricing-section-rhythm`. Paths below
+The reference app `3b9117f7`,branch `fix/landing-pricing-section-rhythm`. Paths below
 belong to the product repository,not the portable package.
 
 | Concern | Source / decision |
@@ -34,7 +34,7 @@ belong to the product repository,not the portable package.
 
 Price anchors:1=R$5,90;10=R$27,90;50=R$55,90;100=R$79,90.
 Interpolate **total**,not unit price,between adjacent anchors. Purchase once;
-no subscription;credits do not expire. Application kit=one credit;LinkedIn
+no subscription;credits do not expire. Application package=one credit;LinkedIn
 optimization=one credit. Resume/LinkedIn analyses remain free. No new pricing
 policy,discount,guaranteed ATS score,interview or hiring claim.
 
@@ -44,7 +44,7 @@ were not edited in this isolated design task.
 
 `invoiceUrl` in the payment slice is a hosted billing page,not a fiscal invoice.
 Do not promise NFS-e,invoice issuance or downloadable fiscal documents. Merchant
-reference:BEROLAB LTDA,CNPJ61.026.871/0001-79. Preview receipt is explicitly
+reference:EMPRESA DE EXEMPLO LTDA,CNPJ00.000.000/0000-00. Preview receipt is explicitly
 illustrative and has no fiscal validity.
 
 ## Revenue-Centric decision
@@ -88,7 +88,7 @@ Entry → quantity/method → validation → explicit submit → awaiting confir
 
 - Route/query/time alone never establishes payment. No automatic submission.
 - Only synthetic CPF in the preview;no PII persistence,logging or transmission.
-- Card data belongs on the real provider's hosted page,not a Curriculol form.
+- Card data belongs on the real provider's hosted page,not the reference app form.
   This preview does not open that provider or collect a real card.
 - Pix preview code is clearly non-payable;no fabricated bank QR or billing URL.
   Copy success only after the clipboard operation succeeds;failure retains the
@@ -121,7 +121,7 @@ full checkout is separate work. Context return does not grant result credits.
 
 ## Visual adaptation and motion
 
-**A adaptation**,not a new extracted reference. Existing BEDS/Curriculol mark,
+**A adaptation**,not a new extracted reference. Existing BEDS/reference-app mark,
 Inter,two fixed themes and semantic neutral/action colors. Width1040px;desktop
 form/summary1.4:1,48px gap;stack below768px,summary precedes fields. Page
 padding24/32 desktop,16 mobile. H1 28/36→24/32;section16/24;total36/44 with

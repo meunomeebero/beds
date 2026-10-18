@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { fileURLToPath } from 'node:url';
+import { coarsePointer, hitBox } from './touch-target';
 
 const evidence = fileURLToPath(new URL('./evidence/empty-state/', import.meta.url));
 async function choose(page: Page, option: string) {
@@ -33,7 +34,7 @@ test('real catalog entry, independent action and interruptible decorative flight
   const frozen = await fly.evaluate(el => getComputedStyle(el).transform);
   await page.waitForTimeout(150);
   expect(await fly.evaluate(el => getComputedStyle(el).transform)).toBe(frozen);
-  expect((await resume.boundingBox())!.height).toBeGreaterThanOrEqual(info.project.name === 'mobile' ? 44 : 32);
+  expect((await hitBox(resume)).height).toBeGreaterThanOrEqual(await coarsePointer(page) ? 44 : 32);
   await resume.press('Shift+Tab');
   const action = card.getByRole('button', { name: 'Buscar vagas' });
   await expect(action).toBeFocused();
@@ -55,7 +56,7 @@ test('real catalog entry, independent action and interruptible decorative flight
 test('both themes, narrow/long content, reduced motion, zoom and forced colors', async ({ page }, info) => {
   for (const theme of ['light', 'dark']) {
     await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'none' });
-    await page.goto('/?view=empty-state&preview=folder&theme=' + theme + '&brand=curriculol');
+    await page.goto('/?view=empty-state&preview=folder&theme=' + theme + '&brand=orange');
     const card = page.getByRole('article');
     const art = card.locator('.es-empty-folder');
     await expect(art.getByRole('button')).toHaveCount(0);

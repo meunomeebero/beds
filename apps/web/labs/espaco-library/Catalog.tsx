@@ -197,7 +197,7 @@ export default function Catalog() {
   const ber11 = initial.get('ber11') === '1';
   const [view, setView] = useState<View>(initialView === 'chat' || initialView === 'components' || initialView === 'tokens' || initialView === 'feature-card' || initialView === 'empty-state' || initialView === 'decisions' || initialView === 'pricing' || initialView === 'records' ? initialView : 'components');
   const [theme, setTheme] = useState<Theme>(initial.get('theme') === 'light' ? 'light' : 'dark');
-  const [brand, setBrand] = useState<'reference' | 'orange'>(['orange', 'curriculol'].includes(initial.get('brand') ?? '') ? 'orange' : 'reference');
+  const [brand, setBrand] = useState<'reference' | 'orange'>(['orange'].includes(initial.get('brand') ?? '') ? 'orange' : 'reference');
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
@@ -247,7 +247,7 @@ export default function Catalog() {
           <NavItem label="Itens com data" icon="CalendarDays" href={catalogHref('date-item', theme)} />
           <NavItem label="Posts do blog" icon="FileText" href={catalogHref('blog-post', theme)} />
           <NavItem label="Rodapé da landing" icon="Globe" href={catalogHref('landing-footer', theme)} />
-          <NavItem label="Landing do Curriculol" icon="Globe" href={catalogHref('landing', theme)} />
+          <NavItem label="Landing de exemplo" icon="Globe" href={catalogHref('landing', theme)} />
           <NavItem label="Análise em andamento" icon="ScanText" href={catalogHref('analysis-loading', theme)} />
           <NavItem label="Otimização em andamento" icon="FileText" href={catalogHref('optimization-loading', theme)} />
           <NavItem label="Resultado da análise" icon="BarChart3" href={catalogHref('analysis-result', theme)} />
@@ -259,7 +259,7 @@ export default function Catalog() {
           <NavItem label="Pagamento confirmado" icon="CreditCard" href={catalogHref('payment-confirmation', theme)} />
           <NavItem label="Créditos no menu" icon="Coins" href={catalogHref('account-credits', theme)} />
           <NavItem label="Cards do fórum" icon="MessageCircle" href={catalogHref('forum', theme)} />
-          <NavItem label="Página da Lucy" icon="MessageSquare" href={catalogHref('lucy', theme)} />
+          <NavItem label="Página do chat de IA" icon="MessageSquare" href={catalogHref('ai-chat', theme)} />
           <NavItem label="Página MCP" icon="Plug" href={catalogHref('mcp', theme)} />
         </SidebarSection>
         <SidebarFooter><NavItem label="Sobre esta demonstração" icon="CircleHelp" onClick={() => setStatus('Componentes públicos e exemplos de app são grupos distintos. Receitas mostram composições opcionais; não são regras universais nem exports de beds. Dados sintéticos.')} /></SidebarFooter>

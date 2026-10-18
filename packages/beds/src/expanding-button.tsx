@@ -1,5 +1,5 @@
-// The focal call to action. Owner decision (Curriculol, 2026-09-28/29): the beUI expanding-arrow chip read as oversized,
-// so the CTA is the shared pill Button in the beUI `outline` variant with a trailing arrow (Curriculol `CtaButton`).
+// The focal call to action. Owner decision (the reference app, 2026-09-28/29): the beUI expanding-arrow chip read as oversized,
+// so the CTA is the shared pill Button in the beUI `outline` variant with a trailing arrow (the reference app `CtaButton`).
 // The props stay identical so existing consumers keep compiling; `context` no longer changes geometry.
 import { type ReactNode } from 'react';
 import { ButtonFrame } from './controls';

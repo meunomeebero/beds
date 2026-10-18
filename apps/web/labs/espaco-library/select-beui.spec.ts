@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { coarsePointer } from './touch-target';
 
 for (const theme of ['light', 'dark'] as const) {
   test.describe(`Select / FilterSelect · ${theme}`, () => {
@@ -54,7 +55,7 @@ for (const theme of ['light', 'dark'] as const) {
       await expect(page.getByRole('heading', { name: 'Componentes', exact: true })).toBeVisible();
       const filter = page.getByRole('button', { name: 'Período da atividade: Últimos 30 dias', exact: true });
       await filter.scrollIntoViewIfNeeded();
-      await expect(filter).toHaveCSS('min-height', '36px');
+      await expect(filter).toHaveCSS('min-height', await coarsePointer(page) ? '44px' : '40px');
       await filter.click();
       const list = page.getByRole('listbox', { name: 'Período da atividade', exact: true });
       await expect(list).toBeVisible();

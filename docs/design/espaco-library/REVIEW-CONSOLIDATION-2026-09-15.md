@@ -3,7 +3,7 @@
 Scope: portable BEDS plus its catalog;all accumulated component families.
 Detailed rendered review: shared shell,fields,settings,toast recovery.
 Broad regression scope: entire catalog,desktop/mobile Chromium. This is not a
-manual pixel-by-pixel approval of all113 components or the Curriculol backend.
+manual pixel-by-pixel approval of all113 components or reference-app backend.
 
 Skills read and applied: `better-interface`, `better-accessibility`,
 `better-layout`, `better-writing`, `better-typography`, `better-colors`,

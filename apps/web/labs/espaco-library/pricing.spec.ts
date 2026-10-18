@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { fileURLToPath } from 'node:url';
+import { coarsePointer } from './touch-target';
 
 const evidence = fileURLToPath(new URL('./evidence/pricing/', import.meta.url));
 const title = 'Um plano para cada momento';
@@ -13,7 +14,7 @@ test('real catalog entry preserves pricing hierarchy, geometry and one emphasize
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   for (const theme of ['light', 'dark']) {
-    await page.goto('/?view=chat&theme=' + theme + '&brand=curriculol');
+    await page.goto('/?view=chat&theme=' + theme + '&brand=orange');
     if (info.project.name === 'mobile') await page.getByRole('button', { name: 'Navigation', exact: true }).click();
     await page.getByRole('button', { name: 'Precificação', exact: true }).click();
     await expect(page).toHaveURL(/view=pricing/);
@@ -35,7 +36,7 @@ test('real catalog entry preserves pricing hierarchy, geometry and one emphasize
       await expect(card.getByRole('img')).toHaveCount(0);
       const media = (await card.locator('.es-pricing-card-media').boundingBox())!;
       expect(media.width / media.height).toBeCloseTo(4, 1);
-      expect((await card.getByRole('button').boundingBox())!.height).toBeGreaterThanOrEqual(info.project.name === 'mobile' ? 44 : 40);
+      expect((await card.getByRole('button').boundingBox())!.height).toBeGreaterThanOrEqual(await coarsePointer(page) ? 44 : 40);
     }
     const pro = section.getByRole('article', { name: 'Pro', exact: true });
     await expect(pro.getByRole('button')).toHaveAccessibleDescription('Cobrança mensal. Valor demonstrativo.');
@@ -53,7 +54,7 @@ test('real catalog entry preserves pricing hierarchy, geometry and one emphasize
 });
 
 test('selection is explicit, recoverable and never creates an actual subscription', async ({ page }, info) => {
-  await page.goto('/?view=pricing&theme=dark&brand=curriculol');
+  await page.goto('/?view=pricing&theme=dark&brand=orange');
   const pro = page.getByRole('article', { name: 'Pro', exact: true });
   const starter = page.getByRole('article', { name: 'Essencial', exact: true });
   const action = pro.getByRole('button');
@@ -87,7 +88,7 @@ test('selection is explicit, recoverable and never creates an actual subscriptio
 });
 
 test('price motion uses a typed controlled amount and never parses the literal label', async ({ page }) => {
-  await page.goto('/?view=pricing&theme=dark&brand=curriculol');
+  await page.goto('/?view=pricing&theme=dark&brand=orange');
   const price = page.locator('.es-pricing-card[data-featured=true] .es-pricing-price');
   await expect(price).toHaveText('R$ 49/mês');
   await expect(price.locator('.es-animated-number')).toHaveCount(0);
@@ -99,7 +100,7 @@ test('price motion uses a typed controlled amount and never parses the literal l
 
 test('long prices and copy reflow, with single-plan and empty-benefit alternatives', async ({ page }, info) => {
   for (const theme of ['light', 'dark']) {
-    await page.goto('/?view=pricing&theme=' + theme + '&brand=curriculol');
+    await page.goto('/?view=pricing&theme=' + theme + '&brand=orange');
     await page.getByRole('switch', { name: 'Testar texto longo' }).click();
     const section = page.getByRole('region', { name: title });
     for (const width of [320, 390, 938, 1440]) {
@@ -107,7 +108,8 @@ test('long prices and copy reflow, with single-plan and empty-benefit alternativ
       await section.scrollIntoViewIfNeeded();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       expect(await section.evaluate(element => [...element.querySelectorAll('h1,h2,p,li,button,bdi')].every(child => child.scrollWidth <= child.clientWidth + 1 && child.scrollHeight <= child.clientHeight + 1))).toBe(true);
-      for (const button of await section.getByRole('button').all()) expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(width < 768 ? 44 : 40);
+      const floor = await coarsePointer(page) ? 44 : 40;
+      for (const button of await section.getByRole('button').all()) expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(floor);
       if (width === 320) {
         const lastCard = section.getByRole('article').last();
         const heading = (await lastCard.getByRole('heading').boundingBox())!;

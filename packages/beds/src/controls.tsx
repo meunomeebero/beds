@@ -32,7 +32,7 @@ type ButtonProps = {
   'aria-expanded'?: boolean; 'aria-controls'?: string;
 };
 
-/* beUI Button + StatefulButton (https://beui.dev/r/button-stateful, MIT), as ported and tuned in Curriculol:
+/* beUI Button + StatefulButton (https://beui.dev/r/button-stateful, MIT), as ported and tuned in the reference app:
    pill md 40 (44 on touch) / sm 32, 14/12px medium, pointer-only .97 press with a short spring release,
    no hover lift, a fixed 24px status slot and a letter roll capped at 60ms. Colors resolve through BEDS tokens. */
 const BUTTON_BASE = 'es-button relative box-border inline-flex shrink-0 items-center justify-center max-w-full m-0 border border-solid border-transparent font-medium tracking-normal text-center no-underline cursor-pointer select-none [-webkit-tap-highlight-color:transparent] transition-[color,background-color,border-color] duration-150 ease-[cubic-bezier(.4,0,.2,1)] motion-reduce:transition-none disabled:pointer-events-none disabled:opacity-50 aria-busy:cursor-progress focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
@@ -106,6 +106,10 @@ export function ButtonFrame({ label, onClick, type = 'button', variant = 'second
   const instant = reduce || keyboard;
   const pressable = !disabled && !loading && !reduce;
   const text = state === 'loading' ? loadingLabel ?? label : state === 'success' ? successLabel ?? label : state === 'error' ? errorLabel ?? label : label;
+  // The letter roll marks status changes only: a new caller label (copy, locale) swaps in place, so long copy never rolls on one line past a narrow container.
+  const lastState = useRef(state);
+  const statusChange = lastState.current !== state;
+  useEffect(() => { lastState.current = state; }, [state]);
   const glyph: IconName | undefined = state === 'loading' ? 'Loader2' : state === 'success' ? 'Check' : state === 'error' ? 'X' : icon;
   const release = () => setPressed(false);
   const slot = glyph && <span aria-hidden className="es-button-glyph relative inline-grid size-6 shrink-0 place-items-center overflow-hidden">
@@ -143,7 +147,7 @@ export function ButtonFrame({ label, onClick, type = 'button', variant = 'second
     <span aria-live="polite" className="es-button-row relative inline-flex min-w-0 max-w-full items-center justify-center">
       {mark && <span aria-hidden className="es-button-mark inline-grid size-6 shrink-0 place-items-center [&_svg]:size-4">{mark}</span>}
       {iconPosition === 'start' && slot}
-      <ButtonLabel text={text} instant={instant} />
+      <ButtonLabel text={text} instant={instant || !statusChange} />
       {iconPosition === 'end' && slot}
     </span>
   </motion.button>;
@@ -297,8 +301,8 @@ function FieldNotes({ id, description, error, reserveErrorLine, product }: { id:
 }
 
 /* Text entry: soft structural border (fieldBorder="soft" default) and, on focus, a heading-tinted border plus a 2px soft ring
-   (beUI input, adopted from Curriculol). The transparent outline keeps a visible Highlight ring in forced-colors mode. */
-const TEXT_INPUT_BASE = 'box-border w-full min-w-0 tracking-normal border border-solid border-field-border bg-field text-input-text placeholder:text-[color:var(--es-placeholder-soft)] transition-[border-color,box-shadow] duration-200 motion-reduce:transition-none disabled:opacity-60 disabled:cursor-not-allowed read-only:text-muted-foreground outline-none focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-transparent focus-visible:border-[color:var(--es-field-focus-border)] focus-visible:shadow-[0_0_0_2px_var(--es-focus-ring)] aria-[invalid=true]:border-[color:var(--es-error-text)] aria-[invalid=true]:shadow-[0_0_0_2px_var(--es-error-ring)] aria-[invalid=true]:focus-visible:border-[color:var(--es-error-text)] aria-[invalid=true]:focus-visible:shadow-[0_0_0_2px_var(--es-error-ring)]';
+   (beUI input, adopted from the reference app). The transparent outline keeps a visible Highlight ring in forced-colors mode. */
+const TEXT_INPUT_BASE = 'box-border w-full min-w-0 tracking-normal border border-solid border-field-border bg-field text-input-text placeholder:text-[color:var(--es-placeholder-soft)] transition-[border-color,box-shadow] duration-200 motion-reduce:transition-none disabled:opacity-60 disabled:cursor-not-allowed read-only:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-transparent focus-visible:border-[color:var(--es-field-focus-border)] focus-visible:shadow-[0_0_0_2px_var(--es-focus-ring)] aria-[invalid=true]:border-[color:var(--es-error-text)] aria-[invalid=true]:shadow-[0_0_0_2px_var(--es-error-ring)] aria-[invalid=true]:focus-visible:border-[color:var(--es-error-text)] aria-[invalid=true]:focus-visible:shadow-[0_0_0_2px_var(--es-error-ring)]';
 const TEXT_INPUT_SETTINGS = 'h-9 py-1 px-2.5 text-sm leading-[20px] rounded-lg pointer-coarse:h-11 pointer-coarse:py-0 pointer-coarse:text-[16px] pointer-coarse:leading-6';
 const TEXT_INPUT_CONNECTION = 'h-10 py-1 px-4 text-[14px] leading-4 rounded-xl pointer-coarse:h-10 pointer-coarse:text-[16px] pointer-coarse:leading-6';
 /** beUI `input` anatomy (https://beui.dev/r/input): 44px pill, 14px inline padding, 16px text on every pointer. */
@@ -437,13 +441,13 @@ export function Switch({ label, checked, onChange, description, disabled }: Togg
 
 type Choice = { id: string; label: string; disabled?: boolean };
 
-/* One tab pill for SegmentedControl and Tabs: beUI Tabs `pill` (https://beui.dev/r/tabs, MIT) as Curriculol ships it
+/* One tab pill for SegmentedControl and Tabs: beUI Tabs `pill` (https://beui.dev/r/tabs, MIT) as the reference app ships it
    in SlidingChoices. 40px track (4px inset, 4px gap), 32px options at 14/20 medium, a primary pill gliding on
    245/36/1.2 without overshoot, and the selected label drawn as an on-primary copy clipped to the pill every frame,
    so the text colour flips exactly under it. Touch grows each option to 44px. */
 const PILL_GLIDE = { type: 'spring', stiffness: 245, damping: 36, mass: 1.2 } as const;
 const PILL_TRACK = 'es-pill-track box-border inline-flex w-fit items-center min-w-0 max-w-full overflow-x-auto overscroll-x-contain [scroll-padding-inline:4px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden gap-1 p-1 rounded-full bg-surface';
-const PILL_OPTION = 'es-pill-option relative flex flex-none items-center justify-center min-h-8 px-3.5 py-1.5 rounded-full text-[14px] leading-5 tracking-normal font-medium whitespace-nowrap text-muted-foreground transition-colors duration-150 motion-reduce:transition-none pointer-coarse:min-h-11';
+const PILL_OPTION = 'es-pill-option relative flex flex-none items-center justify-center min-h-8 px-3.5 py-1.5 rounded-full text-[14px] leading-5 tracking-normal font-medium whitespace-nowrap text-muted-foreground transition-colors duration-150 motion-reduce:transition-none motion-reduce:duration-0 pointer-coarse:min-h-11';
 const PILL_OVERLAY = 'es-pill-overlay pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-3.5 py-1.5 rounded-full text-[14px] leading-5 tracking-normal font-medium whitespace-nowrap text-primary-foreground';
 const PILL_INDICATOR = 'es-pill-indicator pointer-events-none absolute inset-0 z-0 rounded-full bg-primary';
 
@@ -747,9 +751,10 @@ export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
       <span aria-hidden="true" data-pill-overlay="" className={PILL_OVERLAY} style={{ clipPath: active ? 'inset(0)' : 'inset(0 100% 0 0)' }}>{item.label}</span>
     </button>;
   });
+  // Edge scroll buttons serve pointers only: arrow keys already reveal the focused tab, and Tab must go from the tablist straight to its panel.
   const connectionListStyle = connection ? { gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` } : undefined;
   const tabList = <motion.div ref={list} layoutScroll id={`${id}-list`} className={cn('es-tabs-list', PILL_TRACK, connection && 'grid w-full')} style={connectionListStyle} role="tablist" aria-label={label} onFocusCapture={event => { if (event.target instanceof HTMLElement && event.target.getAttribute('role') === 'tab') reveal(event.target, reduce || keyboardTarget !== null); }}>{tabButtons}</motion.div>;
-  const strip = <div className="es-tabs-list-shell" data-variant={variant} data-overflow={edges.overflow} data-edge-left={edges.left} data-edge-right={edges.right}>{edges.left && <span className="es-tabs-edge-fade" data-edge="left" aria-hidden="true" />}{edges.right && <span className="es-tabs-edge-fade" data-edge="right" aria-hidden="true" />}{edges.overflow && <button type="button" className="es-tabs-edge-button" data-edge="left" aria-label="Rolar abas para a esquerda" aria-controls={list.current?.id} disabled={!edges.left} onClick={() => scroll(-1)}><Icon name="ArrowLeft" purpose="small" /></button>}{tabList}{edges.overflow && <button type="button" className="es-tabs-edge-button" data-edge="right" aria-label="Rolar abas para a direita" aria-controls={list.current?.id} disabled={!edges.right} onClick={() => scroll(1)}><Icon name="ArrowRight" purpose="small" /></button>}</div>;
+  const strip = <div className="es-tabs-list-shell" data-variant={variant} data-overflow={edges.overflow} data-edge-left={edges.left} data-edge-right={edges.right}>{edges.left && <span className="es-tabs-edge-fade" data-edge="left" aria-hidden="true" />}{edges.right && <span className="es-tabs-edge-fade" data-edge="right" aria-hidden="true" />}{edges.overflow && <button type="button" tabIndex={-1} className="es-tabs-edge-button" data-edge="left" aria-label="Rolar abas para a esquerda" aria-controls={list.current?.id} disabled={!edges.left} onClick={() => scroll(-1)}><Icon name="ArrowLeft" purpose="small" /></button>}{tabList}{edges.overflow && <button type="button" tabIndex={-1} className="es-tabs-edge-button" data-edge="right" aria-label="Rolar abas para a direita" aria-controls={list.current?.id} disabled={!edges.right} onClick={() => scroll(1)}><Icon name="ArrowRight" purpose="small" /></button>}</div>;
   return <LayoutGroup id={id}><div ref={root} className={cn('es-tabs min-w-0', connection && 'rounded-[16px] overflow-hidden border border-border-subtle shadow-[0_1px_2px_var(--es-border-subtle)]')} data-variant={variant} onPointerDown={clearKeyboardTarget} onBlurCapture={event => { if (!root.current?.contains(event.relatedTarget as Node | null)) clearKeyboardTarget(); }}>{connection ? <div className="es-tabs-connection-strip contain-inline-size w-full max-w-full min-w-0 overflow-visible p-2 border-b border-border-subtle">{strip}</div> : strip}{items.map(item => {
     const active = selected?.id === item.id;
     const panelId = `${id}-panel-${item.id}`;

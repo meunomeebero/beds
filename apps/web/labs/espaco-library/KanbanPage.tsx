@@ -40,7 +40,7 @@ export default function KanbanPage() {
 
   return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <AppShell contentWidth="full" collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} navigationLabel="Navegação" closeNavigationLabel="Fechar navegação"
-      sidebar={<><SidebarHeader><Inline gap="tight"><BrandMark src="/demo-brand.svg" label="Curriculol" /><Text>Curriculol</Text></Inline></SidebarHeader><SidebarSection label="Playground"><NavItem label="Componentes" icon="Folder" href={`?view=components&theme=${theme}`} /><NavItem label="Quadro de vagas" icon="Briefcase" active href={`?view=kanban&theme=${theme}`} /></SidebarSection></>}
+      sidebar={<><SidebarHeader><Inline gap="tight"><BrandMark src="/demo-brand.svg" label="App de exemplo" /><Text>App de exemplo</Text></Inline></SidebarHeader><SidebarSection label="Playground"><NavItem label="Componentes" icon="Folder" href={`?view=components&theme=${theme}`} /><NavItem label="Quadro de vagas" icon="Briefcase" active href={`?view=kanban&theme=${theme}`} /></SidebarSection></>}
       header={<ContentHeader actions={<ThemeToggle label="Aparência da página" lightLabel="Claro" darkLabel="Escuro" />}><Text>Componentes / Quadro de vagas</Text></ContentHeader>}>
       <Stack gap="section">
         <PageHeader title="Candidaturas" description="Cada oportunidade, no seu próximo passo." />

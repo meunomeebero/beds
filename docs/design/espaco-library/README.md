@@ -1,6 +1,6 @@
 # Espaço — portable SaaS interface library
 
-Canonical library: `beds`. React 19; two fixed themes; one brand color. Independent of Curriculol business rules. This map is the entrypoint, not another geometry specification.
+Canonical library: `beds`. React 19; two fixed themes; one brand color. Independent of the reference app business rules. This map is the entrypoint, not another geometry specification.
 
 ## Read only the relevant path
 
@@ -24,7 +24,7 @@ not a template that unrelated apps must inherit.
 
 | Task | Read next |
 |---|---|
-| Know the visual defaults (0.3, Curriculol patterns) | [Foundations](FOUNDATIONS.md#proportions--the-curriculol-finish): pill buttons md 40 / sm 32, soft fields with a soft focus ring, one 40px tab pill, card and layout proportions |
+| Know the visual defaults (0.3, the reference app patterns) | [Foundations](FOUNDATIONS.md#proportions--the-finished-look): pill buttons md 40 / sm 32, soft fields with a soft focus ring, one 40px tab pill, card and layout proportions |
 | Make the one focal CTA | `Button variant="outline"` with a trailing arrow; [ExpandingButton](EXPANDING-BUTTON.md) now renders the same pill |
 | Point at a nearby CTA with a handwritten note | [HandDrawnArrow](HAND-DRAWN-ARROW.md): decorative pen stroke, fixed shapes/directions/contexts/tones, draw-in and brand ink |
 | Choose the product's contrast color | [Foundations](FOUNDATIONS.md#contrast-color--mandatory-choice): mandatory `brandColor`, how to pick it and where to use it |
@@ -49,7 +49,7 @@ not a template that unrelated apps must inherit.
 | Looking for motion to add | [beUI opportunities audit](BEUI-OPPORTUNITIES-2026-09-16.md): measured motion gap,replace/enhance/new candidates by intensity,open owner decisions |
 | Review UI quality | [Interface quality](INTERFACE-QUALITY.md) → affected contracts → Governance evidence requirements |
 | Create or improve a SaaS landing | [Landing-page skill](LANDING-PAGE-SKILL.md): portable `marc-lou-landing-page`, automatic scoped routing, product proof and honest CTAs |
-| Compose the full landing | [Landing composition and review](LANDING-PAGE.md): shared header/hero/demo/workflow/FAQ, Curriculol preview, product evidence and scoped Better/Emil results |
+| Compose the full landing | [Landing composition and review](LANDING-PAGE.md): shared header/hero/demo/workflow/FAQ, the reference app preview, product evidence and scoped Better/Emil results |
 | Show processing stages | [Processing](PROCESSING.md): controlled analysis/optimization presentation,current90s/75s fixtures,pause/recovery and timing-policy drift |
 | Show analysis/optimization results | [Results](RESULTS.md): reusable proof/report/next-step patterns,Revenue-Centric conversion,owned-artifact access and simulated payment |
 | Compose checkout | [Checkout](CHECKOUT.md): clear total,conditional fields,payment recovery and explicit mock confirmation;Revenue-Centric and form friction |
@@ -76,7 +76,7 @@ not a template that unrelated apps must inherit.
 | Inspect current MCP/Profile review | [2026-09-15 audit](REVIEW-MCP-PROFILE-2026-09-15.md): named preview only; findings remain open |
 | Maintain documentation | Governance → [Documentation audit](DOCUMENTATION-AUDIT.md); no UI or full skill-suite pass unless rendering changes |
 | Build or hand off a package | [Artifact validation](ARTIFACT-VALIDATION.md) → [Validation](VALIDATION.md) |
-| Inspect an example | [Lucy](LUCY-COMPOSITION.md), [MCP](MCP-COMPOSITION.md), or [Data patterns](DATA-PATTERNS.md); not a production-flow specification |
+| Inspect an example | [AI chat composition](AI-CHAT-COMPOSITION.md), [MCP](MCP-COMPOSITION.md), or [Data patterns](DATA-PATTERNS.md); not a production-flow specification |
 | Trace a design decision | [Provenance](PROVENANCE.md) → [Original measurements](REFERENCE-MEASUREMENTS.md), only when needed |
 
 ## Ownership

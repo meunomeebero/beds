@@ -106,7 +106,9 @@ test('light/dark, narrow, long text, RTL and zoom stay contained with visible fo
       const dialog = page.locator('.es-search-dialog');
       await expect(dialog).toBeVisible();
       await expect(page.getByRole('combobox')).toHaveCSS('font-size', '16px');
-      await expect(page.getByRole('combobox')).toHaveCSS('outline-width', '2px');
+      // The focus ring sits on the field pill (soft ring plus a transparent 2px outline that forced colors paint).
+      await expect(page.getByRole('combobox')).toBeFocused();
+      await expect(dialog.locator('.es-search-dialog-field')).toHaveCSS('outline-width', '2px');
       const geometry = await dialog.evaluate(el => {
         const rect = el.getBoundingClientRect();
         return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom, overflow: el.scrollWidth - el.clientWidth };

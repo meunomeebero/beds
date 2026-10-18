@@ -4,7 +4,7 @@ Reusable React 19 components and a product-agnostic style guide. Two fixed theme
 one caller-owned brand color, semantic variants instead of style props. Package and
 import name: **beds**.
 
-The visual defaults are the patterns proven in Curriculol, the reference product:
+The visual defaults are the patterns proven in a production reference app:
 pill buttons (md 40px, sm 32px), text fields with a soft border and a soft focus
 ring instead of a hard outline, one proportional tab pill, outline calls to action
 and quiet removable chips. BEDS ships components and guidance; each app owns its
@@ -62,7 +62,7 @@ and query `beds/manifest.json` for the exact props instead of guessing.
 
 1. **Components, not pages.** BEDS owns controls, interaction states, tokens and
    motion. Page hierarchy, widths, navigation and copy belong to the app; follow the
-   [proportions](docs/design/espaco-library/FOUNDATIONS.md#proportions--the-curriculol-finish)
+   [proportions](docs/design/espaco-library/FOUNDATIONS.md#proportions--the-finished-look)
    for the values that make screens feel finished.
 2. **No style escape hatches.** Components expose semantic variants, not `className`
    or `style`. Apps read `--es-*` tokens but never target `.es-*` selectors or

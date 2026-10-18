@@ -2,7 +2,7 @@ import { expect, test, type Page, type TestInfo } from '@playwright/test';
 import { mkdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
-const evidence = fileURLToPath(new URL('./evidence/lucy-attachments/', import.meta.url));
+const evidence = fileURLToPath(new URL('./evidence/ai-chat-attachments/', import.meta.url));
 const fixture = (name = 'currículo.pdf') => ({ name, mimeType: 'application/pdf', buffer: Buffer.from('%PDF demo metadata only') });
 async function capture(page: Page, info: TestInfo, name: string) {
   await mkdir(evidence, { recursive: true });
@@ -16,7 +16,7 @@ async function noOverflow(page: Page) {
 
 test('attachment anatomy; light/dark, long names, RTL, zoom and keyboard focus', async ({ page }, info) => {
   for (const theme of ['dark', 'light']) {
-    await page.goto(`/?view=lucy&preview=attachments&theme=${theme}`);
+    await page.goto(`/?view=ai-chat&preview=attachments&theme=${theme}`);
     await page.evaluate(() => document.fonts.ready);
     const list = page.getByRole('list', { name: 'Anexos da mensagem' });
     await expect(list.getByRole('listitem')).toHaveCount(3);
@@ -59,7 +59,7 @@ test('attachment anatomy; light/dark, long names, RTL, zoom and keyboard focus',
 test('real attach action, cancel, duplicate names, removal, draft recovery and local-only submission', async ({ page }) => {
   const requests: string[] = [];
   page.on('request', request => { if (['fetch', 'xhr'].includes(request.resourceType())) requests.push(request.url()); });
-  await page.goto('/?view=lucy&theme=dark&preview=error');
+  await page.goto('/?view=ai-chat&theme=dark&preview=error');
   await page.getByRole('button', { name: 'Descrever experiências', exact: true }).click();
   const editor = page.getByRole('textbox', { name: 'Suas experiências' });
   await editor.fill('Destaque meus resultados.');
@@ -98,7 +98,7 @@ test('real attach action, cancel, duplicate names, removal, draft recovery and l
   await page.locator('input[type=file]').setInputFiles(fixture());
   await page.getByRole('button', { name: 'Enviar mensagem' }).click();
   await expect(list).toHaveCount(0);
-  await page.goto('/?view=lucy&preview=loading');
+  await page.goto('/?view=ai-chat&preview=loading');
   await expect(page.getByRole('button', { name: 'Anexar arquivos' })).toBeDisabled();
   await page.getByRole('button', { name: 'Interromper prévia' }).click();
   await expect(page.getByRole('button', { name: 'Anexar arquivos' })).toBeEnabled();

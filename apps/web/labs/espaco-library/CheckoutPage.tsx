@@ -48,15 +48,20 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     document.documentElement.lang = 'pt-BR';
-    document.title = 'Checkout · Playground Curriculol';
+    document.title = 'Checkout · Playground de exemplo';
     return () => { if (creationTimer.current) clearTimeout(creationTimer.current); };
   }, []);
 
   useEffect(() => {
     if (!needsFocus.current || dialog !== null) return;
     needsFocus.current = false;
-    main.current?.focus({ preventScroll: true });
-    main.current?.scrollIntoView({ block: 'start', behavior: 'instant' });
+    // A closing dialog keeps the page inert until its exit finishes: land on main once it leaves the top layer.
+    const land = () => {
+      if (document.querySelector('dialog[open]')) { requestAnimationFrame(land); return; }
+      main.current?.focus({ preventScroll: true });
+      main.current?.scrollIntoView({ block: 'start', behavior: 'instant' });
+    };
+    land();
   }, [state, dialog]);
 
   function persist(next: CheckoutRecord | null) {
@@ -138,7 +143,7 @@ export default function CheckoutPage() {
   </CheckoutSection>;
 
   return <DesignSystemProvider theme={theme} onThemeChange={next => { setTheme(next); const url = new URL(location.href); url.searchParams.set('theme', next); history.replaceState(null, '', url); }} brandColor={"#ffa133"}>
-    <CheckoutLayout ref={main} title={state === 'confirmed' ? 'Compra de demonstração concluída.' : 'Prepare sua próxima candidatura.'} description={state === 'confirmed' ? 'Veja a confirmação e continue de onde parou. Nenhum crédito real foi adicionado.' : 'Transforme os ajustes da análise em um currículo e uma carta para a vaga.'} mark={<BrandMark src="/demo-brand.svg" label="Curriculol" />} back={{ label: returnLabel, href: returnHref }} utilities={<ThemeToggle label="Aparência do checkout" lightLabel="Claro" darkLabel="Escuro" />} summary={summary} footer={<Stack><Stack gap="tight"><Text variant="caption" tone="secondary">Curriculol é um produto da BEROLAB LTDA · CNPJ 61.026.871/0001-79.</Text><Inline gap="tight"><Button variant="ghost" label="Termos" onClick={() => setDialog('terms')} /><Button variant="ghost" label="Privacidade" onClick={() => setDialog('privacy')} /><Button variant="ghost" label="Ajuda com o pagamento" onClick={() => setDialog('help')} /></Inline><Text variant="caption" tone="secondary">Playground: pagamento, confirmação e recibo são demonstrativos. Não informe dados reais.</Text></Stack>{demoControls}</Stack>}>
+    <CheckoutLayout ref={main} title={state === 'confirmed' ? 'Compra de demonstração concluída.' : 'Prepare sua próxima candidatura.'} description={state === 'confirmed' ? 'Veja a confirmação e continue de onde parou. Nenhum crédito real foi adicionado.' : 'Transforme os ajustes da análise em um currículo e uma carta para a vaga.'} mark={<BrandMark src="/demo-brand.svg" label="App de exemplo" />} back={{ label: returnLabel, href: returnHref }} utilities={<ThemeToggle label="Aparência do checkout" lightLabel="Claro" darkLabel="Escuro" />} summary={summary} footer={<Stack><Stack gap="tight"><Text variant="caption" tone="secondary">App de exemplo é um produto fictício · CNPJ 00.000.000/0000-00.</Text><Inline gap="tight"><Button variant="ghost" label="Termos" onClick={() => setDialog('terms')} /><Button variant="ghost" label="Privacidade" onClick={() => setDialog('privacy')} /><Button variant="ghost" label="Ajuda com o pagamento" onClick={() => setDialog('help')} /></Inline><Text variant="caption" tone="secondary">Playground: pagamento, confirmação e recibo são demonstrativos. Não informe dados reais.</Text></Stack>{demoControls}</Stack>}>
       <Stack>
         {state === 'form' && <SettingsForm label="Finalizar compra de demonstração" onSubmit={submit}>
           <CheckoutSection title="Escolha seus créditos" description="A quantidade muda; os recursos continuam os mesmos.">
@@ -165,14 +170,14 @@ export default function CheckoutPage() {
 
         {state === 'closed' && <CheckoutSection title="Este pagamento foi encerrado" description="O código ou link anterior não está mais ativo nesta simulação."><Notice tone="warning" title="Confira se houve débito antes de tentar novamente" description="No aplicativo real, consulte seu banco. Se o pagamento foi concluído, aguarde a confirmação; não pague outra vez." /><Button purpose="welcome" variant="primary" label="Voltar às formas de pagamento" onClick={reset} /></CheckoutSection>}
 
-        {state === 'confirmed' && record && <Stack><PaymentConfirmation title="Pagamento confirmado · demonstração" description="Nenhuma cobrança aconteceu. Este recibo é ilustrativo e não tem validade fiscal." merchant="Curriculol · demonstração" mark={<BrandMark src="/demo-brand.svg" label="Curriculol" />} purchase={{ label: checkoutCredits(record.quantity), description: 'Compra única, sem assinatura' }} receipt={{ title: 'Recibo DEMO — sem validade fiscal', items: [{ id: 'order', label: 'Pedido fictício', value: record.order }, { id: 'method', label: 'Forma', value: method === 'pix' ? 'Pix · simulação' : 'Cartão · simulação' }, { id: 'quantity', label: 'Quantidade', value: checkoutCredits(record.quantity) }], total: { label: 'Total simulado', value: price }, note: 'Nenhum saldo real foi alterado. Este recibo não é uma nota fiscal.' }} animate={restored?.state !== 'confirmed'} /><TextLink href={returnHref}>{returnLabel}</TextLink></Stack>}
+        {state === 'confirmed' && record && <Stack><PaymentConfirmation title="Pagamento confirmado · demonstração" description="Nenhuma cobrança aconteceu. Este recibo é ilustrativo e não tem validade fiscal." merchant="App de exemplo · demonstração" mark={<BrandMark src="/demo-brand.svg" label="App de exemplo" />} purchase={{ label: checkoutCredits(record.quantity), description: 'Compra única, sem assinatura' }} receipt={{ title: 'Recibo DEMO — sem validade fiscal', items: [{ id: 'order', label: 'Pedido fictício', value: record.order }, { id: 'method', label: 'Forma', value: method === 'pix' ? 'Pix · simulação' : 'Cartão · simulação' }, { id: 'quantity', label: 'Quantidade', value: checkoutCredits(record.quantity) }], total: { label: 'Total simulado', value: price }, note: 'Nenhum saldo real foi alterado. Este recibo não é uma nota fiscal.' }} animate={restored?.state !== 'confirmed'} /><TextLink href={returnHref}>{returnLabel}</TextLink></Stack>}
 
         {storageUnavailable && <Notice tone="warning" title="A prévia não pôde ser guardada nesta aba" description="Você pode continuar normalmente. Ao recarregar ou sair, o pedido fictício poderá ser perdido; nenhum dado foi enviado." />}
 
       </Stack>
 
     <Dialog open={dialog !== null} onOpenChange={open => { if (!open) setDialog(null); }} title={dialog === 'restart' ? 'Conferiu o pagamento anterior?' : dialog === 'terms' ? 'Termos · prévia de interface' : dialog === 'privacy' ? 'Privacidade · prévia de interface' : 'Ajuda com o pagamento'} description={dialog === 'restart' ? 'Se já houve débito, não inicie outro pagamento. Consulte seu banco e aguarde a confirmação.' : 'Este conteúdo explica a demonstração. Não substitui os textos legais nem o suporte do aplicativo.'} actions={dialog === 'restart' ? <><Button label="Continuar aguardando" onClick={() => setDialog(null)} /><Button label="Não paguei · escolher outra forma" onClick={reset} /></> : <Button label="Voltar ao checkout" onClick={() => setDialog(null)} />}>
-      <Text>{dialog === 'privacy' ? 'O CPF digitado existe somente na memória desta página e não é salvo. Apenas o pedido fictício, a quantidade, o método e o estado da prévia podem permanecer nesta aba por até 24 horas. Não há envio a provedores.' : dialog === 'terms' ? 'Os valores exibidos seguem a tabela atual de créditos do Curriculol. Esta prévia não realiza venda, não gera saldo e não emite nota fiscal. A revisão dos textos legais finais pertence à integração do produto.' : dialog === 'restart' ? 'A troca descarta somente este pedido fictício e mantém a quantidade escolhida. No aplicativo real, o status deve ser conferido antes de criar outra cobrança.' : 'Se houver falha ao consultar um pagamento, mantenha o pedido e tente consultar novamente. Se já pagou, não pague uma segunda vez. Nesta prévia, use os controles da demonstração para validar cada estado.'}</Text>
+      <Text>{dialog === 'privacy' ? 'O CPF digitado existe somente na memória desta página e não é salvo. Apenas o pedido fictício, a quantidade, o método e o estado da prévia podem permanecer nesta aba por até 24 horas. Não há envio a provedores.' : dialog === 'terms' ? 'Os valores exibidos seguem a tabela atual de créditos do app de exemplo. Esta prévia não realiza venda, não gera saldo e não emite nota fiscal. A revisão dos textos legais finais pertence à integração do produto.' : dialog === 'restart' ? 'A troca descarta somente este pedido fictício e mantém a quantidade escolhida. No aplicativo real, o status deve ser conferido antes de criar outra cobrança.' : 'Se houver falha ao consultar um pagamento, mantenha o pedido e tente consultar novamente. Se já pagou, não pague uma segunda vez. Nesta prévia, use os controles da demonstração para validar cada estado.'}</Text>
     </Dialog>
     </CheckoutLayout>
   </DesignSystemProvider>;

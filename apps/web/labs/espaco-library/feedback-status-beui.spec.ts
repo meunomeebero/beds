@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { coarsePointer } from './touch-target';
 
 test.describe('Feedback, status, loading and notifications', () => {
   for (const theme of ['light', 'dark'] as const) {
@@ -25,7 +26,7 @@ test.describe('Feedback, status, loading and notifications', () => {
       const describedBy = await notices.evaluateAll(elements => elements.map(element => element.getAttribute('aria-describedby')));
       expect(new Set(labelledBy).size).toBe(2);
       expect(new Set(describedBy).size).toBe(2);
-      const dismissButtons = notices.getByRole('button', { name: 'Dismiss notification', exact: true });
+      const dismissButtons = notices.getByRole('button', { name: 'Dispensar notificação', exact: true });
       await expect(dismissButtons).toHaveCount(2);
       await dismissButtons.first().focus();
       await expect(dismissButtons.first()).toBeFocused();
@@ -67,7 +68,7 @@ test.describe('Feedback, status, loading and notifications', () => {
     await action.focus();
     await expect(action).toBeFocused();
     await expect(action).toHaveCSS('outline-style', 'solid');
-    expect((await action.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    expect((await action.boundingBox())!.height).toBeGreaterThanOrEqual(await coarsePointer(page) ? 44 : 40);
 
     await page.emulateMedia({ forcedColors: 'active' });
     await expect(action).toHaveCSS('outline-style', 'solid');

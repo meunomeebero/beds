@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-const catalogQuery = 'view=components&theme=dark&brand=curriculol&ber10=1&ber11=1&preserve=1';
+const catalogQuery = 'view=components&theme=dark&brand=orange&ber10=1&ber11=1&preserve=1';
 
 function rgb(value: string) {
   const channels = value.match(/[\d.]+/g)?.slice(0, 3).map(Number);
@@ -58,7 +58,7 @@ test('catalog links preserve context and native history semantics', async ({ pag
   const replaced = new URL(page.url());
   expect(replaced.searchParams.get('view')).toBe('tokens');
   expect(replaced.searchParams.get('theme')).toBe('light');
-  expect(replaced.searchParams.get('brand')).toBe('curriculol');
+  expect(replaced.searchParams.get('brand')).toBe('orange');
   expect(replaced.searchParams.get('ber10')).toBe('1');
   expect(replaced.searchParams.get('ber11')).toBe('1');
   expect(replaced.searchParams.get('preserve')).toBe('1');
@@ -71,14 +71,14 @@ test('catalog links preserve context and native history semantics', async ({ pag
   const linkUrl = new URL(await kanban.getAttribute('href') ?? '', page.url());
   expect(linkUrl.searchParams.get('view')).toBe('kanban');
   expect(linkUrl.searchParams.get('theme')).toBe('dark');
-  expect(linkUrl.searchParams.get('brand')).toBe('curriculol');
+  expect(linkUrl.searchParams.get('brand')).toBe('orange');
   expect(linkUrl.searchParams.get('ber10')).toBe('1');
   expect(linkUrl.searchParams.get('ber11')).toBe('1');
   expect(linkUrl.searchParams.get('preserve')).toBe('1');
   await kanban.click();
   await expect(page).toHaveURL(/view=kanban/);
   const forwardUrl = new URL(page.url());
-  expect(forwardUrl.searchParams.get('brand')).toBe('curriculol');
+  expect(forwardUrl.searchParams.get('brand')).toBe('orange');
   expect(forwardUrl.searchParams.get('ber10')).toBe('1');
   expect(forwardUrl.searchParams.get('ber11')).toBe('1');
   expect(forwardUrl.searchParams.get('preserve')).toBe('1');

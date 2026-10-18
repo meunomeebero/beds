@@ -23,7 +23,7 @@
  --es-image-outline:rgba(0,0,0,.1);
  --es-shadow-popup:0 4px 6px -1px #0000001a,0 2px 4px -2px #0000001a;
  --es-shadow-xs:0 1px 2px #0000000d;
- /* Field focus/error (beUI input, adopted from Curriculol): a quiet heading-tinted border plus a soft 2px ring; never a hard outline. */
+ /* Field focus/error (beUI input, adopted from the reference app): a quiet heading-tinted border plus a soft 2px ring; never a hard outline. */
  --es-field-focus-border:color-mix(in srgb,var(--es-heading) 40%,transparent);
  --es-focus-ring:color-mix(in srgb,var(--es-focus) 40%,transparent);
  --es-error-ring:color-mix(in srgb,var(--es-error-text) 25%,transparent);

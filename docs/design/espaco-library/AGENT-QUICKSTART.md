@@ -19,7 +19,7 @@ node -e "const m=require('beds/manifest.json');console.log(JSON.stringify(m.comp
 If a prop or value is not in the manifest, it does not exist. Do not add
 `className`, `style`, spreads or wrapper CSS to change a BEDS component.
 
-## 2. Defaults you get for free (0.3, Curriculol patterns)
+## 2. Defaults you get for free (0.3, the reference app patterns)
 
 Buttons are pills (md 40px, `compact` sm 32px); the focal action is
 `variant="outline"` with `icon="ArrowRight" iconPosition="end"`; async actions pass
@@ -52,7 +52,7 @@ render one 40px tab pill. Do not resize, recolor or outline these in app CSS.
    and hairlines, one signature motion, a preview instead of an icon tile.
    Use the outline pill with a trailing arrow for the one focal CTA (no brand-filled
    buttons) and `TextLink`/`LinkButton` `purpose="nav"` for header and footer links.
-   Follow [Proportions](FOUNDATIONS.md#proportions--the-curriculol-finish) for widths,
+   Follow [Proportions](FOUNDATIONS.md#proportions--the-finished-look) for widths,
    rhythm and card anatomy. No gradients, glow or shadows.
 6. **Look at it.** Check desktop and 320px, light and dark, keyboard focus and
    reduced motion in a real browser. Passing checks are not visual review.

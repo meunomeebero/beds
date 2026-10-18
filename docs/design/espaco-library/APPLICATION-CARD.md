@@ -15,7 +15,7 @@ shares all properties and score rendering;no duplicate card/ATS implementation.
 
 ## Anatomy and traceability
 
-Reference inspected: Curriculol `apps/web/src/components/dashboard/KanbanBoard.tsx`
+Reference inspected: the reference app `apps/web/src/components/dashboard/KanbanBoard.tsx`
 (`ApplicationCard`, `ManualScoreState`, status/next-action handling), `types.ts`,
 `kanban-v4.css`; search metadata from `JobSearchMatchCard.tsx`.
 Source properties are D (source-derived). New BEDS translation is A (explicit
@@ -30,7 +30,7 @@ adaptation for review), not a measured Marketer value or human visual approval.
 | Status, status mover | `status`; optional controlled `statusOptions/onStatusChange`; caller restricts transitions |
 | FIT saved with vacancy | `score.kind=fit`; never relabelled ATS |
 | Optimization match | `score.kind=match`; caller-supplied number/explanation |
-| Kit ATS before/after/delta | `score.kind=ats`, `before/value`; points, not probability; finite0–100 only |
+| ATS package before/after/delta | `score.kind=ats`, `before/value`; points, not probability; finite0–100 only |
 | ATS pending / missing | `processing/unavailable`; named text, no fake zero or result |
 | Segmented score | Shared28 vertical segments, floor not upward rounding; numeric meter retains actual integer score |
 | Keywords | All supplied values; wrapping; application decides relevant content |

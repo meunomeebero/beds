@@ -129,7 +129,7 @@
 
 /* Drawer: a viewport-edge panel, not a rounded card or a resizable window. */
 .es-root .es-drawer::backdrop{background:var(--es-overlay)}
-/* Text entry inside dialogs and drawers is outlined without a fill (Curriculol product rule): the panel surface shows through. */
+/* Text entry inside dialogs and drawers is outlined without a fill (the reference app product rule): the panel surface shows through. */
 .es-root :is(.es-drawer,.es-dialog-surface){--es-field:transparent}
 
 /* Select owns its touch target regardless of which page or panel contains it. */

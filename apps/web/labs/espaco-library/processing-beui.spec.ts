@@ -44,7 +44,7 @@ test.describe('ProcessingView · beUI todo-list adaptation', () => {
       await expect(scoreRegion).toBeVisible();
 
       const expected = fixture.scores.map(score => String(score.value));
-      const before = await scoreRegion.locator('.es-meter-label > span:last-child').allTextContents();
+      const before = await scoreRegion.locator('.recipe-processing-meter-label > span:last-child').allTextContents();
       expect(before).toEqual(expected);
       const ariaValues = await scoreRegion.locator('.es-segmented-bars').evaluateAll(elements => elements.map(element => element.getAttribute('aria-valuenow')));
       expect(ariaValues).toEqual(expected);
@@ -52,7 +52,7 @@ test.describe('ProcessingView · beUI todo-list adaptation', () => {
       expect(await meter.evaluate(element => getComputedStyle(element).clipPath)).toMatch(/inset/);
 
       await page.clock.runFor(120);
-      await expect(scoreRegion.locator('.es-meter-label > span:last-child')).toHaveText(expected);
+      await expect(scoreRegion.locator('.recipe-processing-meter-label > span:last-child')).toHaveText(expected);
       expect(await meter.evaluate(element => getComputedStyle(element).clipPath)).toMatch(/inset/);
     });
   }

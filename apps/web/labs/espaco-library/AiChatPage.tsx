@@ -47,7 +47,7 @@ const panels = {
 type Panel = keyof typeof panels;
 
 /** Application composition only. The existing library owns every visual choice. */
-export default function LucyPage() {
+export default function AiChatPage() {
   const preview = new URLSearchParams(location.search).get('preview');
   const [theme, setTheme] = useState<Theme>(new URLSearchParams(location.search).get('theme') === 'light' ? 'light' : 'dark');
   const [collapsed, setCollapsed] = useState(false);
@@ -171,7 +171,7 @@ export default function LucyPage() {
         </SidebarHeader>
         <SidebarSection purpose="primary">
           <NavItem label="Início" icon="House" onClick={() => openPanel('home')} />
-          <NavItem label="Lucy" icon="MessageCircle" active onClick={() => { setPanel(null); setMobileOpen(false); }} />
+          <NavItem label="Assistente" icon="MessageCircle" active onClick={() => { setPanel(null); setMobileOpen(false); }} />
         </SidebarSection>
         <SidebarSection label="Seu espaço">
           <NavItem label="Currículos" icon="FileText" onClick={() => openPanel('resumes')} />
@@ -188,10 +188,10 @@ export default function LucyPage() {
         <SidebarFooter><NavItem label="8 créditos" icon="Coins" onClick={() => openPanel('credits')} /></SidebarFooter>
       </>}
       header={<ContentHeader><Inline align="between">
-        <Breadcrumbs label="Localização" items={[{ id: 'catalog', label: 'Catálogo', href: '?view=components' }, { id: 'lucy', label: 'Lucy' }]} />
+        <Breadcrumbs label="Localização" items={[{ id: 'catalog', label: 'Catálogo', href: '?view=components' }, { id: 'assistant', label: 'Assistente' }]} />
         <Button label="Nova conversa" icon="Plus" variant="ghost" compact onClick={() => messages.length || draft || attachments.length || files.linkedin.length || files.resume.length ? setResetOpen(true) : newConversation()} />
       </Inline></ContentHeader>}>
-      <ChatThread title="Conversa com Lucy" stepKey={`${step}-${revision}`} announcement={announcement}
+      <ChatThread title="Conversa com a assistente" stepKey={`${step}-${revision}`} announcement={announcement}
         notice="Prévia de interface. Sem IA, envio de arquivos ou alterações no perfil."
         interaction={step === 'choose'
           ? <ChatOptions title="Como você prefere começar?" options={choices} onChoose={choose} />
@@ -211,10 +211,10 @@ export default function LucyPage() {
               <Inline><Button label="Escolher outra opção" variant="ghost" onClick={returnToChoices} disabled={busy} />{busy && <Text>Carregamento de exemplo…</Text>}</Inline>
             </Stack>}
           </Stack>}>
-        <ChatMessage role="assistant" purpose="thread" author="Lucy" mark={<BrandMark src="/demo-brand.svg" label="Curriculol" />}>
+        <ChatMessage role="assistant" purpose="thread" author="Assistente" mark={<BrandMark src="/demo-brand.svg" label="App de exemplo" />}>
           <Stack><Text variant="body">Olá, Marina. Vamos dar forma à sua trajetória?</Text><Text variant="body">Podemos começar pelo que você já tem ou conversar sobre suas experiências. Depois, você revisa tudo com calma.</Text></Stack>
         </ChatMessage>
-        {messages.map((message, index) => <ChatMessage key={index} role={message.role} purpose="thread" author={message.role === 'assistant' ? 'Lucy' : undefined} mark={message.role === 'assistant' ? <BrandMark src="/demo-brand.svg" label="Curriculol" /> : undefined}>{message.text}</ChatMessage>)}
+        {messages.map((message, index) => <ChatMessage key={index} role={message.role} purpose="thread" author={message.role === 'assistant' ? 'Assistente' : undefined} mark={message.role === 'assistant' ? <BrandMark src="/demo-brand.svg" label="App de exemplo" /> : undefined}>{message.text}</ChatMessage>)}
       </ChatThread>
     </AppShell>
     <Dialog open={resetOpen} onOpenChange={setResetOpen} title="Começar uma nova prévia?" description="A conversa, os rascunhos e os arquivos selecionados nesta prévia serão removidos.">
@@ -225,8 +225,8 @@ export default function LucyPage() {
         <SearchField label="Buscar no espaço" value={query} onChange={setQuery} placeholder="Buscar seções…" />
         {searchResults.length ? searchResults.map(([id, label]) => <RecentItem key={id} title={label} onClick={() => openPanel(id as Panel)} />) : <Text tone="secondary">Nenhum resultado encontrado.</Text>}
       </Stack> : <Stack>
-        <Text>{panel === 'credits' ? 'Saldo de exemplo para visualizar os créditos no rodapé da navegação.' : 'Esta seção faz parte do esboço. Por enquanto, você pode experimentar a conversa com Lucy.'}</Text>
-        <Button label="Voltar para Lucy" onClick={() => setPanel(null)} />
+        <Text>{panel === 'credits' ? 'Saldo de exemplo para visualizar os créditos no rodapé da navegação.' : 'Esta seção faz parte do esboço. Por enquanto, você pode experimentar a conversa com a assistente.'}</Text>
+        <Button label="Voltar para a assistente" onClick={() => setPanel(null)} />
       </Stack>}
     </Dialog>
   </DesignSystemProvider>;

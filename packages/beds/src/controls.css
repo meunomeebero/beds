@@ -1,4 +1,4 @@
-/* Button: beUI Button + StatefulButton pills (md 40 / 44 touch, sm 32) adopted from Curriculol, in controls.tsx (Tailwind + motion).
+/* Button: beUI Button + StatefulButton pills (md 40 / 44 touch, sm 32) adopted from the reference app, in controls.tsx (Tailwind + motion).
    IconButton / IconToggleButton: 32px square (44 on touch), press on an inert child, soft hover tint. */
 
 /* TextField / TextAreaField / DateField / SearchField: beUI `input` anatomy in controls.tsx. Soft border by default, focus = heading-tinted
@@ -6,7 +6,7 @@
 
 /* Checkbox / Switch: Tailwind + motion in controls.tsx; marks keep the functional --es-control-border. */
 
-/* SegmentedControl / Tabs: one tab pill (beUI Tabs `pill`, as Curriculol ships it), see controls.tsx. */
+/* SegmentedControl / Tabs: one tab pill (beUI Tabs `pill`, as the reference app ships it), see controls.tsx. */
 
 /* A one-column grid lets the scrolling tab strip shrink below its labels' width inside flex columns,
    so a long tab set scrolls in place instead of widening the page at 320px. */

@@ -16,7 +16,7 @@ Current verification status belongs to the migration ledger.
 September16 local candidate; `?view=landing&theme=light|dark`. Not included in
 published RC16. No release, product integration, authentication, analysis,
 upload, purchase or application submission. Package remains product-neutral;
-Curriculol copy/fixtures live only in the playground.
+reference-app copy and fixtures live only in the playground.
 
 ## Optional recipe API
 
@@ -46,7 +46,7 @@ application. First useful outcome: understand the resume against a chosen job.
 Primary CTA example: `Analisar meu currículo`; repeated without changing meaning.
 
 Promise → illustrative vacancy + readable resume/letter → three-step workflow
-→ five outcome-led benefits → free analysis vs paid kit → FAQ → closing CTA.
+→ five outcome-led benefits → free analysis vs paid package → FAQ → closing CTA.
 Reuse: BrandMark, ApplicationCard, Tabs, Dialog, BenefitsSection,
 BenefitIllustration, PricingSection, CardMedia, LandingFooter, IconButton.
 Existing original benefits artwork and local pricing illustrations; no copied
@@ -62,14 +62,14 @@ No tracking added here.
 
 ## Product evidence snapshot
 
-Read-only Curriculol checkout, September16,2026,
+Read-only the reference app checkout, September16,2026,
 HEAD `3b9117f71b8611c75a5834d48fbc406e03954c5f`; paths below belong to that project.
 Recheck before production adoption; the DS does not own these business rules.
 
 | Claim | Local evidence |
 |---|---|
 | Free analysis, email confirmation required | `apps/web/src/routes/_funnel/optimization.job.tsx`; `optimization.claim-email.tsx`; `apps/api/src/features/analyze/README.md` |
-| Resume + cover letter =1 credit per job; review before sending | `apps/api/src/features/application-kit/README.md`; `docs/design/FIRST-VISIT-ONBOARDING.md` |
+| Resume + cover letter =1 credit per job; review before sending | `apps/api/src/features/application-package/README.md`; `docs/design/FIRST-VISIT-ONBOARDING.md` |
 |1=R$5.90;10=R$27.90;50=R$55.90;no subscription | `apps/web/src/components/pricing/PackagesGrid.tsx`; `packages/shared/src/index.ts` |
 | Credits valid while account exists | `apps/web/src/components/TermsPage.tsx`; pricing copy |
 | Start from resume, LinkedIn data or experience description | `docs/design/FIRST-VISIT-ONBOARDING.md`; `apps/web/src/i18n/locales/pt-BR/app.json` |
@@ -81,10 +81,10 @@ claims from the previous marketing page. No business policy changed.
 
 | Entry | Transition / return |
 |---|---|
-| Catalog → Landing do Curriculol | Native link to local page; light default, supplied theme retained |
+| Catalog → Landing de exemplo | Native link to local page; light default, supplied theme retained |
 | Primary CTA | Existing local `?view=upload`; explicit no-read/no-upload disclaimer; browser Back |
 | Login link | Existing local `?view=otp`; no code sent or account created |
-| Paid-kit secondary link | Existing local `?view=kanban`; no checkout disguised as a purchase |
+| Paid-package secondary link | Existing local `?view=kanban`; no checkout disguised as a purchase |
 | Product demo | Resume/letter tabs via pointer or Arrow/Home/End; document buttons select the same state |
 | Example vacancy | Existing Dialog; Escape closes and restores triggering focus |
 | Mobile navigation | Native Menu summary; links close it; Escape closes and returns focus; no modal trap |

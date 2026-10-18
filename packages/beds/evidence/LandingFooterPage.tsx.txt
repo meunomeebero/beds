@@ -13,14 +13,14 @@ export default function LandingFooterPage() {
     <ContentHeader actions={<ThemeToggle label="Aparência" lightLabel="Claro" darkLabel="Escuro" />}>
       <Inline><TextLink href={href('components')}>Componentes</TextLink><Text>Rodapé da landing</Text></Inline>
     </ContentHeader>
-    <LandingFooter brandName={long ? 'Curriculol — sua próxima oportunidade' : 'Curriculol'} brandMark={<BrandMark src="/demo-brand.svg" label="Example brand" />}
+    <LandingFooter brandName={long ? 'App de exemplo — sua próxima oportunidade' : 'App de exemplo'} brandMark={<BrandMark src="/demo-brand.svg" label="Example brand" />}
       title={long ? 'Conte sua trajetória com clareza e encontre espaço para o próximo capítulo da sua carreira.' : 'Seu próximo passo começa com a sua história.'}
       description="Reúna suas experiências, encontre vagas e acompanhe suas candidaturas em um só lugar."
       action={minimal ? undefined : { label: long ? 'Começar a organizar minhas experiências profissionais' : 'Preparar meu perfil', href: href('onboarding') }}
       groups={minimal ? [] : [{ id: 'explore', label: 'Explore', links: [
         { id: 'search', label: 'Buscar vagas', href: href('search') },
         { id: 'applications', label: long ? 'Acompanhar e organizar candidaturas por etapa do processo seletivo' : 'Candidaturas', href: href('kanban') },
-        { id: 'lucy', label: 'Conhecer a Lucy', href: href('lucy') },
+        { id: 'assistant', label: 'Conhecer a assistente', href: href('ai-chat') },
       ] }]}
       community={minimal ? undefined : { label: 'Conteúdo e comunidade', links: [{ id: 'blog', label: 'Blog', href: href('blog-post') }, { id: 'forum', label: 'Fórum', href: href('forum') }] }}
       legal={long ? { label: 'Documentação da prévia', links: [{ id: 'docs', label: 'Voltar ao catálogo de componentes', href: href('components') }] } : undefined}

@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { coarsePointer } from './touch-target';
 
 for (const theme of ['light', 'dark'] as const) {
   test(`settings tabs keep the measured lane and indicator in ${theme}`, async ({ page }, testInfo) => {
@@ -17,8 +18,10 @@ for (const theme of ['light', 'dark'] as const) {
     expect(geometry.paddingInlineStart).toBe('4px');
     expect(geometry.paddingInlineEnd).toBe('4px');
     expect(geometry.overflowX).toBe('auto');
-    expect((await tab.boundingBox())!.height).toBe(48);
-    expect(await tab.locator('[data-tabs-indicator]').evaluate(element => getComputedStyle(element).height)).toBe('2px');
+    // One tab pill: 32px options (44px on coarse pointers) and a primary indicator that fills the selected option.
+    const tabBox = (await tab.boundingBox())!;
+    expect(tabBox.height).toBe(await coarsePointer(page) ? 44 : 32);
+    expect((await tab.locator('[data-tabs-indicator]').boundingBox())!.height).toBe(tabBox.height);
     expect(await panel.evaluate(element => getComputedStyle(element).marginTop)).toBe('24px');
     expect(await tablist.evaluate(element => element.scrollWidth > element.clientWidth)).toBe(width === 320);
     const edgeLeft = page.getByRole('button', { name: 'Rolar abas para a esquerda', exact: true });
@@ -70,6 +73,7 @@ for (const theme of ['light', 'dark'] as const) {
       const activeEdgeKind = await edgeLeft.isEnabled() ? 'left' : 'right';
       const activeEdge = activeEdgeKind === 'left' ? edgeLeft : edgeRight;
       const beforeTabBox = await endTab.boundingBox();
+      const beforeClick = await tablist.evaluate(element => element.scrollLeft);
       await activeEdge.click();
       await expect.poll(async () => endTab.boundingBox()).not.toEqual(beforeTabBox);
       const afterTabBox = await endTab.boundingBox();
@@ -80,7 +84,7 @@ for (const theme of ['light', 'dark'] as const) {
       const after = await tablist.evaluate(element => element.scrollLeft);
       await page.waitForTimeout(60);
       await expect.poll(async () => tablist.evaluate(element => element.scrollLeft)).toBe(after);
-      expect(after).not.toBe(before);
+      expect(after).not.toBe(beforeClick);
     }
   });
 

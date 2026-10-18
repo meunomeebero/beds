@@ -17,7 +17,7 @@ async function assertContrast(page: Page) {
 
 test('footer exposes named native navigation, keyboard focus and a real preview round trip', async ({ page }) => {
   await page.goto('/?view=landing-footer&theme=light');
-  const footer = page.getByRole('contentinfo', { name: 'Curriculol', exact: true });
+  const footer = page.getByRole('contentinfo', { name: 'App de exemplo', exact: true });
   await expect(footer).toBeVisible();
   await expect(footer.getByRole('navigation')).toHaveCount(2);
   await expect(footer.getByRole('link')).toHaveCount(6);

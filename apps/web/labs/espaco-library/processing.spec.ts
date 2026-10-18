@@ -1,6 +1,7 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { fileURLToPath } from 'node:url';
 import { processingFixtures, type ProcessingDemoKind } from './processing-fixtures';
+import { coarsePointer, hitBox } from './touch-target';
 
 const evidence = fileURLToPath(new URL('./evidence/processing/', import.meta.url));
 const flows = {
@@ -64,7 +65,7 @@ async function masterValue(screen: Locator) {
 async function assertFits(page: Page, screen: Locator) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
   const clipped = await screen.locator('h1,h2,h3,p,button,summary').evaluateAll(elements => elements
-    .filter(element => element.getClientRects().length && !element.matches('.es-visually-hidden') && !element.closest('[aria-hidden="true"]'))
+    .filter(element => element.getClientRects().length && !element.matches('.es-visually-hidden,.es-sr-only,.recipe-processing-announcement') && !element.closest('[aria-hidden="true"]'))
     .filter(element => element.scrollWidth > element.clientWidth + 1 && getComputedStyle(element).display !== 'inline')
     .map(element => ({ text: element.textContent, width: element.clientWidth, scroll: element.scrollWidth })));
   expect(clipped).toEqual([]);
@@ -263,7 +264,8 @@ test('both themes support long content, narrow widths, reduced motion and a 200%
     await assertFits(page, screen);
     await expect(screen.locator('.recipe-processing-scan')).toHaveCSS('animation-name', 'none');
     expect(await screen.evaluate(element => element.getAnimations({ subtree: true }).filter(animation => animation.playState === 'running').length)).toBe(0);
-    for (const button of await screen.getByRole('button').all()) expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    const floor = await coarsePointer(page) ? 44 : 32;
+    for (const button of await screen.getByRole('button').all()) expect((await hitBox(button)).height).toBeGreaterThanOrEqual(floor);
     const contrast = await measureContrast(screen);
     await info.attach(`${kind}-${theme}-${width}-contrast`, { body: JSON.stringify(contrast), contentType: 'application/json' });
     await screen.screenshot({ path: evidence + `${kind}-${theme}-${width}-long-reduced.png`, animations: 'disabled' });

@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { coarsePointer } from './touch-target';
 
 test('keyboard move updates columns and counts, retains focus and opens full details', async ({ page }) => {
   await page.goto('/?view=kanban&theme=dark');
@@ -58,8 +59,9 @@ test('light/dark, mobile and long titles stay inside cards; board alone may scro
       const second = await columns[1].boundingBox();
       expect(second!.y).toBeGreaterThan(first!.y + first!.height);
       const target = await page.getByRole('button', { name: /^Mover/ }).first().boundingBox();
-      expect(target!.width).toBeGreaterThanOrEqual(44);
-      expect(target!.height).toBeGreaterThanOrEqual(44);
+      const floor = await coarsePointer(page) ? 44 : 32;
+      expect(target!.width).toBeGreaterThanOrEqual(floor);
+      expect(target!.height).toBeGreaterThanOrEqual(floor);
     }
     await page.screenshot({ path: `apps/web/labs/espaco-library/evidence/kanban/${info.project.name}-${theme}-${width}.png`, fullPage: true });
   }

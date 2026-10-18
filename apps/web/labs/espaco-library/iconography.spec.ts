@@ -32,8 +32,8 @@ async function openSidebar(page: Page, label: string) {
 }
 
 for (const theme of ['dark', 'light'] as const) {
-  test(`Lucide iconography is shared by Lucy and catalog in ${theme}`, async ({ page }) => {
-    await page.goto(`/?view=lucy&theme=${theme}`);
+  test(`Lucide iconography is shared by the AI chat and catalog in ${theme}`, async ({ page }) => {
+    await page.goto(`/?view=ai-chat&theme=${theme}`);
     await expect(page.getByRole('heading', { name: 'Como você prefere começar?' })).toBeVisible();
     await page.evaluate(() => document.fonts.ready);
 
@@ -45,7 +45,7 @@ for (const theme of ['dark', 'light'] as const) {
     await openSidebar(page, 'Navegação');
     const sidebar = page.locator('.es-sidebar');
     for (const item of [
-      { label: 'Início', glyph: House }, { label: 'Lucy', glyph: MessageCircle },
+      { label: 'Início', glyph: House }, { label: 'Assistente', glyph: MessageCircle },
       { label: 'Próximo passo na carreira', glyph: MessageCircle },
       { label: 'Análises', glyph: ChartColumn }, { label: 'LinkedIn', glyph: UserRound },
       { label: 'Candidaturas', glyph: Briefcase }, { label: '8 créditos', glyph: Coins },
@@ -63,7 +63,7 @@ for (const theme of ['dark', 'light'] as const) {
     const integration = page.locator('.es-integration-row').filter({ has: page.getByRole('heading', { name: 'Integração de exemplo', exact: true }) });
     await expectGlyph(integration.locator('.es-integration-mark svg'), Plug, 20);
     await openSidebar(page, 'Navigation');
-    await expectGlyph(page.locator('.es-sidebar').getByRole('button', { name: 'Medidas da referência', exact: true }).locator('svg'), BarChart3, 16);
+    await expectGlyph(page.locator('.es-sidebar').getByRole('link', { name: 'Resultado da análise', exact: true }).locator('svg'), BarChart3, 16);
     await expect(page.locator('svg.es-icon:not(.lucide)')).toHaveCount(0);
     const divergentStrokes = await page.locator('svg.es-icon').evaluateAll(icons => icons.filter(icon => icon.getAttribute('stroke-width') !== '1.5' || getComputedStyle(icon).strokeWidth !== '1.5px').map(icon => icon.getAttribute('class')));
     expect(divergentStrokes).toEqual([]);

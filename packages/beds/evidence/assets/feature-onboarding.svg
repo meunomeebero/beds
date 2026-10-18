@@ -14,11 +14,11 @@
     <g fill="#ffa133"><rect x="118" y="98" width="22" height="5" rx="2.5"/><rect x="118" y="107" width="22" height="5" rx="2.5"/><rect x="118" y="116" width="22" height="5" rx="2.5"/></g>
     <g font-family="Arial,sans-serif" fill="#323c42">
       <text x="154" y="116" font-size="19" font-weight="600">Seu próximo passo</text>
-      <text x="122" y="182" font-size="18" font-weight="600">Lucy</text>
+      <text x="122" y="182" font-size="18" font-weight="600">Assistente</text>
       <text x="122" y="213" font-size="18">Vamos começar pela sua história?</text>
       <rect x="250" y="243" width="348" height="70" rx="19" fill="#303b42"/>
       <text x="274" y="285" font-size="18" fill="#ffffff">Quero encontrar uma nova vaga.</text>
-      <text x="122" y="358" font-size="18" font-weight="600">Lucy</text>
+      <text x="122" y="358" font-size="18" font-weight="600">Assistente</text>
       <text x="122" y="390" font-size="18">Me conte o que você faz. A gente</text>
       <text x="122" y="417" font-size="18">organiza o seu perfil a partir daí.</text>
     </g>

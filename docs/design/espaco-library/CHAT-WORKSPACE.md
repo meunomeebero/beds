@@ -85,7 +85,7 @@ network failures, persistence, and routing. This component does not call a
 network API, calculate charges, create a session, or infer that a streamed
 response completed.
 
-Current Curriculol handoff: retain `career-chat-api` and the stream hook, then
+Current reference-app handoff: retain `career-chat-api` and the stream hook, then
 map their incremental transcript, disabled, cancel, error, and retry states to
 this surface. The application-owned backend contract is deliberately not linked
 from this portable package: it remains an integration concern, not shipped

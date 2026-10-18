@@ -16,9 +16,9 @@ export default function FeatureCardExamples() {
     <PageHeader title="Card de apresentação" description="Imagem, contexto e um próximo passo. Para onboarding, novidades e descoberta de recursos." />
     <ResponsiveGrid>
       <FeatureCard
-        image={{ src: source, alt: decorative ? '' : 'Conversa ilustrativa com a Lucy para organizar um perfil profissional.', fallbackLabel: 'Prévia indisponível' }}
+        image={{ src: source, alt: decorative ? '' : 'Conversa ilustrativa com a assistente para organizar um perfil profissional.', fallbackLabel: 'Prévia indisponível' }}
         title={longCopy ? 'Um ponto de partida para organizar toda a sua trajetória profissional' : 'Seu próximo passo começa aqui'}
-        description={longCopy ? 'Reúna suas experiências, projetos e habilidades em um só lugar. A partir dessa base, você pode preparar novos currículos e explorar oportunidades no seu ritmo, sem precisar recomeçar a cada vaga.' : 'Conte sua história para a Lucy e organize um perfil pronto para as próximas oportunidades.'}
+        description={longCopy ? 'Reúna suas experiências, projetos e habilidades em um só lugar. A partir dessa base, você pode preparar novos currículos e explorar oportunidades no seu ritmo, sem precisar recomeçar a cada vaga.' : 'Conte sua história para a assistente e organize um perfil pronto para as próximas oportunidades.'}
         primaryAction={{ label: actionState === 'busy' ? 'Preparando seu perfil' : longCopy ? 'Começar a organizar minha trajetória' : 'Montar meu perfil', onClick: () => setStatus('Exemplo iniciado. Nenhum dado foi enviado.'), busy: actionState === 'busy', disabled: actionState === 'disabled' }}
         secondaryAction={secondary ? { label: 'Saiba mais', onClick: () => setStatus('O card apresenta um recurso. A aplicação decide o que acontece em cada ação.') } : undefined}
       />

@@ -460,7 +460,7 @@
         "apps/web/labs/espaco-library/KanbanPage.tsx",
         "apps/web/labs/espaco-library/LandingFooterPage.tsx",
         "apps/web/labs/espaco-library/LandingPage.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/McpPage.tsx",
         "apps/web/labs/espaco-library/OnboardingPage.tsx",
         "apps/web/labs/espaco-library/OtpPage.tsx",
@@ -795,7 +795,7 @@
         "apps/web/labs/espaco-library/KanbanPage.tsx",
         "apps/web/labs/espaco-library/LandingFooterPage.tsx",
         "apps/web/labs/espaco-library/LandingPage.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/McpPage.tsx",
         "apps/web/labs/espaco-library/OnboardingPage.tsx",
         "apps/web/labs/espaco-library/PagedCarouselPage.tsx",
@@ -894,7 +894,7 @@
         "apps/web/labs/espaco-library/DisclosuresPage.tsx",
         "apps/web/labs/espaco-library/DrawerPage.tsx",
         "apps/web/labs/espaco-library/ForumTopicPage.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/McpPage.tsx",
         "apps/web/labs/espaco-library/RecordExamples.tsx",
         "apps/web/labs/espaco-library/SettingsPage.tsx",
@@ -1051,7 +1051,7 @@
         "apps/web/labs/espaco-library/KanbanPage.tsx",
         "apps/web/labs/espaco-library/LandingFooterPage.tsx",
         "apps/web/labs/espaco-library/LandingPage.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/OnboardingPage.tsx",
         "apps/web/labs/espaco-library/PaymentConfirmationPage.tsx",
         "apps/web/labs/espaco-library/PricingExamples.tsx",
@@ -1272,7 +1272,7 @@
       "sourceFile": "packages/beds/src/foundation.tsx",
       "sourceLine": 9,
       "indexLine": 1,
-      "api": "const brands: Readonly<{ reference: \"#d0f300\"; curriculol: \"#ffa133\"; }>",
+      "api": "const brands: Readonly<{ reference: \"#d0f300\"; reference-app: \"#ffa133\"; }>",
       "variants": [],
       "consumers": [
         "apps/web/labs/espaco-library/AccountCreditsPage.tsx",
@@ -1290,7 +1290,7 @@
         "apps/web/labs/espaco-library/KanbanPage.tsx",
         "apps/web/labs/espaco-library/LandingFooterPage.tsx",
         "apps/web/labs/espaco-library/LandingPage.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/McpPage.tsx",
         "apps/web/labs/espaco-library/OnboardingPage.tsx",
         "apps/web/labs/espaco-library/OtpPage.tsx",
@@ -1428,7 +1428,7 @@
       ],
       "consumers": [
         "apps/web/labs/espaco-library/Catalog.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/McpPage.tsx"
       ],
       "beuiSource": {
@@ -1510,7 +1510,7 @@
         "apps/web/labs/espaco-library/DataPatterns.tsx",
         "apps/web/labs/espaco-library/DisclosuresPage.tsx",
         "apps/web/labs/espaco-library/LandingPage.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/McpPage.tsx",
         "apps/web/labs/espaco-library/mcp-page.spec.ts"
       ],
@@ -2055,7 +2055,7 @@
         "apps/web/labs/espaco-library/empty-state.spec.ts",
         "apps/web/labs/espaco-library/landing-footer.spec.ts",
         "apps/web/labs/espaco-library/landing.spec.ts",
-        "apps/web/labs/espaco-library/lucy-page.spec.ts",
+        "apps/web/labs/espaco-library/ai-chat-page.spec.ts",
         "apps/web/labs/espaco-library/mcp-page.spec.ts",
         "apps/web/labs/espaco-library/onboarding.spec.ts",
         "apps/web/labs/espaco-library/processing.spec.ts",
@@ -2116,7 +2116,7 @@
           "apps/web/labs/espaco-library/empty-state.spec.ts",
           "apps/web/labs/espaco-library/landing-footer.spec.ts",
           "apps/web/labs/espaco-library/landing.spec.ts",
-          "apps/web/labs/espaco-library/lucy-page.spec.ts",
+          "apps/web/labs/espaco-library/ai-chat-page.spec.ts",
           "apps/web/labs/espaco-library/mcp-page.spec.ts",
           "apps/web/labs/espaco-library/onboarding.spec.ts",
           "apps/web/labs/espaco-library/processing.spec.ts",
@@ -2254,7 +2254,7 @@
         "apps/web/labs/espaco-library/EmptyStateExamples.tsx",
         "apps/web/labs/espaco-library/FeatureCardExamples.tsx",
         "apps/web/labs/espaco-library/ForumTopicPage.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/McpPage.tsx",
         "apps/web/labs/espaco-library/OnboardingPage.tsx",
         "apps/web/labs/espaco-library/OtpPage.tsx",
@@ -2820,7 +2820,7 @@
       ],
       "consumers": [
         "apps/web/labs/espaco-library/Catalog.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx"
+        "apps/web/labs/espaco-library/AiChatPage.tsx"
       ],
       "beuiSource": {
         "status": "ADAPTED_HASH_NOT_RECORDED",
@@ -3303,7 +3303,7 @@
         }
       ],
       "consumers": [
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/UploadPage.tsx"
       ],
       "beuiSource": {
@@ -4250,7 +4250,7 @@
         "apps/web/labs/espaco-library/CheckoutPage.tsx",
         "apps/web/labs/espaco-library/DrawerPage.tsx",
         "apps/web/labs/espaco-library/LandingPage.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/PaymentConfirmationPage.tsx",
         "apps/web/labs/espaco-library/ResultsPage.tsx",
         "apps/web/labs/espaco-library/SearchDialogPage.tsx",
@@ -5323,7 +5323,7 @@
         "apps/web/labs/espaco-library/DrawerPage.tsx",
         "apps/web/labs/espaco-library/ForumTopicPage.tsx",
         "apps/web/labs/espaco-library/KanbanPage.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/McpPage.tsx",
         "apps/web/labs/espaco-library/OtpPage.tsx",
         "apps/web/labs/espaco-library/PagedCarouselPage.tsx",
@@ -5428,7 +5428,7 @@
         "apps/web/labs/espaco-library/DisclosuresPage.tsx",
         "apps/web/labs/espaco-library/ForumTopicPage.tsx",
         "apps/web/labs/espaco-library/KanbanPage.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/McpPage.tsx",
         "apps/web/labs/espaco-library/PaymentConfirmationPage.tsx",
         "apps/web/labs/espaco-library/ProcessingPage.tsx",
@@ -5519,7 +5519,7 @@
       "consumers": [
         "apps/web/labs/espaco-library/AccountCreditsPage.tsx",
         "apps/web/labs/espaco-library/Catalog.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/McpPage.tsx"
       ],
       "beuiSource": {
@@ -5619,7 +5619,7 @@
         "apps/web/labs/espaco-library/DisclosuresPage.tsx",
         "apps/web/labs/espaco-library/ForumTopicPage.tsx",
         "apps/web/labs/espaco-library/KanbanPage.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/McpPage.tsx",
         "apps/web/labs/espaco-library/PaymentConfirmationPage.tsx",
         "apps/web/labs/espaco-library/ProcessingPage.tsx",
@@ -5775,7 +5775,7 @@
         "apps/web/labs/espaco-library/DisclosuresPage.tsx",
         "apps/web/labs/espaco-library/ForumTopicPage.tsx",
         "apps/web/labs/espaco-library/KanbanPage.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/McpPage.tsx",
         "apps/web/labs/espaco-library/PaymentConfirmationPage.tsx",
         "apps/web/labs/espaco-library/ProcessingPage.tsx",
@@ -5869,7 +5869,7 @@
       "consumers": [
         "apps/web/labs/espaco-library/Catalog.tsx",
         "apps/web/labs/espaco-library/DisclosuresPage.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/McpPage.tsx",
         "apps/web/labs/espaco-library/SettingsPage.tsx"
       ],
@@ -5959,7 +5959,7 @@
         "apps/web/labs/espaco-library/DateItemPage.tsx",
         "apps/web/labs/espaco-library/KanbanPage.tsx",
         "apps/web/labs/espaco-library/LandingFooterPage.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/PaymentConfirmationPage.tsx",
         "apps/web/labs/espaco-library/ProcessingPage.tsx",
         "apps/web/labs/espaco-library/ResultsPage.tsx",
@@ -6105,7 +6105,7 @@
       "variants": [],
       "consumers": [
         "apps/web/labs/espaco-library/Catalog.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/UploadPage.tsx"
       ],
       "beuiSource": {
@@ -6377,7 +6377,7 @@
         "apps/web/labs/espaco-library/ForumTopicPage.tsx",
         "apps/web/labs/espaco-library/KanbanPage.tsx",
         "apps/web/labs/espaco-library/LandingPage.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/McpPage.tsx",
         "apps/web/labs/espaco-library/OtpPage.tsx",
         "apps/web/labs/espaco-library/PagedCarouselPage.tsx",
@@ -6495,7 +6495,7 @@
         "apps/web/labs/espaco-library/ForumTopicPage.tsx",
         "apps/web/labs/espaco-library/KanbanPage.tsx",
         "apps/web/labs/espaco-library/LandingFooterPage.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/McpPage.tsx",
         "apps/web/labs/espaco-library/OnboardingPage.tsx",
         "apps/web/labs/espaco-library/PaymentConfirmationPage.tsx",
@@ -8342,7 +8342,7 @@
       ],
       "consumers": [
         "apps/web/labs/espaco-library/Catalog.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/shell.spec.ts"
       ],
       "beuiSource": {
@@ -8501,7 +8501,7 @@
       "consumers": [
         "apps/web/labs/espaco-library/AccountCreditsPage.tsx",
         "apps/web/labs/espaco-library/Catalog.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx",
+        "apps/web/labs/espaco-library/AiChatPage.tsx",
         "apps/web/labs/espaco-library/McpPage.tsx",
         "apps/web/labs/espaco-library/account-menu-beui.spec.ts"
       ],
@@ -11222,7 +11222,7 @@
       ],
       "consumers": [
         "apps/web/labs/espaco-library/Catalog.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx"
+        "apps/web/labs/espaco-library/AiChatPage.tsx"
       ],
       "beuiSource": {
         "status": "NOT_RECORDED",
@@ -11449,7 +11449,7 @@
       ],
       "consumers": [
         "apps/web/labs/espaco-library/Catalog.tsx",
-        "apps/web/labs/espaco-library/LucyPage.tsx"
+        "apps/web/labs/espaco-library/AiChatPage.tsx"
       ],
       "beuiSource": {
         "status": "NOT_RECORDED",
@@ -11517,7 +11517,7 @@
       "api": "function ChatThread({ title, children, interaction, stepKey, notice, announcement }: { title: string; children: ReactNode; interaction: ReactNode; stepKey: string; notice?: string; announcement?: string; })",
       "variants": [],
       "consumers": [
-        "apps/web/labs/espaco-library/LucyPage.tsx"
+        "apps/web/labs/espaco-library/AiChatPage.tsx"
       ],
       "beuiSource": {
         "status": "NOT_RECORDED",
@@ -11585,7 +11585,7 @@
       "api": "function ChatOptions({ title, options, onChoose, disabled = false }: { title: string; options: readonly ChatOption[]; onChoose: (id: string) => void; disabled?: boolean; })",
       "variants": [],
       "consumers": [
-        "apps/web/labs/espaco-library/LucyPage.tsx"
+        "apps/web/labs/espaco-library/AiChatPage.tsx"
       ],
       "beuiSource": {
         "status": "NOT_RECORDED",
@@ -11653,7 +11653,7 @@
       "api": "type ChatOption = { id: string; label: string; description?: string; icon: IconName; disabled?: boolean }",
       "variants": [],
       "consumers": [
-        "apps/web/labs/espaco-library/LucyPage.tsx"
+        "apps/web/labs/espaco-library/AiChatPage.tsx"
       ],
       "beuiSource": {
         "status": "NOT_APPLICABLE_TYPE",
@@ -11721,7 +11721,7 @@
       "api": "type ComposerAttachment = { id: string; name: string; kind: 'document' | 'image' | 'spreadsheet' | 'folder' | 'file'; removeLabel: string }",
       "variants": [],
       "consumers": [
-        "apps/web/labs/espaco-library/LucyPage.tsx"
+        "apps/web/labs/espaco-library/AiChatPage.tsx"
       ],
       "beuiSource": {
         "status": "NOT_APPLICABLE_TYPE",

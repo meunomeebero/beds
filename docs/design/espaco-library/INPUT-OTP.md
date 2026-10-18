@@ -2,7 +2,7 @@
 
 `InputOTP` is the BEDS controlled one-time-code primitive. It keeps the `input-otp@1.4.2` native input as the owner of keyboard navigation, selection, paste and autofill, while the visual slots are an accessible projection of that value. Verification belongs to the caller.
 
-**0.3 — Curriculol patterns (2026-10-18).** Slots draw the soft text-entry border
+**0.3 — the reference app patterns (2026-10-18).** Slots draw the soft text-entry border
 by default and the active slot uses the shared field focus (heading-tinted border
 plus a 2px soft ring) instead of a 2px outline with a filled background.
 

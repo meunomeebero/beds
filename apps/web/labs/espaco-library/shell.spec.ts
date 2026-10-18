@@ -43,6 +43,8 @@ for (const theme of ['light', 'dark'] as const) {
     await expect(menu).toBeVisible();
     await expect(menu.getByRole('button', { name: 'Account settings', exact: true })).toBeFocused();
     await expect(menu.getByRole('radio', { name: theme === 'light' ? 'Light' : 'Dark', exact: true })).toBeChecked();
+    // Measure once the corner-clip and panel spring have settled.
+    await expect.poll(() => menu.evaluate(element => element.getBoundingClientRect().width)).toBe(280);
 
     const geometry = await menu.evaluate(element => {
       const action = element.querySelector<HTMLElement>('.es-account-action')!;

@@ -8,10 +8,10 @@ test('catalog separates app examples and avoids a named product brand preset', a
   const examplesStart = source.indexOf('<SidebarSection label="Exemplos de app">');
   assert.ok(coreStart > 0 && examplesStart > coreStart);
   const core = source.slice(coreStart, examplesStart);
-  assert.doesNotMatch(core, /Landing do Curriculol|Onboarding|Página da Lucy|Checkout/);
+  assert.doesNotMatch(core, /Landing de exemplo|Onboarding|Página do chat de IA|Checkout/);
   assert.match(source.slice(examplesStart), /Chat · receita/);
   assert.match(source, /id: 'orange', label: 'Laranja · exemplo'/);
-  assert.doesNotMatch(source, /id: 'curriculol', label:/);
+  assert.match(source, /options=\{\[\{ id: 'reference', label: 'Referência' \}, \{ id: 'orange', label: 'Laranja · exemplo' \}\]\}/);
   assert.match(source, /PageContentHeader · receita de app/);
   assert.match(source, /\? initialView : 'components'/);
 });

@@ -1,7 +1,7 @@
 {
   "scope": "Catalog routing, query context and responsive technical evidence",
   "browser": "Chromium via Playwright",
-  "route": "?view=components&theme={light|dark}&brand={reference|curriculol}&ber10=1&ber11=1",
+  "route": "?view=components&theme={light|dark}&brand={reference|orange}&ber10=1&ber11=1",
   "viewportMatrix": [
     { "width": 1440, "height": 1000 },
     { "width": 768, "height": 1000 },

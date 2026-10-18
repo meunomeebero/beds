@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
+import { coarsePointer } from './touch-target';
 
-// Historical Lucy geometry is retained where applicable. Catalog recipes now
+// Historical AI chat geometry is retained where applicable. Catalog recipes now
 // live in their own navigation group, not alongside public component shortcuts.
 for (const theme of ['light', 'dark'] as const) {
-  test(`Lucy sidebar hierarchy and current ${theme} semantic colors stay fixed`, async ({ page }, info) => {
-    await page.goto(`/?view=chat&theme=${theme}&brand=curriculol`);
+  test(`AI chat sidebar hierarchy and current ${theme} semantic colors stay fixed`, async ({ page }, info) => {
+    await page.goto(`/?view=chat&theme=${theme}&brand=orange`);
     await expect(page.getByRole('heading', { name: 'How can I help you today?' })).toBeVisible();
     if (info.project.name === 'mobile') await page.getByRole('button', { name: 'Navigation', exact: true }).click();
     const sidebar = page.locator('.es-sidebar');
@@ -28,30 +29,35 @@ for (const theme of ['light', 'dark'] as const) {
     await expect(primary.getByRole('button', { name: 'Chat · receita', exact: true })).toHaveCount(0);
     await expect(sidebar.getByRole('heading', { name: 'Exemplos de app', exact: true })).toBeVisible();
 
-    const selectedFill = theme === 'dark' ? 'rgb(206, 206, 206)' : 'rgb(55, 53, 46)';
-    const selectedStroke = theme === 'dark' ? 'rgb(25, 25, 25)' : 'rgb(251, 250, 249)';
-    await expect(chat.locator('svg')).toHaveCSS('fill', selectedFill);
-    await expect(chat.locator('svg')).toHaveCSS('stroke', selectedStroke);
+    // The selected row takes the heading colour; a selected primary row also fills its glyph (knocked out in the sidebar colour).
+    const selected = theme === 'dark' ? 'rgb(212, 212, 212)' : 'rgb(55, 53, 46)';
+    const quiet = theme === 'dark' ? 'rgb(148, 148, 148)' : 'rgb(106, 105, 102)';
+    const sidebarColor = theme === 'dark' ? 'rgb(25, 25, 25)' : 'rgb(251, 250, 249)';
+    await expect(chat.locator('svg')).toHaveCSS('fill', 'none');
+    await expect(chat.locator('svg')).toHaveCSS('stroke', selected);
     await expect(components.locator('svg')).toHaveCSS('fill', 'none');
+    await expect(components.locator('svg')).toHaveCSS('stroke', quiet);
     await components.click();
     if (info.project.name === 'mobile') await page.getByRole('button', { name: 'Navigation', exact: true }).click();
     await expect(components).toHaveAttribute('aria-current', 'page');
-    await expect(components.locator('svg')).toHaveCSS('fill', selectedFill);
-    await expect(chat.locator('svg')).toHaveCSS('fill', 'none');
+    await expect(components.locator('svg')).toHaveCSS('fill', selected);
+    await expect(components.locator('svg')).toHaveCSS('stroke', sidebarColor);
+    await expect(chat.locator('svg')).toHaveCSS('stroke', quiet);
     await chat.click();
     if (info.project.name === 'mobile') await page.getByRole('button', { name: 'Navigation', exact: true }).click();
-    await expect(chat.locator('svg')).toHaveCSS('fill', selectedFill);
+    await expect(chat.locator('svg')).toHaveCSS('stroke', selected);
     await expect(components.locator('svg')).toHaveCSS('fill', 'none');
+    await expect(components.locator('svg')).toHaveCSS('stroke', quiet);
 
     const item = sidebar.getByRole('button', { name: 'Tokens', exact: true });
     await expect(item.locator('svg')).toHaveCSS('fill', 'none');
-    await expect(item).toHaveCSS('height', '31px');
+    await expect(item).toHaveCSS('height', await coarsePointer(page) ? '44px' : '36px');
     await expect(item).toHaveCSS('font-size', '14px');
-    await expect(item).toHaveCSS('font-weight', '400');
-    await expect(item).toHaveCSS('gap', '11px');
+    await expect(item).toHaveCSS('font-weight', '500');
+    await expect(item).toHaveCSS('gap', '10px');
     await expect(item.locator('svg')).toHaveCSS('width', '16px');
     await expect(item).toHaveCSS('color', theme === 'dark' ? 'rgb(148, 148, 148)' : 'rgb(106, 105, 102)');
-    await expect(sidebar.locator('.es-sidebar-section--default')).toHaveCSS('margin-top', '17px');
+    await expect(sidebar.locator('.es-sidebar-section--default').first()).toHaveCSS('margin-top', '17px');
 
     // Source hover is translucent and distinct from the selected pill.
     if (info.project.name === 'desktop') {

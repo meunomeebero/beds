@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 for (const theme of ['light', 'dark']) {
   test(`conversation semantics and reflow ${theme}`, async ({ page }) => {
     await page.goto(`/?view=conversation&theme=${theme}`);
-    const conversation = page.getByRole('region', { name: 'Conversa com Lucy' });
+    const conversation = page.getByRole('region', { name: 'Conversa com a assistente' });
     await expect(conversation).toBeVisible();
     await expect(conversation.getByRole('article', { name: 'Mensagem da assistente' })).toHaveCount(2);
     await expect(conversation.getByRole('article', { name: 'Sua mensagem' })).toHaveCount(1);

@@ -592,7 +592,7 @@
   },
   "branding": {
     "sourceWorkspace": "#d0f300",
-    "curriculol": "#ffa133",
+    "reference-app": "#ffa133",
     "mutableInputs": [
       "brandColor"
     ],

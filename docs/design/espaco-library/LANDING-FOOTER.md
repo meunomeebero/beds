@@ -14,7 +14,7 @@ Current verification status belongs to the migration ledger.
 
 
 Scope: optional app-owned `LandingFooter` recipe; isolated `?view=landing-footer` catalog.
-No Curriculol landing integration, FAQ, signup, tracking or external requests.
+No reference landing integration, FAQ, signup, tracking or external requests.
 Recipe-local declarations: `LandingFooterProps`, `LandingFooterLink`,
 `LandingFooterGroup`. The app owns page geometry and identity;
 [Foundations](FOUNDATIONS.md) guides shared primitives.

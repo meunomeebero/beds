@@ -15,7 +15,7 @@ provenance for this example, not universal library requirements.
 | Consumer | [McpPage.tsx](../../../apps/web/labs/espaco-library/McpPage.tsx) |
 | Library | Current local `beds` source; version and inventory are not pinned by this example. |
 | Theme / brand | Controlled light or dark + caller-owned orange `#ffa133`; no named DS brand preset |
-| Content authority | Synthetic Curriculol-oriented setup fixture; not a portable OAuth, pricing or permission contract. |
+| Content authority | Synthetic the reference app-oriented setup fixture; not a portable OAuth, pricing or permission contract. |
 | Visual authority | Current [foundations](FOUNDATIONS.md), [components](COMPONENTS.md), [consumer contract](CONSUMER-CONTRACT.md) and live MCP geometry measurements |
 | Forbidden | Actual credential/OAuth/MCP calls, secrets and private BEDS CSS overrides. App layout CSS, native semantics and owned assets are allowed. |
 
@@ -23,7 +23,7 @@ provenance for this example, not universal library requirements.
 
 | Region | Public primitives or optional recipes | Local behavior |
 |---|---|---|
-| Shell | `AppShell`, sidebar primitives, `AccountMenu` | Same fixed 264/62px rail and responsive drawer as Lucy |
+| Shell | `AppShell`, sidebar primitives, `AccountMenu` | Same fixed 264/62px rail and responsive drawer as the AI chat composition |
 | Page identity | `PageContentHeader`, `Icon`, `Button` | Source-measured title/subtitle/action header; no breadcrumb bar is added |
 | Change policy | `Surface`, `Inline`, `Text`, `SegmentedControl` | One concise panel with a controlled local-only approval choice |
 | Client setup | `SectionHeader`, `Tabs`, `CodeSnippet` | `Tabs variant="connection"` owns the card, tab strip and padded content lane; Claude, ChatGPT, Codex, Cursor and generic client panels remain controlled |

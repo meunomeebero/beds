@@ -27,7 +27,7 @@ test('filter selector preserves keyboard selection, disabled options and focus',
     await page.goto('/data-patterns.html?theme=' + theme);
     const trigger = page.getByRole('button', { name: 'Período da atividade: Últimos 30 dias', exact: true });
     await expect(trigger).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
-    await expect(trigger).toHaveCSS('border-radius', '8px');
+    await expect(trigger).toHaveCSS('border-radius', '20px');
     await expect(trigger.locator('svg')).toHaveCount(2);
     await expect(page.getByRole('button', { name: 'Filtro indisponível: Últimos 30 dias' })).toBeDisabled();
     await trigger.press('ArrowDown');

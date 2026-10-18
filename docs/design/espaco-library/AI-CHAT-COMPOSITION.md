@@ -1,4 +1,4 @@
-# Lucy — guided profile conversation
+# AI chat composition — guided profile conversation
 
 ## Active component boundary
 
@@ -6,17 +6,17 @@
 The app owns the H1, viewport height, transcript spacing, next-step placement and
 focus policy. `ChatMessage`, `ChatComposer`, `ChatOptions`, `Conversation` and
 `ConversationBubble` remain public. Existing flow descriptions below document the
-synthetic Lucy example, not requirements for unrelated products. Brand assets and
+synthetic AI chat example, not requirements for unrelated products. Brand assets and
 layout CSS belong to the consumer; earlier statements prohibiting them are historical.
 
-Scope: BEDS catalog, local synthetic UI. Current entry: `?view=lucy`;
-alias `?view=home&tab=lucy`. Preview port is host configuration; current
-review used5296. [Consumer](../../../apps/web/labs/espaco-library/LucyPage.tsx).
+Scope: BEDS catalog, local synthetic UI. Current entry: `?view=ai-chat`;
+alias `?view=home&tab=ai-chat`. Preview port is host configuration; current
+review used5296. [Consumer](../../../apps/web/labs/espaco-library/AiChatPage.tsx).
 No product route,AI,upload,PDF parser,LinkedIn session,queue or persistence.
 
 ## Current composition
 
-September15 owner request: Lucy screen + three choices,using supplied chat and
+September15 owner request: the AI chat screen + three choices,using supplied chat and
 inbox references. Open assistant prose,user replies trailing,quiet lower choice
 panel. **A adaptation**,not source-CSS measurement or source-artwork copy.
 [Foundations](FOUNDATIONS.md) owns geometry,Inter,existing themes and brand.
@@ -25,13 +25,13 @@ No new colors,assets,dependencies or consumer CSS.
 | Region | Contract |
 |---|---|
 | Header |Existing ContentHeader + wrapping Inline,Breadcrumbs and new-conversation action |
-| Conversation |ChatThread in existing640px lane;hidden H1;ChatMessage thread purpose;Lucy name and small BrandMark;newlines retained |
+| Conversation |ChatThread in existing640px lane;hidden H1;ChatMessage thread purpose;the assistant name and small BrandMark;newlines retained |
 | Choices |ChatOptions:LinkedIn / describe experiences / résumé;icon,label,short description and trailing affordance |
 | Next step |Only chosen workflow rendered;no up-front upload form,tutorial or context selector |
-| Navigation |Existing catalog Lucy sidebar/account composition retained;not a product-sidebar migration |
+| Navigation |Existing catalog AI chat sidebar/account composition retained;not a product-sidebar migration |
 | Notice |Persistent PT-BR note:interface preview,no AI,file transmission or profile changes |
 
-This replaces the initial generic prompt/composer composition on the Lucy demo
+This replaces the initial generic prompt/composer composition on the AI chat demo
 route. Original September12 layout checkpoints remain historical in Validation.
 ChatLayout remains available as an app recipe. ConversationBubble,SuggestionRow
 and composer defaults remain public; no installed consumer is implicitly upgraded.
@@ -75,7 +75,7 @@ not inspect the host locale or force a product translation.
 
 | Path | Behavior |
 |---|---|
-| Initial |Lucy introduction + three native options;no invented user message |
+| Initial |Assistant introduction + three native options;no invented user message |
 | LinkedIn |Explicit choice appears in transcript;reveal local PDF selection |
 | Experiences |Reveal labelled composer;focus textbox;plain multiline draft |
 | Résumé |Reveal illustrated [document upload](DOCUMENT-UPLOAD.md);local PDF/DOCX selection,5MiB cap |
@@ -99,7 +99,7 @@ success/error state. No pricing,privacy or import entitlement invented.
 
 Owner reference:`Captura de Tela 2026-09-15 às 14.03.01.png`. A adaptation:
 file chips in a separate context tray above the text,kind icon,name and remove.
-Explicit fixture:`?view=lucy&preview=attachments&theme=light` (or dark). Fixture
+Explicit fixture:`?view=ai-chat&preview=attachments&theme=light` (or dark). Fixture
 names are synthetic metadata,not actual user files. Existing no-file composition
 and initial three choices remain unchanged. No model selector or decorative
 tools copied from the reference;no new network integration.
@@ -120,7 +120,7 @@ submission participation. `accept` is a chooser hint,not security validation.
 Default send accepts text or attachments;guided empty submit still reaches host
 validation. Submit never clears data inside the primitive;host owns success.
 
-Lucy fixture transitions:
+AI chat fixture transitions:
 - Experiences → attach button → native chooser → add chips,retain text.
 - LinkedIn PDF/résumé PDF or DOCX choice → Continue → selected file also appears in composer.
 - Add/cancel/remove/switch option → draft retained;original file untouched.
@@ -147,15 +147,15 @@ unavailable;native chooser behavior checked against [MDN file input](https://dev
 | Colors |Canonical semantic roles;rendered filename contrast in light/dark |
 | UI |r24/r20 inset;quiet context tray,small file glyphs;no animated insertion/removal |
 
-Verification: `PLAYWRIGHT_BASE_URL=http://127.0.0.1:5296 npm run test:browser -- lucy-attachments.spec.ts lucy-page.spec.ts conversation.spec.ts --reporter=line`;`npm run verify`.
-Verified 2026-09-15:18/18 browser checks (4 attachment,10 guided Lucy,4 existing
+Verification: `PLAYWRIGHT_BASE_URL=http://127.0.0.1:5296 npm run test:browser -- ai-chat-attachments.spec.ts ai-chat-page.spec.ts conversation.spec.ts --reporter=line`;`npm run verify`.
+Verified 2026-09-15:18/18 browser checks (4 attachment,10 guided AI chat,4 existing
 conversation;desktop/mobile);31/31 guard/routing tests. Build,typecheck,104-component/
 90-token contract,consumer and documentation checks passed. The12px internal
 CSS-zoom overflow found in review was corrected through shared container rules,
 wrapping toolbar and label;the final responsive run passed. Evidence:
-[desktop dark](../../../apps/web/labs/espaco-library/evidence/lucy-attachments/desktop-dark.png),
-[desktop light](../../../apps/web/labs/espaco-library/evidence/lucy-attachments/desktop-light.png),
-[narrow light](../../../apps/web/labs/espaco-library/evidence/lucy-attachments/mobile-light-320.png).
+[desktop dark](../../../apps/web/labs/espaco-library/evidence/ai-chat-attachments/desktop-dark.png),
+[desktop light](../../../apps/web/labs/espaco-library/evidence/ai-chat-attachments/desktop-light.png),
+[narrow light](../../../apps/web/labs/espaco-library/evidence/ai-chat-attachments/mobile-light-320.png).
 Physical devices,screen-reader speech,APCA,Firefox/Safari and real imports remain
 unverified. Independent baseline comparison and owner visual approval **PENDING**.
 Local implementation only;no publication or consumer upgrade.
@@ -185,19 +185,19 @@ variant or global sidebar change. Guided file rows now wrap filenames;touch
 targets scoped to the guided next step,not every file control.
 
 Verification commands:
-- `PLAYWRIGHT_BASE_URL=http://127.0.0.1:5296 npm run test:browser -- lucy-page.spec.ts conversation.spec.ts --reporter=line`
+- `PLAYWRIGHT_BASE_URL=http://127.0.0.1:5296 npm run test:browser -- ai-chat-page.spec.ts conversation.spec.ts --reporter=line`
 - `npm run verify`
-- `node packages/beds/scripts/check-consumer.mjs apps/web/labs/espaco-library/LucyPage.tsx`
+- `node packages/beds/scripts/check-consumer.mjs apps/web/labs/espaco-library/AiChatPage.tsx`
 
-Verified 2026-09-15:14/14 browser checks (10 guided Lucy +4 existing
+Verified 2026-09-15:14/14 browser checks (10 guided AI chat +4 existing
 conversation checks;desktop/mobile),31/31 guard/routing tests. Build,typecheck,
 consumer,104-component/90-token contract,documentation and packed-artifact
 checks passed. Browser evidence:
-[desktop dark](../../../apps/web/labs/espaco-library/evidence/lucy-guided/desktop-dark.png),
-[mobile light](../../../apps/web/labs/espaco-library/evidence/lucy-guided/mobile-light.png),
-[narrow dark](../../../apps/web/labs/espaco-library/evidence/lucy-guided/mobile-dark-320.png),
-[LinkedIn step](../../../apps/web/labs/espaco-library/evidence/lucy-guided/mobile-linkedin.png),
-[conversation](../../../apps/web/labs/espaco-library/evidence/lucy-guided/desktop-conversation.png).
+[desktop dark](../../../apps/web/labs/espaco-library/evidence/ai-chat-guided/desktop-dark.png),
+[mobile light](../../../apps/web/labs/espaco-library/evidence/ai-chat-guided/mobile-light.png),
+[narrow dark](../../../apps/web/labs/espaco-library/evidence/ai-chat-guided/mobile-dark-320.png),
+[LinkedIn step](../../../apps/web/labs/espaco-library/evidence/ai-chat-guided/mobile-linkedin.png),
+[conversation](../../../apps/web/labs/espaco-library/evidence/ai-chat-guided/desktop-conversation.png).
 
 Unverified:physical devices,VoiceOver/screen-reader speech,real browser zoom
 (CSS zoom proxy only),APCA,Firefox/Safari,actual imports/AI,product integration.

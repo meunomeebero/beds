@@ -22,14 +22,14 @@ test('catalog entry, landmarks, product demo and recovery are keyboard operable'
   page.on('request', request => { if (!['GET', 'HEAD'].includes(request.method())) mutations.push(request.url()); });
   await page.goto('/?view=components&theme=light');
   if (page.viewportSize()!.width < 768) await page.getByRole('button', { name: 'Navigation', exact: true }).click();
-  await page.getByRole('link', { name: 'Landing do Curriculol', exact: true }).click();
+  await page.getByRole('link', { name: 'Landing de exemplo', exact: true }).click();
   await expect(page).toHaveURL(/view=landing/);
-  await expect(page).toHaveTitle(/Curriculol/);
+  await expect(page).toHaveTitle(/App de exemplo/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
   await expect(page.getByRole('main')).toHaveCount(1);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('A vaga muda. Seu currículo também.');
   await expect(page.getByRole('contentinfo')).toHaveCount(1);
-  await expect(page.getByRole('banner').getByRole('link', { name: 'Curriculol', exact: true })).toHaveCount(1);
+  await expect(page.getByRole('banner').getByRole('link', { name: 'App de exemplo', exact: true })).toHaveCount(1);
   const skip = page.getByRole('link', { name: 'Pular para o conteúdo' });
   await skip.focus(); await skip.press('Enter');
   await expect(page.getByRole('main')).toBeFocused();

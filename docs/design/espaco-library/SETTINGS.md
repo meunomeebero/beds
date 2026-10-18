@@ -4,7 +4,7 @@ Scope: `Tabs variant="settings"`, `SettingsGroup variant="section"`, isolated
 `?view=settings` catalog. No product integration or real account mutations.
 Existing `activity`/`connection` tabs and default settings panels remain unchanged.
 
-**0.3 — Curriculol patterns (2026-10-18).** The settings tab strip (48px boxed
+**0.3 — the reference app patterns (2026-10-18).** The settings tab strip (48px boxed
 tabs with a 2px underline) is retired: every `Tabs` variant renders the shared
 tab pill (40px track, 32px options, primary pill with clipped label). `settings`
 keeps its 24px panel gap and instant panel swap. Text fields default to the
@@ -41,7 +41,7 @@ nested-control styling. Foundations guides reusable components. Caller supplies 
 drafts, validation, persistence and requests. Components do not inspect routes,
 fetch account data, save preferences or implement legal/payment policy.
 
-## Curriculol playground mapping
+## The reference app playground mapping
 
 Reviewed existing `home-rcd/blocks/settings-screen/SettingsScreen.tsx` and fixtures,
 plus original product `components/settings/SettingsScreen.tsx` read-only.
@@ -52,11 +52,11 @@ Preserve the playground's grouping rather than import its business code.
 | Conta | Avatar, username form, email, account ID; profile/MCP destinations |
 | Preferências | Light/dark,PT-BR/en-US preference, sound toggle |
 | Notificações | All9 existing fixture preferences: documents6,community1,financial2 |
-| Privacidade | Anonymous usage,personalization,Lucy memory,legal-document placeholders,account deletion confirmation |
+| Privacidade | Anonymous usage,personalization,assistant memory,legal-document placeholders,account deletion confirmation |
 
 All data synthetic. Changes stay in React memory; reload/navigation resets them.
 Tabs retain drafts/preferences while mounted. Profile action explicitly opens
-the existing local Lucy preview; MCP opens its local preview. No unavailable
+the existing local AI chat preview; MCP opens its local preview. No unavailable
 profile destination disguised as a working link. Language selection does not
 translate this fixture; sound selection plays no audio; UI explains both.
 Legal dialogs are placeholders, not legal documents. Deletion and memory actions

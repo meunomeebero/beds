@@ -15,8 +15,8 @@ const accountActions = [
   { id: 'support', label: 'Ajuda', icon: 'CircleHelp' },
 ] satisfies { id: string; label: string; icon: IconName }[];
 
-const codexAdd = "codex mcp add curriculol --url 'https://api.curricu.lol/mcp' --oauth-client-id 'agent_<client-id>'";
-const codexLogin = "codex mcp login curriculol --scopes 'profile.read,credits.read,job.search,job.apply,email.send'";
+const codexAdd = "codex mcp add exemplo --url 'https://api.example.com/mcp' --oauth-client-id 'agent_<client-id>'";
+const codexLogin = "codex mcp login exemplo --scopes 'profile.read,credits.read,job.search,job.apply,email.send'";
 const codexSetup = `${codexAdd} && ${codexLogin}`;
 
 function validRedirectUrl(value: string) {
@@ -62,33 +62,33 @@ export default function McpPage() {
       id: 'claude', label: 'Claude', content: <Stack>
         <Text>1. Cole o endpoint remoto no terminal.</Text>
         <Text>2. Autorize o acesso na janela que o Claude abrir.</Text>
-        <CodeSnippet label="Adicionar servidor" value="https://api.curricu.lol/mcp" messages={copyMessages} />
-        <Text tone="secondary">O Curriculol estará disponível nas sessões do Claude dentro dos escopos autorizados.</Text>
+        <CodeSnippet label="Adicionar servidor" value="https://api.example.com/mcp" messages={copyMessages} />
+        <Text tone="secondary">O app de exemplo estará disponível nas sessões do Claude dentro dos escopos autorizados.</Text>
       </Stack>,
     },
     {
       id: 'chatgpt', label: 'ChatGPT', content: <Stack>
         <Text>Adicione o endpoint remoto ao conector MCP e conclua o consentimento no navegador.</Text>
-        <CodeSnippet label="Endpoint MCP" value="https://api.curricu.lol/mcp" messages={copyMessages} />
+        <CodeSnippet label="Endpoint MCP" value="https://api.example.com/mcp" messages={copyMessages} />
       </Stack>,
     },
     {
       id: 'codex', label: 'Codex', content: <Stack>
         <Text>Copie o comando e conclua o consentimento na janela que o Codex abrir.</Text>
         <CodeSnippet label="Conectar no Codex" value={codexSetup} messages={copyMessages} />
-        <Text tone="secondary">O Curriculol estará disponível nas sessões do Codex dentro dos escopos autorizados.</Text>
+        <Text tone="secondary">O app de exemplo estará disponível nas sessões do Codex dentro dos escopos autorizados.</Text>
       </Stack>,
     },
     {
       id: 'cursor', label: 'Cursor', content: <Stack>
         <Text>Registre o endpoint remoto no Cursor e prossiga com o consentimento no navegador.</Text>
-        <CodeSnippet label="Endpoint MCP" value="https://api.curricu.lol/mcp" messages={copyMessages} />
+        <CodeSnippet label="Endpoint MCP" value="https://api.example.com/mcp" messages={copyMessages} />
       </Stack>,
     },
     {
       id: 'other', label: 'Outros', content: <Stack>
         <Text>Use um cliente compatível com Streamable HTTP MCP e OAuth 2.1 com PKCE.</Text>
-        <CodeSnippet label="Endpoint MCP" value="https://api.curricu.lol/mcp" messages={copyMessages} />
+        <CodeSnippet label="Endpoint MCP" value="https://api.example.com/mcp" messages={copyMessages} />
       </Stack>,
     },
   ];
@@ -108,7 +108,7 @@ export default function McpPage() {
         </SidebarHeader>
         <SidebarSection purpose="primary">
           <NavItem label="Início" icon="House" href="?view=components" />
-          <NavItem label="Lucy" icon="MessageCircle" href="?view=lucy" />
+          <NavItem label="Assistente" icon="MessageCircle" href="?view=ai-chat" />
         </SidebarSection>
         <SidebarSection label="Seu espaço">
           <NavItem label="Currículos" icon="FileText" onClick={() => showStatus('Currículos é uma seção demonstrativa nesta composição.')} />
@@ -121,11 +121,11 @@ export default function McpPage() {
           <NavItem label="Candidaturas" icon="Briefcase" onClick={() => showStatus('Candidaturas é uma seção demonstrativa nesta composição.')} />
         </SidebarSection>
         <SidebarSection label="Conversas" purpose="history">
-          <NavItem label="Próximo passo na carreira" icon="MessageCircle" href="?view=lucy" />
+          <NavItem label="Próximo passo na carreira" icon="MessageCircle" href="?view=ai-chat" />
         </SidebarSection>
         <SidebarFooter><NavItem label="8 créditos" icon="Coins" onClick={() => showStatus('O saldo exibido é sintético e não foi consultado.')} /></SidebarFooter>
       </>}
-      header={<PageContentHeader title="MCP do Curriculol" description="Conecte aplicativos de IA ao seu espaço." leading={<Icon name="Plug" purpose="feature" />} actions={<Button label="Guia de configuração" icon="FileText" variant="ghost" compact onClick={() => showStatus('Esta página reúne o guia de configuração demonstrativo.')} />} />}>
+      header={<PageContentHeader title="MCP do app de exemplo" description="Conecte aplicativos de IA ao seu espaço." leading={<Icon name="Plug" purpose="feature" />} actions={<Button label="Guia de configuração" icon="FileText" variant="ghost" compact onClick={() => showStatus('Esta página reúne o guia de configuração demonstrativo.')} />} />}>
       <Stack gap="section">
         {status && <Notice title="Prévia local" description={status} onDismiss={() => setStatus('')} />}
 

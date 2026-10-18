@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { coarsePointer } from './touch-target';
 
 async function noPageOverflow(page: Page) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -72,14 +73,15 @@ test('settings anatomy stays clean, legible and contained in both themes and nar
     await noPageOverflow(page);
     await contrast(page);
     const tab = page.getByRole('tab', { name: 'Conta', exact: true });
-    expect((await tab.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    const tabBox = (await tab.boundingBox())!;
+    expect(tabBox.height).toBeGreaterThanOrEqual(await coarsePointer(page) ? 44 : 32);
     const indicator = tab.locator('[data-tabs-indicator]');
     await expect(indicator).toBeVisible();
-    expect(await indicator.evaluate(el => getComputedStyle(el).height)).toBe('2px');
+    expect((await indicator.boundingBox())!.height).toBe(tabBox.height);
     expect(await page.getByRole('tabpanel', { name: 'Conta' }).getByRole('region', { name: 'Sua conta' }).evaluate(el => getComputedStyle(el).borderWidth)).toBe('0px');
     if (width < 768) {
       expect(await page.getByRole('textbox').evaluate(el => getComputedStyle(el).fontSize)).toBe('16px');
-      expect((await page.getByRole('button', { name: 'Salvar nome' }).boundingBox())!.height).toBeGreaterThanOrEqual(44);
+      expect((await page.getByRole('button', { name: 'Salvar nome' }).boundingBox())!.height).toBeGreaterThanOrEqual(await coarsePointer(page) ? 44 : 40);
     }
     await page.screenshot({ path: `apps/web/labs/espaco-library/evidence/settings/${info.project.name}-${theme}-${width}.png`, fullPage: true });
     for (const label of ['Preferências', 'Notificações', 'Privacidade']) {
@@ -107,6 +109,10 @@ test('confirmation is reversible, synthetic, focused; loading and error have rec
   const trigger = page.getByRole('button', { name: 'Excluir conta', exact: true });
   await trigger.click();
   const dialog = page.getByRole('dialog', { name: 'Excluir conta?' });
+  // The native dialog shell holds focus while the surface enters inert; keyboard order starts once it settles.
+  await expect(dialog).toBeFocused();
+  await expect(dialog.locator('.es-dialog-surface')).toHaveAttribute('data-phase', 'settled');
+  await page.keyboard.press('Tab');
   await expect(dialog.getByRole('button', { name: 'Fechar', exact: true })).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(dialog.getByRole('button', { name: 'Cancelar' })).toBeFocused();

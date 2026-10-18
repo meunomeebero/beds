@@ -1,4 +1,4 @@
-// Synthetic preferences adapted from the existing Curriculol settings playground.
+// Synthetic preferences adapted from the reference app's settings playground.
 export const notificationGroups = [
   { id: 'documents', title: 'Análises e documentos', items: [
     { id: 'analysis_started', label: 'Análise iniciada', description: 'Quando sua análise entra na fila.' },
@@ -18,7 +18,7 @@ export const notificationGroups = [
 ];
 
 export const confirmations = {
-  memory: { title: 'Limpar memória da Lucy?', description: 'Esta demonstração não apaga memórias, currículos nem análises. Você está validando apenas a confirmação.', action: 'Simular limpeza' },
+  memory: { title: 'Limpar memória da assistente?', description: 'Esta demonstração não apaga memórias, currículos nem análises. Você está validando apenas a confirmação.', action: 'Simular limpeza' },
   delete: { title: 'Excluir conta?', description: 'Esta ação é definitiva na aplicação. Aqui, a exclusão é apenas simulada: sua conta e seus dados permanecem intactos.', action: 'Simular exclusão' },
   privacy: { title: 'Política de privacidade', description: 'Na aplicação, este acesso abre a política oficial. Esta prévia não contém um documento jurídico.', action: null },
   terms: { title: 'Termos de uso', description: 'Na aplicação, este acesso abre os termos oficiais. Nenhum aceite é registrado nesta prévia.', action: null },

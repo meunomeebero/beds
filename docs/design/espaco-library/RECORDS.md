@@ -1,7 +1,7 @@
 # Records — compact metadata and item options
 
 Scope:portable BEDS;catalog `?view=records`. Synthetic data/local callbacks only.
-No Curriculol integration,server request or permission grant. Not tab navigation.
+No reference-app integration,server request or permission grant. Not tab navigation.
 
 ## API
 

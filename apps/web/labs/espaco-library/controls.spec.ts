@@ -125,7 +125,8 @@ for (const theme of ['light', 'dark'] as const) {
       const input = dialog.getByRole('combobox', { name: 'Comandos do catálogo' });
       await expect(input).toBeFocused();
       await expectWithinViewport(dialog);
-      await input.press('End');
+      // Home/End stay native caret keys in the text field; arrows wrap the active command.
+      await input.press('ArrowUp');
       await expect(dialog.locator('[data-active="true"]')).toContainText('Configurações');
       await input.press('ArrowDown');
       await expect(dialog.locator('[data-active="true"]')).toContainText('Fundamentos');

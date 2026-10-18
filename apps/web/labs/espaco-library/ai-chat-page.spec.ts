@@ -3,14 +3,14 @@ import { mkdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
 const choices = ['Importar dados do LinkedIn', 'Descrever experiências', 'Importar currículo'];
-const evidence = fileURLToPath(new URL('./evidence/lucy-guided/', import.meta.url));
+const evidence = fileURLToPath(new URL('./evidence/ai-chat-guided/', import.meta.url));
 async function capture(page: Page, info: TestInfo, name: string) {
   await mkdir(evidence, { recursive: true });
   await page.screenshot({ path: evidence + info.project.name + '-' + name + '.png', fullPage: true, animations: 'disabled' });
 }
 async function ready(page: Page, theme = 'dark', extra = '') {
-  await page.goto('/?view=lucy&theme=' + theme + extra);
-  await expect(page.getByRole('heading', { name: 'Conversa com Lucy', exact: true })).toHaveCount(1);
+  await page.goto('/?view=ai-chat&theme=' + theme + extra);
+  await expect(page.getByRole('heading', { name: 'Conversa com a assistente', exact: true })).toHaveCount(1);
   await page.evaluate(() => document.fonts.ready);
 }
 async function noOverflow(page: Page) {
@@ -21,7 +21,7 @@ test('catalog entry; three native options; both themes and measured contrast', a
   await page.goto('/?view=components');
   const nav = page.getByRole('button', { name: 'Navigation', exact: true });
   if (await nav.isVisible()) await nav.click();
-  await page.getByRole('link', { name: 'Página da Lucy', exact: true }).click();
+  await page.getByRole('link', { name: 'Página do chat de IA', exact: true }).click();
   await expect(page.locator('.es-chat-options')).toBeVisible();
   for (const theme of ['dark', 'light']) {
     await ready(page, theme);
@@ -130,7 +130,9 @@ test('320px, zoom, RTL, loading interruption and retry', async ({ page }, info) 
     await noOverflow(page);
     await page.evaluate(() => { document.documentElement.dir = 'ltr'; document.documentElement.style.zoom = '2'; });
     await page.setViewportSize({ width: 800, height: 1000 }); await noOverflow(page);
-    await page.getByRole('button', { name: choices[1], exact: true }).click();
+    // Keyboard activation: under the zoom proxy the option column is very tall and touch emulation pans the visual viewport.
+    await page.getByRole('button', { name: choices[1], exact: true }).focus();
+    await page.keyboard.press('Enter');
     await page.getByRole('textbox', { name: 'Suas experiências' }).fill('Experiência profissional '.repeat(60));
     await noOverflow(page);
   }

@@ -51,9 +51,9 @@ async function assertFits(page: Page, screen: Locator) {
 }
 
 async function assertTouchTargets(screen: Locator) {
-  // The recipe uses each component's target contract, not a private CSS override.
+  // The recipe uses each component's target contract, not a private CSS override. Inline text links follow the text.
   const minimum = await screen.evaluate(() => matchMedia('(pointer:coarse)').matches ? 44 : 32);
-  for (const target of await screen.locator('button:visible,a:visible,.es-radio-option:visible').all()) {
+  for (const target of await screen.locator('button:visible,a:visible:not(.es-text-link[data-purpose="inline"]),.es-radio-option:visible').all()) {
     const bounds = (await target.boundingBox())!;
     const label = (await target.innerText()).slice(0, 80);
     // Ignore browser sub-pixel noise: CSS 44px can measure as 43.99997px.
@@ -89,6 +89,8 @@ async function expectNativeModal(page: Page, dialog: Locator, trigger: Locator) 
   await expect(dialog).toBeVisible();
   expect(await dialog.evaluate(element => element.matches(':modal')), 'Dialog enters the native modal top layer').toBe(true);
   expect(await dialog.evaluate(element => element.contains(document.activeElement))).toBe(true);
+  // The surface stays inert while it enters; keyboard order starts once it settles.
+  await expect(dialog.locator('.es-dialog-surface')).toHaveAttribute('data-phase', 'settled');
   const controls = dialog.locator('button:not([disabled]),a[href],input:not([disabled]),[tabindex="0"]');
   await controls.last().focus();
   await page.keyboard.press('Tab');
@@ -286,6 +288,8 @@ test('keyboard payment and informational dialogs trap focus, Escape preserves or
     await trigger.focus();
     await trigger.press('Enter');
     const dialog = page.getByRole('dialog', { name: title, exact: true });
+    // Measure the settled surface, not a frame of its entry scale.
+    await expect(dialog.locator('.es-dialog-surface')).toHaveAttribute('data-phase', 'settled');
     await assertTouchTargets(dialog);
     await expectNativeModal(page, dialog, trigger);
   }

@@ -9,7 +9,7 @@
     "headings": [
       {
         "tag": "H1",
-        "text": "MCP do Curriculol",
+        "text": "MCP do the reference app",
         "size": "16px"
       },
       {
@@ -117,7 +117,7 @@
           25
         ],
         "contrast": 11.86,
-        "sample": "MCP do Curriculol",
+        "sample": "MCP do the reference app",
         "font": "16px",
         "weight": "500"
       },
@@ -338,7 +338,7 @@
     "headings": [
       {
         "tag": "H1",
-        "text": "MCP do Curriculol",
+        "text": "MCP do the reference app",
         "size": "16px"
       },
       {
@@ -410,7 +410,7 @@
           25
         ],
         "contrast": 11.86,
-        "sample": "MCP do Curriculol",
+        "sample": "MCP do the reference app",
         "font": "16px",
         "weight": "500"
       },
@@ -643,7 +643,7 @@
     "headings": [
       {
         "tag": "H1",
-        "text": "MCP do Curriculol",
+        "text": "MCP do the reference app",
         "size": "16px"
       },
       {
@@ -715,7 +715,7 @@
           25
         ],
         "contrast": 11.86,
-        "sample": "MCP do Curriculol",
+        "sample": "MCP do the reference app",
         "font": "16px",
         "weight": "500"
       },
@@ -960,7 +960,7 @@
     "headings": [
       {
         "tag": "H1",
-        "text": "MCP do Curriculol",
+        "text": "MCP do the reference app",
         "size": "16px"
       },
       {
@@ -1068,7 +1068,7 @@
           255
         ],
         "contrast": 12.27,
-        "sample": "MCP do Curriculol",
+        "sample": "MCP do the reference app",
         "font": "16px",
         "weight": "500"
       },
@@ -1253,7 +1253,7 @@
     "headings": [
       {
         "tag": "H1",
-        "text": "MCP do Curriculol",
+        "text": "MCP do the reference app",
         "size": "16px"
       },
       {
@@ -1325,7 +1325,7 @@
           255
         ],
         "contrast": 12.27,
-        "sample": "MCP do Curriculol",
+        "sample": "MCP do the reference app",
         "font": "16px",
         "weight": "500"
       },
@@ -1498,7 +1498,7 @@
     "headings": [
       {
         "tag": "H1",
-        "text": "MCP do Curriculol",
+        "text": "MCP do the reference app",
         "size": "16px"
       },
       {
@@ -1570,7 +1570,7 @@
           255
         ],
         "contrast": 12.27,
-        "sample": "MCP do Curriculol",
+        "sample": "MCP do the reference app",
         "font": "16px",
         "weight": "500"
       },
@@ -1756,8 +1756,8 @@
   {
     "check": "profile-state",
     "scenario": "profile-empty",
-    "initial": "Seu perfil ainda está vazio\n\nA Lucy monta o perfil com você, em uma conversa. Estado simulado desta prévia.\n\nCriar perfil",
-    "after": "Seu perfil ainda está vazio\n\nA Lucy monta o perfil com você, em uma conversa. Estado simulado desta prévia.\n\nCriar perfil",
+    "initial": "Seu perfil ainda está vazio\n\nA the assistant monta o perfil com você, em uma conversa. Estado simulado desta prévia.\n\nCriar perfil",
+    "after": "Seu perfil ainda está vazio\n\nA the assistant monta o perfil com você, em uma conversa. Estado simulado desta prévia.\n\nCriar perfil",
     "h1": 0
   },
   {
@@ -1791,7 +1791,7 @@
   },
   {
     "check": "profile-edit-entry",
-    "url": "http://127.0.0.1:5292/?view=lucy&scenario=profile-ready&theme=dark",
+    "url": "http://127.0.0.1:5292/?view=ai-chat&scenario=profile-ready&theme=dark",
     "focus": {
       "tag": "BODY",
       "text": null,
@@ -1808,7 +1808,7 @@
       "Perfil",
       "MCP",
       "2 créditos",
-      "Revise meu perfilA Lucy aponta o que merece atualização (roteiro fixo da prévia).",
+      "Revise meu perfilA the assistant aponta o que merece atualização (roteiro fixo da prévia).",
       "Sugira melhoriasReceba sugestões simuladas para o perfil do cenário.",
       "",
       "Concluir e voltar ao perfil",
@@ -1973,7 +1973,7 @@
     "headings": [
       {
         "tag": "H1",
-        "text": "MCP do Curriculol",
+        "text": "MCP do the reference app",
         "size": "16px"
       },
       {
@@ -2081,7 +2081,7 @@
           255
         ],
         "contrast": 12.27,
-        "sample": "MCP do Curriculol",
+        "sample": "MCP do the reference app",
         "font": "16px",
         "weight": "500"
       },

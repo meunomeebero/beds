@@ -1,7 +1,7 @@
 # Decisions — questions, approval and explicit choices
 
 Scope: portable BEDS;catalog `?view=decisions`;local examples only.
-No Curriculol/Lucy integration,queue,permission,request or stored preference.
+No reference-app or assistant integration,queue,permission,request or stored preference.
 
 ## Public API
 
@@ -35,7 +35,7 @@ import { ApprovalCard, QuestionCard } from 'beds';
 
 <ApprovalCard
   title="Permitir acesso ao currículo?"
-  description="Lucy poderá ler o arquivo selecionado."
+  description="A assistente poderá ler o arquivo selecionado."
   status={{ state: 'approval', label: 'Aprovação' }}
   primaryAction={{ label: 'Permitir', onClick: requestAccess }}
   secondaryAction={{ label: 'Pular', onClick: skipStep }}

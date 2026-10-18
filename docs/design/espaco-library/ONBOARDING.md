@@ -60,7 +60,7 @@ Existing control feedback/reduced-motion behavior unchanged.
 Catalog navigation:Onboarding → `?view=onboarding&theme=light` or `theme=dark`.
 [Example](../../../apps/web/labs/espaco-library/OnboardingPage.tsx):synthetic personal
 identity form,name required only in this fixture. Optional role/city/portfolio
-are illustrative,not new Curriculol onboarding requirements. Website input accepts
+are illustrative,not new the reference app onboarding requirements. Website input accepts
 plain text/domain;no validation,fetch or profile import implied.
 
 Footer lets a reviewer choose success/error/pending. Pending settles only through

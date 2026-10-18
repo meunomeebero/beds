@@ -47,7 +47,7 @@ export default function DecisionExamples() {
   return <Stack gap="section">
     <HomeHeader title="Uma decisão de cada vez" description="Perguntas e aprovações com contexto. Todos os exemplos são locais; nenhuma permissão ou operação é executada." />
     <Stack>
-      <ApprovalCard title={long ? 'Permitir que a Lucy consulte as experiências profissionais e a formação do currículo selecionado?' : 'Permitir acesso ao currículo?'} description="Lucy poderá ler o arquivo selecionado. Nenhum arquivo será enviado nesta demonstração." status={status(access.state)} feedback={access.feedback}
+      <ApprovalCard title={long ? 'Permitir que a assistente consulte as experiências profissionais e a formação do currículo selecionado?' : 'Permitir acesso ao currículo?'} description="A assistente poderá ler o arquivo selecionado. Nenhum arquivo será enviado nesta demonstração." status={status(access.state)} feedback={access.feedback}
         primaryAction={{ label: 'Permitir', onClick: () => start(setAccess) }}
         alternativeAction={{ label: long ? 'Sempre permitir a leitura dos arquivos que eu selecionar' : 'Sempre permitir', onClick: () => setAccess({ state: 'success', feedback: '“Sempre permitir” selecionado apenas no exemplo. Nenhuma preferência foi salva.' }) }}
         secondaryAction={{ label: 'Negar', onClick: () => setAccess({ state: 'denied', feedback: 'Acesso negado no exemplo. Nenhum arquivo foi consultado.' }) }} />

@@ -9,10 +9,10 @@ verification and residual acceptance limits; [API boundaries](API-BOUNDARIES.md)
 classifies every current export.
 
 **Source of truth for visual defaults (owner decision, 2026-10-18):** the patterns
-Curriculol ships are the reference. Where BEDS and Curriculol differed, BEDS now
-follows Curriculol: pill buttons (md 40 / sm 32), soft text-entry borders with a
+the reference app ships win. Where BEDS and the reference app differed, BEDS now
+follows the reference app: pill buttons (md 40 / sm 32), soft text-entry borders with a
 soft focus ring, one proportional tab pill, outline calls to action and the
-layout proportions in [Proportions](#proportions--the-curriculol-finish).
+layout proportions in [Proportions](#proportions--the-finished-look).
 
 ## Required authoring skills
 
@@ -87,7 +87,7 @@ It contains no BEDS-owned product logo. Assets and their licenses belong to the
 app. Functional error/success states must not depend on brand color alone.
 
 `DesignSystemProvider` also accepts `fieldBorder: 'soft' | 'strong'`. `soft` is
-the default since 0.3 (owner, about Curriculol: "não gosto de input com borda
+the default since 0.3 (owner, about the reference app: "não gosto de input com borda
 grossa, gosto com borda suave"): fields, text areas, selects, OTP slots and the
 file dropzone draw the structural card border (`--es-border`) and are identified by
 their visible label, placeholder and the soft focus ring. `strong` restores the
@@ -117,7 +117,7 @@ blue, success, warning and error stay separate and never double as the brand.
    from its audience and promise. Examples: "energy, money, new"; "calm, trust, focus".
 2. Pick a hue that carries that feeling and stays distinct from functional colors.
    Starting points, not rules: electric lime or yellow for energy, speed and money
-   (Hyppo `#d0f300`); orange for warmth and optimism (Curriculol `#ff5a00`); violet
+   (for example `#d0f300`); orange for warmth and optimism (for example `#ff5a00`); violet
    for creativity and premium; teal or green for growth and health; pink or coral
    for playful and social. Avoid link-like blues and red, which read as links and errors.
 3. Prefer saturated colors with presence on both `#ffffff` and `#191919`. BEDS
@@ -128,7 +128,7 @@ blue, success, warning and error stay separate and never double as the brand.
 **Using it:** selected or active marks, progress and meters, small identity marks
 (logo accent, highlighter under key headline words, decorative strokes such as
 `HandDrawnArrow`) and illustrations. Keep it to a few focal points per screen.
-Buttons are not brand-filled (Curriculol decision, 2026-09-29: orange fills with
+Buttons are not brand-filled (the reference app decision, 2026-09-29: orange fills with
 black labels read loud; the focal action is the outline pill with a trailing arrow
 and the filled action is the neutral `primary`). Never use brand for body text,
 large page backgrounds or several competing accents. Brand is never the only
@@ -184,13 +184,13 @@ generated. Elegant restraint with one confident accent beats decoration.
 | Modal content | `Dialog`: quiet fade and slight scale by default, no morph. `motionPreset="elastic"` opts into a bounded 260ms spring with 4px lift and .97→1 scale. Do not add a second entrance animation around it |
 | Highlighter, rotating headline, avatar stack | App-owned for now; see [Promotion candidates](PROMOTION-CANDIDATES.md) |
 
-## Proportions — the Curriculol finish
+## Proportions — the finished look
 
 Owner review, 2026-09-28: per-component fidelity is not enough; the product is
 read as a whole against pro.beui.dev. Oversized CTAs (48–64px), 48px tabs with a
 box and an underline, mixed content widths, ragged left edges and display
 headlines inside in-page prompts read as amateur. The components carry the first
-four rows; the rest are app-owned layout values Curriculol proved, recommended for
+four rows; the rest are app-owned layout values the reference app proved, recommended for
 any BEDS product (copy the values into the app's own layout CSS, never into BEDS
 tokens).
 
@@ -206,7 +206,7 @@ tokens).
 | Page identity | One H1 per page: 30/36px medium, tracking -0.025em (26/32px on phones), lead 15/22px secondary at 60ch (`PageHeader`). In-page prompts use a 16px card title, never a display headline |
 | Navigation | Rows 36px (44px touch), 16px icons, 10px gap, 10px radius (`NavItem`); breadcrumbs and the first control's glyph sit on the content's left edge (optical alignment, not box alignment) |
 | Empty states | Message first: round 40px icon tile or the product's own artwork, 18px title, 14px reason at 52ch, one outline action (`EmptyState`) |
-| Motion | Press .97 with a short spring release on pointer only (Curriculol's tuned value; beUI upstream uses .93 and better-ui suggests .96); state changes swap in place; reduced motion jumps to the end state |
+| Motion | Press .97 with a short spring release on pointer only (the reference app's tuned value; beUI upstream uses .93 and better-ui suggests .96); state changes swap in place; reduced motion jumps to the end state |
 
 ## Typography
 

@@ -7,13 +7,13 @@ The reusable `MeterSegments` remains in BEDS; it imposes no processing steps,
 completion timing or score policy. [Agnostic DS](AGNOSTIC-DS.md) owns this boundary.
 
 Scope: local BEDS candidate,2026-09-16. Published RC16 unchanged.
-User request: port current Curriculol processing screens into the redesign
+User request: port current reference-app processing screens into the redesign
 playground,using shared components,Better and Emil. No production migration,
 provider call,upload,email,billing or release.
 
 ## Source and timing conflict
 
-Read-only Curriculol checkout at `3b9117f7`;source paths:
+Read-only the reference app checkout at `3b9117f7`;source paths:
 `apps/web/src/sections/{LoadingScreen,GenerationLoading,ProcessingScreen}.tsx`,
 `apps/web/src/components/{MasterProgressBar,LoadingVideoPanel}.tsx`,
 `apps/web/src/data/processing-configs.ts`.
@@ -28,7 +28,7 @@ Read-only Curriculol checkout at `3b9117f7`;source paths:
 | Master capped95% until real done | Capped95%;explicit simulated confirmation required |
 | Actual completion interrupts choreography | Explicit demo completion allowed;never timer-generated success |
 | Final frame holds | Retained;no restarting from zero while waiting |
-| Named specialists | Analysis:Anya/Vanellope active,Arya optional/inactive;optimization retains source narrative. Unsupported competitor/ATS claims omitted |
+| Named specialists | Analysis:the ATS specialist/the career specialist active,the positioning specialist optional/inactive;optimization retains source narrative. Unsupported competitor/ATS claims omitted |
 | Victory on decorative score completion | Small completion mark only after host success |
 | ASCII bars/terminal font | BEDS28-segment meter,Inter,shared neutrals and brand;no mixed legacy CSS |
 

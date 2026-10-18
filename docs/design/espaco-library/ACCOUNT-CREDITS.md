@@ -59,7 +59,7 @@ storage,timers or real purchase requests in library or catalog fixture.
 
 Catalog:Créditos no menu → `?view=account-credits&theme=dark`.
 Optional `menu=open` opens the demo immediately. [Controlled example](../../../apps/web/labs/espaco-library/AccountCreditsPage.tsx)
-uses fictitious plan/12.500 of20.000 credits;not a Curriculol offer or allowance.
+uses fictitious plan/12.500 of20.000 credits;not the reference app offer or allowance.
 Footer action says “Ver créditos”;error offers explicit local retry. Host account
 actions only emit demo notices. State selector includes zero,unknown quota,
 loading,unavailable,error,invalid value and long content.

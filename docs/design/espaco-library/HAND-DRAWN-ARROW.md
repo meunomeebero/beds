@@ -8,7 +8,7 @@ handwriting role, color roles and draw-in motion.
 
 Built in BEDS after a beUI search (`arrow`, `annotation`, `handwritten`,
 `doodle`, `callout`, `svg path draw`) returned no candidate. First used in
-Hyppo's closed-beta invitation.
+a sibling app's closed-beta invitation.
 
 ## Public contract
 

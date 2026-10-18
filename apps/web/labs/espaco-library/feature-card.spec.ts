@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { fileURLToPath } from 'node:url';
+import { coarsePointer } from './touch-target';
 
 const evidence = fileURLToPath(new URL('./evidence/', import.meta.url));
 const title = 'Seu próximo passo começa aqui';
@@ -30,7 +31,7 @@ test('catalog entry opens the reusable feature card with fixed light and dark ge
     const width = (await card.boundingBox())!.width;
     expect(width).toBeLessThanOrEqual(360);
     const primary = card.getByRole('button', { name: 'Montar meu perfil' });
-    expect((await primary.boundingBox())!.height).toBeGreaterThanOrEqual(info.project.name === 'mobile' ? 44 : 40);
+    expect((await primary.boundingBox())!.height).toBeGreaterThanOrEqual(await coarsePointer(page) ? 44 : 40);
     await page.screenshot({ path: evidence + `feature-card-${theme}-${info.project.name}.png`, fullPage: true });
     await card.screenshot({ path: evidence + `feature-card-detail-${theme}-${info.project.name}.png` });
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

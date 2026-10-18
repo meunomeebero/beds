@@ -1,6 +1,6 @@
 # Document upload
 
-Use when: composing a document-led upload entry or Lucy resume selection.
+Use when: composing a document-led upload entry or the AI chat resume selection.
 Read next: [Foundations](FOUNDATIONS.md), [Components](COMPONENTS.md),
 [States](STATES.md), [Interface quality](INTERFACE-QUALITY.md).
 
@@ -44,10 +44,10 @@ Interactive contrast/focus comes from existing semantic roles, not artwork.
 ## Consumer examples
 
 - [Upload page](../../../apps/web/labs/espaco-library/UploadPage.tsx): `?view=upload&theme=light|dark`.
-- [Lucy](../../../apps/web/labs/espaco-library/LucyPage.tsx): choose **Importar currículo**; LinkedIn PDF remains compact.
+- [AI chat page](../../../apps/web/labs/espaco-library/AiChatPage.tsx): choose **Importar currículo**; LinkedIn PDF remains compact.
 - `?view=upload&preview=disabled`: disabled state; `purpose=default`: compact regression fixture.
 
-Curriculol examples accept one PDF/DOCX, case-insensitive extension, nonempty,
+The reference-app examples accept one PDF/DOCX, case-insensitive extension, nonempty,
 at most5MiB; invalid replacements preserve the previous selection. Old `.doc`
 gets an export-to-PDF/DOCX recovery instruction. Rules mirror the inspected
 product parser/size cap; not new library business policy. `multiple` deliberately
@@ -61,7 +61,7 @@ Entry → empty → picker/drop → local selection → optional preview confirm
 Re-entry keeps controlled files; remove → focus returns; cancel/invalid drop →
 prior selection retained; valid retry → error clears. Refresh clears demo state.
 
-Better scope: document field + standalone upload + Lucy resume entry, not global
+Better scope: document field + standalone upload + the AI chat resume entry, not global
 DS approval. All seven Better entrypoints applied; Foundations and Governance
 own values. No unresolved finding in the inspected document-field states.
 
@@ -86,10 +86,10 @@ aesthetic approval remain pending.
 | Gate | Result |
 |---|---|
 | `npm run verify` | Passed: build, typecheck, library/docs/consumer guards and temporary package consumer smoke; no violations |
-| Playwright `upload.spec.ts lucy-page.spec.ts lucy-attachments.spec.ts` |22 passed; desktop/mobile projects, light/dark, selection/drop/removal and Lucy entry/re-entry |
+| Playwright `upload.spec.ts ai-chat-page.spec.ts ai-chat-attachments.spec.ts` |22 passed; desktop/mobile projects, light/dark, selection/drop/removal and the AI chat entry/re-entry |
 | Rendered review | Desktop light/dark empty + mobile light/dark empty/selected; screenshots in `apps/web/labs/espaco-library/evidence/upload/` |
 
-Browser command: `PLAYWRIGHT_BASE_URL=http://127.0.0.1:5296 npx playwright test --config apps/web/labs/espaco-library/playwright.config.ts upload.spec.ts lucy-page.spec.ts lucy-attachments.spec.ts --reporter=line`.
+Browser command: `PLAYWRIGHT_BASE_URL=http://127.0.0.1:5296 npx playwright test --config apps/web/labs/espaco-library/playwright.config.ts upload.spec.ts ai-chat-page.spec.ts ai-chat-attachments.spec.ts --reporter=line`.
 
 Delivery: canonical source + catalog only. Unreleased addition; no published
 version, consumer dependency upgrade, real upload or production integration.

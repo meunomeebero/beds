@@ -57,7 +57,7 @@ export default function SettingsPage() {
         <NavItem label="Fórum" icon="MessageCircle" href={`?view=forum&theme=${theme}`} />
       </SidebarSection>
       <SidebarSection label="Sua conta">
-        <NavItem label="Editar perfil com a Lucy" icon="UserRound" href={`?view=lucy&theme=${theme}`} />
+        <NavItem label="Editar perfil com a assistente" icon="UserRound" href={`?view=ai-chat&theme=${theme}`} />
         <NavItem label="MCP" icon="Plug" href={`?view=mcp&theme=${theme}`} />
         <NavItem label="Configurações" icon="Settings2" active href={`?view=settings&theme=${theme}`} />
       </SidebarSection>
@@ -69,7 +69,7 @@ export default function SettingsPage() {
           : state === 'loading' ? <Stack><LoadingIndicator label="Carregando configurações" /><Inline><Button label="Concluir carregamento da prévia" variant="ghost" onClick={() => setState('ready')} /></Inline></Stack>
           : <Tabs label="Seções de configurações" value={section} onChange={chooseSection} variant="settings" items={[
             { id: 'account', label: 'Conta', content: <Stack gap="section">
-              <SettingsGroup variant="section" title="Sua conta" description="Sua identificação no Curriculol.">
+              <SettingsGroup variant="section" title="Sua conta" description="Sua identificação no app de exemplo.">
                 <Inline><Avatar name={name} purpose="profile" /><Stack gap="tight"><Text variant="label">{name}</Text><Text tone="secondary">@{username}</Text></Stack></Inline>
                 <SettingsForm label="Editar nome de usuário" onSubmit={saveUsername}>
                   <TextField ref={usernameRef} label="Nome de usuário" name="username" autoComplete="username" spellCheck={false} value={draft} onChange={value => { setDraft(value); setError(''); setMessage(''); }} description={error ? undefined : 'De 3 a 24 letras minúsculas, números ou sublinhado.'} error={error || undefined} />
@@ -79,7 +79,7 @@ export default function SettingsPage() {
                 <SettingsRow title="Identificador da conta"><Text tone="secondary">conta-luisa-demo</Text></SettingsRow>
               </SettingsGroup>
               <SettingsGroup variant="section" title="Seu espaço">
-                <SettingsRow title="Perfil profissional" description="Experiências, habilidades e objetivos de carreira."><TextLink href={`?view=lucy&theme=${theme}`}>Editar perfil com a Lucy</TextLink></SettingsRow>
+                <SettingsRow title="Perfil profissional" description="Experiências, habilidades e objetivos de carreira."><TextLink href={`?view=ai-chat&theme=${theme}`}>Editar perfil com a assistente</TextLink></SettingsRow>
                 <SettingsRow title="Aplicativos conectados" description="Gerencie as permissões dos seus assistentes de IA."><TextLink href={`?view=mcp&theme=${theme}`}>Gerenciar MCP</TextLink></SettingsRow>
               </SettingsGroup>
             </Stack> },
@@ -103,7 +103,7 @@ export default function SettingsPage() {
                 <Switch label="Personalização com e-mail" description="Associa dados de uso ao seu e-mail para personalizar recomendações. Opcional." checked={personalization} onChange={value => { setPersonalization(value); setMessage(`Personalização ${value ? 'ativada' : 'desativada'} apenas nesta prévia.`); }} />
               </SettingsGroup>
               <SettingsGroup variant="section" title="Seus dados">
-                <SettingsRow title="Memória da Lucy" description="O resumo usado para reconhecer você nas próximas conversas."><Button label="Limpar memória" onClick={() => setConfirmation('memory')} /></SettingsRow>
+                <SettingsRow title="Memória da assistente" description="O resumo usado para reconhecer você nas próximas conversas."><Button label="Limpar memória" onClick={() => setConfirmation('memory')} /></SettingsRow>
                 <SettingsRow title="Documentos legais" description="Consulte como seus dados são tratados."><Inline gap="tight"><Button label="Política de privacidade" variant="ghost" onClick={() => setConfirmation('privacy')} /><Button label="Termos de uso" variant="ghost" onClick={() => setConfirmation('terms')} /></Inline></SettingsRow>
               </SettingsGroup>
               <SettingsGroup variant="section" title="Excluir conta" description="Uma ação definitiva na aplicação. Nenhum dado real é afetado nesta prévia."><Inline><Button label="Excluir conta" onClick={() => setConfirmation('delete')} /></Inline></SettingsGroup>

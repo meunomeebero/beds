@@ -12,7 +12,8 @@ test('home greeting remains an optional app recipe with caller-owned identity', 
   }));
   assert.match(html, /<h1>Welcome<\/h1>/);
   assert.match(html, /alt="Example identity"/);
-  assert.doesNotMatch(html, /class="es-|Curriculol|Lucy/);
+  assert.doesNotMatch(html, /class="es-/);
+  assert.equal(html.match(/<img/g)?.length, 1, 'the only identity is the caller-owned one');
 });
 
 test('page header recipe preserves caller heading, description and native action', async () => {

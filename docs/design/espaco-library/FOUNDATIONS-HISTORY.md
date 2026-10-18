@@ -16,7 +16,7 @@ Current rules only. Historical values: [Original measurements](REFERENCE-MEASURE
 
 ## Current user-approved authority
 
-Current user-approved foundation: local Lucy sidebar/dark neutrals, Lucide iconography and the compact legacy account-menu finish. Account-specific geometry is specified below; Inter/Geist, the shared palette, sidebar and page layout remain fixed. These A adoption decisions supersede corresponding historical Marketer measurements without expanding the consumer styling API.
+Current user-approved foundation: local reference-app sidebar/dark neutrals, Lucide iconography and the compact legacy account-menu finish. Account-specific geometry is specified below; Inter/Geist, the shared palette, sidebar and page layout remain fixed. These A adoption decisions supersede corresponding historical Marketer measurements without expanding the consumer styling API.
 
 | Adopted context | Current contract |
 |---|---|
@@ -27,13 +27,13 @@ Current user-approved foundation: local Lucy sidebar/dark neutrals, Lucide icono
 | Primary navigation |`SidebarSection purpose="primary"`;horizontal40px row;31px selected pill;selected icon fill currentColor/stroke sidebar;inactive outline;4px group gap;9px icon/text gap;11px horizontal padding;14px/21px regular text |
 | Sidebar sections |Default17px top;12px/18px labels;8px heading bottom;history15px top/2px row gap;primary3px top/6px bottom |
 | Sidebar glyphs |16px navigation glyph; 24×24 Lucide viewBox/1.5 stroke; 17px profile mark; fixed registry |
-| Dark neutrals |Local Lucy roles; exact adopted values in canonical token register below |
+| Dark neutrals |The local reference app's roles; exact adopted values in canonical token register below |
 | Retained type |Inter interface /Geist Mono code; sidebar role sizes above are scoped |
 | Retained layout |768px breakpoint;full-bleed main;chat640px/Home720px;dashboard880px only for the isolated Home composition;16px main top inset after the content header;existing mobile chat gutters/composer |
 | Light / account |Source palette retained except accessible secondary/badge text; account280px/r12 with the compact finish below |
 | Verification |Current browser/token/package checks recorded in [Validation](VALIDATION.md); source evidence is historical |
 
-The adopted main canvas is full-bleed`#191919`. The local prototype's outer`#171717` frame is not restored. Chat640px/Home720px widths and composer dimensions retain their existing geometry. Dashboard880px is an A width for the isolated Home composition; it does not alter the Lucy or MCP lanes. The16px page-top inset is a fresh M measurement from the reference MCP main wrapper; the package applies it after its own `ContentHeader` or mobile bar. Existing24px desktop/16px mobile side gutters and24px bottom inset remain A shell adaptations, not newly claimed source measurements.
+The adopted main canvas is full-bleed`#191919`. The local prototype's outer`#171717` frame is not restored. Chat640px/Home720px widths and composer dimensions retain their existing geometry. Dashboard880px is an A width for the isolated Home composition; it does not alter the AI chat or MCP lanes. The16px page-top inset is a fresh M measurement from the reference MCP main wrapper; the package applies it after its own `ContentHeader` or mobile bar. Existing24px desktop/16px mobile side gutters and24px bottom inset remain A shell adaptations, not newly claimed source measurements.
 
 | Adopted dark role | Exact value |
 |---|---|
@@ -118,7 +118,7 @@ state,reference provenance and validation. Owner aesthetic approval pending.
 
 ### Full landing composition — September16 adaptation
 
-Product-first Curriculol playground → A candidate,not measured source CSS.
+Product-first reference-app playground → A candidate,not measured source CSS.
 Shared1040px content;header16/24px inset,24px gaps,44px links/theme control.
 Brand20/28px500,10px glyph gap. Below768px:12/16px header,8px gaps,18px brand,
 native Menu disclosure with44px summary;full-width popup within16px gutters,
@@ -369,7 +369,7 @@ tabular metadata. [Forum topics](FORUM-TOPICS.md) owns API/QA.
 
 ### Guided conversation — September15 adaptation
 
-Supplied Lucy chat/option and inbox screenshots → A composition,not extracted
+Supplied AI chat/option and inbox screenshots → A composition,not extracted
 CSS. Existing640px chat lane;transparent assistant prose,14/23px;author14/21px
 500 with16px brand mark and10px gap;12px author/body gap. User bubbles retain
 existing geometry;thread content preserves newlines. Transcript32px rhythm;
@@ -389,7 +389,7 @@ resizable textarea,2px canonical focus perimeter. Input16/24px narrow;send36px
 desktop/44px narrow. Only guided next-step upload/actions receive44px narrow
 targets and full wrapping filenames. Default composer,ChatLayout,SuggestionRow,
 QuestionCard and other file selectors remain unchanged. No new tokens.
-[Lucy](LUCY-COMPOSITION.md) owns API,flow and review evidence.
+[AI chat composition](AI-CHAT-COMPOSITION.md) owns API,flow and review evidence.
 
 September15 attached-input reference → A additive composer context. Attachment
 shell:r24,4px inset,semantic context fill and1px border;existing form stays r20.
@@ -416,7 +416,7 @@ Primary action r6,width100%,minimum36px desktop/44px narrow or coarse pointer;
 wraps long copy. Existing8px account footer inset,no new palette or sidebar
 content. [Account credits](ACCOUNT-CREDITS.md) owns data/state behavior.
 
-Latest explicit preference: the local Lucy account popup. Scope is AccountMenu only. The source used system UI; the library keeps Inter and existing theme tokens. Optional identity description and footer remain data-driven; menu height must follow content rather than a fixed screenshot height.
+Latest explicit preference: the local reference-app account popup. Scope is AccountMenu only. The source used system UI; the library keeps Inter and existing theme tokens. Optional identity description and footer remain data-driven; menu height must follow content rather than a fixed screenshot height.
 
 | Part | Fixed contract |
 |---|---|
@@ -432,7 +432,7 @@ Latest explicit preference: the local Lucy account popup. Scope is AccountMenu o
 | Mobile≤767px |Only account actions/workspaces/appearance minimum44px;theme choice40px/group44px;appearance grows to50px with padding |
 | Unchanged behavior |Anchoring,viewport clamp,scrolling,theme callback,workspace/action callback,Tab loop,Escape/outside and focus return |
 
-The menu-specific mobile target rule does not enlarge navigation, inputs, generic segmented controls or other overlays. The compact Lucy composition uses a single-line identity; applications may still supply a description.
+The menu-specific mobile target rule does not enlarge navigation, inputs, generic segmented controls or other overlays. The compact AI chat composition uses a single-line identity; applications may still supply a description.
 
 ## Current typography and content rhythm
 
@@ -460,7 +460,7 @@ September15 reconciliation: PageContentHeader now executes15/24px; exported side
 | Layout context | Fixed relationship |
 |---|---|
 | AppShell main | Full-bleed; 16px top after content header/mobile bar; 24px desktop sides/bottom, 16px mobile sides |
-| Content lanes | Chat 640px; home 720px; dashboard 880px; full fluid. The dashboard variant supports the isolated Home, not a global widening of Lucy/MCP. |
+| Content lanes | Chat 640px; home 720px; dashboard 880px; full fluid. The dashboard variant supports the isolated Home, not a global widening of the AI chat/MCP. |
 | PageContentHeader | Max 784px; desktop 48/32/16px top/side/bottom; mobile 16/16/12px |
 | Stack | Tight 8px; default 16px; section 48px |
 | Inline | Tight 8px; default 16px; wrapping enabled |
@@ -545,7 +545,7 @@ contract. Prices,fields,terms and confirmation remain host-owned.
 
 ## Processing presentation — September16 adaptation
 
-Current Curriculol status/narrative split → shared BEDS adaptation. Fixed
+Current reference-app status/narrative split → shared BEDS adaptation. Fixed
 1040px maximum,32px block inset,48px groups,1.35:1 columns;760px container stacks.
 Inter28/36px500 heading,24/32px narrow;14/22px body,13/20px supporting copy.
 28px/r8 phase markers,24px row gap,shared28-segment master,3px stage progress.
@@ -556,7 +556,7 @@ historical timing conflict,pause/reduced motion and review limits.
 
 ## Result presentation — September16 adaptation
 
-A: current Curriculol V4 evidence/entitlements,not pixel-porting legacy styles.
+A: current reference-app V4 evidence/entitlements,not pixel-porting legacy styles.
 Shared1040px max,24px block inset;desktop1.35:1 columns/gap32;700px container
 stacks proof→next action→long details. H1Inter28/36px500,24/31px narrow;
 body14/22,detail13/21. Score56/60px500 (48/52narrow),prior32/40,tabular;
@@ -568,7 +568,7 @@ confetti,artificial payment success or blocked document. [Contract](RESULTS.md).
 
 ## Icons and motion
 
-Original Marketer navigation mixed custom outlined 18×18 glyphs and Lucide 24×24 glyphs, both displayed 14px; inspected custom paths used 1.5 stroke and Lucide paths 2 stroke (M). These are historical observations. The latest icons-only override adopts the local Lucy pattern for every current registry entry: Lucide SVG 24×24 viewBox, `strokeWidth={1.5}`, round caps/joins, `fill="none"` and monochrome `currentColor` (A). It does not change Inter/Geist, theme tokens, component dimensions or layout.
+Original Marketer navigation mixed custom outlined 18×18 glyphs and Lucide 24×24 glyphs, both displayed 14px; inspected custom paths used 1.5 stroke and Lucide paths 2 stroke (M). These are historical observations. The latest icons-only override adopts the local reference-app pattern for every current registry entry: Lucide SVG 24×24 viewBox, `strokeWidth={1.5}`, round caps/joins, `fill="none"` and monochrome `currentColor` (A). It does not change Inter/Geist, theme tokens, component dimensions or layout.
 
 Consumer imports remain restricted to library `IconName`/`Icon`; no arbitrary SVG paths, external icon imports, size or stroke props. Fixed purposes set display size; the existing sidebar context retains its 16px glyph override. BrandMark and identity artwork are separate components, not icon-registry entries.
 
@@ -582,7 +582,7 @@ Consumer imports remain restricted to library `IconName`/`Icon`; no arbitrary SV
 
 | Current glyph implementation | Provenance |
 |---|---|
-|All registered names |Lucide 24×24 glyphs/1.5 stroke; explicit Lucy adoption A, not a claim of exact Marketer path identity |
+|All registered names |Lucide 24×24 glyphs/1.5 stroke; explicit reference-app adoption A, not a claim of exact Marketer path identity |
 |Added registry names |`House`, `MessageCircle`, `ChartColumn`, `UserRound`, `Briefcase`, `Coins`, `ScanText`; same fixed contract |
 |`Home`, `BarChart3`, `Plug` |Remain accepted; now render their Lucide glyphs through the same registry |
 |Former `SourceIcon` map |Removed from runtime; extracted TSX text retained only in [historical icon evidence](../../../packages/beds/evidence/marketer-source-icons.txt); not a public component |
@@ -597,7 +597,7 @@ Source durations150/250/400ms and ease-out `cubic-bezier(.16,1,.3,1)` are D; sid
 
 Most names below are historical aliases into the shadcn contract of the same theme blocks (see "Token contract" above): `--es-bg`→`--background`, `--es-text`→`--foreground`, `--es-primary`→`--primary`, `--es-surface`→`--card`, `--es-subtle`→`--muted`, `--es-secondary`→`--muted-foreground`, `--es-hover`→`--accent`, `--es-error`→`--destructive`, `--es-border`→`--border`, `--es-control-border`→`--input`, `--es-focus`→`--ring`, `--es-sidebar`→`--sidebar`. Values stay identical. Extensions without a shadcn equivalent stay `--es-*` permanently.
 
-Current adopted snapshot of `packages/beds/src/tokens.css`,2026-09-14:87 distinct CSS custom properties plus2 provider runtime properties,89 total. Shared declarations provide defaults;theme assignments override them. Sidebar/dark values follow the latest user-approved Lucy adoption above. Light values retain the existing palette;new aliases preserve its established role values. Raw [Marketer source evidence](../../../packages/beds/evidence/marketer-reference.json) remains unchanged and is not a claim that these A adoption values were measured there. Never override these properties in consuming apps.
+Current adopted snapshot of `packages/beds/src/tokens.css`,2026-09-14:87 distinct CSS custom properties plus2 provider runtime properties,89 total. Shared declarations provide defaults;theme assignments override them. Sidebar/dark values follow the latest user-approved reference-app adoption above. Light values retain the existing palette;new aliases preserve its established role values. Raw [Marketer source evidence](../../../packages/beds/evidence/marketer-reference.json) remains unchanged and is not a claim that these A adoption values were measured there. Never override these properties in consuming apps.
 
 September15 addition:`--es-disclosure-lines:3` is a private component-owned
 clamp default. At that checkpoint88 static names plus2 provider properties=90.

@@ -7,7 +7,7 @@ export default function ConversationPage() {
     <AppShell sidebar={null} contentWidth="chat" collapsed={true} onCollapsedChange={() => {}} mobileOpen={false} onMobileOpenChange={() => {}}>
       <Stack>
         <PageHeader title="Conversa" description="Mensagens, horários e reações em uma composição única." />
-        <Conversation label="Conversa com Lucy">
+        <Conversation label="Conversa com a assistente">
           <ConversationBubble role="assistant" sentAt="10:14">Encontrei três vagas compatíveis com seu perfil. Quer revisar a primeira?</ConversationBubble>
           <ConversationBubble role="user" sentAt="10:15">Sim, mostre os pontos mais importantes.</ConversationBubble>
           <ConversationBubble role="assistant" sentAt="10:15" reactions={<Button label="Útil" variant="ghost" compact onClick={() => {}} />}>A vaga prioriza experiência com produto, pesquisa e análise de dados.</ConversationBubble>

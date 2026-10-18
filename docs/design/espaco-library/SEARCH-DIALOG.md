@@ -5,7 +5,7 @@ Source: owner-supplied September15 screenshot; hierarchy observed, exact geometr
 adapted (A). No artwork/source code extracted or redistributed.
 [Foundations](FOUNDATIONS.md) owns geometry, colors and typography.
 
-**0.3 — Curriculol patterns (2026-10-18).** The search input no longer draws a
+**0.3 — the reference app patterns (2026-10-18).** The search input no longer draws a
 2px outline offset 4px around a borderless field (the heavy input outline the
 owner rejected). The field is the shared product search pill: soft border,
 leading glyph, 16px text and the 2px soft focus ring on `:focus-within`. Category

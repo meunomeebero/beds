@@ -28,13 +28,13 @@ centered benefit text. A adaptation,not extracted source CSS or copied artwork.
 |---|---|
 | Asymmetric first row | Fixed first-card span;3/2/1 responsive grid,stable DOM order |
 | Blue/warm diffuse artwork | Original inline SVG;existing orange brand wash ≤16%;fixed neutral theme roles |
-| Video production features | Curriculol resume+letter,profile import,compatibility,Lucy and status tracking |
+| Video production features | Reference-app resume + letter, profile import,compatibility, assistant and status tracking |
 | Large image area | Passive illustrations;all meaning retained in real headings/descriptions |
 | Rounded nested shell | r24 with4px inset andr20 media;no stock gradients behind functional text |
 | No reference mobile state | Container-driven stacking,wrapping copy and44px CTA;documented adaptation |
 
-Copy evidence:existing Curriculol feature docs for `application-kit`,
-`lucy-engine`,`profile-import`,`job-applications`,`job-search`. These describe
+Copy evidence:existing reference-app feature docs for `application-package`,
+`assistant-engine`,`profile-import`,`job-applications`,`job-search`. These describe
 capabilities,not measured user outcomes. No invented statistics,ATS improvement,
 interview/offer guarantee,free-plan claim or unsupervised application promise.
 Illustrations are conceptual,not live UI or a claim that an operation finished.

@@ -19,7 +19,7 @@ email,charge,credit mutation or release. Published package unchanged.
 [Governance](GOVERNANCE.md) owns evidence and acceptance. Result data,eligibility,
 entitlements,pricing,requests and routing remain host responsibilities.
 
-Read-only Curriculol reference: active route imports and their V4 components.
+Read-only the reference app reference: active route imports and their V4 components.
 Paths in this table belong to the product repository,not this portable package.
 Read-only source snapshot:`3b9117f7` on `fix/landing-pricing-section-rhythm`.
 
@@ -75,7 +75,7 @@ conversion/monetization references. Apply a small set of mechanisms:
 | Remove uncertainty,not autonomy | Show total,quantity and billing terms;retain close,back,report access and recovery |
 | Expansion follows usage | Sell the next useful application,not access to an already-paid document |
 
-Hypothesis: an eligible candidate who sees a concrete gap,what the paid kit
+Hypothesis: an eligible candidate who sees a concrete gap,what the paid package
 changes and the exact cost can proceed with less uncertainty. This is not
 measured conversion uplift. No artificial urgency,countdown,scarcity,score
 inflation,fabricated testimonials,automatic purchase or blocked export.
@@ -104,7 +104,7 @@ Product price snapshot,not library defaults:
 |100 |R$79,90 |
 
 One-time purchase,no subscription;current pricing copy says credits do not
-expire. Reverify product terms before integration. One application kit costs
+expire. Reverify product terms before integration. One application package costs
 one credit;the optimization result is not a second charge. No new package,
 discount,renewal policy or expiry rule is proposed. Quantity choices remain
 explicit;larger quantities must not be silently preselected to raise spend.
@@ -157,7 +157,7 @@ regression|partial|balance-error|existing`. Each represents synthetic local stat
 not persisted account history. Preserve selected result kind and theme across
 preview navigation. Existing [Processing](PROCESSING.md) timing and pause
 contracts remain unchanged.
-Analysis narration names Anya/Vanellope as active and Arya as optional/inactive;
+Analysis narration names the ATS specialist/the career specialist as active and the positioning specialist as optional/inactive;
 the52s chapter explains that distinction without changing phase timing.
 Vacancy-search CTAs open an explicit local boundary dialog;this catalog has no
 connected job-search route. Escape/close preserve result,balance and trigger focus.
@@ -165,8 +165,8 @@ Do not route them to the catalog's unknown-view fallback.
 
 ## Visual and motion adaptation
 
-**A local adaptation** of approved BEDS identity: Inter,shared neutrals,one
-Curriculol brand,segmented meters and existing document/control anatomy. Not a
+**A local adaptation** of approved BEDS identity: Inter, shared neutrals, one
+brand colour, segmented meters and existing document/control anatomy. Not a
 pixel measurement or automatic approval of the prior product screen. Shared
 source and Foundations own executed geometry.
 
@@ -211,7 +211,7 @@ Three new server-rendered guards cover absent/invalid/zero scores,fractional and
 tiny regressions,semantic lists,native navigation and price/terms descriptions.
 
 Independent source/selected-render review found two integration issues:unknown
-job-search route and automatic/optional Arya mismatch. Both corrected and
+job-search route and automatic/optional the positioning specialist mismatch. Both corrected and
 independently rechecked. Main inspected both dark desktop pages,checkout,light
 desktop and light/dark390px captures. No remaining scoped code finding;not a
 full-catalog or owner aesthetic approval. [Validation](VALIDATION.md) owns final

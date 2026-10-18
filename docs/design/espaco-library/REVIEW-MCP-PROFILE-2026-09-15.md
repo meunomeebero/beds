@@ -7,7 +7,7 @@ Current rendered screens,not a branch/diff review. React19,public BEDS primitive
 | Snapshot | Identity |
 |---|---|
 | Preview | `http://127.0.0.1:5292/`; enter MCP/Perfil from sidebar; `scenario=profile-ready` |
-| Consumer root | Curriculol worktree `7db9`, `apps/web/labs/home-rcd/`; detached base `d5a0a02096b049bf140d8550e5e05671adfe3bd5` plus local changes |
+| Consumer root | The reference app worktree `7db9`, `apps/web/labs/home-rcd/`; detached base `d5a0a02096b049bf140d8550e5e05671adfe3bd5` plus local changes |
 | Installed package,verified from metadata | `beds@0.1.7-rc.16-local.5` |
 | Consumed archive SHA256 | `253e627381e7f2577e5bebe8aba79df1ac13d42e5c04bed797ebd2523358d48b` |
 | Consumer shell SHA256 | `bc9f43e492eea317abfae09cd5eb11fe5dfdfe8d895c35cf8e9eeea4ceaec048` |
@@ -36,7 +36,7 @@ Consumer locations below are relative to the consumer root above,not files shipp
 | MEDIUM · F2 | Accessibility | `blocks/mcp-screen/McpScreen.tsx:241`; `src/HomeRcdLab.tsx:358` | Revogar acesso immediately changes fixture state; zero confirmation dialogs and no undo. | Model confirm/cancel and restore focus; name the affected application. Preserve the nonproduction boundary. | Current fixture is harmless; it nevertheless demonstrates an unsafe interaction for a future access-revocation flow. |
 | MEDIUM · F3 | Accessibility | `src/HomeRcdLab.tsx:166`,`:321`; `blocks/profile-screen/ProfileScreen.tsx:113`,`:130` | Perfil → Alterar perfil removes the focused button; focus becomes BODY. Every view keeps `Prévia isolada — Home RCD`. Empty/error Profile has no h1. | Provide per-view title and heading in every state; move focus predictably on navigation,return it on completion/recovery. | Keyboard and screen-reader users lose page context. This is navigation behavior,not a reason to restyle the shared shell. |
 | MEDIUM · F4 | Writing | `blocks/profile-screen/ProfileScreen.tsx:360`; `src/HomeRcdLab.tsx:331` | Incorporar registros / Registros incorporados,but callback only clears pending notes. Supporting copy says no profile/CV incorporation occurs. | For the current fixture,use Marcar como revisados / Registros revisados. If incorporation is intended,obtain the product contract before implementing it. | CTA and success message promise more than the action performs; supporting text does not repair that mismatch. |
-| MEDIUM · F5 | Writing | BEDS `packages/beds/src/technical.tsx:5`,`:22`; MCP `blocks/mcp-screen/McpScreen.tsx:119`,`:245` | CodeSnippet hardcodes Copy,Copied and English error/live-region labels inside a PT-BR screen. | Add a shared typed messages contract for idle/pending/success/error/accessible copy labels; supply PT-BR messages in Curriculol. Keep geometry shared. | Visible and spoken recovery must use the application's language; fix the shared API,not DOM/CSS overrides. |
+| MEDIUM · F5 | Writing | BEDS `packages/beds/src/technical.tsx:5`,`:22`; MCP `blocks/mcp-screen/McpScreen.tsx:119`,`:245` | CodeSnippet hardcodes Copy,Copied and English error/live-region labels inside a PT-BR screen. | Add a shared typed messages contract for idle/pending/success/error/accessible copy labels; supply PT-BR messages in the reference app. Keep geometry shared. | Visible and spoken recovery must use the application's language; fix the shared API,not DOM/CSS overrides. |
 
 ## Verification and evidence
 
@@ -67,7 +67,7 @@ The ui-skills category lookup failed with registry DNS resolution; the explicitl
 
 ## Delivery boundary
 
-Automatic routing is implemented in the BEDS author/package/catalog entrypoints and in the local Curriculol BEDS/playground scopes. The four routing regression checks enforce instruction presence and canonical/portable protocol parity,not actual skill execution or UI correctness. Publication of these rules/evidence is separate from releasing an updated package or fixing the consumer findings. Existing component work and installed tarballs remain untouched.
+Automatic routing is implemented in the BEDS author/package/catalog entrypoints and in the local the reference app BEDS/playground scopes. The four routing regression checks enforce instruction presence and canonical/portable protocol parity,not actual skill execution or UI correctness. Publication of these rules/evidence is separate from releasing an updated package or fixing the consumer findings. Existing component work and installed tarballs remain untouched.
 
 ## Verdict
 

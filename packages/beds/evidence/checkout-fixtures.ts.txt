@@ -5,10 +5,10 @@ export type CheckoutReturn = 'analysis' | 'optimization' | 'components';
 
 export const checkoutExample = {
   cpf: '111.222.333-44',
-  merchant: 'BEROLAB LTDA',
-  merchantDocument: 'CNPJ 61.026.871/0001-79',
+  merchant: 'EMPRESA DE EXEMPLO LTDA',
+  merchantDocument: 'CNPJ 00.000.000/0000-00',
   terms: 'Compra única, sem assinatura. Seus créditos não expiram.',
-  code: 'DEMONSTRACAO-CURRICULOL-NAO-PAGAVEL-NAO-USAR-NO-BANCO',
+  code: 'DEMONSTRACAO-EXEMPLO-NAO-PAGAVEL-NAO-USAR-NO-BANCO',
   benefits: ['1 crédito gera um currículo adaptado + carta para uma vaga.', 'A análise continua gratuita. Você paga para gerar as melhorias.'],
 } as const;
 

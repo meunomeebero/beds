@@ -72,7 +72,7 @@ export default function DisclosuresPage() {
               <nav aria-label="Exemplo de navegação"><Inline gap="default"><TextLink href="#como-funciona" purpose="nav">Como funciona</TextLink><TextLink href="https://example.com/blog" purpose="nav" external>Blog</TextLink><LinkButton label="Abrir ajuda" purpose="nav" onClick={() => setLinkClicks(count => count + 1)} /><LinkButton label="Indisponível" purpose="nav" disabled onClick={() => undefined} /></Inline></nav>
               <p role="status">Ajuda aberta: {linkClicks}</p>
             </Stack>
-            <Stack gap="tight"><BrandMark src="/demo-brand.svg" label="Curriculol" /></Stack>
+            <Stack gap="tight"><BrandMark src="/demo-brand.svg" label="App de exemplo" /></Stack>
           </Stack>
     </AppShell>
   </DesignSystemProvider>;

@@ -12,7 +12,7 @@ export type ChipProps = {
 };
 
 /**
- * A value the person added (skills, filters, recipients), as Curriculol's profile editor draws it:
+ * A value the person added (skills, filters, recipients), as the reference app's profile editor draws it:
  * 13/20 text on the subtle surface with a hairline inset, and an optional 24px remove control whose
  * hit area grows to 36px without changing the chip's height. Layout and list semantics are caller-owned.
  */

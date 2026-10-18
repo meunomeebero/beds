@@ -44,35 +44,35 @@ provenance, not universal rules.
 
 ### ExpandingButton — 0.2.0-rc.4, 2026-09-22
 
-The owner asked to bring Hyppo's expanding sign-in pill into BEDS so other
+The owner asked to bring a sibling app's expanding sign-in pill into BEDS so other
 products can use it, and to make the system flexible enough for emphasized
 buttons like it. It ships as its own `ExpandingButton` instead of a `Button`
 variant: the fill motion needs pill geometry and a one-per-view rule that the
 general `Button` must not carry. Flexibility is bounded: an optional `mark`
 slot for provider or product logos, colors always from `brandColor`, no
-styling escape. Hyppo migrates its header and panel sign-in to it.
+styling escape. A sibling app migrates its header and panel sign-in to it.
 
 ### Agent experience — 0.2.0-rc.3, 2026-09-22
 
-The owner asked for fixes to the friction an agent reported while building Hyppo.
+The owner asked for fixes to the friction an agent reported while building a sibling app.
 Mandatory contrast color (owner decision): `brandColor` is required everywhere.
 Agents get `beds/manifest.json` and a quickstart instead of reading long history.
 `HandDrawnArrow` is promoted at the owner's explicit request with one product in
 use; the second-product rule is recorded as pending in Promotion candidates.
-Avatar stack, text highlight, rotating headline and expanding CTA remain in Hyppo.
+Avatar stack, text highlight, rotating headline and expanding CTA remain in a sibling app.
 Reduced-motion hydration is fixed at the hook level. Two mobile `select-beui`
 geometry expectations (36px vs the 44px touch target) failed before this change
 and remain open.
 
 ### Consumer follow-up — 0.2.0-rc.2, 2026-09-22
 
-Curriculol's forum form exposed a WebKit modal Tab escape: buttons may be skipped
+The reference app's forum form exposed a WebKit modal Tab escape: buttons may be skipped
 by native sequential focus, so a boundary-only trap never reached its last
 button. The shared modal helper now advances through visible, enabled controls
 and treats each named radio group as one stop. Dialog/Drawer visuals and motion
 are unchanged. A dedicated WebKit form regression covers both directions and
 keyboard opener restoration. Existing rc.1 assets remain immutable. This patch
-does not promote Curriculol composition back into the library.
+does not promote the reference-app composition back into the library.
 
 ### Mainline promotion — 2026-09-21
 
@@ -81,7 +81,7 @@ The user authorized consolidation onto `main` and immutable distribution as
 not its recorded review limitations. The runtime starts at `fba8fc3`; release
 metadata and current documentation are reconciled separately. Existing consumers
 must explicitly migrate app-owned compositions before installing the new API.
-Curriculol migration and forum polish follow publication; neither is established
+The reference app migration and forum polish follow publication; neither is established
 by this library's technical checks. See the repository release workflow and the
 GitHub release for the exact source SHA, archive hash and executed gates.
 
@@ -90,7 +90,7 @@ implicitly. Preserve the previous published artifact as their current dependency
 
 - [x] Replace embedded three-bar `BrandMark` artwork with a required caller-owned
   image and accessible label. Keep the component's image containment reusable.
-- [x] Remove the `brands.curriculol` runtime preset; the provider accepts the
+- [x] Remove the `brands.reference-app` runtime preset; the provider accepts the
   application's explicit hex color. Existing default accent remains unchanged.
 - [x] Classify all public exports: reusable component, app recipe, or product
   implementation. Remove full-page compositions from the core package surface.
@@ -368,7 +368,7 @@ test. Do not promote these initial checks into whole-library acceptance.
 |---|---|
 | Accessibility | Browser step/return/browse focus, H1 and stable status preserved; screen-reader announcements, full keyboard matrix and forced colors not verified |
 | Layout | Recipe owns former page constraints; desktop and effective433px inspected without document overflow;320px/200% zoom/RTL pending |
-| Writing | Existing preview/no-upload notice and native labels retained; business copy stays in Lucy example |
+| Writing | Existing preview/no-upload notice and native labels retained; business copy stays in the AI chat example |
 | Typography | Narrow textarea measured16px; transcript wrapping inspected; expanded localization matrix pending |
 | Colors | No palette changes; both themes inspected, but new contrast measurement was not performed in this checkpoint |
 | UI polish | Existing composer focus perimeter retained; no motion added; slowed-motion and reduced-motion matrix pending |
@@ -423,7 +423,7 @@ broader rendered acceptance remain open. Nothing was published or integrated.
   Preserved existing examples and URLs rather than discarding consumer work.
   Components is now the fallback entry; PageContentHeader's demo explicitly says
   recipe/not exported. Tokens copy explains consumer-owned identity and layout.
-- Replaced the visible Curriculol color preset with “Laranja · exemplo”. The
+- Replaced the visible reference-app color preset with “Laranja · exemplo”. The
   previous query value remains a local URL compatibility alias, never a DS brand
   export. Browser selection confirmed the same caller-owned #ffa133 accent.
 - Added a catalog-boundary source regression and updated affected browser selectors
