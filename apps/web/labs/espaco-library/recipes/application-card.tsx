@@ -66,7 +66,7 @@ export function ApplicationCard({ purpose = 'default', title, company, companyIm
   const moveOptions = (statusOptions ?? []).filter(option => option.id !== status.id).map(option => ({ ...option, label: `Mover para ${option.label}` }));
   let statusContent: ReactNode = <Badge label={status.label} tone={status.tone} purpose="status" />;
   if (statusOptions && onStatusChange) {
-    if (purpose === 'default') statusContent = <Select label={`Status de ${title}`} value={status.id} options={statusOptions} onChange={onStatusChange} />;
+    if (purpose === 'default') statusContent = <Select variant="compact" label={`Status de ${title}`} value={status.id} options={statusOptions} onChange={onStatusChange} />;
     else if (moveOptions.length > 0) statusContent = <DropdownMenu label={`Mover ${title} na ${company}`} open={statusOpen} onOpenChange={setStatusOpen} items={moveOptions} onSelect={onStatusChange} />;
   }
   const statusControl = <div className="recipe-application-status">

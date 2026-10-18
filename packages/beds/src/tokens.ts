@@ -17,9 +17,9 @@ export const typography = Object.freeze({
   command: { size: 15, line: 24, weight: 400, tracking: -.1, evidence: 'M' },
 });
 export const geometry = Object.freeze({
-  navRow: 31, navGap: 0, navIcon: 16, navLabelGap: 11, navInset: 12,
+  navRow: 36, navGap: 2, navIcon: 16, navLabelGap: 10, navInset: 10,
   sidebarProfile: 40, sidebarActionWidth: 32, sidebarSectionGap: 17, primaryNavRow: 40, primaryNavPill: 31, primaryNavGap: 4,
-  button: 32, compactButton: 28, field: 36, search: 32, switchWidth: 32, switchHeight: 18.4,
+  button: 40, compactButton: 32, touchButton: 44, field: 44, settingsField: 36, search: 44, segmented: 40, segmentedOption: 32, switchWidth: 32, switchHeight: 18.4,
   accountMenu: 280, choiceMenu: 260, periodMenu: 160, command: 672,
   readingWidth: 640, composerRadius: 20, composerInput: 120, agentStrip: 36,
   panelRadius: 20, panelPadding: 16, cardRadius: 24, cardPadding: 20,

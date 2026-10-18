@@ -59,7 +59,7 @@ export default function PricingExamples() {
         <Button label="Concluir simulação" onClick={() => setResult({ ...result, state: 'success', message: 'Plano selecionado somente no exemplo. Nenhuma assinatura foi criada.' })} />
         <Button label="Simular falha" onClick={() => setResult({ ...result, state: 'error', message: 'Não foi possível concluir o exemplo. Escolha o plano novamente para tentar de novo; nenhuma cobrança foi realizada.' })} />
       </Inline>}
-      <Select label="Imagem" value={media} onChange={setMedia} options={[{ id: 'ready', label: 'Disponível' }, { id: 'broken', label: 'Falha ao carregar' }, { id: 'missing', label: 'Sem arquivo' }]} />
+      <Select variant="compact" label="Imagem" value={media} onChange={setMedia} options={[{ id: 'ready', label: 'Disponível' }, { id: 'broken', label: 'Falha ao carregar' }, { id: 'missing', label: 'Sem arquivo' }]} />
       <Switch label="Testar texto longo" checked={long} onChange={setLong} />
       <Switch label="Mostrar apenas um plano" checked={single} onChange={setSingle} />
       <Switch label="Ocultar lista de benefícios" checked={empty} onChange={setEmpty} />

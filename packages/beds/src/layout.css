@@ -10,14 +10,15 @@
 .es-root .es-workspace-name{flex:0 1 auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .es-root .es-workspace-trigger>svg{flex-shrink:0;color:var(--es-secondary);margin-inline-start:1px}
 .es-root .es-sidebar-section{flex-shrink:0;padding:0;margin:17px 0 0}
-.es-root .es-sidebar-section>h2{margin:0 8px 8px;color:var(--es-secondary);font:400 12px/18px var(--es-font)}
-.es-root .es-sidebar-items{display:flex;flex-direction:column;gap:0}
-.es-root .es-nav-item{position:relative;isolation:isolate;display:flex;align-items:center;gap:11px;width:100%;min-width:0;min-height:31px;padding:0 8px;border:0;border-radius:6px;background:transparent;color:var(--es-secondary);font:400 14px/19.6px var(--es-font);text-align:start;text-decoration:none;cursor:pointer}
+.es-root .es-sidebar-section>h2{margin:0 0 6px;padding-inline:10px;color:var(--es-secondary);font:500 12px/16px var(--es-font)}
+.es-root .es-sidebar-items{display:flex;flex-direction:column;gap:2px}
+/* beUI ai-sidebar rows as Curriculol ships them: 36px (44 on touch), 10px radius, 14/20 medium, 16px icons, 10px gap. */
+.es-root .es-nav-item{position:relative;isolation:isolate;display:flex;align-items:center;gap:10px;width:100%;min-width:0;min-height:36px;padding:0 10px;border:0;border-radius:10px;background:transparent;color:var(--es-secondary);font:500 14px/20px var(--es-font);letter-spacing:0;text-align:start;text-decoration:none;cursor:pointer}
 .es-root .es-nav-content{position:relative;z-index:1;display:flex;align-items:center;gap:inherit;width:100%;min-width:0}
 .es-root .es-nav-item>svg,.es-root .es-nav-content>svg{flex-shrink:0;width:16px;height:16px;stroke-width:1.5}
 .es-root .es-nav-active-indicator{position:absolute;inset:0;z-index:0;border-radius:inherit;background:transparent;pointer-events:none}
 .es-root .es-nav-item--active>.es-nav-active-indicator{background:var(--es-selected)}
-.es-root .es-nav-item--active{background:transparent;color:var(--es-text)}
+.es-root .es-nav-item--active{background:transparent;color:var(--es-heading)}
 .es-root .es-nav-item--locked{color:var(--es-secondary);opacity:.55}
 .es-root .es-nav-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .es-root .es-nav-badge{margin-inline-start:auto;border-radius:4px;min-width:16px;padding:0 4px;color:var(--es-on-badge);background:var(--es-badge);text-align:center;font-size:12px;line-height:16px;font-variant-numeric:tabular-nums}
@@ -41,12 +42,17 @@
 .es-root .es-breadcrumbs a{color:var(--es-secondary);text-decoration:none}
 .es-root .es-breadcrumbs [aria-current=page]{color:var(--es-text);font-weight:500}
 .es-root .es-breadcrumb-separator{color:var(--es-secondary);flex-shrink:0}
-.es-root .es-page-header,.es-root .es-section-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
-.es-root .es-page-heading{display:flex;align-items:flex-start;gap:10px;min-width:0}
+/* Page identity (Curriculol PageContentHeader): one big tight headline and a quiet lead; actions sit on the headline's baseline row. */
+.es-root .es-page-header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;min-width:0}
+.es-root .es-section-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.es-root .es-page-heading{display:flex;align-items:flex-start;gap:12px;min-width:0}
 .es-root .es-page-heading>div,.es-root .es-section-header>div{min-width:0}
-.es-root .es-page-leading{display:flex;align-items:center;justify-content:center;min-height:20px;flex-shrink:0}
-.es-root .es-page-header h1,.es-root .es-section-header h2{margin:0;color:var(--es-heading);font:500 16px/20px var(--es-font);overflow-wrap:anywhere}
-.es-root .es-page-header p,.es-root .es-section-header p{margin:8px 0 0;color:var(--es-secondary);font:400 13px/20px var(--es-font);overflow-wrap:anywhere}
+.es-root .es-page-leading{display:flex;align-items:center;justify-content:center;min-height:36px;flex-shrink:0}
+.es-root .es-page-header h1{margin:0;color:var(--es-heading);font:500 30px/36px var(--es-font);letter-spacing:-.025em;text-wrap:balance;overflow-wrap:anywhere}
+.es-root .es-section-header h2{margin:0;color:var(--es-heading);font:500 16px/20px var(--es-font);overflow-wrap:anywhere}
+.es-root .es-page-header p{max-width:60ch;margin:10px 0 0;color:var(--es-secondary);font:400 15px/22px var(--es-font);text-wrap:pretty;overflow-wrap:anywhere}
+.es-root .es-section-header p{margin:8px 0 0;color:var(--es-secondary);font:400 13px/20px var(--es-font);overflow-wrap:anywhere}
+@media(max-width:767px){.es-root .es-page-header{flex-wrap:wrap;align-items:flex-start}.es-root .es-page-header h1{font-size:26px;line-height:32px}}
 .es-root .es-page-actions,.es-root .es-section-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
 .es-root .es-stack{display:flex;flex-direction:column;min-width:0}
 .es-root .es-stack--tight{gap:8px}.es-root .es-stack--default{gap:16px}.es-root .es-stack--section{gap:48px}
@@ -72,6 +78,7 @@
 .es-root .es-activity-panel-header h2{display:flex;align-items:center;gap:8px;margin:0;color:var(--es-heading);font:500 16px/20px var(--es-font);overflow-wrap:anywhere}
 .es-root .es-activity-panel-header h2>svg{color:var(--es-secondary)}
 .es-root .es-nav-item,.es-root .es-header-action,.es-root .es-workspace-trigger{transition:background-color 150ms ease-out,color 150ms ease-out}
+@media(pointer:coarse){.es-root .es-sidebar-section:not(.es-sidebar-section--primary) .es-nav-item{min-height:44px}}
 @media(hover:hover){.es-root .es-nav-item.es-nav-item--active:hover{background:transparent}.es-root .es-sidebar-section--primary .es-nav-item:hover{background:transparent}.es-root .es-sidebar-section--primary .es-nav-item:not(.es-nav-item--active):hover{background:var(--es-hover)}}
 @media(prefers-reduced-motion:reduce){.es-root .es-nav-item,.es-root .es-header-action,.es-root .es-workspace-trigger{transition:none}}
 .es-root .es-activity-panel-body{display:flex;flex:1;flex-direction:column;min-width:0;padding-top:12px}

@@ -26,7 +26,7 @@ function Controls({ prefix }: { prefix: string }) {
     <SegmentedControl label={`${prefix} view`} value={segment} options={choices} onChange={setSegment} />
     <DropdownMenu label={`${prefix} actions`} open={menuOpen} onOpenChange={setMenuOpen} items={choices} onSelect={setLastAction} />
     <output aria-label={`${prefix} last action`}>{lastAction}</output>
-    <Select label={`${prefix} choice`} value={option} onChange={setOption} options={[
+    <Select variant="compact" label={`${prefix} choice`} value={option} onChange={setOption} options={[
       { id: 'one', label: stress ? 'First option with a deliberately long localized name that should be fully readable in the open menu' : 'One', description },
       { id: 'two', label: stress ? 'Second option with an unbroken identifier: ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' : 'Two', description },
     ]} />

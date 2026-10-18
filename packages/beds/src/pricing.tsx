@@ -69,7 +69,7 @@ export function PricingCard({ title, description, image, price, featuresLabel, f
         {actionNote && <p className="es-pricing-note" id={`${id}-note`}>{actionNote}</p>}
         {action.href !== undefined
           ? <a className="es-pricing-link" href={action.href} aria-describedby={actionDescription}>{action.label}</a>
-          : <Button label={action.label} onClick={action.onClick} busy={action.busy} disabled={action.disabled} purpose="welcome" aria-describedby={actionDescription} />}
+          : <Button label={action.label} onClick={action.onClick} busy={action.busy} disabled={action.disabled} variant={featured ? 'primary' : 'outline'} aria-describedby={actionDescription} />}
         <p className="es-pricing-feedback" role="status" aria-atomic="true">{feedback ?? ''}</p>
       </div>
     </div>

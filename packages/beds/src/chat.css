@@ -74,7 +74,7 @@
 .es-root .es-composer[data-purpose=guided] .es-composer-toolbar>div{flex-shrink:0}
 .es-root .es-composer[data-purpose=guided] .es-composer-toolbar>div:last-child{margin-left:0;margin-inline-start:auto}
 .es-root .es-composer[data-purpose=guided] textarea{min-block-size:84px;max-block-size:280px;resize:vertical}
-.es-root .es-composer[data-purpose=guided] form:has(:focus-visible){outline:2px solid var(--es-focus);outline-offset:3px}
+.es-root .es-composer[data-purpose=guided] form:has(textarea:focus-visible){outline:2px solid transparent;outline-offset:0;border-color:var(--es-field-focus-border);box-shadow:0 0 0 2px var(--es-focus-ring)}
 .es-root .es-composer[data-purpose=guided] .es-composer-error{color:var(--es-text);font-size:13px;line-height:20px}
 .es-root .es-composer[data-purpose=guided] .es-composer-send{inline-size:36px;block-size:36px;cursor:pointer}
 .es-root .es-composer[data-purpose=guided] .es-composer-attach{inline-size:36px;block-size:36px;border:1px solid var(--es-border);border-radius:12px;color:var(--es-text);cursor:pointer}
@@ -94,5 +94,5 @@
 }
 @media(forced-colors:active){
   .es-root .es-composer-attachment button:focus-visible,.es-root .es-composer-attach:focus-visible{outline-color:Highlight}
-  .es-root .es-chat-options button:focus-visible,.es-root .es-composer[data-purpose=guided] form:has(:focus-visible),.es-root .es-composer[data-purpose=guided] .es-composer-send:focus-visible{outline-color:Highlight}
+  .es-root .es-chat-options button:focus-visible,.es-root .es-composer[data-purpose=guided] .es-composer-send:focus-visible{outline-color:Highlight}
 }

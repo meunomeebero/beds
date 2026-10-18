@@ -40,15 +40,20 @@ export interface SelectProps {
   onChange: (value: string) => void;
   disabled?: boolean;
   icon?: IconName;
+  /** `input` (default) = the 44px pill that sits flush with TextField; `field` = the 36px row beside settings-density fields;
+   *  `compact` = the 32px toolbar pill (sm button height); `filter` = the 40px bordered toolbar pill; `context` = inline context switch. */
   variant?: "compact" | "field" | "input" | "context" | "filter";
 }
+
+/** Trigger radius per variant: pills match the button family, rows match settings fields. */
+const TRIGGER_RADIUS: Record<NonNullable<SelectProps["variant"]>, number> = { input: 22, compact: 16, filter: 20, field: 8, context: 8 };
 
 /**
  * BEDS Select with beUI's measured entry and chevron motion adapted to the
  * existing controlled API, native manual popover and fixed BEDS geometry.
  * Search, filtering policy and option data remain caller-owned.
  */
-export function Select({ label, value, options, onChange, disabled, icon, variant = "compact" }: SelectProps) {
+export function Select({ label, value, options, onChange, disabled, icon, variant = "input" }: SelectProps) {
   const id = useId();
   const anchor = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
@@ -136,10 +141,10 @@ export function Select({ label, value, options, onChange, disabled, icon, varian
       }}
       initial={false}
       animate={{
-        borderTopLeftRadius: variant === "compact" ? 6 : variant === "input" ? 22 : 8,
-        borderTopRightRadius: variant === "compact" ? 6 : variant === "input" ? 22 : 8,
-        borderBottomLeftRadius: variant === "compact" ? 6 : variant === "input" ? 22 : 8,
-        borderBottomRightRadius: variant === "compact" ? 6 : variant === "input" ? 22 : 8,
+        borderTopLeftRadius: TRIGGER_RADIUS[variant],
+        borderTopRightRadius: TRIGGER_RADIUS[variant],
+        borderBottomLeftRadius: TRIGGER_RADIUS[variant],
+        borderBottomRightRadius: TRIGGER_RADIUS[variant],
       }}
       transition={reduce ? INSTANT_TRANSITION : { duration: 0.18, ease: EASE_OUT }}
     >

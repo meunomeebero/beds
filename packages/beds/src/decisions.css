@@ -10,7 +10,6 @@
 .es-root .es-decision-status[data-state=success] > .es-icon { color: var(--es-badge-success-marker); }
 .es-root .es-decision-status[data-state=error] > .es-icon, .es-root .es-decision-status[data-state=denied] > .es-icon { color: var(--es-badge-error-marker); }
 .es-root .es-decision-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--es-space-4); min-width: 0; }
-.es-root .es-decision-actions > .es-button { height: auto; min-height: 40px; padding: 10px 16px; border-radius: var(--es-radius-full); font: 400 14px/20px var(--es-font); white-space: normal; }
 .es-root .es-decision-actions[data-alternative] > .es-button:last-child { margin-inline-start: auto; }
 .es-root .es-decision-details { display: grid; gap: var(--es-space-4); min-width: 0; margin: 0; padding: var(--es-space-6); border-radius: var(--es-radius-8); background: var(--es-subtle); }
 .es-root .es-decision-details > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--es-space-2) var(--es-space-8); min-width: 0; color: var(--es-secondary); font: 400 14px/21px var(--es-font); }
@@ -24,5 +23,4 @@
 .es-root .es-question-form { display: grid; gap: var(--es-space-8); min-width: 0; }
 .es-root .es-question-form [role="alert"] { color: var(--es-text); line-height: 20px; }
 .es-root .es-question-form [role="alert"] > svg { color: var(--es-badge-error-marker); }
-@media (max-width: 767px) { .es-root .es-decision-actions > .es-button { min-height: 44px; } }
 @media (forced-colors: active) { .es-root .es-decision-status { outline: 1px solid CanvasText; } }

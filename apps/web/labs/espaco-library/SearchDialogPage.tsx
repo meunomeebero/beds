@@ -41,7 +41,7 @@ export default function SearchDialogPage() {
         <PageHeader title="Busca global" leading={<Icon name="Search" purpose="feature" />} description="Currículos e vagas no mesmo lugar. Exemplo com dados fictícios." />
         <Stack><Inline><Button label="Buscar currículos ou vagas" icon="Search" onClick={() => setOpen(true)} /><ThemeToggle lightLabel="Claro" darkLabel="Escuro" /></Inline>
           <Text tone="secondary">Abra a busca ou use ⌘ K / Ctrl K. A busca e os detalhes são locais; nenhum arquivo é enviado.</Text>
-          <Select label="Estado da demonstração" value={example} onChange={setExample} options={[
+          <Select variant="compact" label="Estado da demonstração" value={example} onChange={setExample} options={[
             { id: 'ready', label: 'Resultados' }, { id: 'loading', label: 'Carregando' }, { id: 'error', label: 'Erro recuperável' }, { id: 'empty', label: 'Sem dados' }, { id: 'long', label: 'Texto longo' }, { id: 'manual', label: 'Resultados externos simulados' },
           ]} />
         </Stack>

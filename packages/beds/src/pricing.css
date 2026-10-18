@@ -18,17 +18,15 @@
 .es-root .es-pricing-benefits li > .es-icon { flex:none; margin-top:2.5px; }
 .es-root .es-pricing-benefits li > span { min-width:0; overflow-wrap:anywhere; }
 .es-root .es-pricing-footer { display:grid; gap:var(--es-space-4); margin-top:auto; padding-top:var(--es-space-11); min-width:0; }
-.es-root .es-pricing-footer > .es-button { width:100%; min-height:40px; height:auto; padding:10px 16px; border-radius:var(--es-radius-full); font:400 14px/20px var(--es-font); white-space:normal; }
-.es-root .es-pricing-card[data-featured] .es-pricing-footer > .es-button { background:var(--es-brand); color:var(--es-on-brand); }
+/* One action per card, full width: the featured plan gets the neutral primary pill, the others the outline pill (no brand-filled buttons). */
+.es-root .es-pricing-footer > .es-button { width:100%; }
 .es-root .es-pricing-feedback { margin:0; color:var(--es-text); font:400 13px/20px var(--es-font); overflow-wrap:anywhere; }
 .es-root .es-pricing-feedback:empty { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
-.es-root .es-pricing-link { display:flex; align-items:center; justify-content:center; width:100%; min-height:44px; padding:10px 16px; border-radius:var(--es-radius-full); background:var(--es-control); color:var(--es-text); font:400 14px/20px var(--es-font); text-align:center; text-decoration:none; overflow-wrap:anywhere; }
-.es-root .es-pricing-card[data-featured] .es-pricing-link { background:var(--es-brand); color:var(--es-on-brand); }
+.es-root .es-pricing-link { display:flex; align-items:center; justify-content:center; width:100%; min-height:40px; padding:9px 20px; border:1px solid var(--es-border); border-radius:var(--es-radius-full); background:var(--es-transparent); color:var(--es-heading); font:500 14px/20px var(--es-font); text-align:center; text-decoration:none; overflow-wrap:anywhere; }
+.es-root .es-pricing-card[data-featured] .es-pricing-link { border-color:var(--es-primary); background:var(--es-primary); color:var(--es-on-primary); }
+@media(pointer:coarse) { .es-root .es-pricing-link { min-height:44px; } }
 .es-root .es-pricing-link:focus-visible { outline:2px solid var(--es-focus); outline-offset:3px; }
-.es-root .es-pricing-link:active { box-shadow:inset 0 0 0 2px currentColor; }
-@media(hover:hover) and (pointer:fine) { .es-root .es-pricing-link:hover { box-shadow:inset 0 0 0 1px currentColor; } }
+@media(hover:hover) and (pointer:fine) { .es-root .es-pricing-card:not([data-featured]) .es-pricing-link:hover { background:var(--es-hover-soft); } }
 @media(forced-colors:active) { .es-root .es-pricing-link { outline:1px solid CanvasText; } .es-root .es-pricing-link:focus-visible { outline:2px solid Highlight; } }
-@media(hover:hover) and (pointer:fine) { .es-root .es-pricing-card[data-featured] .es-pricing-footer > .es-button:not(:disabled):hover { background:var(--es-brand); color:var(--es-on-brand); box-shadow:inset 0 0 0 1px var(--es-on-brand); } }
-.es-root .es-pricing-card[data-featured] .es-pricing-footer > .es-button:not(:disabled):active { background:var(--es-brand); color:var(--es-on-brand); box-shadow:inset 0 0 0 2px var(--es-on-brand); }
-@media(max-width:767px) { .es-root .es-pricing-card { min-height:0; } .es-root .es-pricing-footer > .es-button { min-height:44px; }  }
+@media(max-width:767px) { .es-root .es-pricing-card { min-height:0; } }
 @media(forced-colors:active) { .es-root .es-pricing-card,.es-root .es-pricing-footer > .es-button { outline:1px solid CanvasText; } .es-root .es-pricing-footer > .es-button:focus-visible { outline:2px solid Highlight; } }

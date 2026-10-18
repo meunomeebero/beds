@@ -28,19 +28,18 @@
 .es-root .es-file-dropzone[data-disabled]{opacity:.5}
 .es-root .es-file-dropzone>svg{color:var(--es-secondary)}
 .es-root .es-file-dropzone>p{margin:0;color:inherit;font:400 13px/19.5px var(--es-font);overflow-wrap:anywhere}
-.es-root .es-file-upload-browse{min-height:32px;padding:8px 10px;border:0;border-radius:8px;background:var(--es-control);color:var(--es-text);font:500 13px/16px var(--es-font);letter-spacing:-.1px;cursor:pointer}
+/* Browse = the shared secondary pill (sm 32px here, md 40px in the document purpose); remove = the quiet round ×. */
+.es-root .es-file-upload-browse{min-height:32px;padding:6px 12px;border:1px solid var(--es-border);border-radius:var(--es-radius-full);background:var(--es-surface);color:var(--es-heading);font:500 12px/16px var(--es-font);letter-spacing:0;cursor:pointer}
 .es-root .es-file-upload-browse:disabled{cursor:default}
-.es-root .es-file-upload-browse:not(:disabled):active{background:var(--es-pressed)}
 .es-root .es-file-upload-browse:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
 .es-root .es-file-upload-list{display:grid;gap:4px;padding:0;margin:0;list-style:none}
 .es-root .es-file-upload-list>li{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0;padding:6px 8px;border-radius:6px;background:var(--es-subtle);color:var(--es-text);font:400 12px/18px var(--es-font)}
 .es-root .es-file-upload-list>li>span{min-width:0;overflow-wrap:anywhere}
-.es-root .es-file-upload-list button{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:24px;height:24px;padding:0;border:0;border-radius:6px;background:transparent;color:var(--es-secondary);cursor:pointer}
+.es-root .es-file-upload-list button{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:24px;height:24px;padding:0;border:0;border-radius:var(--es-radius-full);background:transparent;color:var(--es-secondary);cursor:pointer}
 .es-root .es-file-upload-list button:disabled{cursor:default}
 @media(max-width:767px){.es-root .es-file-upload-browse{min-block-size:44px}.es-root .es-file-upload-list button{inline-size:44px;block-size:44px}}
-.es-root .es-file-upload-list button:not(:disabled):active{background:var(--es-pressed);color:var(--es-text)}
 .es-root .es-file-upload-list button:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
-@media(hover:hover) and (pointer:fine){.es-root .es-file-upload-browse:not(:disabled):hover{background:var(--es-hover);color:var(--es-text)}.es-root .es-file-upload-list button:not(:disabled):hover{background:var(--es-hover);color:var(--es-text)}}
+@media(hover:hover) and (pointer:fine){.es-root .es-file-upload-list button:not(:disabled):hover{background:var(--es-remove-hover);color:var(--es-heading)}}
 .es-root .es-file-upload-status{margin:0;color:var(--es-secondary);font:400 13px/20px var(--es-font);overflow-wrap:anywhere}
 .es-root .es-file-upload-status:empty{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
 
@@ -50,7 +49,7 @@
 .es-root .es-file-upload[data-purpose=document] .es-file-dropzone[data-dragging]{border:2px dashed var(--es-focus);padding:39px 23px;background:var(--es-hover)}
 .es-root .es-file-upload[data-purpose=document] .es-file-dropzone>h2{margin:0;max-width:28ch;color:var(--es-heading);font:500 22px/30px var(--es-font);letter-spacing:-.25px;text-wrap:balance;overflow-wrap:anywhere}
 .es-root .es-file-upload[data-purpose=document] .es-file-dropzone>p{max-width:42ch;font:400 14px/22px var(--es-font);text-wrap:pretty}
-.es-root .es-file-upload[data-purpose=document] .es-file-upload-browse{margin-block-start:12px;min-height:40px;max-width:100%;padding:10px 18px;border-radius:var(--es-radius-full);background:var(--es-control);font:500 14px/20px var(--es-font);overflow-wrap:anywhere}
+.es-root .es-file-upload[data-purpose=document] .es-file-upload-browse{margin-block-start:12px;min-height:40px;max-width:100%;padding:9px 20px;border-radius:var(--es-radius-full);font:500 14px/20px var(--es-font);overflow-wrap:anywhere}
 .es-root .es-file-upload[data-purpose=document] .es-file-dropzone>.es-file-formats{font:400 12px/18px var(--es-font)}
 .es-root .es-file-upload[data-purpose=document] .es-file-upload-list{gap:8px}
 .es-root .es-file-upload[data-purpose=document] .es-file-upload-list>li{padding:8px 12px;gap:12px;border:1px solid var(--es-border);border-radius:var(--es-radius-14);background:var(--es-transparent);font:400 14px/21px var(--es-font)}
@@ -69,8 +68,6 @@
 .es-root .es-document-lines>i:nth-child(2){width:80%}
 .es-root .es-document-lines>i:nth-child(3){width:54%}
 .es-root .es-document-format{padding:3px 7px;border-radius:var(--es-radius-full);background:var(--es-surface);font:500 12px/16px var(--es-font);white-space:nowrap}
-@media(hover:hover) and (pointer:fine){.es-root .es-file-upload[data-purpose=document] .es-file-upload-browse:not(:disabled):hover{background:var(--es-hover)}}
-.es-root .es-file-upload[data-purpose=document] .es-file-upload-browse:not(:disabled):active{background:var(--es-pressed)}
 @media(max-width:767px){
   .es-root .es-file-upload[data-purpose=document] .es-file-dropzone{min-height:420px;padding:32px 16px}
   .es-root .es-file-upload[data-purpose=document] .es-file-dropzone[data-dragging]{padding:31px 15px}

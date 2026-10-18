@@ -47,8 +47,6 @@
   overflow-wrap: anywhere;
 }
 .es-root .es-empty-state-card-action { margin-top: var(--es-space-4); max-width: 100%; }
-.es-root .es-empty-state-card-action > .es-button { min-width: 0; max-width: 100%; min-height: 40px; height: auto; white-space: normal; }
-.es-root .es-empty-state-card-action > .es-button > span { min-width: 0; overflow-wrap: anywhere; }
 .es-root .es-empty-state-card-media {
   position: relative;
   width: 100%;
@@ -61,7 +59,6 @@
 .es-root .es-empty-state-card-media > img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .es-root .es-empty-state-card-media[data-state=loading] > img { opacity: 0; }
 .es-root .es-empty-state-card-fallback { display: flex; align-items: center; justify-content: center; height: 100%; padding: 16px; overflow: auto; color: var(--es-secondary); font: 400 13px/20px var(--es-font); text-align: center; overflow-wrap: anywhere; }
-@media (max-width: 767px) { .es-root .es-empty-state-card-action > .es-button { min-height: 44px; } }
 @media (forced-colors: active) {
   .es-root .es-empty-state-card, .es-root .es-empty-state-card-icon { outline: 1px solid CanvasText; outline-offset: -1px; }
 }
@@ -82,8 +79,6 @@
 .es-root .es-empty-folder-legs { fill: none; stroke: var(--es-secondary); stroke-width: .8; stroke-linecap: round; }
 .es-root .es-empty-folder-wings { fill: var(--es-surface); stroke: var(--es-secondary); stroke-width: .5; transform-box: fill-box; transform-origin: center; }
 .es-root .es-empty-folder-playback { display: none; justify-content: center; padding: var(--es-space-2) var(--es-space-4) var(--es-space-4); }
-.es-root .es-empty-folder-playback .es-button { min-height: 32px; height: auto; color: var(--es-secondary); font: 400 12px/18px var(--es-font); }
-.es-root .es-empty-folder-playback .es-button:is(:hover,:active) { color: var(--es-text); }
 @media (prefers-reduced-motion: no-preference) {
   .es-root .es-empty-folder-playback { display: flex; }
   .es-root .es-empty-folder-fly { animation: es-empty-folder-flight-one 7.8s cubic-bezier(.45,0,.55,1) infinite; }
@@ -111,7 +106,6 @@
   75% { transform: translate(-24px,3px) rotate(24deg); }
 }
 @keyframes es-empty-folder-wings { from { transform: scaleY(.72); } to { transform: scaleY(1); } }
-@media (max-width: 767px), (pointer: coarse) { .es-root .es-empty-folder-playback .es-button { min-height: 44px; } }
 @media (forced-colors: active) {
   .es-root .es-empty-folder-art { display: none; }
   .es-root .es-empty-folder-playback { display: none; }

@@ -361,7 +361,7 @@ export function Drawer({ open, onOpenChange, title, description, children, actio
     }
     return () => observer.disconnect();
   }, [present, children]);
-  return <motion.dialog ref={dialog} className="es-drawer fixed inset-y-0 [inset-inline-start:auto] [inset-inline-end:0] z-50 [&:not([open])]:hidden flex w-[min(var(--es-command-width),100%)] max-w-full h-full max-h-full m-0 p-0 border-0 [border-inline-start:1px_solid_var(--es-border)] rounded-none flex-col overflow-hidden overscroll-contain bg-card text-card-foreground shadow-[var(--es-shadow-dialog)] [font:400_14px/1.5_var(--es-font)] max-[767px]:w-full max-[767px]:[border-inline-start:0] [&_button]:min-h-10 [&_button]:max-w-full [&_button]:h-auto [&_button]:whitespace-normal [&_button]:[overflow-wrap:anywhere] [&_button>span]:min-w-0 [&_button>span]:whitespace-normal [&_button>span]:[overflow-wrap:anywhere] max-[767px]:[&_button]:min-h-11 max-[767px]:[&_button]:min-w-11 pointer-coarse:[&_button]:min-h-11 pointer-coarse:[&_button]:min-w-11" aria-labelledby={`${id}-title`} aria-modal="true"
+  return <motion.dialog ref={dialog} className="es-drawer fixed inset-y-0 [inset-inline-start:auto] [inset-inline-end:0] z-50 [&:not([open])]:hidden flex w-[min(var(--es-command-width),100%)] max-w-full h-full max-h-full m-0 p-0 border-0 [border-inline-start:1px_solid_var(--es-border)] rounded-none flex-col overflow-hidden overscroll-contain bg-card text-card-foreground shadow-[var(--es-shadow-dialog)] [font:400_14px/1.5_var(--es-font)] max-[767px]:w-full max-[767px]:[border-inline-start:0]" aria-labelledby={`${id}-title`} aria-modal="true"
     aria-describedby={description ? `${id}-description` : undefined}
     inert={!open}
     {...drawerMotion(open, reduce, motionPreset, offscreen)}
@@ -383,7 +383,7 @@ export function Drawer({ open, onOpenChange, title, description, children, actio
     <div ref={body} className="es-drawer-body flex-1 min-h-0 overflow-auto overscroll-contain scroll-py-6 p-6 pb-[max(24px,env(safe-area-inset-bottom))] focus-visible:outline-2 focus-visible:outline-[var(--es-focus)] focus-visible:outline-offset-[-4px] max-[767px]:px-[max(16px,env(safe-area-inset-left),env(safe-area-inset-right))]" role="region" aria-label={contentLabel} tabIndex={overflow ? 0 : undefined}>
       <div className="es-drawer-content min-w-0 [overflow-wrap:anywhere]">{children}</div>
     </div>
-    {actions && <footer className="es-drawer-actions flex items-center justify-end flex-wrap gap-2 flex-none max-h-[35%] overflow-auto p-4 px-6 pb-[max(16px,env(safe-area-inset-bottom))] border-t border-[var(--es-border-subtle)] max-[767px]:px-[max(16px,env(safe-area-inset-left),env(safe-area-inset-right))]">{actions}</footer>}
+    {actions && <footer className="es-drawer-actions flex items-center justify-end flex-wrap gap-2 flex-none max-h-[35%] overflow-auto p-4 px-6 pb-[max(16px,env(safe-area-inset-bottom))] border-t border-[var(--es-border-subtle)] max-[767px]:px-[max(16px,env(safe-area-inset-left),env(safe-area-inset-right))] max-[480px]:flex-col-reverse max-[480px]:items-stretch">{actions}</footer>}
   </motion.dialog>;
 }
 

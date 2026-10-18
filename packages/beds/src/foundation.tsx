@@ -21,21 +21,22 @@ export function useDesignSystem() {
  * `brandColor` is required: every product picks one deliberate contrast color
  * (FOUNDATIONS.md, "Contrast color — mandatory choice") and records why in its AGENTS.md.
  *
- * `fieldBorder` is an explicit, product-level opt-in. `default` keeps the
- * functional-contrast boundary (`--es-control-border`) on every text-entry
- * control. `soft` gives fields, text areas, selects, OTP slots and the file
- * dropzone the structural card border (`--es-border`) instead; the field is
- * then identified by its label, fill, placeholder and focus ring rather than
- * by a high-contrast outline. Checkbox, radio and switch marks always keep the
- * functional boundary. Choose it knowingly and record why in the product's AGENTS.md.
+ * `fieldBorder` sets the boundary of text-entry controls (fields, text areas,
+ * selects, OTP slots, file dropzone). `soft`, the default, draws the structural
+ * card border (`--es-border`): the field reads through its label, fill,
+ * placeholder and the soft focus ring, never a heavy outline. `strong` restores
+ * the 3:1 functional-contrast outline (`--es-control-border`) for products that
+ * need it; `default` is kept as a deprecated alias of `strong` for consumers
+ * written before 0.3. Checkbox, radio and switch marks always keep the
+ * functional boundary.
  */
-export function DesignSystemProvider({ children, theme, brandColor, fieldBorder = 'default', onThemeChange }: {
-  children: ReactNode; theme: Theme; brandColor: string; fieldBorder?: 'default' | 'soft'; onThemeChange?: (theme: Theme) => void;
+export function DesignSystemProvider({ children, theme, brandColor, fieldBorder = 'soft', onThemeChange }: {
+  children: ReactNode; theme: Theme; brandColor: string; fieldBorder?: 'soft' | 'strong' | 'default'; onThemeChange?: (theme: Theme) => void;
 }) {
   if (!brandColor) throw new Error('brandColor is required: choose this product\'s contrast color (FOUNDATIONS.md, "Contrast color — mandatory choice").');
   if (!/^#[0-9a-f]{6}$/i.test(brandColor)) throw new Error('brandColor must be one six-digit hex color.');
   if (theme !== 'light' && theme !== 'dark') throw new Error('theme must be light or dark.');
-  if (fieldBorder !== 'default' && fieldBorder !== 'soft') throw new Error('fieldBorder must be default or soft.');
+  if (fieldBorder !== 'soft' && fieldBorder !== 'strong' && fieldBorder !== 'default') throw new Error('fieldBorder must be soft or strong.');
   const root = useRef<HTMLDivElement>(null);
   const previousTheme = useRef(theme);
   useLayoutEffect(() => {
@@ -49,7 +50,7 @@ export function DesignSystemProvider({ children, theme, brandColor, fieldBorder 
   const luminance = rgb[0] * .2126 + rgb[1] * .7152 + rgb[2] * .0722;
   const onBrand = luminance > .179 ? '#000000' : '#ffffff';
   const style = { '--es-brand': brandColor, '--es-on-brand': onBrand } as CSSProperties;
-  return <Context.Provider value={{ theme, brandColor, onThemeChange }}><div ref={root} className="es-root" data-theme={theme} data-field-border={fieldBorder === 'soft' ? 'soft' : undefined} style={style}>{children}</div></Context.Provider>;
+  return <Context.Provider value={{ theme, brandColor, onThemeChange }}><div ref={root} className="es-root" data-theme={theme} data-field-border={fieldBorder === 'soft' ? undefined : 'strong'} style={style}>{children}</div></Context.Provider>;
 }
 
 export function Icon({ name, purpose = 'navigation' }: { name: IconName; purpose?: 'navigation' | 'action' | 'small' | 'feature' }) {

@@ -80,8 +80,8 @@ test('page-inset composition is absent while generic heading remains usable', ()
   }
   const css = readFileSync(new URL('dist/styles.css', root), 'utf8');
   assert.doesNotMatch(css, /\.(?:es|recipe)-page-content-header/);
-  assert.match(css, /\.es-page-header h1,/);
-  assert.match(css, /\.es-page-header p,/);
+  assert.match(css, /\.es-page-header h1\{/);
+  assert.match(css, /\.es-page-header p\{/);
 });
 
 test('guided chat page and focus policy are not public component behavior', () => {

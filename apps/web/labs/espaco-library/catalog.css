@@ -12,3 +12,4 @@
 .esl-table td,.esl-table thead{color:var(--es-secondary)}
 @media(max-width:1023px){.esl-demo-grid{grid-template-columns:minmax(0,1fr)}.esl-swatches{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:767px){.esl-swatches{grid-template-columns:repeat(2,minmax(0,1fr))}.esl-table{font-size:11px}.esl-table th,.esl-table td{padding-right:6px}}
+.esl-chip-list{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}

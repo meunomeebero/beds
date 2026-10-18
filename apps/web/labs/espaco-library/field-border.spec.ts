@@ -1,9 +1,9 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
 /**
- * `DesignSystemProvider fieldBorder`: `default` keeps the functional-contrast boundary on every
- * text-entry control; `soft` gives them the structural card border instead. Marks (checkbox,
- * switch, radio) always keep the functional boundary, and focus / error stay legible.
+ * `DesignSystemProvider fieldBorder`: `soft` (default since 0.3, the Curriculol pattern) gives every
+ * text-entry control the structural card border; `strong` restores the functional-contrast outline.
+ * Marks (checkbox, switch, radio) always keep the functional boundary, and focus / error stay legible.
  */
 
 /** Computed colour of `--es-border` (structural) and `--es-control-border` (functional) in the page's theme. */
@@ -34,19 +34,9 @@ function textEntry(page: Page) {
 }
 
 for (const theme of ['light', 'dark'] as const) {
-  test(`default keeps the functional border on every text-entry control in ${theme}`, async ({ page }) => {
+  test(`soft is the default text-entry border and marks keep the functional one in ${theme}`, async ({ page }) => {
     await page.goto(`/?view=components&theme=${theme}`);
-    await expect(page.locator('.es-root')).not.toHaveAttribute('data-field-border', /.+/);
-    const { strong, soft } = await tokens(page);
-    expect(strong).not.toBe(soft);
-    for (const [name, locator] of Object.entries(textEntry(page))) {
-      expect(await border(locator), name).toBe(strong);
-    }
-  });
-
-  test(`soft gives text-entry controls the card border but marks keep the functional one in ${theme}`, async ({ page }) => {
-    await page.goto(`/?view=components&theme=${theme}&fieldBorder=soft`);
-    await expect(page.locator('.es-root').first()).toHaveAttribute('data-field-border', 'soft');
+    await expect(page.locator('.es-root').first()).not.toHaveAttribute('data-field-border', /.+/);
     const { strong, soft } = await tokens(page);
     expect(soft).not.toBe(strong);
     for (const [name, locator] of Object.entries(textEntry(page))) {
@@ -58,15 +48,24 @@ for (const theme of ['light', 'dark'] as const) {
     expect(await border(page.locator('[role="switch"] + span').first()), 'switch').toBe(strong);
   });
 
+  test(`strong restores the functional border on every text-entry control in ${theme}`, async ({ page }) => {
+    await page.goto(`/?view=components&theme=${theme}&fieldBorder=strong`);
+    await expect(page.locator('.es-root').first()).toHaveAttribute('data-field-border', 'strong');
+    const { strong } = await tokens(page);
+    for (const [name, locator] of Object.entries(textEntry(page))) {
+      expect(await border(locator), name).toBe(strong);
+    }
+  });
+
   test(`soft fields still show focus and error clearly in ${theme}`, async ({ page }) => {
-    await page.goto(`/?view=components&theme=${theme}&fieldBorder=soft`);
+    await page.goto(`/?view=components&theme=${theme}`);
     const { soft } = await tokens(page);
     const { field } = textEntry(page);
     await field.focus();
     await page.keyboard.press('Tab');
     await field.focus();
     expect(await border(field), 'focus-visible border').not.toBe(soft);
-    await expect(field).toHaveCSS('box-shadow', /rgba?\(.+\) 0px 0px 0px 3px/);
+    await expect(field).toHaveCSS('box-shadow', /rgba?\(.+\) 0px 0px 0px 2px/);
     await field.fill('erro');
     await expect(field).toHaveAttribute('aria-invalid', 'true');
     await page.locator('body').click({ position: { x: 4, y: 4 } });
@@ -78,15 +77,15 @@ for (const theme of ['light', 'dark'] as const) {
     for (const [query, selector] of [['view=otp', '.es-otp-slot'], ['view=upload&purpose=default', '.es-file-dropzone']] as const) {
       await page.goto(`/?${query}&theme=${theme}`);
       const base = await tokens(page);
-      expect(await border(page.locator(selector).first()), `${query} default`).toBe(base.strong);
-      await page.goto(`/?${query}&theme=${theme}&fieldBorder=soft`);
-      const soft = await tokens(page);
-      expect(await border(page.locator(selector).first()), `${query} soft`).toBe(soft.soft);
+      expect(await border(page.locator(selector).first()), `${query} soft`).toBe(base.soft);
+      await page.goto(`/?${query}&theme=${theme}&fieldBorder=strong`);
+      const strong = await tokens(page);
+      expect(await border(page.locator(selector).first()), `${query} strong`).toBe(strong.strong);
     }
   });
 
   test(`the document dropzone keeps its structural border in both modes in ${theme}`, async ({ page }) => {
-    for (const suffix of ['', '&fieldBorder=soft']) {
+    for (const suffix of ['', '&fieldBorder=strong']) {
       await page.goto(`/?view=upload&theme=${theme}${suffix}`);
       const { soft } = await tokens(page);
       expect(await border(page.locator('.es-file-dropzone').first()), `document${suffix}`).toBe(soft);

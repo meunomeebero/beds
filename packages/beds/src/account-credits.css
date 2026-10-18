@@ -9,9 +9,8 @@
 .es-account-credits-label bdi { color: var(--es-text); font-variant-numeric: tabular-nums; }
 .es-account-credits-status,.es-account-credits-note { margin: 0; color: var(--es-secondary); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
 .es-account-credits-status[role="alert"]:not(:empty) { color: var(--es-text); border-inline-start: 2px solid var(--es-badge-error-marker); padding-inline-start: var(--es-space-4); }
-.es-root .es-account-credits > .es-button { width: 100%; min-height: 36px; border-radius: var(--es-radius-6); font-size: 13px; line-height: 1.5; }
+.es-root .es-account-credits > .es-button { width: 100%; }
 @media (max-width: 767px), (pointer: coarse) {
-  .es-root .es-account-credits > .es-button { min-height: 44px; }
 }
 @media (forced-colors: active) {
   .es-account-credits { border-color: CanvasText; }

@@ -9,6 +9,3 @@
 .es-root .es-feature-card-copy>h2{margin:0;color:var(--es-heading);font:600 18px/24px var(--es-font);letter-spacing:-.15px;text-wrap:balance;overflow-wrap:anywhere}
 .es-root .es-feature-card-copy>p{margin:0;color:var(--es-secondary);font:400 14px/22px var(--es-font);text-wrap:pretty;overflow-wrap:anywhere}
 .es-root .es-feature-card-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px;min-width:0}
-.es-root .es-feature-card-actions>.es-button{min-width:0;max-width:100%;white-space:normal;height:auto;min-height:40px}
-.es-root .es-feature-card-actions>.es-button>span{min-width:0;overflow-wrap:anywhere}
-@media(max-width:767px){.es-root .es-feature-card-actions>.es-button{min-height:44px}}

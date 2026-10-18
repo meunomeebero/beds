@@ -44,7 +44,7 @@ export default function ForumTopicPage() {
         <Stack>
           <Text variant="section-title">Testar os cards</Text>
           <Text tone="secondary">Pessoas, conversas e contagens fictícias. Abrir um tópico não publica nem envia mensagens.</Text>
-          <Inline align="between"><Select label="Estado do exemplo" value={example} onChange={updateExample} options={[
+          <Inline align="between"><Select variant="compact" label="Estado do exemplo" value={example} onChange={updateExample} options={[
             { id: 'ready', label: 'Conversas' }, { id: 'long', label: 'Texto longo' }, { id: 'image-error', label: 'Avatar indisponível' },
             { id: 'loading', label: 'Carregando' }, { id: 'empty', label: 'Vazio' }, { id: 'error', label: 'Erro recuperável' },
           ]} /><Button label="Restaurar exemplos" variant="ghost" onClick={() => { updateExample('ready'); setSelected(''); setRead([]); }} /></Inline>

@@ -10,11 +10,12 @@
 .es-root .es-toast{flex-shrink:0}
 .es-root .es-toast-content{display:flex;min-width:0;flex:1 1 120px}
 .es-root .es-toast-message{display:block;min-width:0;flex:1 1 auto;overflow-wrap:anywhere}
-.es-root .es-toast-dismiss{display:grid;place-items:center;flex:none;width:32px;height:32px;padding:0;border:0;border-radius:var(--es-radius-full);background:var(--es-transparent);color:var(--es-secondary);cursor:pointer}
+.es-root .es-toast-dismiss{display:grid;place-items:center;flex:none;width:32px;height:32px;padding:0;border:0;border-radius:var(--es-radius-full);background:var(--es-transparent);color:var(--es-secondary);cursor:pointer;transition:background-color 150ms ease-out,color 150ms ease-out}
 .es-root .es-toast-dismiss:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
-.es-root .es-toast-action{flex:none;min-height:28px;padding:4px 12px;border:1px solid var(--es-border-subtle);border-radius:999px;background:var(--es-raised);color:var(--es-text);font:500 12px/18px var(--es-font);cursor:pointer}
+/* Toast action = the sm outline pill (32px, 12px medium); dismiss = the quiet round × shared with chips and notices. */
+.es-root .es-toast-action{flex:none;min-height:32px;padding:6px 12px;border:1px solid var(--es-border);border-radius:999px;background:var(--es-transparent);color:var(--es-heading);font:500 12px/16px var(--es-font);cursor:pointer;transition:background-color 150ms ease-out}
 .es-root .es-toast-action:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
-@media(hover:hover) and (pointer:fine){.es-root .es-toast-action:hover{border-color:var(--es-border-strong);background:var(--es-hover)}}
+@media(hover:hover) and (pointer:fine){.es-root .es-toast-action:hover{background:var(--es-hover-soft)}.es-root .es-toast-dismiss:hover{background:var(--es-remove-hover);color:var(--es-heading)}}
 @media(max-width:767px){.es-root .es-toast-region{top:12px;width:calc(100vw - 24px)}.es-root .es-toast{border-radius:16px;flex-wrap:wrap}.es-root .es-toast-message{flex:1 1 120px}.es-root .es-toast-action{min-height:44px}.es-root .es-toast-dismiss{width:44px;height:44px}}
-@media(prefers-reduced-motion:reduce){.es-root .es-toast{touch-action:auto}}
+@media(prefers-reduced-motion:reduce){.es-root .es-toast{touch-action:auto}.es-root :is(.es-toast-action,.es-toast-dismiss){transition:none}}
 @media(forced-colors:active){.es-root .es-toast{border-color:CanvasText}.es-root .es-toast-action{border-color:CanvasText;background:Canvas;color:CanvasText}.es-root .es-toast-dismiss:focus-visible,.es-root .es-toast-action:focus-visible{outline-color:Highlight}}

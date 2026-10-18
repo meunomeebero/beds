@@ -38,8 +38,8 @@ export default function ApplicationCardPage() {
       </ResponsiveGrid>
       <Stack>
         <Text variant="section-title">Testar o medidor</Text>
-        <Select label="Nota do exemplo" value={scoreValue} onChange={setScoreValue} options={['92', '0', '1', '29', '99', '100', '-1', '101', 'NaN'].map(value => ({ id: value, label: value === 'NaN' ? 'Inválida' : value }))} />
-        <Select label="Tipo da nota" value={scoreKind} onChange={value => setScoreKind(value === 'ats' ? 'ats' : value === 'fit' ? 'fit' : 'match')} options={[{ id: 'ats', label: 'ATS' }, { id: 'fit', label: 'FIT' }, { id: 'match', label: 'Compatibilidade' }]} />
+        <Select variant="compact" label="Nota do exemplo" value={scoreValue} onChange={setScoreValue} options={['92', '0', '1', '29', '99', '100', '-1', '101', 'NaN'].map(value => ({ id: value, label: value === 'NaN' ? 'Inválida' : value }))} />
+        <Select variant="compact" label="Tipo da nota" value={scoreKind} onChange={value => setScoreKind(value === 'ats' ? 'ats' : value === 'fit' ? 'fit' : 'match')} options={[{ id: 'ats', label: 'ATS' }, { id: 'fit', label: 'FIT' }, { id: 'match', label: 'Compatibilidade' }]} />
         <SegmentedMeter label="Medidor compartilhado" value={Number(scoreValue)} tone="brand" />
       </Stack>
       <Dialog open={Boolean(detail)} onOpenChange={value => { if (!value) setDetail(''); }} title={detail || 'Detalhes'}><Text>Exemplo local. Nenhum documento, cobrança ou envio real.</Text></Dialog>

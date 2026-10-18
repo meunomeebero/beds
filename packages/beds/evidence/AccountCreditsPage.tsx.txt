@@ -42,7 +42,7 @@ export default function AccountCreditsPage() {
         } }} />}
     /></SidebarHeader>}>
       <Stack gap="section"><PageHeader title="Créditos no menu do usuário" description="Abra o menu da Luísa para visualizar o componente." />
-        <Stack><Select label="Estado do saldo" value={scenario} onChange={scenarioChange} options={[{ id: 'ready', label: 'Com saldo' }, { id: 'zero', label: 'Saldo zero' }, { id: 'no-limit', label: 'Sem limite informado' }, { id: 'loading', label: 'Carregando' }, { id: 'unavailable', label: 'Indisponível' }, { id: 'error', label: 'Erro com recuperação' }, { id: 'invalid', label: 'Dado inválido' }, { id: 'long', label: 'Conteúdo longo' }]} />
+        <Stack><Select variant="compact" label="Estado do saldo" value={scenario} onChange={scenarioChange} options={[{ id: 'ready', label: 'Com saldo' }, { id: 'zero', label: 'Saldo zero' }, { id: 'no-limit', label: 'Sem limite informado' }, { id: 'loading', label: 'Carregando' }, { id: 'unavailable', label: 'Indisponível' }, { id: 'error', label: 'Erro com recuperação' }, { id: 'invalid', label: 'Dado inválido' }, { id: 'long', label: 'Conteúdo longo' }]} />
         <Text variant="body-small" tone="secondary">Saldo, limite e plano fictícios. Sem pagamentos ou integração com a conta real.</Text><ResultsStatus>{message}</ResultsStatus></Stack>
       </Stack>
     </AppShell>

@@ -25,8 +25,8 @@ export default function FeatureCardExamples() {
       <Stack>
         <Text variant="section-title">Experimente os estados</Text>
         <Text tone="secondary">Conteúdo e ações são configuráveis. Tipografia, cores, cantos e espaçamento pertencem ao DS.</Text>
-        <Select label="Imagem do exemplo" value={imageState} onChange={setImageState} options={[{ id: 'ready', label: 'Imagem disponível' }, { id: 'broken', label: 'Falha ao carregar' }, { id: 'empty', label: 'Sem arquivo' }]} />
-        <Select label="Ação principal" value={actionState} onChange={setActionState} options={[{ id: 'ready', label: 'Disponível' }, { id: 'busy', label: 'Em espera' }, { id: 'disabled', label: 'Desabilitada' }]} />
+        <Select variant="compact" label="Imagem do exemplo" value={imageState} onChange={setImageState} options={[{ id: 'ready', label: 'Imagem disponível' }, { id: 'broken', label: 'Falha ao carregar' }, { id: 'empty', label: 'Sem arquivo' }]} />
+        <Select variant="compact" label="Ação principal" value={actionState} onChange={setActionState} options={[{ id: 'ready', label: 'Disponível' }, { id: 'busy', label: 'Em espera' }, { id: 'disabled', label: 'Desabilitada' }]} />
         <Switch label="Mostrar ação secundária" checked={secondary} onChange={setSecondary} />
         <Switch label="Testar texto longo" checked={longCopy} onChange={setLongCopy} />
         <Switch label="Imagem apenas decorativa" checked={decorative} onChange={setDecorative} />

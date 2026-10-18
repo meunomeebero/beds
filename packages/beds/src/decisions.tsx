@@ -28,9 +28,9 @@ export type DecisionActionsProps = {
 /** Explicit choices only. No permission persistence, request or automatic success. */
 export function DecisionActions({ primary, secondary, alternative, disabled }: DecisionActionsProps) {
   return <div className="es-decision-actions" data-alternative={Boolean(alternative && secondary) || undefined}>
-    <Button label={primary.label} onClick={primary.onClick} disabled={disabled || primary.disabled} variant="primary" purpose="welcome" />
-    {alternative && <Button label={alternative.label} onClick={alternative.onClick} disabled={disabled || alternative.disabled} purpose="welcome" />}
-    {secondary && <Button label={secondary.label} onClick={secondary.onClick} disabled={disabled || secondary.disabled} purpose="welcome" />}
+    <Button label={primary.label} onClick={primary.onClick} disabled={disabled || primary.disabled} variant="primary" />
+    {alternative && <Button label={alternative.label} onClick={alternative.onClick} disabled={disabled || alternative.disabled} />}
+    {secondary && <Button label={secondary.label} onClick={secondary.onClick} disabled={disabled || secondary.disabled} />}
   </div>;
 }
 
@@ -96,8 +96,8 @@ export function QuestionCard({ title, description, status, feedback, options, va
     <form ref={form} className="es-question-form" aria-label={title} tabIndex={-1} noValidate onSubmit={event => { event.preventDefault(); if (!locked) onConfirm(selected?.id ?? null); }}>
       <RadioGroup label={title} purpose="question" value={selected?.id ?? ''} options={options} onChange={onChange} error={error} disabled={locked} />
       <div className="es-decision-actions">
-        <Button label={confirmLabel} type="submit" disabled={locked} variant="primary" purpose="welcome" />
-        {skipAction && <Button label={skipAction.label} onClick={skipAction.onClick} disabled={locked || skipAction.disabled} purpose="welcome" />}
+        <Button label={confirmLabel} type="submit" disabled={locked} variant="primary" />
+        {skipAction && <Button label={skipAction.label} onClick={skipAction.onClick} disabled={locked || skipAction.disabled} />}
       </div>
     </form>
   </DecisionFrame>;

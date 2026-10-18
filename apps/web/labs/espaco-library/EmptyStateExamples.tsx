@@ -37,12 +37,12 @@ export default function EmptyStateExamples() {
         />}
     <Stack>
       <Inline align="between">
-        <Select label="Situação" value={example} onChange={value => { setExample(value); setFeedback(''); }} options={[
+        <Select variant="compact" label="Situação" value={example} onChange={value => { setExample(value); setFeedback(''); }} options={[
           { id: 'applications', label: 'Sem candidaturas' }, { id: 'jobs', label: 'Sem vagas' }, { id: 'folder-long', label: 'Pasta com texto longo' },
           { id: 'clear', label: 'Tudo em dia' }, { id: 'first-use', label: 'Primeiro uso' }, { id: 'long', label: 'Texto longo' },
           { id: 'busy', label: 'Ação em espera' }, { id: 'disabled', label: 'Ação indisponível' }, { id: 'compact', label: 'Compacto existente' },
         ]} />
-        {!folder && <Select label="Ilustração" value={imageState} onChange={setImageState} options={[
+        {!folder && <Select variant="compact" label="Ilustração" value={imageState} onChange={setImageState} options={[
           { id: 'ready', label: 'Disponível' }, { id: 'broken', label: 'Falha ao carregar' }, { id: 'missing', label: 'Sem arquivo' },
         ]} />}
       </Inline>

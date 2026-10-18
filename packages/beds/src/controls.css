@@ -1,22 +1,17 @@
-/* Button / IconButton / IconToggleButton: migrated to Tailwind + motion in controls.tsx (Fable F1 — beUI `button`, 2026-09-17).
-   Geometry preserved (32/28/40px, r=8/6/12/10px), pointer press scale(.97) on an inert child, focus visible ring. */
+/* Button: beUI Button + StatefulButton pills (md 40 / 44 touch, sm 32) adopted from Curriculol, in controls.tsx (Tailwind + motion).
+   IconButton / IconToggleButton: 32px square (44 on touch), press on an inert child, soft hover tint. */
 
-/* TextField / TextAreaField / SearchField: migrated to Tailwind + motion in controls.tsx (Fable F1 — beUI `input`, 2026-09-17).
-   Geometry preserved (36/40px, r=8/10px), focus border + soft ring replaces offset outline, error shake uses motion `animate`
-   and the error message settles in via AnimatePresence (no CSS keyframes). Touch ergonomics inlined in the controls. */
+/* TextField / TextAreaField / DateField / SearchField: beUI `input` anatomy in controls.tsx. Soft border by default, focus = heading-tinted
+   border + 2px soft ring (no hard outline), error = error border + ring, one-shot shake and a message that settles in from a blur. */
 
-/* Checkbox / Switch: migrated to Tailwind + motion in controls.tsx (Fable F1 — beUI `checkbox` / `switch`, 2026-09-17).
-   Geometry preserved (16×16 box / 32×18.4 track with 16 thumb travelling logical14px),
-   check enters via motion (scale .6→1 in 160ms BEDS easing), thumb travel via insetInlineStart (180ms).
-   Focus ring uses the `peer-focus-visible:` Tailwind variant. */
+/* Checkbox / Switch: Tailwind + motion in controls.tsx; marks keep the functional --es-control-border. */
+
+/* SegmentedControl / Tabs: one tab pill (beUI Tabs `pill`, as Curriculol ships it), see controls.tsx. */
 
 .es-root .es-tabs{min-width:0}
-.es-root .es-tabs[data-variant="activity"] .es-tabs-list{flex-wrap:wrap}
-.es-root .es-tabs[data-variant="activity"] .es-tabs-list>[role="tab"]{flex:0 0 auto;max-width:100%;white-space:normal;overflow-wrap:anywhere}
 .es-root .es-tabs-list-shell{position:relative;display:flex;align-items:center;width:100%;max-width:100%;min-width:0}
-.es-root .es-tabs-list-shell[data-variant="activity"]{--es-tabs-fade:var(--es-subtle);width:max-content}
-.es-root .es-tabs-list-shell[data-variant="connection"]{--es-tabs-fade:var(--es-subtle)}
-.es-root .es-tabs-list-shell[data-variant="settings"]{--es-tabs-fade:var(--es-bg)}
+.es-root .es-tabs-list-shell{--es-tabs-fade:var(--es-surface)}
+.es-root .es-tabs-list-shell:not([data-variant="connection"]){width:max-content}
 .es-root .es-tabs-edge-fade{position:absolute;inset-block:0;z-index:10;width:44px;pointer-events:none}
 .es-root .es-tabs-edge-fade[data-edge="left"]{left:0;background:linear-gradient(to right,var(--es-tabs-fade),transparent)}
 .es-root .es-tabs-edge-fade[data-edge="right"]{right:0;background:linear-gradient(to left,var(--es-tabs-fade),transparent)}
@@ -28,16 +23,11 @@
 .es-root .es-tab-panel{min-width:0}
 .es-root :where(button[aria-pressed],button:not([aria-pressed]):not([aria-label]),.es-icon-button,.es-icon-toggle-button,.es-tabs-list>[role="tab"],.es-tab-panel):focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
 @media(forced-colors:active){.es-root :where(.es-button,.es-icon-button,.es-icon-toggle-button):focus-visible{outline:2px solid Highlight;outline-offset:2px}}
-@media(pointer:coarse){.es-root .es-button,.es-root :where(.es-icon-button,.es-icon-toggle-button){min-height:44px}.es-root :where(.es-icon-button,.es-icon-toggle-button){min-width:44px}}
-/* Fields now own their focus idiom via Tailwind utilities (border-ring + shadow-[0_0_0_3px_var(--es-focus-ring)]); forced-colors
-   paints Highlight through the explicit `outline:transparent` set on focus. */
-/* Field transitions removed — TextField/TextAreaField/SearchField now use Tailwind transition-colors + motion for shake. */
-/* Field error shake/error-in keyframes removed — replaced by motion `animate` (one-shot x oscillation) and AnimatePresence in controls.tsx. */
-/* Binary control transitions and check-in keyframe removed — switch thumb uses logical motion inset; check enter is motion scale. */
-/* Touch ergonomics (WCAG 2.5.8 / HIG): desktop geometry is untouched. On coarse pointers text fields grow to 44px at 16px
-   (below 16px iOS Safari zooms the page on focus) and compact controls grow to a real 44px target. A pseudo-element hit
-   area was tried and rejected: an ::after inset -6px inflates scrollWidth by 6px (reads as clipped text in evidence specs)
-   and the label overlay breaks the hidden input's hit-target actionability. Real geometry keeps both honest. */
+@media(pointer:coarse){.es-root :where(.es-icon-button,.es-icon-toggle-button){min-height:44px;min-width:44px}}
+/* Fields own their focus idiom through Tailwind utilities (soft border + 2px ring); forced-colors paints Highlight through the
+   explicit transparent outline set on focus. Touch: dense fields grow to 44px at 16px (below 16px iOS Safari zooms on focus);
+   the md button grows to 44px; the sm button keeps its 32px pill and pads only its vertical hit area, so no scroll container
+   gains horizontal overflow. */
 @media(pointer:coarse){
   .es-root .es-radio-option{min-height:44px}
 }
@@ -46,22 +36,14 @@
 @media(max-width:767px){.es-root .es-tabs[data-variant="connection"] .es-tab-panel{padding:16px 16px 24px}}
 
 @media(hover:hover) and (pointer:fine){
-  .es-root .es-tabs-list>[role="tab"]:not(:disabled):not([aria-selected="true"]):hover{color:var(--es-text)}
-  .es-root .es-segmented-choice>input:not(:disabled):not(:checked)+span:hover{color:var(--es-text)}
+  .es-root .es-tabs-list>[role="tab"]:not(:disabled):not([aria-selected="true"]):hover{color:var(--es-heading)}
+  .es-root .es-segmented-choice>input:not(:disabled):not(:checked)+span:hover{color:var(--es-heading)}
 }
 
-/* Segmented pills keep their 24px lane: the keyboard ring is painted inside the 22px visual, so overflow clipping cannot hide it. */
+/* The keyboard ring is painted inside each 32px option, so the scrolling track cannot clip it. */
 .es-root .es-segmented-choice>input:focus-visible+.es-segmented-choice-span{outline-offset:-2px}
 @media(forced-colors:active){.es-root .es-segmented-choice>input:focus-visible+.es-segmented-choice-span{outline-color:Highlight}}
 /* RTL scroll ranges round fractional label widths to whole CSS pixels; one logical end pixel keeps the focused item fully revealable. */
-.es-root .es-segmented-control:dir(rtl){padding-inline-end:2px}
-
-/* Fixed dark selection roles adopted from the Lucy preview — scoped to the segmented control
-   so the dialog and other data-variant surfaces keep their token background. */
-.es-root[data-theme=dark] .es-segmented-control:not([data-variant=joined]){background:var(--es-control)}
-
-.es-root .es-tabs[data-variant="settings"] [aria-selected="true"] .es-settings-tab-label{background:var(--es-selected);color:var(--es-text)}
-.es-root .es-tabs[data-variant="settings"] .es-settings-tab-indicator{position:absolute;inset-inline:var(--es-space-1);inset-block-end:0;block-size:2px;border-radius:var(--es-radius-full);background:var(--es-text);pointer-events:none}
-.es-root .es-tabs[data-variant="settings"] .es-tabs-list>[role="tab"]:focus-visible{outline-offset:-2px}
-@media(hover:hover){.es-root .es-tabs[data-variant="settings"] [role="tab"]:not(:disabled):not([aria-selected="true"]):hover{background:transparent}.es-root .es-tabs[data-variant="settings"] [role="tab"]:not(:disabled):not([aria-selected="true"]):hover .es-settings-tab-label{background:var(--es-hover)}}
-@media(forced-colors:active){.es-root .es-tabs[data-variant="settings"] .es-settings-tab-indicator{background:Highlight}.es-root .es-tabs[data-variant="settings"] [aria-selected="true"] .es-settings-tab-label{outline:1px solid Highlight}}
+.es-root .es-segmented-control:dir(rtl){padding-inline-end:5px}
+/* The pill indicator and its clipped label copy read in forced colors as an outlined Canvas pill with Highlight text. */
+@media(forced-colors:active){.es-root .es-pill-indicator{border:2px solid Highlight;background:Canvas}.es-root .es-pill-overlay{color:Highlight}}

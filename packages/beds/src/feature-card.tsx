@@ -29,8 +29,8 @@ export function FeatureCard({ image, title, description, primaryAction, secondar
         <p id={`${id}-description`}>{description}</p>
       </div>
       <div className="es-feature-card-actions">
-        <Button label={primaryAction.label} onClick={primaryAction.onClick} disabled={primaryAction.disabled} busy={primaryAction.busy} purpose="welcome" variant="primary" />
-        {secondaryAction && <Button label={secondaryAction.label} onClick={secondaryAction.onClick} disabled={secondaryAction.disabled} busy={secondaryAction.busy} purpose="welcome" variant="ghost" />}
+        <Button label={primaryAction.label} onClick={primaryAction.onClick} disabled={primaryAction.disabled} busy={primaryAction.busy} variant="primary" />
+        {secondaryAction && <Button label={secondaryAction.label} onClick={secondaryAction.onClick} disabled={secondaryAction.disabled} busy={secondaryAction.busy} variant="ghost" />}
       </div>
     </div>
   </article>;

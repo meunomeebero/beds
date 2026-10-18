@@ -22,7 +22,7 @@ export default function DrawerPage() {
     <AppShell sidebar={<ThemeToggle lightLabel="Claro" darkLabel="Escuro" />} contentWidth="home" collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen}>
       <Stack gap="section">
         <PageHeader title="Detalhes da vaga" leading={<Icon name="Briefcase" purpose="feature" />} description="Explore uma oportunidade sem sair da lista. Demonstração com dados fictícios." />
-        <Inline align="between"><Select label="Estado da demonstração" value={example} onChange={setExample} options={[
+        <Inline align="between"><Select variant="compact" label="Estado da demonstração" value={example} onChange={setExample} options={[
           { id: 'ready', label: 'Detalhes' }, { id: 'long', label: 'Texto longo' }, { id: 'loading', label: 'Carregando' }, { id: 'error', label: 'Erro recuperável' }, { id: 'empty', label: 'Vaga indisponível' },
         ]} /><ThemeToggle lightLabel="Claro" darkLabel="Escuro" /></Inline>
         <ResponsiveGrid>
@@ -30,7 +30,7 @@ export default function DrawerPage() {
         </ResponsiveGrid>
       </Stack>
       <Drawer open={open} onOpenChange={setOpen} title={example === 'long' ? longTitle : title} description="Vaga de demonstração" motionPreset={motionPreset}
-        headerActions={ready ? <Button label="Ver origem" icon="ArrowUpRight" variant="ghost" onClick={() => setSourceOpen(true)} /> : undefined}
+        headerActions={ready ? <Button label="Ver origem" icon="ArrowUpRight" iconPosition="end" variant="outline" compact onClick={() => setSourceOpen(true)} /> : undefined}
         actions={ready ? <Button label={saved ? 'Remover das salvas' : 'Salvar vaga'} icon="Bookmark" variant={saved ? 'secondary' : 'primary'} onClick={() => {
           setSaved(value => !value); setFeedback(saved ? 'Vaga removida das salvas nesta demonstração.' : 'Vaga salva nesta demonstração.');
         }} /> : undefined}>

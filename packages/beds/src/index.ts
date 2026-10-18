@@ -22,6 +22,7 @@ export { PagedCarousel, type PagedCarouselProps } from './paged-carousel';
 export { DisclosureText, LabelField, DisclosedRecords } from './disclosure';
 export { SettingsForm, SettingsRow, SettingsGroup, IntegrationRow, RecentItem, PlanCard, AccountMenu } from './patterns';
 export { Badge, StatusDot, Notice, EmptyState, Skeleton, LoadingIndicator, ProgressBar, SegmentedMeter, Metric, DataList, type MetricProps } from './feedback';
+export { Chip, type ChipProps } from './chip';
 export { Conversation, ConversationBubble, ChatComposer, SuggestionRow, ChatMessage, ChatOptions, type ChatOption, type ComposerAttachment, type ComposerAttachmentPicker } from './chat';
 export { CodeSnippet, type CodeSnippetMessages } from './technical';
 export { FeatureCard, type FeatureCardProps } from './feature-card';

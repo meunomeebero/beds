@@ -51,6 +51,6 @@ export function AccountCredits({ plan, label, balance, action, note, invalidValu
       <p className="es-account-credits-status" role="alert">{!ready && balance.status === 'error' ? balance.message : ''}</p>
     </div>
     {note && <p className="es-account-credits-note">{note}</p>}
-    {action && <Button label={action.label} onClick={action.onClick} disabled={action.disabled} busy={action.busy} variant="primary" purpose="welcome" />}
+    {action && <Button label={action.label} onClick={action.onClick} disabled={action.disabled} busy={action.busy} variant="primary" />}
   </section>;
 }
