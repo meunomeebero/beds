@@ -1,12 +1,32 @@
 # Espaço library — validation record
 
 Canonical repository: `meunomeebero/beds`. Current published candidate:
-`beds@0.3.0-rc.1` (2026-10-18); every later section is historical (the 0.1.7
+`beds@0.3.0-rc.2` (2026-10-19); every later section is historical (the 0.1.7
 candidates and their [F0–F4 migration closeout](F0-F4-MIGRATION-TRACKING.md)).
 Publication identity/hash belong to an immutable GitHub prerelease; this record
 describes source validation, not deployment or release acceptance.
 
-## 0.3.0-rc.1 — 2026-10-18 (published candidate)
+## 0.3.0-rc.2 — 2026-10-19 (published candidate)
+
+Scope: reference-app parity pass over rc.1 — elastic modal motion by default
+(`motionPreset: 'elastic' | 'quiet'`), no ring around the dialog surface on shell
+focus, field `warning`, `TextField action`, auto-growing product text area,
+`EmptyState artwork`, outline `EmptyStateCard` action, `ExpandingButton` async
+props, beUI Breadcrumbs anatomy, 36px chevron tab edges with the fades above the
+labels, reference Notice dismiss and read-only Chip padding; Foundations editing and
+badge rules. Hash and source commit live in the GitHub prerelease notes.
+
+| Gate | Result |
+|---|---|
+| `npm run verify` | Pass: build, package + lab typecheck, library contract (115 components, 220 tokens, 0 violations), docs (126 files, 0 violations), 36 example consumer roots (0 violations), 88 guard + 26 recipe/routing tests, artifact parity and fresh-consumer smoke |
+| Lab Playwright, targeted (Chromium desktop 1440 + mobile 390) | Specs of the touched components, run once each in small batches: dialog-beui (pinned to `quiet`), drawer, drawer-beui, controls, field-border, tabs-beui, tabs-settings-beui, empty-state, feedback-status-beui, navigation-beui, catalog, button, settings-page, checkout, results, overlay-beui, search-dialog — 221 passed, 0 failed; controls, field-border and both tabs specs re-run after the last fix (104 passed). No full-suite run |
+| Rendered check | Lab screenshots at 1440 light and 390 dark (fields with warning, inline action and a growing text area; empty states with artwork; breadcrumbs), tab overflow at 320 in both themes (found and fixed: the fades sat under the option labels), keyboard-opened dialog (surface outline `none`) |
+| Product-agnostic grep | No reference-product names added to package, docs, lab or copy |
+
+Limits: Chromium only; no WebKit/Firefox, physical-device or screen-reader pass; no
+fresh independent design review for this candidate; no aesthetic approval implied.
+
+## 0.3.0-rc.1 — 2026-10-18 (previous candidate)
 
 Scope: reference-app patterns as defaults (pill buttons, soft fields and focus ring,
 one tab pill, outline CTA, Chip, EmptyState, NavItem, PageHeader, Select labels,

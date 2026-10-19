@@ -15,7 +15,51 @@ Read next: [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.
 
 Rollback: select the previous known release URL/integrity, reinstall and rerun app gates. Do not mutate the old release.
 
-## Published candidate — 0.3.0-rc.1 (reference-app patterns)
+## Published candidate — 0.3.0-rc.2 (reference-app parity pass)
+
+Tag `v0.3.0-rc.2`, GitHub prerelease asset `beds-0.3.0-rc.2.tgz` (SHA-256 and
+source commit in the release notes). Built on 0.3.0-rc.1 after a component-by-component
+check of BEDS against the reference app's current code (owner rule: its patterns are
+the source of truth; BEDS stays product-agnostic). Not published to the npm registry.
+
+**Changed defaults:**
+
+- `Dialog`/`Drawer` `motionPreset` defaults to `elastic` (the reference app wraps every
+  modal in it). The type is now `'elastic' | 'quiet'`: `quiet` is the 0.2 fade/slide and
+  the former `'default'` value is gone (no known consumer passed it).
+- `Dialog` no longer paints a 2px ring around the whole surface when the native shell
+  takes the opening focus (visible on dialogs opened at page load). The shell is a
+  programmatic focus target; every control inside keeps its ring. A fix, not parity:
+  the reference app's build shows the same ring.
+- Product `TextAreaField` (`field`) grows with its content from a 96px floor
+  (`field-sizing: content`, no resize grip; other browsers keep the vertical handle).
+- `EmptyStateCard` action is the outline pill with a trailing arrow (was the neutral fill).
+- `Notice` dismiss returns to the reference app's 32px control with a 6px radius and the
+  hover veil (rc.1 had made it round).
+- `Breadcrumbs` take the beUI Breadcrumb anatomy the reference app ports: 13/20px medium,
+  ancestors as quiet 32px pills (44px touch) with a hover tint, a soft chevron, current
+  page in heading ink, wrapping labels and a soft path transition.
+- `Tabs` overflow edges are 36px chevrons over the faded track ends; read-only `Chip`
+  uses 10px inline padding.
+
+**Added:** `TextField`/`TextAreaField`/`DateField` `warning` (amber-glyph note,
+`role="status"`, never blocks); `TextField` `action: { label, onClick, busy? }` (one
+sm secondary pill inside the field); `EmptyState` `artwork` (product artwork in place
+of the icon tile); `ExpandingButton` `busy`, `state`, `loadingLabel`, `successLabel`,
+`errorLabel`. Foundations: an "Editing — one mode, in place" section (no per-row
+pencil/trash, one `Editar` mode, chips with the × only while editing, no drawer for one
+field) and a "Badges" rule (no recommended/popular badges).
+
+**Not carried yet:** the reference app's link pill for router links, choice cards, icon
+theme switch, wrapping tooltip, full beUI chat stack, table, command palette and centered
+upload are listed in [Promotion candidates](docs/design/espaco-library/PROMOTION-CANDIDATES.md).
+
+**Consumer migration:** pass `motionPreset="quiet"` only if a modal must keep the 0.2
+fade; replace `motionPreset="default"` with `"quiet"`. Apps that kept a brand-filled
+sign-in pill on `ExpandingButton` before 0.3 keep their own component (0.3 renders the
+outline pill).
+
+## Previous candidate — 0.3.0-rc.1 (reference-app patterns)
 
 Tag `v0.3.0-rc.1`, GitHub prerelease asset `beds-0.3.0-rc.1.tgz` (SHA-256 and
 source commit in the release notes). Built on rc.11 (`b52ab01`) plus the
