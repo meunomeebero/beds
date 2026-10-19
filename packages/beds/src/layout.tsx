@@ -1,8 +1,8 @@
 import { createContext, useContext, useId, type ComponentProps, type ReactNode } from 'react';
-import { motion } from 'motion/react';
+import { AnimatePresence, LayoutGroup, motion } from 'motion/react';
 import { Icon, Text } from './foundation';
 import { HelpLabel } from './overlays';
-import { SPRING_LAYOUT } from './lib/ease';
+import { EASE_OUT, SPRING_LAYOUT } from './lib/ease';
 import './layout.css';
 import { useReducedMotionPreference } from './lib/hooks/use-reduced-motion';
 
@@ -76,8 +76,21 @@ export function ContentHeader({ children, actions }: { children: ReactNode; acti
   return <header className="es-content-header"><div className="es-content-header-main">{children}</div>{actions && <div className="es-content-header-actions">{actions}</div>}</header>;
 }
 
+/* beUI Breadcrumb (https://beui.dev/r/breadcrumb, MIT) as the reference app ports it: 13/20 medium trail, ancestors as quiet
+   32px pills (44px on touch) with a hover tint, a 60% chevron inside the following item, the current page in heading ink, and a
+   soft path change (levels fade and lift 6px, siblings glide on the layout spring; reduced motion only fades). Labels wrap. */
 export function Breadcrumbs({ label = 'Breadcrumb', items }: { label?: string; items: { id: string; label: string; href?: string }[] }) {
-  return <nav className="es-breadcrumbs" aria-label={label}><ol>{items.map((item, index) => <li key={item.id}>{index > 0 && <span className="es-breadcrumb-separator" aria-hidden="true">/</span>}{item.href && index < items.length - 1 ? <a href={item.href}>{item.label}</a> : <span aria-current={index === items.length - 1 ? 'page' : undefined}>{item.label}</span>}</li>)}</ol></nav>;
+  const reduce = useReducedMotionPreference();
+  const groupId = useId();
+  const hidden = { opacity: 0, y: reduce ? 0 : 6 };
+  return <nav className="es-breadcrumbs" aria-label={label}><LayoutGroup id={groupId}><ol><AnimatePresence initial={false} mode="popLayout">{items.map((item, index) => <motion.li
+    key={item.id}
+    layout={reduce ? false : 'position'}
+    initial={hidden}
+    animate={{ opacity: 1, y: 0 }}
+    exit={hidden}
+    transition={{ duration: reduce ? 0.12 : 0.2, ease: EASE_OUT, layout: SPRING_LAYOUT }}
+  >{index > 0 && <span className="es-breadcrumb-separator" aria-hidden="true"><Icon name="ChevronRight" purpose="small" /></span>}{item.href && index < items.length - 1 ? <a href={item.href}>{item.label}</a> : <span className="es-breadcrumb-page" aria-current={index === items.length - 1 ? 'page' : undefined}>{item.label}</span>}</motion.li>)}</AnimatePresence></ol></LayoutGroup></nav>;
 }
 
 export function PageHeader({ title, description, leading, actions }: { title: string; description?: string; leading?: ReactNode; actions?: ReactNode }) {

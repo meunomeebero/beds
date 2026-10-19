@@ -35,7 +35,7 @@ test('modal motion is a bounded optional preset, not an arbitrary transition API
     const props = component(name).props;
     const preset = props.find(prop => prop.name === 'motionPreset');
     assert.equal(preset?.required, false, name);
-    assert.deepEqual(preset?.values, ['default', 'elastic'], name);
+    assert.deepEqual(preset?.values, ['elastic', 'quiet'], name);
     assert.equal(props.some(prop => ['transition', 'initial', 'animate', 'duration', 'bounce'].includes(prop.name)), false, name);
   }
 });

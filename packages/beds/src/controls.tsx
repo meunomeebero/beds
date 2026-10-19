@@ -232,6 +232,8 @@ export function IconToggleButton({ label, icon, pressed, onPressedChange, disabl
 
 type FieldProps = {
   label: string; value: string; onChange: (value: string) => void; description?: string;
+  /** A gentle note under the field (amber glyph) asking the person to check the value; it never blocks anything. */
+  warning?: string;
   error?: string; placeholder?: string; disabled?: boolean; readOnly?: boolean;
   name?: string; autoComplete?: string; inputMode?: InputHTMLAttributes<HTMLInputElement>['inputMode']; spellCheck?: boolean; focusOnError?: boolean;
   /** Keep the error slot occupied while there is no error, so appearing errors never shift the layout below. */
@@ -245,6 +247,9 @@ type FieldProps = {
 type TextFieldProps = FieldProps & {
   purpose?: 'field' | 'settings' | 'connection'; type?: 'text' | 'email' | 'url' | 'tel' | 'password' | 'search';
   enterKeyHint?: InputHTMLAttributes<HTMLInputElement>['enterKeyHint'];
+  /** One small action inside the pill, at its trailing edge (the reference app's coupon "Aplicar"): the sm secondary `Button`,
+   *  disabled with the field. Wrap the field in a form whose submit runs the same action so Enter applies it. The caller owns the request. */
+  action?: { label: string; onClick: () => void; busy?: boolean };
 };
 type TextAreaFieldProps = FieldProps & { purpose?: 'field' | 'settings' };
 
@@ -273,17 +278,31 @@ function useErrorFocus<T extends HTMLElement>(error?: string, focusOnError?: boo
   return ref;
 }
 
-function useFieldIds(description?: string, error?: string) {
+function useFieldIds(description?: string, error?: string, warning?: string) {
   const id = useId();
-  const describedBy = [description && `${id}-description`, error && `${id}-error`].filter(Boolean).join(' ') || undefined;
+  const describedBy = [description && `${id}-description`, warning && `${id}-warning`, error && `${id}-error`].filter(Boolean).join(' ') || undefined;
   return { id, describedBy };
 }
 
-/** Product fields (beUI input): 12px notes inset 4px, error settles in from a 4px blur. Dense settings rows keep the leading alert glyph. */
-function FieldNotes({ id, description, error, reserveErrorLine, product }: { id: string; description?: string; error?: string; reserveErrorLine?: boolean; product: boolean }) {
+/** Product fields (beUI input): 12px notes inset 4px, error settles in from a 4px blur. Dense settings rows keep the leading alert glyph.
+ *  A warning is the description line led by an amber glyph (the reference app's Field): it enters and leaves like the error. */
+function FieldNotes({ id, description, warning, error, reserveErrorLine, product }: { id: string; description?: string; warning?: string; error?: string; reserveErrorLine?: boolean; product: boolean }) {
   const reduce = useReducedMotionPreference();
+  const hidden = reduce ? { opacity: 0 } : { opacity: 0, y: -4, filter: 'blur(4px)' };
   return <>
     {description && <p id={`${id}-description`} className={cn('text-xs text-muted-foreground [text-wrap:pretty]', product ? 'px-1 leading-4' : 'leading-[18px]')}>{description}</p>}
+    <AnimatePresence initial={false}>
+      {warning ? <motion.p
+        key="warning"
+        id={`${id}-warning`}
+        role="status"
+        initial={hidden}
+        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+        exit={hidden}
+        transition={{ duration: 0.2, ease: EASE_OUT }}
+        className={cn('es-field-warning flex items-start gap-1.5 text-xs text-muted-foreground [text-wrap:pretty] [&_svg]:mt-px [&_svg]:size-3.5 [&_svg]:flex-none [&_svg]:text-warning', product ? 'px-1 leading-4' : 'leading-[18px]')}
+      ><Icon name="AlertCircle" purpose="small" />{warning}</motion.p> : null}
+    </AnimatePresence>
     <div className={cn(reserveErrorLine ? 'min-h-4' : 'contents')}>
       <AnimatePresence initial={false}>
         {error ? <motion.p
@@ -307,8 +326,18 @@ const TEXT_INPUT_SETTINGS = 'h-9 py-1 px-2.5 text-sm leading-[20px] rounded-lg p
 const TEXT_INPUT_CONNECTION = 'h-10 py-1 px-4 text-[14px] leading-4 rounded-xl pointer-coarse:h-10 pointer-coarse:text-[16px] pointer-coarse:leading-6';
 /** beUI `input` anatomy (https://beui.dev/r/input): 44px pill, 14px inline padding, 16px text on every pointer. */
 const TEXT_INPUT_FIELD = 'h-11 py-0 px-3.5 text-[16px] leading-6 rounded-full';
-const TEXT_AREA_FIELD = 'min-h-25 py-2.5 px-3.5 text-[16px] leading-6 rounded-[20px]';
+/** Product text area: grows with what is written from a 96px floor (`field-sizing: content` in controls.css; the page scrolls, never the field). */
+const TEXT_AREA_FIELD = 'min-h-24 py-2.5 px-3.5 text-[16px] leading-6 rounded-[20px]';
 const TEXT_AREA_SETTINGS = 'min-h-25 py-2 px-2.5 text-sm leading-[20px] rounded-lg pointer-coarse:text-[16px] pointer-coarse:leading-6';
+/* A field with an inline action draws the pill on a wrapper so typed text never runs under the button: the ring follows the input's
+   own focus (never the button's), and an error paints the wrapper. Same soft border, focus and error idiom as TEXT_INPUT_BASE. */
+const ACTION_PILL_BASE = 'es-field-pill box-border flex items-center w-full min-w-0 gap-2 tracking-normal border border-solid border-field-border bg-field transition-[border-color,box-shadow] duration-200 motion-reduce:transition-none has-[input:focus-visible]:border-[color:var(--es-field-focus-border)] has-[input:focus-visible]:shadow-[0_0_0_2px_var(--es-focus-ring)] has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-0 has-[input:focus-visible]:outline-transparent data-[invalid]:border-[color:var(--es-error-text)] data-[invalid]:shadow-[0_0_0_2px_var(--es-error-ring)] data-[invalid]:has-[input:focus-visible]:border-[color:var(--es-error-text)] data-[invalid]:has-[input:focus-visible]:shadow-[0_0_0_2px_var(--es-error-ring)] has-[input:disabled]:opacity-60';
+const ACTION_PILL_SIZE = {
+  field: 'h-11 ps-3.5 pe-1.5 rounded-full text-[16px] leading-6',
+  settings: 'h-9 ps-2.5 pe-0.5 rounded-lg text-sm leading-[20px] pointer-coarse:h-11 pointer-coarse:text-[16px] pointer-coarse:leading-6',
+  connection: 'h-10 ps-4 pe-1 rounded-xl text-[14px] leading-4 pointer-coarse:text-[16px] pointer-coarse:leading-6',
+} as const;
+const ACTION_PILL_INPUT = 'min-w-0 flex-1 self-stretch m-0 p-0 border-0 bg-transparent text-input-text [font:inherit] tracking-normal placeholder:text-[color:var(--es-placeholder-soft)] focus:outline-none disabled:cursor-not-allowed read-only:text-muted-foreground';
 const FIELD_STACK_PRODUCT = 'grid gap-1.5 min-w-0';
 const FIELD_STACK_SETTINGS = 'grid gap-2 min-w-0';
 const FIELD_LABEL_PRODUCT = 'px-1 text-[14px] leading-5 font-medium tracking-normal text-[color:var(--es-heading)]';
@@ -325,16 +354,20 @@ function useErrorShake<T extends HTMLElement>(error?: string) {
   return ref;
 }
 
-export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function TextField({ label, value, onChange, description, error, placeholder, disabled, readOnly, name, autoComplete, inputMode, spellCheck, focusOnError, reserveErrorLine, maxLength, enterKeyHint, purpose = 'field', type = 'text' }, forwardedRef) {
-  const { id, describedBy } = useFieldIds(description, error);
+export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function TextField({ label, value, onChange, description, warning, error, placeholder, disabled, readOnly, name, autoComplete, inputMode, spellCheck, focusOnError, reserveErrorLine, maxLength, enterKeyHint, action, purpose = 'field', type = 'text' }, forwardedRef) {
+  const { id, describedBy } = useFieldIds(description, error, warning);
   const inputRef = useErrorFocus<HTMLInputElement>(error, focusOnError);
   const shakeRef = useErrorShake<HTMLDivElement>(error);
   const product = purpose === 'field';
   const sizeClass = purpose === 'connection' ? TEXT_INPUT_CONNECTION : product ? TEXT_INPUT_FIELD : TEXT_INPUT_SETTINGS;
+  const input = <input ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} type={type} name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} maxLength={maxLength} enterKeyHint={enterKeyHint} data-purpose={purpose} value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} className={action ? ACTION_PILL_INPUT : cn(TEXT_INPUT_BASE, sizeClass)} />;
   return <div className={product ? FIELD_STACK_PRODUCT : FIELD_STACK_SETTINGS} ref={shakeRef}>
     <label htmlFor={id} className={product ? FIELD_LABEL_PRODUCT : FIELD_LABEL_SETTINGS}>{label}</label>
-    <input ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} type={type} name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} maxLength={maxLength} enterKeyHint={enterKeyHint} data-purpose={purpose} value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} className={cn(TEXT_INPUT_BASE, sizeClass)} />
-    <FieldNotes id={id} description={description} error={error} reserveErrorLine={reserveErrorLine} product={product} />
+    {action ? <div className={cn(ACTION_PILL_BASE, ACTION_PILL_SIZE[purpose])} data-purpose={purpose} data-invalid={error ? '' : undefined}>
+      {input}
+      <span className="es-field-action inline-flex flex-none"><Button label={action.label} onClick={action.onClick} busy={action.busy} disabled={disabled} compact /></span>
+    </div> : input}
+    <FieldNotes id={id} description={description} warning={warning} error={error} reserveErrorLine={reserveErrorLine} product={product} />
   </div>;
 });
 TextField.displayName = 'TextField';
@@ -347,28 +380,28 @@ TextField.displayName = 'TextField';
  * The visual/error anatomy is the beUI `input` adaptation already used by
  * TextField; beUI's wheel-picker was a no-fit for this native form control.
  */
-export const DateField = forwardRef<HTMLInputElement, DateFieldProps>(function DateField({ label, value, onChange, description, error, disabled, readOnly, name, autoComplete, focusOnError, reserveErrorLine, min, max, required, purpose = 'field' }, forwardedRef) {
-  const { id, describedBy } = useFieldIds(description, error);
+export const DateField = forwardRef<HTMLInputElement, DateFieldProps>(function DateField({ label, value, onChange, description, warning, error, disabled, readOnly, name, autoComplete, focusOnError, reserveErrorLine, min, max, required, purpose = 'field' }, forwardedRef) {
+  const { id, describedBy } = useFieldIds(description, error, warning);
   const inputRef = useErrorFocus<HTMLInputElement>(error, focusOnError);
   const shakeRef = useErrorShake<HTMLDivElement>(error);
   const product = purpose === 'field';
   return <div className={product ? FIELD_STACK_PRODUCT : FIELD_STACK_SETTINGS} ref={shakeRef}>
     <label htmlFor={id} className={product ? FIELD_LABEL_PRODUCT : FIELD_LABEL_SETTINGS}>{label}</label>
     <input ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} type="date" name={name} autoComplete={autoComplete} value={value} onChange={event => onChange(event.target.value)} min={min} max={max} required={required} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} className={cn(TEXT_INPUT_BASE, product ? TEXT_INPUT_FIELD : TEXT_INPUT_SETTINGS)} />
-    <FieldNotes id={id} description={description} error={error} reserveErrorLine={reserveErrorLine} product={product} />
+    <FieldNotes id={id} description={description} warning={warning} error={error} reserveErrorLine={reserveErrorLine} product={product} />
   </div>;
 });
 DateField.displayName = 'DateField';
 
-export const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(function TextAreaField({ label, value, onChange, description, error, placeholder, disabled, readOnly, name, autoComplete, inputMode, spellCheck, focusOnError, reserveErrorLine, maxLength, purpose = 'field' }, forwardedRef) {
-  const { id, describedBy } = useFieldIds(description, error);
+export const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(function TextAreaField({ label, value, onChange, description, warning, error, placeholder, disabled, readOnly, name, autoComplete, inputMode, spellCheck, focusOnError, reserveErrorLine, maxLength, purpose = 'field' }, forwardedRef) {
+  const { id, describedBy } = useFieldIds(description, error, warning);
   const inputRef = useErrorFocus<HTMLTextAreaElement>(error, focusOnError);
   const shakeRef = useErrorShake<HTMLDivElement>(error);
   const product = purpose === 'field';
   return <div className={product ? FIELD_STACK_PRODUCT : FIELD_STACK_SETTINGS} ref={shakeRef}>
     <label htmlFor={id} className={product ? FIELD_LABEL_PRODUCT : FIELD_LABEL_SETTINGS}>{label}</label>
-    <textarea ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} maxLength={maxLength} value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} className={cn(TEXT_INPUT_BASE, product ? TEXT_AREA_FIELD : TEXT_AREA_SETTINGS, 'resize-y align-top')} />
-    <FieldNotes id={id} description={description} error={error} reserveErrorLine={reserveErrorLine} product={product} />
+    <textarea ref={node => { inputRef.current = node; setForwardedRef(forwardedRef, node); }} id={id} name={name} autoComplete={autoComplete} inputMode={inputMode} spellCheck={spellCheck} maxLength={maxLength} value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} disabled={disabled} readOnly={readOnly} aria-invalid={Boolean(error) || undefined} aria-describedby={describedBy} data-purpose={purpose} className={cn('es-textarea', TEXT_INPUT_BASE, product ? TEXT_AREA_FIELD : TEXT_AREA_SETTINGS, 'resize-y align-top')} />
+    <FieldNotes id={id} description={description} warning={warning} error={error} reserveErrorLine={reserveErrorLine} product={product} />
   </div>;
 });
 TextAreaField.displayName = 'TextAreaField';
@@ -597,7 +630,8 @@ export function SegmentedControl({ label, value, options, onChange, variant = 'p
 }
 
 const TABS_PANEL_TRANSITION = { duration: 0.18, ease: EASE_OUT } as const;
-const TABS_EDGE_SIZE = 44;
+/** Overflow edge controls (the reference app's tab pill): 36px chevrons over the faded track ends; pointer only. */
+const TABS_EDGE_SIZE = 36;
 
 /** Every variant renders the same tab pill; variants only differ in frame and panel spacing.
  *  `activity` (default) = pill above its panel · `settings` = pill with a roomier panel · `connection` = framed card with equal-width tabs. */
@@ -754,7 +788,7 @@ export function Tabs({ label, value, items, onChange, variant = 'activity' }: {
   // Edge scroll buttons serve pointers only: arrow keys already reveal the focused tab, and Tab must go from the tablist straight to its panel.
   const connectionListStyle = connection ? { gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` } : undefined;
   const tabList = <motion.div ref={list} layoutScroll id={`${id}-list`} className={cn('es-tabs-list', PILL_TRACK, connection && 'grid w-full')} style={connectionListStyle} role="tablist" aria-label={label} onFocusCapture={event => { if (event.target instanceof HTMLElement && event.target.getAttribute('role') === 'tab') reveal(event.target, reduce || keyboardTarget !== null); }}>{tabButtons}</motion.div>;
-  const strip = <div className="es-tabs-list-shell" data-variant={variant} data-overflow={edges.overflow} data-edge-left={edges.left} data-edge-right={edges.right}>{edges.left && <span className="es-tabs-edge-fade" data-edge="left" aria-hidden="true" />}{edges.right && <span className="es-tabs-edge-fade" data-edge="right" aria-hidden="true" />}{edges.overflow && <button type="button" tabIndex={-1} className="es-tabs-edge-button" data-edge="left" aria-label="Rolar abas para a esquerda" aria-controls={list.current?.id} disabled={!edges.left} onClick={() => scroll(-1)}><Icon name="ArrowLeft" purpose="small" /></button>}{tabList}{edges.overflow && <button type="button" tabIndex={-1} className="es-tabs-edge-button" data-edge="right" aria-label="Rolar abas para a direita" aria-controls={list.current?.id} disabled={!edges.right} onClick={() => scroll(1)}><Icon name="ArrowRight" purpose="small" /></button>}</div>;
+  const strip = <div className="es-tabs-list-shell" data-variant={variant} data-overflow={edges.overflow} data-edge-left={edges.left} data-edge-right={edges.right}>{edges.left && <span className="es-tabs-edge-fade" data-edge="left" aria-hidden="true" />}{edges.right && <span className="es-tabs-edge-fade" data-edge="right" aria-hidden="true" />}{edges.overflow && <button type="button" tabIndex={-1} className="es-tabs-edge-button" data-edge="left" aria-label="Rolar abas para a esquerda" aria-controls={list.current?.id} disabled={!edges.left} onClick={() => scroll(-1)}><Icon name="ChevronRight" purpose="action" /></button>}{tabList}{edges.overflow && <button type="button" tabIndex={-1} className="es-tabs-edge-button" data-edge="right" aria-label="Rolar abas para a direita" aria-controls={list.current?.id} disabled={!edges.right} onClick={() => scroll(1)}><Icon name="ChevronRight" purpose="action" /></button>}</div>;
   return <LayoutGroup id={id}><div ref={root} className={cn('es-tabs min-w-0', connection && 'rounded-[16px] overflow-hidden border border-border-subtle shadow-[0_1px_2px_var(--es-border-subtle)]')} data-variant={variant} onPointerDown={clearKeyboardTarget} onBlurCapture={event => { if (!root.current?.contains(event.relatedTarget as Node | null)) clearKeyboardTarget(); }}>{connection ? <div className="es-tabs-connection-strip contain-inline-size w-full max-w-full min-w-0 overflow-visible p-2 border-b border-border-subtle">{strip}</div> : strip}{items.map(item => {
     const active = selected?.id === item.id;
     const panelId = `${id}-panel-${item.id}`;

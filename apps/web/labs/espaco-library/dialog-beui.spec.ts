@@ -16,7 +16,8 @@ async function recordExitDurations(page: Page) {
 }
 const readExitDurations = (page: Page) => page.evaluate(() => (window as unknown as { exitDurations: Promise<(number | null)[]> }).exitDurations);
 
-const probe = '/dialog-harness.html';
+// This suite pins the quiet preset; the elastic default is covered by modal-motion.test.mjs and the drawer specs.
+const probe = '/dialog-harness.html?motionPreset=quiet';
 
 test.describe('Dialog quiet-fade native lifecycle', () => {
   test.beforeEach(async ({ page }) => {

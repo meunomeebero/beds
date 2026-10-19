@@ -256,8 +256,10 @@ export function Tooltip({ label, children }: { label: string; children: ReactEle
   return <TooltipPrimitive content={label} side="bottom">{children}</TooltipPrimitive>;
 }
 
-export function Dialog({ open, onOpenChange, title, description, children, actions, variant = 'standard', artwork, motionPreset = 'default' }: {
-  open: boolean; onOpenChange: (open: boolean) => void; title: string; description?: string; children?: ReactNode; actions?: ReactNode; variant?: 'standard' | 'welcome'; artwork?: ReactNode; motionPreset?: 'default' | 'elastic';
+export function Dialog({ open, onOpenChange, title, description, children, actions, variant = 'standard', artwork, motionPreset = 'elastic' }: {
+  open: boolean; onOpenChange: (open: boolean) => void; title: string; description?: string; children?: ReactNode; actions?: ReactNode; variant?: 'standard' | 'welcome'; artwork?: ReactNode;
+  /** `elastic` (default) = bounded 260ms spring, 4px lift and .97→1 scale with an independent fade, the reference app's modal motion; `quiet` = the plain 180ms fade. */
+  motionPreset?: 'elastic' | 'quiet';
 }) {
   const id = useId();
   const dialog = useRef<HTMLDialogElement>(null);
@@ -323,11 +325,13 @@ export function Dialog({ open, onOpenChange, title, description, children, actio
 
 /** Modal detail panel. Content, requests and any unsaved-change decision belong to the caller. */
 export function Drawer({ open, onOpenChange, title, description, children, actions, headerActions,
-  closeLabel = 'Fechar detalhes', contentLabel = 'Conteúdo dos detalhes', motionPreset = 'default',
+  closeLabel = 'Fechar detalhes', contentLabel = 'Conteúdo dos detalhes', motionPreset = 'elastic',
 }: {
   open: boolean; onOpenChange: (open: boolean) => void; title: string;
   description?: string; children: ReactNode; actions?: ReactNode; headerActions?: ReactNode;
-  closeLabel?: string; contentLabel?: string; motionPreset?: 'default' | 'elastic';
+  closeLabel?: string; contentLabel?: string;
+  /** `elastic` (default) keeps the inline-end travel on a bounded spring with an independent fade; `quiet` = the plain panel slide. */
+  motionPreset?: 'elastic' | 'quiet';
 }) {
   const id = useId();
   const dialog = useRef<HTMLDialogElement>(null);

@@ -181,7 +181,7 @@ generated. Elegant restraint with one confident accent beats decoration.
 | Header, footer and link-list items | `TextLink purpose="nav"` (URL) or `LinkButton purpose="nav"` (in-page action): no underline at rest, a drawn underline on hover and keyboard focus |
 | Links inside prose | `TextLink` (default `inline`), always underlined |
 | A handwritten note pointing at the CTA | `HandDrawnArrow` with a short note |
-| Modal content | `Dialog`: quiet fade and slight scale by default, no morph. `motionPreset="elastic"` opts into a bounded 260ms spring with 4px lift and .97→1 scale. Do not add a second entrance animation around it |
+| Modal content | `Dialog`: a bounded 260ms spring with 4px lift and .97→1 scale (`motionPreset="elastic"`, the default since 0.3.0-rc.2), no morph; `motionPreset="quiet"` keeps the plain fade. Do not add a second entrance animation around it |
 | Highlighter, rotating headline, avatar stack | App-owned for now; see [Promotion candidates](PROMOTION-CANDIDATES.md) |
 
 ## Proportions — the finished look
@@ -198,15 +198,37 @@ tokens).
 |---|---|
 | Buttons | One geometry: pill md 40px (44px touch), sm 32px, 14/12px medium. No 48–64px CTAs. One focal action per view (outline + arrow); the filled action is neutral `primary`, never brand |
 | Tabs and filters | One tab pill: 40px track, 32px options (`SegmentedControl`, `Tabs`). No boxed or underlined tab strips |
-| Fields | 44px pill, 16px text, label 14/20px inset 4px, soft border, soft 2px focus ring; dense 36px rows only in admin/settings |
-| Chips and dismiss | 28px pill, 13px text, round 24px × with a quiet tint; toasts and notices share the × |
+| Fields | 44px pill, 16px text, label 14/20px inset 4px, soft border, soft 2px focus ring; notes 12/16px inset 4px (description, an amber-glyph `warning` that never blocks, the error); one small inline action may sit inside the pill (`TextField action`, e.g. "Aplicar" on a coupon); product text areas grow with their content from 96px (no resize grip); dense 36px rows only in admin/settings |
+| Chips and dismiss | 28px pill, 13px text, round 24px × with a quiet tint; toasts use the round 32px ×, notices a 32px × with a 6px radius. Reading shows plain chips; the × appears only while editing |
+| Badges | Facts only: status, counts, a real saving (−53%). No "recommended", "popular" or "best value" badges on plans or options, and no decoy emphasis (the reference app's pricing decision) |
 | Cards | One anatomy per product: 1px `--es-border`, 16px radius, 24px inset (20px on phones), a surface step instead of a shadow; collection/job cards may use the 24px card radius. No card inside a card; hairline-divided panes instead |
 | Content width | Signed-in pages: `wide` 1040px (lists, boards, search) and `compact` 760px (profile, forum, settings); both centered with the same top rhythm and fluid 16–40px gutters. Public/landing frame: 1216px outer, 32px gutter (20px on phones) |
 | Rhythm | Page header → content 48px (the header owns no bottom padding); landing sections 112px (80px on phones); section head = quiet 14px eyebrow, 36px/500 title, 16px lead, 48px to content |
 | Page identity | One H1 per page: 30/36px medium, tracking -0.025em (26/32px on phones), lead 15/22px secondary at 60ch (`PageHeader`). In-page prompts use a 16px card title, never a display headline |
 | Navigation | Rows 36px (44px touch), 16px icons, 10px gap, 10px radius (`NavItem`); breadcrumbs and the first control's glyph sit on the content's left edge (optical alignment, not box alignment) |
-| Empty states | Message first: round 40px icon tile or the product's own artwork, 18px title, 14px reason at 52ch, one outline action (`EmptyState`) |
-| Motion | Press .97 with a short spring release on pointer only (the reference app's tuned value; beUI upstream uses .93 and better-ui suggests .96); state changes swap in place; reduced motion jumps to the end state |
+| Empty states | Message first: round 40px icon tile or the product's own artwork (`EmptyState artwork`), 18px title, 14px reason at 52ch, one outline action (`EmptyState`, `EmptyStateCard`) |
+| Breadcrumbs | `Breadcrumbs`: 13/20px medium trail, ancestors as quiet 32px pills (44px touch) with a hover tint, a soft chevron between levels, the current page in heading ink. The app pulls the trail back 8px (the first pill's inset) so the first crumb's text meets the content edge |
+| Motion | Press .97 with a short spring release on pointer only (the reference app's tuned value; beUI upstream uses .93 and better-ui suggests .96); state changes swap in place; dialogs and drawers enter on the bounded elastic spring (`motionPreset="elastic"`, the default since 0.3.0-rc.2); reduced motion jumps to the end state |
+
+## Editing — one mode, in place
+
+Owner review, 2026-10-18, on the reference app's profile: a pencil and a trash icon on
+every row and a full drawer for one field read as unpolished. Editing follows one
+pattern. It is an app composition built from BEDS parts (`Button`, `Chip`,
+`TextField`, `TextAreaField`, `Dialog`), not a component.
+
+| Rule | How |
+|---|---|
+| Reading is clean | View mode shows content only: no per-row pencil, trash or "Editar" link |
+| One way in, one way out | One `Editar` button turns the page into edit mode; one secondary "Concluir edição" ends it (one primary action at a time) |
+| The mode is visible | A sticky pill bar (hairline `--es-border-strong`, `--es-bg`, a small brand dot, the mode label, its one exit) and one hint under it, never "Editar" repeated on every card |
+| Sections open in place | In edit mode every section is one hairline card ([Cards](#proportions--the-finished-look)); the whole closed card opens it, one section at a time; the open card takes the firmer `--es-border-strong` edge and eases to its new height |
+| Rows stay flat | List items are flat rows divided by hairlines (no card in a card); a row opens its own fields; reorder and remove live only inside the open row, and removal is the `destructive` button |
+| Values are chips | Multi-value fields (skills, tags) are `Chip`s; the subtle round × (`onRemove`) appears only in edit mode |
+| Empty sections | One dashed tile in the section's own place that adds it ("Adicionar …"), not an empty card |
+| Saving | A footer pinned inside the open card: what will change, `Cancelar` (ghost) and "Salvar alterações" (primary). A failed save is never silent: bring the invalid field or the notice into view |
+| Leaving | Switching sections, finishing or navigating away with unsaved changes asks: save and continue, discard, or keep editing (a `Dialog`; actions stack full width on phones) |
+| No drawer for one field | Small edits happen in place. A `Drawer` is for read-only details or a multi-part form, never a single field |
 
 ## Typography
 

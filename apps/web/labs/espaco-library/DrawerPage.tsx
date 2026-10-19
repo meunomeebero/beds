@@ -8,7 +8,7 @@ const longTitle = 'Especialista em pesquisa, acessibilidade e sistemas de design
 const about = 'Você vai ajudar a transformar problemas complexos em experiências simples. No Ateliê Digital, design, produto e engenharia trabalham juntos, da descoberta ao cuidado com cada detalhe da interface.';
 
 export default function DrawerPage() {
-  const motionPreset = new URLSearchParams(location.search).get('motionPreset') === 'elastic' ? 'elastic' : 'default';
+  const motionPreset = new URLSearchParams(location.search).get('motionPreset') === 'quiet' ? 'quiet' : undefined;
   const [theme, setTheme] = useState<'light' | 'dark'>(() => new URLSearchParams(location.search).get('theme') === 'light' ? 'light' : 'dark');
   const [open, setOpen] = useState(false);
   const [sourceOpen, setSourceOpen] = useState(false);

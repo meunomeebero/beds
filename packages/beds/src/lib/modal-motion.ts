@@ -1,7 +1,8 @@
 import type { MotionProps } from 'motion/react';
 import { EASE_OUT, SPRING_PANEL } from './ease.js';
 
-type ModalMotionPreset = 'default' | 'elastic';
+/** `elastic` (default since 0.3.0-rc.2, what the reference app ships on every modal) · `quiet` = the 0.2 fade/slide. */
+type ModalMotionPreset = 'elastic' | 'quiet';
 type ModalMotion = Pick<MotionProps, 'initial' | 'animate' | 'transition'>;
 
 const DIALOG_ENTER_TRANSITION = { duration: 0.18, ease: [0.23, 1, 0.32, 1] } as const;
@@ -12,7 +13,7 @@ const DIALOG_END = 'translateY(0px) scale(1)';
 
 /** One internal surface owner; full transform strings avoid shorthand ownership conflicts. */
 export function dialogMotion(open: boolean, reduce: boolean, preset: ModalMotionPreset): ModalMotion {
-  if (preset === 'default') return {
+  if (preset === 'quiet') return {
     initial: reduce ? { opacity: 0, scale: 1 } : { opacity: 0, scale: 0.97 },
     animate: open ? { opacity: 1, scale: 1 } : (reduce ? { opacity: 0, scale: 1 } : { opacity: 0, scale: 0.97 }),
     transition: reduce ? FADE_TRANSITION : open ? DIALOG_ENTER_TRANSITION : EXIT_TRANSITION,
@@ -32,7 +33,7 @@ export function dialogMotion(open: boolean, reduce: boolean, preset: ModalMotion
 
 /** Preserve the drawer's spatial inline-end travel and native modal lifecycle. */
 export function drawerMotion(open: boolean, reduce: boolean, preset: ModalMotionPreset, offscreen: '100%' | '-100%'): ModalMotion {
-  if (preset === 'default') return {
+  if (preset === 'quiet') return {
     initial: reduce ? { opacity: 0, x: 0 } : { x: offscreen },
     animate: open ? (reduce ? { opacity: 1, x: 0 } : { x: 0 }) : (reduce ? { opacity: 0, x: 0 } : { x: offscreen }),
     transition: reduce ? { duration: 0.2, ease: EASE_OUT } : SPRING_PANEL,

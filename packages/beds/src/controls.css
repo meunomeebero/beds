@@ -4,6 +4,10 @@
 /* TextField / TextAreaField / DateField / SearchField: beUI `input` anatomy in controls.tsx. Soft border by default, focus = heading-tinted
    border + 2px soft ring (no hard outline), error = error border + ring, one-shot shake and a message that settles in from a blur. */
 
+/* Product text areas grow with what is written (the reference app's editor): the page scrolls, never the field, so the resize
+   grip goes away where the browser can size the box to its content. Elsewhere the native vertical resize stays. */
+@supports (field-sizing:content){.es-root .es-textarea[data-purpose="field"]{field-sizing:content;resize:none}}
+
 /* Checkbox / Switch: Tailwind + motion in controls.tsx; marks keep the functional --es-control-border. */
 
 /* SegmentedControl / Tabs: one tab pill (beUI Tabs `pill`, as the reference app ships it), see controls.tsx. */
@@ -14,13 +18,17 @@
 .es-root .es-tabs-list-shell{position:relative;display:flex;align-items:center;width:100%;max-width:100%;min-width:0}
 .es-root .es-tabs-list-shell{--es-tabs-fade:var(--es-surface)}
 .es-root .es-tabs-list-shell:not([data-variant="connection"]){width:max-content}
-.es-root .es-tabs-edge-fade{position:absolute;inset-block:0;z-index:10;width:44px;pointer-events:none}
-.es-root .es-tabs-edge-fade[data-edge="left"]{left:0;background:linear-gradient(to right,var(--es-tabs-fade),transparent)}
-.es-root .es-tabs-edge-fade[data-edge="right"]{right:0;background:linear-gradient(to left,var(--es-tabs-fade),transparent)}
-.es-root .es-tabs-edge-button{position:absolute;inset-block:0;z-index:20;display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0;border:0;border-radius:var(--es-radius-8);background:transparent;color:var(--es-text);cursor:pointer}
-.es-root .es-tabs-edge-button[data-edge="left"]{left:0}
-.es-root .es-tabs-edge-button[data-edge="right"]{right:0}
+/* Fades sit above the option labels (z 10/20) so text actually fades under the chevrons. */
+.es-root .es-tabs-edge-fade{position:absolute;inset-block:0;z-index:30;width:40px;pointer-events:none}
+.es-root .es-tabs-edge-fade[data-edge="left"]{left:0;border-radius:999px 0 0 999px;background:linear-gradient(to right,var(--es-tabs-fade),transparent)}
+.es-root .es-tabs-edge-fade[data-edge="right"]{right:0;border-radius:0 999px 999px 0;background:linear-gradient(to left,var(--es-tabs-fade),transparent)}
+/* Edge controls: 36px chevrons over the faded ends of the track (the reference app's tab pill), heading ink, fade out when that end is reached. */
+.es-root .es-tabs-edge-button{position:absolute;inset-block:0;z-index:40;display:inline-flex;align-items:center;justify-content:center;width:36px;padding:0;border:0;background:transparent;color:var(--es-heading);cursor:pointer}
+.es-root .es-tabs-edge-button[data-edge="left"]{left:0;border-radius:999px 0 0 999px}
+.es-root .es-tabs-edge-button[data-edge="left"] svg{transform:scaleX(-1)}
+.es-root .es-tabs-edge-button[data-edge="right"]{right:0;border-radius:0 999px 999px 0}
 .es-root .es-tabs-edge-button:disabled{pointer-events:none;opacity:0}
+@media(hover:hover){.es-root .es-tabs-edge-button:hover{opacity:.7}}
 .es-root .es-tabs-edge-button:focus-visible{outline:2px solid var(--es-focus);outline-offset:-2px}
 .es-root .es-tab-panel{min-width:0}
 .es-root :where(button[aria-pressed],button:not([aria-pressed]):not([aria-label]),.es-icon-button,.es-icon-toggle-button,.es-tabs-list>[role="tab"],.es-tab-panel):focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}

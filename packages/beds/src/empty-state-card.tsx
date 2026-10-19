@@ -27,7 +27,7 @@ export function EmptyStateCard({ title, description, image, illustration, icon =
         <Heading id={`${id}-title`}>{title}</Heading>
         <p id={`${id}-description`}>{description}</p>
       </div>
-      {action && <div className="es-empty-state-card-action"><Button label={action.label} onClick={action.onClick} busy={action.busy} disabled={action.disabled} variant="primary" /></div>}
+      {action && <div className="es-empty-state-card-action"><Button label={action.label} onClick={action.onClick} busy={action.busy} disabled={action.disabled} variant="outline" icon="ArrowRight" iconPosition="end" /></div>}
     </div>
     {illustration === 'empty-folder' ? <EmptyFolderIllustration /> : <CardMedia key={image.src} purpose="empty-state" src={image.src} alt={image.alt} fallbackLabel={image.fallbackLabel} />}
   </article>;

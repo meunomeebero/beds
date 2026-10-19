@@ -84,10 +84,16 @@ export function Notice({ title, description, tone = 'info', onDismiss, dismissLa
     {onDismiss && <button type="button" aria-label={dismissLabel} onClick={onDismiss}><Icon name="X" /></button>}
   </div>;
 }
-/** Message-first empty state (the reference app pattern): round icon tile, 18px title, a 52ch reason and one outline call to action with a trailing arrow. */
-export function EmptyState({ title, description, icon = 'Folder', action, headingLevel = 3 }: { title: string; description?: string; icon?: IconName; action?: { label: string; onClick: () => void }; headingLevel?: 2 | 3 | 4 }) {
+/** Message-first empty state (the reference app pattern): round icon tile or the product's own artwork, 18px title, a 52ch reason
+ *  and one outline call to action with a trailing arrow. */
+export function EmptyState({ title, description, icon = 'Folder', artwork, action, headingLevel = 3 }: {
+  title: string; description?: string; icon?: IconName;
+  /** The product's own artwork (a mascot, an illustration) in place of the 40px icon tile. Caller owns its size (64–96px reads best) and semantics. */
+  artwork?: ReactNode;
+  action?: { label: string; onClick: () => void }; headingLevel?: 2 | 3 | 4;
+}) {
   const Heading = headingLevel === 2 ? 'h2' : headingLevel === 4 ? 'h4' : 'h3';
-  return <div className="es-empty-state"><span className="es-empty-icon" aria-hidden="true"><Icon name={icon} purpose="feature" /></span><div className="es-empty-copy"><Heading>{title}</Heading>{description && <p>{description}</p>}</div>{action && <Button label={action.label} onClick={action.onClick} variant="outline" icon="ArrowRight" iconPosition="end" />}</div>;
+  return <div className="es-empty-state">{artwork ? <span className="es-empty-artwork">{artwork}</span> : <span className="es-empty-icon" aria-hidden="true"><Icon name={icon} purpose="feature" /></span>}<div className="es-empty-copy"><Heading>{title}</Heading>{description && <p>{description}</p>}</div>{action && <Button label={action.label} onClick={action.onClick} variant="outline" icon="ArrowRight" iconPosition="end" />}</div>;
 }
 export function Skeleton({ purpose = 'line' }: { purpose?: 'line' | 'avatar' | 'card' }) {
   return <span className="es-skeleton" data-purpose={purpose} aria-hidden="true" />;

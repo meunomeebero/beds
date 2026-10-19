@@ -3,7 +3,7 @@ import { Button, DesignSystemProvider, Dialog, Text, TextField, TextAreaField } 
 import 'beds/styles.css';
 
 export default function DialogHarness() {
-  const motionPreset = new URLSearchParams(location.search).get('motionPreset') === 'elastic' ? 'elastic' : 'default';
+  const motionPreset = new URLSearchParams(location.search).get('motionPreset') === 'quiet' ? 'quiet' : undefined;
   const [open, setOpen] = useState(false);
   const [nestedOpen, setNestedOpen] = useState(false);
   const [rejectClose, setRejectClose] = useState(false);

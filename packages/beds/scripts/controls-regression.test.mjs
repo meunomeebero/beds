@@ -181,5 +181,5 @@ test('DateField keeps native date, bounds and shared field recovery semantics', 
   assert.match(source, /type="date"/);
   assert.match(source, /min=\{min\} max=\{max\} required=\{required\}/);
   assert.match(source, /DateField[\s\S]*?aria-invalid=\{Boolean\(error\) \|\| undefined\}[\s\S]*?aria-describedby=\{describedBy\}/);
-  assert.match(source, /DateField[\s\S]*?<FieldNotes id=\{id\} description=\{description\} error=\{error\} reserveErrorLine=\{reserveErrorLine\}/);
+  assert.match(source, /DateField[\s\S]*?<FieldNotes id=\{id\} description=\{description\} warning=\{warning\} error=\{error\} reserveErrorLine=\{reserveErrorLine\}/);
 });

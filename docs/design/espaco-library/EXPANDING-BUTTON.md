@@ -8,9 +8,13 @@ beUI StatefulButton instead ("muito exagerado, use o Stateful Button ... que é 
 botão normal", 2026-09-28) and then outline over brand fills (2026-09-29). Props
 are unchanged so existing consumers keep compiling: `icon` other than
 `ArrowRight` is dropped, `mark` renders as a decorative leading glyph and
-`context` no longer changes geometry. Prefer `Button variant="outline"
-icon="ArrowRight" iconPosition="end"` in new code; it also supports async
-`state`. The history below describes the retired chip anatomy.
+`context` no longer changes geometry. Since 0.3.0-rc.2 it passes `busy`, `state`
+and `loadingLabel`/`successLabel`/`errorLabel` through, like the reference app's
+focal button, so an async submit shows the spinner in the arrow's slot and rolls
+its status label. A brand-colored identity pill (for example a provider sign-in
+whose chip fills with the contrast color) is no longer this component: keep it
+in the app. Prefer `Button variant="outline" icon="ArrowRight" iconPosition="end"`
+in new code. The history below describes the retired chip anatomy.
 
 Adapted from beUI `expanding-arrow-button`
 (`https://beui.dev/components/motion/expanding-arrow-button`, retrieved

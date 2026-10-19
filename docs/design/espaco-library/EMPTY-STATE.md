@@ -8,6 +8,9 @@ shared pill button; its own geometry is unchanged. The compact `EmptyState` now
 follows the reference app's empty-state anatomy: round 40px icon tile, 18px/1.4 balanced
 title, 14px/1.6 secondary reason capped at 52ch, 20px rhythm, 40/24px padding
 (32/16px on phones) and one outline action with a trailing arrow.
+Since 0.3.0-rc.2 the `EmptyStateCard` action is that same outline pill with a trailing
+arrow (it was the neutral fill), and `EmptyState` takes `artwork` (the product's own
+mascot or illustration) in place of the icon tile, as the reference app's empty states do.
 
 ## Use / API
 

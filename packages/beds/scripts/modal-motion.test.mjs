@@ -3,18 +3,18 @@ import assert from 'node:assert/strict';
 import { dialogMotion, drawerMotion } from '../dist/lib/modal-motion.js';
 import { EASE_OUT, SPRING_PANEL } from '../dist/lib/ease.js';
 
-test('default dialog and drawer motion retain the rc.11 contract', () => {
-  assert.deepEqual(dialogMotion(true, false, 'default'), {
+test('the quiet preset keeps the rc.11 fade and slide contract', () => {
+  assert.deepEqual(dialogMotion(true, false, 'quiet'), {
     initial: { opacity: 0, scale: 0.97 }, animate: { opacity: 1, scale: 1 },
     transition: { duration: 0.18, ease: [0.23, 1, 0.32, 1] },
   });
-  assert.deepEqual(dialogMotion(false, false, 'default').transition, { duration: 0.15, ease: EASE_OUT });
-  assert.deepEqual(dialogMotion(true, true, 'default').animate, { opacity: 1, scale: 1 });
-  assert.deepEqual(drawerMotion(true, false, 'default', '100%'), {
+  assert.deepEqual(dialogMotion(false, false, 'quiet').transition, { duration: 0.15, ease: EASE_OUT });
+  assert.deepEqual(dialogMotion(true, true, 'quiet').animate, { opacity: 1, scale: 1 });
+  assert.deepEqual(drawerMotion(true, false, 'quiet', '100%'), {
     initial: { x: '100%' }, animate: { x: 0 }, transition: SPRING_PANEL,
   });
-  assert.deepEqual(drawerMotion(false, false, 'default', '-100%').animate, { x: '-100%' });
-  assert.deepEqual(drawerMotion(false, true, 'default', '100%'), {
+  assert.deepEqual(drawerMotion(false, false, 'quiet', '-100%').animate, { x: '-100%' });
+  assert.deepEqual(drawerMotion(false, true, 'quiet', '100%'), {
     initial: { opacity: 0, x: 0 }, animate: { opacity: 0, x: 0 },
     transition: { duration: 0.2, ease: EASE_OUT },
   });
@@ -57,11 +57,11 @@ test('live reduced motion changes both targets: stops spatial motion without ski
   }
 });
 
-test('Dialog keeps the native shell still and assigns elastic motion to its inner surface', async () => {
+test('Dialog defaults to elastic: the native shell stays still and the inner surface owns the spring', async () => {
   const { createElement } = await import('react');
   const { renderToStaticMarkup } = await import('react-dom/server');
   const { Dialog } = await import('../dist/index.js');
-  const markup = renderToStaticMarkup(createElement(Dialog, { open: true, onOpenChange() {}, title: 'Details', motionPreset: 'elastic' }, 'Content'));
+  const markup = renderToStaticMarkup(createElement(Dialog, { open: true, onOpenChange() {}, title: 'Details' }, 'Content'));
   const shell = markup.match(/<dialog[^>]+>/)?.[0];
   assert.ok(shell);
   assert.doesNotMatch(shell, /style=|transform/);

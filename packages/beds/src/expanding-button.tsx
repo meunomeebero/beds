@@ -19,10 +19,15 @@ export type ExpandingButtonProps = {
   /** Fuller accessible name. It must contain the visible label, e.g. label "Entrar", accessibleLabel "Entrar com X". */
   accessibleLabel?: string;
   disabled?: boolean;
+  /** Shorthand for `state="loading"` (the reference app's `CtaButton`): the spinner takes the arrow's slot and the action is inert. */
+  busy?: boolean;
+  /** Async lifecycle, same as `Button`: loading/success/error swap the glyph; a status label rolls in letter by letter. */
+  state?: 'idle' | 'loading' | 'success' | 'error';
+  loadingLabel?: string; successLabel?: string; errorLabel?: string;
   'aria-describedby'?: string;
 };
 
 /** The one focal action of a view: outline pill (md 40px, 44px on touch) with a trailing arrow. */
-export function ExpandingButton({ label, onClick, type = 'button', icon = 'ArrowRight', mark, accessibleLabel, disabled, 'aria-describedby': describedBy }: ExpandingButtonProps) {
-  return <ButtonFrame label={label} onClick={onClick} type={type} variant="outline" icon={icon === 'ArrowRight' ? 'ArrowRight' : undefined} iconPosition="end" mark={mark} accessibleLabel={accessibleLabel} disabled={disabled} aria-describedby={describedBy} />;
+export function ExpandingButton({ label, onClick, type = 'button', icon = 'ArrowRight', mark, accessibleLabel, disabled, busy, state, loadingLabel, successLabel, errorLabel, 'aria-describedby': describedBy }: ExpandingButtonProps) {
+  return <ButtonFrame label={label} onClick={onClick} type={type} variant="outline" icon={icon === 'ArrowRight' ? 'ArrowRight' : undefined} iconPosition="end" mark={mark} accessibleLabel={accessibleLabel} disabled={disabled} busy={busy} state={state} loadingLabel={loadingLabel} successLabel={successLabel} errorLabel={errorLabel} aria-describedby={describedBy} />;
 }
