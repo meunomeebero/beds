@@ -3,30 +3,44 @@ import { coarsePointer } from './touch-target';
 
 test('keyboard move updates columns and counts, retains focus and opens full details', async ({ page }) => {
   await page.goto('/?view=kanban&theme=dark');
-  const saved = page.getByRole('region', { name: 'Salvas', exact: true });
-  const sent = page.getByRole('region', { name: 'Enviadas', exact: true });
-  await expect(saved.getByRole('article')).toHaveCount(2);
+  const toSend = page.getByRole('region', { name: 'Para enviar', exact: true });
+  const closed = page.getByRole('region', { name: 'Não avançou', exact: true });
+  await expect(toSend.getByRole('article')).toHaveCount(2);
   const menu = page.getByRole('button', { name: 'Mover Product designer na Norte', exact: true });
   await menu.press('Enter');
-  await expect(page.getByRole('menuitem', { name: 'Mover para Em preparação' })).toHaveCount(0);
+  await expect(page.getByRole('menuitem', { name: 'Mover para Em preparo' })).toHaveCount(0);
   await page.getByRole('menu').press('End');
   await page.getByRole('menu').press('Enter');
-  await expect(sent.getByRole('article')).toHaveCount(1);
-  await expect(saved.getByRole('article')).toHaveCount(1);
-  await expect(sent.locator('.recipe-application-board-count')).toHaveText('1 vaga');
+  await expect(closed.getByRole('article')).toHaveCount(1);
+  await expect(toSend.getByRole('article')).toHaveCount(1);
+  await expect(closed.locator('.es-kanban-count')).toHaveText('1');
   await expect(menu).toBeFocused();
-  await expect(page.getByRole('status').last()).toContainText('movida para Enviadas');
-  const open = sent.getByRole('button', { name: 'Ver detalhes', exact: true });
+  await expect(page.getByRole('status').filter({ hasText: 'movida para Não avançou' })).toHaveCount(1);
+  // A calm outcome: no confetti, one undo toast.
+  await expect(page.locator('.es-confetti')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Desfazer' }).click();
+  await expect(toSend.getByRole('article')).toHaveCount(2);
+  await expect(closed).toContainText('Nenhuma vaga nesta etapa');
+  const open = toSend.getByRole('button', { name: 'Ver detalhes', exact: true }).first();
   await open.click();
-  await expect(page.getByRole('dialog')).toContainText('R$ 10 mil – R$ 14 mil');
+  await expect(page.getByRole('dialog')).toContainText('Mover para');
   await page.keyboard.press('Escape');
   await expect(open).toBeFocused();
+});
+
+test('a real win celebrates once; reduced motion shows no confetti', async ({ page }) => {
+  await page.goto('/?view=kanban&theme=light');
+  const menu = page.getByRole('button', { name: 'Mover Product designer na Norte', exact: true });
   await menu.click();
-  await page.getByRole('menuitem', { name: 'Mover para Salvas' }).click();
-  await expect(saved.getByRole('article')).toHaveCount(2);
-  await expect(sent.getByRole('article')).toHaveCount(0);
-  await expect(menu).toBeFocused();
-  await expect(sent).toContainText('As vagas que você marcar como enviadas');
+  await page.getByRole('menuitem', { name: 'Mover para Em seleção' }).click();
+  await expect(page.locator('.es-confetti')).toHaveCount(1);
+  await expect(page.locator('.es-confetti')).toHaveAttribute('aria-hidden', 'true');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/?view=kanban&theme=light');
+  await page.getByRole('button', { name: 'Mover Product designer na Norte', exact: true }).click();
+  await page.getByRole('menuitem', { name: 'Mover para Conquistada' }).click();
+  await expect(page.getByRole('button', { name: 'Desfazer' })).toBeVisible();
+  await expect(page.locator('.es-confetti')).toHaveCount(0);
 });
 
 test('light/dark, mobile and long titles stay inside cards; board alone may scroll', async ({ page }, info) => {
@@ -35,10 +49,10 @@ test('light/dark, mobile and long titles stay inside cards; board alone may scro
     await page.setViewportSize({ width, height: 1000 });
     await page.goto(`/?view=kanban&theme=${theme}&preview=long`);
     await expect(page.getByRole('article')).toHaveCount(5);
-    await expect(page.getByRole('heading', { level: 2 })).toHaveCount(width >= 768 ? 5 : 4);
+    await expect(page.locator('.es-kanban-header h2')).toHaveCount(6);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     expect(await page.locator('.recipe-application-card').evaluateAll(cards => cards.every(card => card.scrollWidth <= card.clientWidth + 1))).toBe(true);
-    const contrasts = await page.locator('.recipe-application-board h3>button,.recipe-application-company,.recipe-application-details li,.recipe-application-note>span,.recipe-application-board-count,.recipe-application-board-empty,.recipe-application-details-action').evaluateAll(elements => elements.map(element => {
+    const contrasts = await page.locator('.recipe-application-board h3>button,.recipe-application-company,.recipe-application-details li,.recipe-application-note>span,.es-kanban-count,.es-kanban-empty,.recipe-application-details-action').evaluateAll(elements => elements.map(element => {
       const rgba = (value: string) => value.match(/[\d.]+/g)!.map(Number);
       const layers: number[][] = [];
       let node: Element | null = element;
@@ -50,14 +64,14 @@ test('light/dark, mobile and long titles stay inside cards; board alone may scro
     }));
     for (const pair of contrasts) expect(pair.ratio, JSON.stringify(pair)).toBeGreaterThanOrEqual(4.5);
     const board = page.getByRole('region', { name: 'Vagas por status', exact: true });
-    const overflowing = await board.evaluate(el => el.scrollWidth > el.clientWidth + 1);
-    if (overflowing) await expect(board).toHaveAttribute('tabindex', '0');
-    else await expect(board).not.toHaveAttribute('tabindex');
+    await expect(board).toHaveAttribute('tabindex', '0');
+    // Columns keep their width and scroll sideways on every width; they never stack.
+    const columns = await page.locator('.es-kanban-column').all();
+    const first = await columns[0].boundingBox();
+    const second = await columns[1].boundingBox();
+    expect(Math.abs(second!.y - first!.y)).toBeLessThan(1);
+    expect(first!.width).toBeLessThanOrEqual(width < 768 ? 320 : 360);
     if (width < 768) {
-      const columns = await page.locator('.recipe-application-board-column').all();
-      const first = await columns[0].boundingBox();
-      const second = await columns[1].boundingBox();
-      expect(second!.y).toBeGreaterThan(first!.y + first!.height);
       const target = await page.getByRole('button', { name: /^Mover/ }).first().boundingBox();
       const floor = await coarsePointer(page) ? 44 : 32;
       expect(target!.width).toBeGreaterThanOrEqual(floor);
@@ -74,14 +88,15 @@ test('read-only, unavailable score, empty and rejected moves do not invent outco
   await expect(page.getByRole('article', { name: 'Senior UX designer' }).getByRole('meter')).toHaveCount(0);
   await page.goto('/?view=kanban&preview=empty');
   await expect(page.getByRole('article')).toHaveCount(0);
-  await expect(page.locator('.recipe-application-board-empty')).toHaveCount(4);
-  await expect(page.locator('.recipe-application-board-count')).toHaveText(['0 vagas', '0 vagas', '0 vagas', '0 vagas']);
+  await expect(page.locator('.es-kanban-empty')).toHaveCount(6);
+  await expect(page.locator('.es-kanban-count')).toHaveText(['0', '0', '0', '0', '0', '0']);
   await page.goto('/?view=kanban&preview=move-error');
   const menu = page.getByRole('button', { name: 'Mover Product designer na Norte', exact: true });
   await menu.click();
-  await page.getByRole('menuitem', { name: 'Mover para Enviadas' }).click();
-  await expect(page.getByRole('status').last()).toContainText('Não foi possível mover');
-  await expect(page.getByRole('region', { name: 'Salvas', exact: true }).getByRole('article')).toHaveCount(2);
+  await page.getByRole('menuitem', { name: 'Mover para Enviada' }).click();
+  await expect(page.getByRole('status').filter({ hasText: 'Não foi possível mover' }).first()).toBeAttached();
+  await expect(page.getByRole('region', { name: 'Para enviar', exact: true }).getByRole('article')).toHaveCount(2);
+  await expect(page.locator('.es-confetti')).toHaveCount(0);
   await expect(menu).toBeFocused();
 });
 

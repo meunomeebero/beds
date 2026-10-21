@@ -24,6 +24,8 @@ not a template that unrelated apps must inherit.
 
 | Task | Read next |
 |---|---|
+| Adopt or upgrade BEDS in an app | [Adopting](ADOPTING.md): install line, breaking changes, theme setup, component map and the principles |
+| Show a measured result, a stage board, an in-place edit mode, a coupon or setup steps | [Result, board, editing and commerce patterns](RC3-PATTERNS.md) (0.3.0-rc.3) |
 | Know the visual defaults (0.3, the reference app patterns) | [Foundations](FOUNDATIONS.md#proportions--the-finished-look): pill buttons md 40 / sm 32, soft fields with a soft focus ring, one 40px tab pill, card and layout proportions |
 | Make the one focal CTA | `Button variant="outline"` with a trailing arrow; [ExpandingButton](EXPANDING-BUTTON.md) now renders the same pill |
 | Point at a nearby CTA with a handwritten note | [HandDrawnArrow](HAND-DRAWN-ARROW.md): decorative pen stroke, fixed shapes/directions/contexts/tones, draw-in and brand ink |

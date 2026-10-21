@@ -25,5 +25,11 @@
  "forum-topic.css",
  "date-item.css",
  "blog-post.css",
- "hand-drawn-arrow.css"
+ "hand-drawn-arrow.css",
+ "score.css",
+ "celebration.css",
+ "summary.css",
+ "board.css",
+ "editing.css",
+ "commerce.css"
 ]

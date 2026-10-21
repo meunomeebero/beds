@@ -230,6 +230,16 @@ pattern. It is an app composition built from BEDS parts (`Button`, `Chip`,
 | Leaving | Switching sections, finishing or navigating away with unsaved changes asks: save and continue, discard, or keep editing (a `Dialog`; actions stack full width on phones) |
 | No drawer for one field | Small edits happen in place. A `Drawer` is for read-only details or a multi-part form, never a single field |
 
+## Truthful states and celebration
+
+The reference app's rules, carried into 0.3.0-rc.3 ([patterns](RC3-PATTERNS.md)):
+
+- **No pair, no number.** A score, gain or comparison shows only when both sides were measured the same way. Otherwise it says plainly what is unavailable, and any refund or credit line comes from persisted state, never from a guess.
+- **Celebrate only real wins.** The brand "+N", brand segments, `ConfettiBurst` and any sound are for a measured win the product defines (for example +5 or more), a reached goal or an accepted offer. Never celebrate on load, on undo, for a small gain, for a tie or for routine success. Keep negative outcomes calm and neutral, never red. The error tone is for failures.
+- **The brand color means one thing per screen.** On a result it marks what the product added. Presence, lists and reasons stay neutral (`ChangeSummary`, `SelectionNote`, the No answer).
+- **Honest next steps.** When the honest advice is the free path, it is the primary action and the paid path is secondary, with its cost under the buttons (`NextStepCard`). A suggestion such as "same price, more units" offers the switch and never makes it by itself (`InlineSuggestion`).
+- **Every tap answers.** Chips and yes/no answers save on tap and say so in one polite status line, with retry or undo. One undo toast at a time; the next confirmed action retires it, and a stale undo gets a warning.
+
 ## Typography
 
 The current component family uses bundled Inter for interface text and Geist

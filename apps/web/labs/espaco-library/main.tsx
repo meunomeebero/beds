@@ -31,12 +31,18 @@ import CheckoutPage from './CheckoutPage';
 import AnimatedNumberPage from './AnimatedNumberPage';
 import HandDrawnArrowPage from './HandDrawnArrowPage';
 import ExpandingButtonPage from './ExpandingButtonPage';
+import ResultPatternsPage from './ResultPatternsPage';
+import EditingPage from './EditingPage';
+import CommercePage from './CommercePage';
 const params = new URLSearchParams(location.search);
 const pages: Record<string, React.ComponentType> = {
   checkout: CheckoutPage,
   'animated-number': AnimatedNumberPage,
   'hand-drawn-arrow': HandDrawnArrowPage,
   'expanding-button': ExpandingButtonPage,
+  'result-patterns': ResultPatternsPage,
+  editing: EditingPage,
+  commerce: CommercePage,
   'analysis-result': () => <ResultsPage mode="analysis" />,
   'optimization-result': () => <ResultsPage mode="optimization" />,
   'analysis-loading': ProcessingPage,

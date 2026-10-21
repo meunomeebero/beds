@@ -1,0 +1,5 @@
+/* Confetti burst (0.3.0-rc.3): decorative, pointer-transparent, never under reduced motion. */
+.es-root .es-confetti,.es-confetti{position:absolute;inset:0;z-index:30;overflow:hidden;pointer-events:none}
+.es-confetti[data-fixed]{position:fixed;z-index:1100}
+.es-confetti>i{position:absolute;top:-16px;display:block;will-change:transform,opacity}
+@media(prefers-reduced-motion:reduce){.es-confetti{display:none}}

@@ -1,0 +1,34 @@
+/* 0.3.0-rc.3 — discount code field, inline suggestion, consent notice and instruction steps. */
+/* Discount code: quiet toggle (optically aligned with the text edge) → 44px pill field → applied row (a 44px pill like the field). */
+.es-root .es-coupon-toggle{display:grid;justify-items:start}
+.es-root .es-coupon-toggle>.es-button{margin-inline-start:-12px}
+.es-root .es-coupon-form{display:grid;min-inline-size:0;margin:0}
+/* Codes read upper-case as typed; the caller normalizes the value it receives, so the caret never jumps. */
+.es-root .es-coupon-form input{text-transform:uppercase}
+.es-root .es-coupon-minimum{display:grid;justify-items:start;gap:8px}
+.es-root .es-coupon-minimum:not(:empty){margin-block-start:10px}
+.es-root .es-coupon-applied{display:flex;align-items:center;gap:10px;min-block-size:44px;box-sizing:border-box;padding:6px 6px 6px 14px;border-radius:22px;background:var(--es-applied);color:var(--es-heading)}
+.es-root .es-coupon-applied>.es-icon{width:18px;height:18px;color:var(--es-success)}
+.es-root .es-coupon-applied>p{flex:1;min-inline-size:0;margin:0;padding-block:4px;font-size:13px;line-height:1.45;text-wrap:pretty}
+.es-root .es-coupon-applied>p:focus-visible{outline:2px solid var(--es-focus);outline-offset:3px;border-radius:3px}
+.es-root .es-coupon-note{color:var(--es-secondary)}
+/* Held without a check: neutral, never the success tint of an accepted code. */
+.es-root .es-coupon-applied[data-kept]{background:var(--es-subtle)}
+.es-root .es-coupon-applied[data-kept]>.es-icon{color:var(--es-secondary)}
+
+/* Inline suggestion: one quiet sentence and its explicit action. */
+.es-root .es-inline-suggestion{display:grid;justify-items:start;gap:8px}
+.es-root .es-inline-suggestion-text{margin:0;color:var(--es-secondary);font-size:13px;line-height:1.55;text-wrap:pretty}
+
+/* Consent notice: bottom-start floating card, or in the page flow. */
+.es-root .es-consent-notice[data-placement='floating']{position:fixed;z-index:60;inset-block-end:16px;inset-inline-start:16px;width:min(360px,calc(100vw - 32px))}
+.es-root .es-consent-notice[data-placement='inline']{position:static;width:auto}
+.es-root .es-consent-content{display:flex;flex-direction:column;gap:8px}
+.es-root .es-consent-actions{display:flex;justify-content:flex-end;gap:4px}
+
+/* Instruction steps: numbered list with quiet markers; a step may hold one supporting element. */
+.es-root .es-instruction-steps{min-inline-size:0}
+.es-root .es-instruction-steps>ol{display:grid;gap:12px;margin:0 0 16px;padding-inline-start:1.25em;min-inline-size:0}
+.es-root .es-instruction-steps>ol:last-child{margin-block-end:0}
+.es-root .es-instruction-steps li{min-inline-size:0;padding-inline-start:4px}
+.es-root .es-instruction-steps li::marker{color:var(--es-secondary);font-weight:600}

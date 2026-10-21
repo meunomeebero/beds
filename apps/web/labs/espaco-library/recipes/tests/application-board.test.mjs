@@ -15,12 +15,11 @@ test('ApplicationBoard intersects only host-declared destinations with per-item 
 });
 
 test('ApplicationBoard returns focus to a stable heading only when the moved card disappears', () => {
-  assert.match(source, /const headings = useRef\(new Map<string, HTMLHeadingElement>\(\)\)/);
+  assert.match(source, /<KanbanColumn [^>]*headingId=\{`\$\{id\}-\$\{index\}`\}/);
   assert.match(source, /const reachedDestination = columns\.some\(column => column\.id === pending\.destinationId/);
   assert.match(source, /if \(reachedDestination && card\)/);
   assert.match(source, /else if \(!card\) \{/);
-  assert.match(source, /headings\.current\.get\(pending\.sourceColumnId\)/);
-  assert.match(source, /tabIndex=\{-1\}/);
+  assert.match(source, /document\.getElementById\(`\$\{id\}-\$\{index\}`\)/);
   assert.match(source, /<p className="recipe-application-sr-only" role="status">\{announcement\}<\/p>/);
   assert.doesNotMatch(source, /setAnnouncement/);
 });

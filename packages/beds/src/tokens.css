@@ -32,6 +32,27 @@
  --es-hover-soft:color-mix(in srgb,var(--es-subtle) 60%,transparent);
  --es-remove-hover:color-mix(in srgb,var(--es-heading) 8%,transparent);
  --es-destructive-border:color-mix(in srgb,var(--es-error-text) 35%,transparent);
+ /* Score and level meters (0.3.0-rc.3): empty, measured base and the neutral middle band. Gains use --es-brand. */
+ --es-meter-empty:color-mix(in srgb,var(--es-text) 9%,transparent);
+ --es-meter-base:color-mix(in srgb,var(--es-text) 32%,transparent);
+ --es-meter-fair:color-mix(in srgb,var(--es-text) 55%,transparent);
+ /* Quiet pills and tags (counts, reasons): a 7% text veil; the brand tint marks a count the product earned. */
+ --es-tint-quiet:color-mix(in srgb,var(--es-text) 7%,transparent);
+ --es-tint-brand:color-mix(in srgb,var(--es-brand) 14%,transparent);
+ --es-emphasis-border:color-mix(in srgb,var(--es-brand) 55%,var(--es-border));
+ /* Pressable choice chips: dashed until chosen, then a brand hairline and tint. */
+ --es-chip-dashed:color-mix(in srgb,var(--es-secondary) 55%,transparent);
+ --es-chip-chosen-border:color-mix(in oklab,var(--es-brand) 55%,transparent);
+ --es-chip-chosen:color-mix(in oklab,var(--es-brand) 9%,var(--es-surface));
+ /* Editing and prompts (0.3.0-rc.3): the one brand tile of a prompt, quiet row hovers, a struck old value, an applied-offer tint. */
+ --es-tile-brand:color-mix(in srgb,var(--es-brand) 12%,transparent);
+ --es-row-hover:color-mix(in srgb,var(--es-subtle) 70%,transparent);
+ --es-tile-hover:color-mix(in srgb,var(--es-subtle) 50%,transparent);
+ --es-strike:color-mix(in srgb,var(--es-secondary) 60%,transparent);
+ --es-applied:color-mix(in srgb,var(--es-success-subtle) 60%,transparent);
+ /* Celebration confetti: the brand family plus heading and success inks. */
+ --es-confetti-1:var(--es-brand);--es-confetti-2:var(--es-brand-ink);--es-confetti-3:color-mix(in oklab,var(--es-brand) 55%,#ffd166);
+ --es-confetti-4:var(--es-heading);--es-confetti-5:var(--es-success);--es-confetti-6:color-mix(in oklab,var(--es-brand) 40%,#ff7ab6);
 }
 .es-root[data-theme='light'] {
  color-scheme:light;

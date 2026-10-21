@@ -1,0 +1,146 @@
+/* 0.3.0-rc.3 */
+/* Editing primitives (editing.tsx): one in-place edit mode. Depth is borders only; the brand is the one accent (dot,
+   ring, tile, mark). Motion lives in motion/react; hover changes here are instant. */
+
+/* ── Mode bar ── */
+.es-root .es-edit-bar{position:sticky;inset-block-start:12px;z-index:5;display:flex;align-items:center;gap:10px;min-width:0;padding:4px 4px 4px 16px;border:1px solid var(--es-border-strong);border-radius:999px;background:var(--es-bg)}
+.es-root .es-edit-bar:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
+.es-root .es-edit-bar__dot{flex:none;inline-size:8px;block-size:8px;border-radius:50%;background:var(--es-brand)}
+.es-root .es-edit-bar__label{flex:1;min-width:0;overflow:hidden;color:var(--es-heading);font:500 14px/20px var(--es-font);text-overflow:ellipsis;white-space:nowrap}
+.es-root .es-edit-bar__hint{margin:0;padding-inline:17px;color:var(--es-secondary);font:400 13px/20px var(--es-font);text-wrap:pretty}
+
+/* ── Section card ── */
+.es-root .es-editable{display:grid;gap:16px;min-width:0;padding:20px 24px 24px;border:1px solid var(--es-border);border-radius:20px;background:transparent;scroll-margin-block:84px 24px}
+.es-root .es-editable[data-active]{border-color:var(--es-border-strong)}
+.es-root .es-editable:not([data-active]):not([data-disabled]){cursor:pointer}
+.es-root .es-editable__body{min-width:0;margin-inline:-4px;padding-inline:4px}
+.es-root .es-editable__body[data-easing]{overflow:clip}
+.es-root .es-editable__heading{display:grid;gap:2px;min-width:0}
+.es-root .es-editable__title{margin:0;color:var(--es-heading);font:500 17px/24px var(--es-font);letter-spacing:-.015em}
+.es-root .es-editable__name{display:flex;align-items:baseline;gap:10px;min-width:0;overflow-wrap:anywhere}
+.es-root .es-editable__count{flex:none;color:var(--es-secondary);font:400 14px/20px var(--es-font);letter-spacing:0;font-variant-numeric:tabular-nums}
+.es-root .es-editable__hint{margin:0;color:var(--es-secondary);font:400 13px/20px var(--es-font);text-wrap:pretty}
+.es-root .es-editable__open{display:flex;align-items:center;justify-content:space-between;gap:12px;inline-size:calc(100% + 20px);min-block-size:44px;margin:-10px;padding:6px 10px;border:0;border-radius:12px;background:transparent;color:inherit;font:inherit;letter-spacing:inherit;text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.es-root .es-editable__open:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
+.es-root .es-editable__open:disabled{cursor:not-allowed}
+.es-root .es-editable__cue{flex:none;color:var(--es-secondary);font:500 13px/20px var(--es-font);letter-spacing:0;opacity:0}
+.es-root .es-editable__open:focus-visible .es-editable__cue{opacity:1}
+.es-root .es-editable__footer{position:sticky;inset-block-end:0;z-index:2;margin:0 -24px -24px;padding:14px 24px 16px;border-block-start:1px solid var(--es-border-subtle);border-end-start-radius:19px;border-end-end-radius:19px;background:var(--es-bg)}
+@media (hover:hover) and (pointer:fine){
+  .es-root .es-editable:not([data-active]):not([data-disabled]):hover{border-color:var(--es-border-strong)}
+  .es-root .es-editable:not([data-disabled]):hover .es-editable__cue{opacity:1}
+}
+
+/* ── Decision footer: note + actions; stacks (primary on top) when narrow ── */
+.es-root .es-edit-footer-frame{container:es-edit-footer / inline-size;min-width:0}
+.es-root .es-edit-footer{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;min-width:0}
+.es-root .es-edit-footer__note{flex:1 1 auto;min-width:0;margin:0;color:var(--es-secondary);font:400 12px/18px var(--es-font);text-wrap:pretty}
+.es-root .es-edit-footer__note[data-tone=error]{color:var(--es-error-text)}
+.es-root .es-edit-footer__actions{display:flex;flex:none;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px;margin-inline-start:auto}
+@container es-edit-footer (max-width:440px){
+  .es-root .es-edit-footer{flex-direction:column;align-items:stretch}
+  .es-root .es-edit-footer__actions{flex-direction:column-reverse;align-items:stretch;margin-inline-start:0}
+  .es-root .es-edit-footer__actions>*{inline-size:100%}
+}
+
+/* ── Add tile ── */
+.es-root .es-add-tile{display:flex;align-items:center;justify-content:space-between;gap:16px;inline-size:100%;min-width:0;margin:0;padding:16px 24px;border:1px dashed var(--es-border-strong);border-radius:20px;background:transparent;color:inherit;font:inherit;text-align:start;cursor:pointer;scroll-margin-block:84px 24px;-webkit-tap-highlight-color:transparent}
+.es-root .es-add-tile:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
+.es-root .es-add-tile:disabled{cursor:not-allowed;opacity:.5}
+.es-root .es-add-tile__text{display:grid;gap:2px;min-width:0}
+.es-root .es-add-tile__title{color:var(--es-heading);font:500 17px/24px var(--es-font);letter-spacing:-.015em}
+.es-root .es-add-tile__hint{color:var(--es-secondary);font:400 13px/20px var(--es-font);text-wrap:pretty}
+.es-root .es-add-tile__action{display:inline-flex;flex:none;align-items:center;gap:6px;color:var(--es-heading);font:500 13px/20px var(--es-font)}
+.es-root .es-add-tile__plus{display:block;inline-size:14px;block-size:14px}
+@media (hover:hover) and (pointer:fine){.es-root .es-add-tile:not(:disabled):hover{background:var(--es-tile-hover)}}
+
+/* ── Step list: checklist card ── */
+.es-root .es-steps{display:grid;gap:10px;min-width:0;padding:20px 24px 14px;border:1px solid var(--es-border);border-radius:20px;background:transparent;scroll-margin-block:84px 24px}
+.es-root .es-steps__head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;min-width:0}
+.es-root .es-steps__title{margin:0;color:var(--es-heading);font:500 17px/24px var(--es-font);letter-spacing:-.015em}
+.es-root .es-steps__count{flex:none;color:var(--es-secondary);font:400 13px/20px var(--es-font);font-variant-numeric:tabular-nums}
+.es-root .es-steps__list{display:grid;margin:0;padding:0;list-style:none}
+.es-root .es-steps__item{min-width:0}
+.es-root .es-steps__item+.es-steps__item{border-block-start:1px solid var(--es-border-subtle)}
+.es-root .es-steps__row{display:flex;align-items:center;gap:12px;inline-size:calc(100% + 20px);min-block-size:48px;margin:0 -10px;padding:6px 10px;border:0;border-radius:12px;background:transparent;color:inherit;font:inherit;text-align:start}
+.es-root button.es-steps__row{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.es-root button.es-steps__row:focus-visible{outline:2px solid var(--es-focus);outline-offset:1px}
+@media (hover:hover) and (pointer:fine){.es-root button.es-steps__row:hover{background:var(--es-row-hover)}}
+.es-root .es-steps__label{flex:1;min-width:0;color:var(--es-text);font:500 14px/20px var(--es-font);overflow-wrap:anywhere}
+.es-root .es-steps__item[data-state=current] .es-steps__label{color:var(--es-heading)}
+.es-root .es-steps__item[data-state=done] .es-steps__label{color:var(--es-secondary)}
+.es-root .es-steps__body{min-width:0;margin-inline:-4px;padding-inline:4px}
+.es-root .es-steps__body[data-easing]{overflow:clip}
+.es-root .es-steps__ask{display:grid;gap:12px;min-width:0;padding:0 0 18px 30px}
+.es-root .es-steps__done{margin:2px 0 6px;color:var(--es-heading);font:500 14px/20px var(--es-font)}
+
+/* The mark: an empty ring (brand on the current item), filled with a check once done. */
+.es-root .es-steps__mark{position:relative;display:grid;flex:none;place-items:center;inline-size:18px;block-size:18px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--es-border-strong)}
+.es-root .es-steps__mark[data-size=sm]{inline-size:16px;block-size:16px}
+.es-root [data-state=current]>.es-steps__mark,.es-root [data-state=current]>.es-steps__row>.es-steps__mark{box-shadow:inset 0 0 0 1.5px var(--es-brand)}
+.es-root [data-state=done]>.es-steps__mark,.es-root [data-state=done]>.es-steps__row>.es-steps__mark{box-shadow:none}
+.es-root .es-steps__check{position:absolute;inset:0;display:grid;place-items:center;border-radius:50%;background:var(--es-brand);color:var(--es-on-brand)}
+.es-root .es-steps__check-icon{display:block;inline-size:12px;block-size:12px}
+.es-root .es-steps__mark[data-size=sm] .es-steps__check-icon{inline-size:11px;block-size:11px}
+
+/* ── Step list: progress ── */
+.es-root .es-steps-progress{display:grid;gap:10px;min-width:0}
+.es-root .es-steps-progress__list{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.es-root .es-steps-progress__step{display:flex;align-items:center;gap:10px;min-width:0;color:var(--es-secondary);font:400 14px/20px var(--es-font)}
+.es-root .es-steps-progress__step[data-state=current]{color:var(--es-heading)}
+.es-root .es-steps-progress__step[data-state=done]{color:var(--es-text)}
+.es-root .es-steps-progress__note{margin:0;color:var(--es-secondary);font:400 13px/20px var(--es-font);text-wrap:pretty}
+
+/* ── Version compare ── */
+.es-root .es-versions{--es-versions-lines:3;display:grid;gap:6px;min-width:0;margin:0}
+.es-root .es-versions__row{display:grid;grid-template-columns:6.5rem minmax(0,1fr);align-items:baseline;gap:0 12px;min-width:0;margin:0}
+.es-root .es-versions__row dt{color:var(--es-secondary);font:500 12px/22px var(--es-font)}
+.es-root .es-versions__row dd{min-width:0;margin:0}
+.es-root .es-versions__value{display:block;margin:0;color:var(--es-heading);font:400 14px/22px var(--es-font);overflow-wrap:break-word;white-space:pre-line;text-wrap:pretty}
+.es-root .es-versions__value[data-clamped]{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:var(--es-versions-lines)}
+.es-root .es-versions__row[data-state=unused] .es-versions__value{color:var(--es-secondary)}
+.es-root .es-versions__row[data-state=goes] .es-versions__value{color:var(--es-secondary);text-decoration:line-through;text-decoration-color:var(--es-strike);text-decoration-thickness:1px}
+
+/* ── Prompt card ── */
+.es-root .es-prompt-slot{min-width:0;overflow:hidden;container-type:inline-size}
+.es-root .es-prompt{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px 16px;padding:16px 16px 16px 18px;border:1px solid var(--es-border);border-radius:20px;background:transparent}
+.es-root .es-prompt__tile{display:grid;flex:none;place-items:center;inline-size:40px;block-size:40px;border-radius:12px;background:var(--es-tile-brand);color:var(--es-brand-ink)}
+.es-root .es-prompt__tile .es-icon{inline-size:18px;block-size:18px}
+.es-root .es-prompt__text{display:grid;gap:2px;min-width:0;max-width:36rem}
+.es-root .es-prompt__title{margin:0;color:var(--es-heading);font:500 15px/22px var(--es-font);text-wrap:pretty}
+.es-root .es-prompt__body{margin:0;color:var(--es-secondary);font:400 13px/20px var(--es-font);text-wrap:pretty;overflow-wrap:anywhere}
+.es-root .es-prompt__extra{grid-column:2;min-width:0;max-width:44rem}
+.es-root .es-prompt__actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px}
+/* With extra content, the tile and text head the card and the actions follow the extra content. */
+.es-root .es-prompt[data-extra]{align-items:start}
+.es-root .es-prompt[data-extra] .es-prompt__actions{grid-column:2;grid-row:3;justify-content:flex-start;margin-inline-start:-2px}
+.es-root .es-prompt[data-extra] .es-prompt__text{grid-column:2 / 4}
+.es-root .es-prompt[data-extra] .es-prompt__extra{grid-column:2 / 4}
+@container (max-width:640px){
+  .es-root .es-prompt{grid-template-columns:auto minmax(0,1fr);align-items:start;padding:16px}
+  .es-root .es-prompt__actions{grid-column:2;justify-content:flex-start;margin-inline-start:-2px}
+  .es-root .es-prompt[data-extra] .es-prompt__text,.es-root .es-prompt[data-extra] .es-prompt__extra{grid-column:2}
+}
+
+/* ── Success mark ── */
+.es-root .es-success-mark{display:inline-grid;flex:none;place-items:center;inline-size:56px;block-size:56px;border-radius:50%;background:var(--es-tint-brand);color:var(--es-brand-ink)}
+.es-root .es-success-mark svg{display:block;inline-size:36px;block-size:36px;overflow:visible}
+.es-root .es-success-mark[data-compact]{inline-size:28px;block-size:28px}
+.es-root .es-success-mark[data-compact] svg{inline-size:18px;block-size:18px}
+
+@media (max-width:640px){
+  .es-root .es-editable{padding:16px 16px 18px}
+  .es-root .es-editable__footer{margin:0 -16px -18px;padding:12px 16px 14px}
+  .es-root .es-add-tile{padding:14px 16px}
+  .es-root .es-steps{padding:16px 16px 10px}
+  .es-root .es-steps__ask{padding-inline-start:0}
+  .es-root .es-versions__row{grid-template-columns:minmax(0,1fr)}
+  .es-root .es-versions__row dt{line-height:18px}
+}
+
+@media (forced-colors:active){
+  .es-root .es-edit-bar,.es-root .es-editable,.es-root .es-add-tile,.es-root .es-steps,.es-root .es-prompt{border-color:CanvasText}
+  .es-root .es-steps__mark{box-shadow:inset 0 0 0 1.5px CanvasText}
+  .es-root .es-steps__check{background:CanvasText;color:Canvas}
+  .es-root .es-prompt__tile{background:Canvas;color:CanvasText;box-shadow:inset 0 0 0 1px CanvasText}
+}

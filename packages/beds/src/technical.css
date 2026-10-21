@@ -6,3 +6,13 @@
 .es-root .es-code-field>p{font-size:12px;line-height:18px;color:var(--es-text);overflow-wrap:anywhere}
 .es-root .es-code-snippet>:focus-visible{outline-offset:-3px}
 @media(hover:hover) and (pointer:fine){.es-root .es-code-snippet>button:hover{background:var(--es-hover)}}
+.es-root .es-copy-pill-field{min-inline-size:0}
+.es-root .es-copy-pill-label{font:500 14px/20px var(--es-font);color:var(--es-text)}
+.es-root .es-copy-pill{display:flex;align-items:center;gap:12px;min-inline-size:0;padding:6px 6px 6px 18px;border:1px solid var(--es-border);border-radius:999px;background:var(--es-transparent);color:var(--es-secondary)}
+.es-root .es-copy-pill>code{flex:1;min-inline-size:0;overflow:auto;white-space:pre;font:400 13px/20px var(--es-font);padding-block:6px}
+.es-root .es-copy-pill>button{display:inline-flex;align-items:center;justify-content:center;gap:8px;flex-shrink:0;min-block-size:40px;padding:8px 16px;border:0;border-radius:999px;background:var(--es-control);color:var(--es-text);font:500 14px/20px var(--es-font);cursor:pointer}
+.es-root .es-copy-pill>button:disabled{opacity:.6;cursor:wait}
+.es-root .es-copy-pill>:is(code,button):focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
+.es-root .es-copy-pill-field>p{margin:0;color:var(--es-secondary);font:400 13px/20px var(--es-font)}
+@media(pointer:coarse){.es-root .es-copy-pill>button{min-block-size:44px}}
+@media(max-width:360px){.es-root .es-copy-pill>button{padding-inline:12px}.es-root .es-copy-pill-text{display:none}}

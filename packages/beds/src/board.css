@@ -1,0 +1,18 @@
+/* Stage board (0.3.0-rc.3): sideways on every width, one column per snap. */
+.es-root .es-kanban{min-width:0;overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-gutter:stable;padding-block:2px 4px;scroll-snap-type:inline proximity}
+.es-root .es-kanban:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
+.es-root .es-kanban[data-fade=end]{mask-image:linear-gradient(to right,var(--es-black) calc(100% - 56px),transparent)}
+.es-root .es-kanban[data-fade=start]{mask-image:linear-gradient(to left,var(--es-black) calc(100% - 56px),transparent)}
+.es-root .es-kanban[data-fade=both]{mask-image:linear-gradient(to right,transparent,var(--es-black) 56px,var(--es-black) calc(100% - 56px),transparent)}
+.es-root .es-kanban-columns{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(min(360px,calc(100vw - 48px)),360px);gap:12px;width:max-content;min-width:100%;align-items:stretch}
+.es-root .es-kanban-column{min-width:0;min-height:280px;border-radius:var(--es-radius-card);scroll-snap-align:start}
+.es-root .es-kanban-panel{display:flex;flex-direction:column;gap:12px;box-sizing:border-box;height:100%;padding:16px;border:1px solid var(--es-border);border-radius:var(--es-radius-panel);background:var(--es-transparent)}
+.es-root .es-kanban-header{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.es-root .es-kanban-header h2{min-width:0;margin:0;color:var(--es-heading);font:500 16px/20px var(--es-font);overflow-wrap:anywhere}
+.es-root .es-kanban-header h2:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px;border-radius:4px}
+.es-root .es-kanban-count{display:inline-flex;flex:none;align-items:center;justify-content:center;min-width:24px;min-height:24px;box-sizing:border-box;padding-inline:6px;border-radius:var(--es-radius-full);background:var(--es-bg);color:var(--es-secondary);font:500 12px/16px var(--es-font);font-variant-numeric:tabular-nums}
+.es-root .es-kanban-cards{position:relative;display:flex;flex-direction:column;gap:8px}
+.es-root .es-kanban-cards:empty{display:none}
+.es-root .es-kanban-empty{margin:0;padding:12px 4px;color:var(--es-secondary);font:400 13px/20px var(--es-font)}
+@media(max-width:767px){.es-root .es-kanban-columns{grid-auto-columns:minmax(min(320px,calc(100vw - 72px)),320px)}}
+@media(forced-colors:active){.es-root :is(.es-kanban,.es-kanban-header h2):focus-visible{outline-color:Highlight}}

@@ -10,6 +10,33 @@ Landing, benefits, footer, onboarding, checkout, processing and results are now
 app-owned recipes; their names and types are no longer imports from `beds`.
 `brands` was removed; identity and presets are caller-owned.
 
+## Parity patterns (0.3.0-rc.3) — 22
+
+Contract: [Result, board, editing and commerce patterns](RC3-PATTERNS.md). Lab: `?view=result-patterns`, `?view=kanban`, `?view=editing`, `?view=commerce`.
+
+| Component | Job |
+|---|---|
+| `ScoreComparison` | Before/after score board: count-up, two segmented rows, optional celebrated gain, band, criteria and notes |
+| `ScoreMeter` | 28-segment score bar with gain segments and caller-owned level palettes |
+| `ConfettiBurst` | One-off confetti for a real win; absent under reduced motion |
+| `NextStepCard` | The one next step: full-width stacked actions, note, emphasis state |
+| `ChangeSummary` | What changed: neutral chip groups, lines and a closing note |
+| `SelectionNote` | Which items went in, were left out or were shortened, with reason tags |
+| `ChipChecklist` | Pressable confirm chips with locked/frozen states and a status line |
+| `BinaryQuestionList` | A few yes/no questions saved on tap |
+| `KanbanBoard`, `KanbanColumn` | Sideways stage board with fixed columns and count pills |
+| `EditModeBar`, `EditableSection`, `EditFooter`, `AddSectionTile` | Single in-place edit mode |
+| `StepList` | One-question-at-a-time checklist or progress steps |
+| `VersionCompare` | Keep or replace one value (stays / goes / unused) |
+| `PromptCard` | Tinted-tile prompt that collapses away |
+| `SuccessMark` | Drawn completion mark |
+| `CouponField` | Coupon toggle, field with Apply, applied and kept rows |
+| `InlineSuggestion` | A hint with one action that never acts by itself |
+| `ConsentNotice` | First-run usage-data notice (floating or inline) |
+| `InstructionSteps` | Numbered setup steps with embedded content |
+
+`CodeSnippet` adds `variant="pill"` and `hideLabel`.
+
 ## Reusable segmented meter
 
 `MeterSegments` exposes the existing shared meter anatomy without prescribing

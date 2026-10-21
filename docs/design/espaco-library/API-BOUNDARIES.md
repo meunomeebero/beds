@@ -48,6 +48,13 @@ widget does not endorse all its historical geometry or certify every state.
 | input-otp | `InputOTP`, `InputOTPGroup`, `InputOTPSlot`, `InputOTPSeparator`, `InputOTPProps`, `InputOTPStatus` | Retain: one segmented code input and parts. No verification service, login flow or success inference. |
 | toast | `Toaster`, `toast`, `dismissToast`, `ToastInput`, `ToastTone`, `ToastAction` | Retain: transient feedback service and visual host. No product request or business event interpretation. |
 | collection-controls | `ResultsStatus`, `CollectionToolbar` | Retain: status text and search/filter slot grouping. No application-card schema or lifecycle. |
+| score | `ScoreMeter`, `ScoreComparison`, `ScoreMeterProps`, `ScoreMeterEntrance`, `ScoreComparisonProps`, `ScoreCriterion` | Retain (0.3.0-rc.3): measured before/after presentation. The caller decides what counts as a win (`gain`), the band and every reading; BEDS never derives a score or a threshold. |
+| celebration | `ConfettiBurst`, `ConfettiBurstProps` | Retain: decorative one-off celebration. The caller decides when a win is real; sound and once-per-item memory are host-owned. |
+| choice-chips | `ChipChecklist`, `BinaryQuestionList`, `ChipChecklistProps`, `ChipChecklistOption`, `BinaryQuestionListProps`, `BinaryQuestion`, `ChoiceStatus` | Retain: tap-to-answer choice cards. Persistence, undo and what a locked item means stay with the host. |
+| summary | `ChangeSummary`, `SelectionNote`, `NextStepCard`, `ChangeSummaryProps`, `ChangeSummaryGroup`, `SummaryLink`, `SelectionNoteProps`, `SelectionRow`, `NextStepCardProps` | Retain: result summaries and the one next-step card. Content, prices and which action is recommended are caller-owned. |
+| board | `KanbanBoard`, `KanbanColumn`, `KanbanBoardProps`, `KanbanColumnProps` | Retain: sideways stage layout only. Stages, cards, moves, drag and outcomes are host-owned. |
+| editing | `EditModeBar`, `EditableSection`, `EditFooter`, `AddSectionTile`, `StepList`, `VersionCompare`, `PromptCard`, `SuccessMark`, `EditModeBarProps`, `EditableSectionProps`, `EditFooterProps`, `AddSectionTileProps`, `StepListProps`, `StepItem`, `StepState`, `VersionCompareProps`, `VersionCompareRow`, `PromptCardProps`, `SuccessMarkProps` | Retain: the single in-place edit mode and its parts. Saving, conflicts and undo windows stay in the app. |
+| commerce | `CouponField`, `InlineSuggestion`, `ConsentNotice`, `InstructionSteps`, `CouponFieldState`, `CouponFieldPhase`, `CouponFieldLabels`, `InlineSuggestionAction`, `InstructionStep` | Retain: coupon entry, a suggestion with one action, a consent notice and setup steps. No coupon validation, pricing, analytics or connection backend. |
 
 ## Borderline decisions
 
