@@ -1,6 +1,6 @@
-/* 0.3.0-rc.3 */
+/* 0.3.0-rc.3 · 0.3.0-rc.4 adds the stacked footer and the pane density (section-editor.css) */
 /* Editing primitives (editing.tsx): one in-place edit mode. Depth is borders only; the brand is the one accent (dot,
-   ring, tile, mark). Motion lives in motion/react; hover changes here are instant. */
+   ring, tile, mark). Motion lives in motion/react; color hovers ease through Tailwind transition utilities on the elements (150–200ms). */
 
 /* ── Mode bar ── */
 .es-root .es-edit-bar{position:sticky;inset-block-start:12px;z-index:5;display:flex;align-items:center;gap:10px;min-width:0;padding:4px 4px 4px 16px;border:1px solid var(--es-border-strong);border-radius:999px;background:var(--es-bg)}
@@ -42,6 +42,11 @@
   .es-root .es-edit-footer__actions{flex-direction:column-reverse;align-items:stretch;margin-inline-start:0}
   .es-root .es-edit-footer__actions>*{inline-size:100%}
 }
+
+/* Stacked footer (side-pane cards): content rows, the note, then the actions at the end. */
+.es-root .es-edit-footer-stack{display:grid;gap:12px;min-width:0}
+.es-root .es-edit-footer-stack>.es-edit-footer__note{font-size:13px;line-height:20px}
+.es-root .es-edit-footer-stack__actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}
 
 /* ── Add tile ── */
 .es-root .es-add-tile{display:flex;align-items:center;justify-content:space-between;gap:16px;inline-size:100%;min-width:0;margin:0;padding:16px 24px;border:1px dashed var(--es-border-strong);border-radius:20px;background:transparent;color:inherit;font:inherit;text-align:start;cursor:pointer;scroll-margin-block:84px 24px;-webkit-tap-highlight-color:transparent}

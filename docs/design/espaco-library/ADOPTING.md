@@ -1,18 +1,18 @@
-# Adopting BEDS 0.3.0-rc.3
+# Adopting BEDS 0.3.0-rc.4
 
-Use when: an app moves from beds 0.2.x or 0.3.0-rc.1/rc.2 to rc.3, or adopts BEDS from scratch and should look like the reference app.
+Use when: an app moves from beds 0.2.x or 0.3.0-rc.1–rc.3 to rc.4, or adopts BEDS from scratch and should look like the reference app.
 Do not use when: you are changing BEDS itself. Read [Governance](GOVERNANCE.md) for that.
-Read next: [Agent quickstart](AGENT-QUICKSTART.md) · [Foundations](FOUNDATIONS.md) · [RC3 patterns](RC3-PATTERNS.md).
+Read next: [Agent quickstart](AGENT-QUICKSTART.md) · [Foundations](FOUNDATIONS.md) · [RC3 patterns](RC3-PATTERNS.md) · [RC4 patterns](RC4-PATTERNS.md).
 
 ## 1. Install
 
 BEDS is not on the npm registry, because the `beds` name there belongs to a third party. Pin the GitHub prerelease asset:
 
 ```json
-"beds": "https://github.com/meunomeebero/beds/releases/download/v0.3.0-rc.3/beds-0.3.0-rc.3.tgz"
+"beds": "https://github.com/meunomeebero/beds/releases/download/v0.3.0-rc.4/beds-0.3.0-rc.4.tgz"
 ```
 
-You can also vendor the asset with `"beds": "file:vendor/beds-0.3.0-rc.3.tgz"`. Check its SHA-256 against the release notes. Peer dependencies are `react`/`react-dom` 19 and TypeScript 5.9 or later. After install, read `node_modules/beds/dist/manifest.json` for the exact props. Do not guess them.
+You can also vendor the asset with `"beds": "file:vendor/beds-0.3.0-rc.4.tgz"`. Check its SHA-256 against the release notes. Peer dependencies are `react`/`react-dom` 19 and TypeScript 5.9 or later. After install, read `node_modules/beds/dist/manifest.json` for the exact props. Do not guess them.
 
 ## 2. Theme and tokens
 
@@ -50,6 +50,16 @@ From 0.3.0-rc.2:
 - `CodeSnippet` gains `variant="pill"` and `hideLabel`.
 - No default changed.
 
+### From rc.3 to rc.4
+
+Additive. Nothing to change unless you adopt the new pieces:
+- **New dependency:** `@dnd-kit/core` (MIT) comes with the package. Only the board drag code imports it; tree-shaking bundlers leave it out when you do not use `KanbanBoard`.
+- **14 new components:** `DocumentWorkspace`, `DocumentToolbar`, `DocumentSheet`, `RevisionList`, `EditorPane`, `VersionNote`, `PendingLine`, `BulletFields`, `ChipInput`, `EntryList`, `RatingStrip`, `KanbanCard`, `KanbanDragHandle`, `StruckPrice`.
+- **New props:** `KanbanBoard drag` and `KanbanColumn id`; `EditableSection index`; `EditFooter layout="stacked"` + `children`; `Chip pressed` + `onPressedChange`; `LinkButton dot` and `purpose="quiet"` (also on `TextLink`); `PricingCard price.listLabel` + `listAccessibleLabel`; `Icon name="ArrowDown"`.
+- **6 tokens:** `--es-drag-shadow`, `--es-version-dot`, `--es-doc-stage`, `--es-paper`, `--es-paper-ink`, `--es-sheet-shadow`.
+- **Visual changes you may notice:** section cards ease their border (200ms) and fade their "Editar" cue (150ms) on hover, and the add tile eases its tint; before, these changes were instant. An `EditableSection` inside an `EditorPane` uses the pane density (18/20px padding, 16px title) instead of the page density.
+- **Board drag replaces your own:** if your app ran its own drag on top of `KanbanBoard`, remove it before passing `drag`. Keep your stored order and move request in `onDrop`.
+
 ## 4. Component map
 
 Replace local ports and 0.2 usages screen by screen. Check each screen in light and dark, at 1440 and 390 width, before you delete the old code.
@@ -70,19 +80,52 @@ Replace local ports and 0.2 usages screen by screen. Check each screen in light 
 | Local dashed confirm chips | `ChipChecklist` |
 | Local yes/no question rows | `BinaryQuestionList` |
 | Local board columns, `ApplicationBoard`-style recipe | `KanbanBoard` + `KanbanColumn` (cards stay yours) |
+| Local board drag (`@dnd-kit` in the app: handle, drop slot, overlay, keyboard drag) | `KanbanBoard drag` + `KanbanColumn id` + `KanbanCard` + `KanbanDragHandle` in the card |
 | Local edit-mode bar, section cards, sticky footer, empty tile | `EditModeBar`, `EditableSection`, `EditFooter`, `AddSectionTile` |
 | Local gaps checklist or reading-progress list | `StepList purpose="checklist" \| "progress"` |
 | Local keep/replace versions list | `VersionCompare` |
 | Local nudge or repair prompt with a tinted tile | `PromptCard` |
 | Local same-price / upgrade hint | `InlineSuggestion` |
+| Local struck list price before a total | `StruckPrice` (or `PricingCard price.listLabel`) |
+| Local toggle chips in a review (`aria-pressed`) | `Chip pressed onPressedChange` |
+| Local "N items missing" link with a dot | `LinkButton purpose="quiet" dot` |
 | Local analytics / consent banner | `ConsentNotice` |
 | Local copy pill for an endpoint | `CodeSnippet variant="pill"` |
 | Local numbered setup list | `InstructionSteps` |
 | Celebration / undo / stale-warning toasts | `toast({ id, tone, action })` + `dismissToast(id)` |
 
+**Document editor** (rc.4):
+
+| Old (local app code) | New (rc.4) |
+|---|---|
+| Workspace frame: document stage, side pane, resize separator, footer, phone tabs | `DocumentWorkspace` (`toolbar`, `document`, `side`, `footer`, `notices`, `pane`/`onPaneChange`) |
+| Document toolbar with a status dot and actions | `DocumentToolbar` + `VersionNote tone="review" \| "history"` |
+| Letter or text page on the stage | `DocumentSheet` (a PDF viewer stays yours, inside `document`) |
+| History drawer list | `Drawer` + `RevisionList` |
+| Side-pane heading, page-count line, "back to the delivered version" row | `EditorPane` (`meta`, `intro`) + `VersionNote tone="current"` with a ghost compact `Button` |
+| Section card (closed preview, open form, cue) | `EditableSection` inside `EditorPane` (+ `index` for the staggered rise) |
+| Card footer: save error, "save to profile too", note, Cancelar / Salvar | `EditFooter layout="stacked"` with `Notice` and `Checkbox` as children |
+| Empty section tile | `AddSectionTile` |
+| Bullet fields with × | `BulletFields` |
+| Skills chips + "Novo item" + Adicionar | `ChipInput` |
+| Experience / education / language rows with ↑ ↓ | `EntryList` (+ `BulletFields` in `fields`) |
+| "Splitting into sections" line, retry, read-only notice | `PendingLine`, `Notice` + compact outline `Button` |
+| Discard-changes confirmation | `Dialog` with a destructive action |
+
+**Feedback** (rc.4):
+
+| Old (local app code) | New (rc.4) |
+|---|---|
+| Star rating form + "Enviar avaliação" | `RatingStrip` (`legend`, `starLabel`, `submitLabel`, `onSubmit`, `pending`, `disabledReason`) |
+| Receipt line, low-score note and "Revisar seções" | `RatingStrip receipt`, `scoreLabel`, `lowThreshold`, `lowNote`, `lowAction` |
+| The one outlined "Envie feedback" | `RatingStrip trailing={<Button variant="outline" … />}` (your form opens from it) |
+| Two-row phone layout | Built in (container query at 720px) |
+
 These stay in the app:
 - sound,
-- drag and drop,
+- stored card order and which moves are allowed (BEDS ships the drag gesture since rc.4),
+- the document model, saving, revisions and the PDF viewer,
+- rating storage and the feedback form,
 - once-per-item celebration memory,
 - undo windows,
 - prices and coupon validation,
@@ -93,6 +136,7 @@ Lab views show every pattern with synthetic data:
 - `?view=kanban`
 - `?view=editing`
 - `?view=commerce`
+- `?view=document-editor`
 
 ## 5. Follow these principles
 

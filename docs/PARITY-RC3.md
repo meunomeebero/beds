@@ -60,3 +60,5 @@ Totals:
 - **Pattern rows:** 24 added, 2 changed, 10 already OK, 3 product-specific, 4 deferred.
 - **Deferred group:** the eight pieces carried over from rc.2 are grouped in the last row.
 - **New exported components:** 22.
+
+Next round: [PARITY-RC4.md](PARITY-RC4.md) (0.3.0-rc.4) closes the drag and drop, pressed chip, dotted quiet link and struck price deferrals.

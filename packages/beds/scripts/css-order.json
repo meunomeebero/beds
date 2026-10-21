@@ -31,5 +31,8 @@
  "summary.css",
  "board.css",
  "editing.css",
- "commerce.css"
+ "commerce.css",
+ "section-editor.css",
+ "document.css",
+ "rating.css"
 ]

@@ -1,0 +1,39 @@
+/* 0.3.0-rc.4 */
+/* Rating strip (rating.tsx), the reference app's feedback strip: question + stars + submit, then the one outlined
+   feedback action at the end. Two short rows on narrow frames (container es-rating). */
+.es-root .es-rating-frame{container:es-rating / inline-size;min-width:0}
+.es-root .es-rating{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;min-inline-size:0;padding:12px 16px;border:1px solid var(--es-border);border-radius:16px}
+.es-root .es-rating__form,.es-root .es-rating__done{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;min-inline-size:0}
+.es-root .es-rating fieldset{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;min-inline-size:0;margin:0;padding:0;border:0}
+.es-root .es-rating legend{float:left;padding:0;color:var(--es-heading);font:500 14px/20px var(--es-font)}
+.es-root .es-rating__stars{display:flex;gap:2px}
+.es-root .es-rating__star{position:relative;display:inline-grid;place-items:center;inline-size:32px;block-size:32px;border-radius:var(--es-radius-full);color:var(--es-secondary);cursor:pointer}
+.es-root .es-rating__star input{position:absolute;inset:0;margin:0;opacity:0;cursor:inherit}
+.es-root .es-rating__star svg{inline-size:20px;block-size:20px;pointer-events:none}
+.es-root .es-rating__star[data-filled]{color:var(--es-brand-ink)}
+.es-root .es-rating__star[data-filled] svg{fill:currentColor}
+.es-root .es-rating__star:has(input:focus-visible){outline:2px solid var(--es-focus);outline-offset:1px}
+@media (hover:hover) and (pointer:fine){.es-root .es-rating__star:hover{color:var(--es-heading)}}
+.es-root .es-rating fieldset:disabled .es-rating__star{cursor:default;opacity:.55}
+.es-root .es-rating p{margin:0}
+.es-root .es-rating__done>p:first-child{color:var(--es-heading);font:500 14px/20px var(--es-font)}
+.es-root .es-rating__done>p:first-child:focus{outline:none}
+.es-root .es-rating__score{color:var(--es-secondary);font-weight:400}
+.es-root .es-rating__note{flex-basis:100%;color:var(--es-secondary);font:400 13px/20px var(--es-font)}
+.es-root .es-rating__done .es-rating__note{flex-basis:auto}
+.es-root .es-rating__trailing{display:flex;flex:none}
+
+/* Narrow frames: two short rows (question + stars, then the two buttons) so the content above keeps its height. */
+@container es-rating (max-width:720px){
+  .es-root .es-rating{justify-content:flex-start;gap:10px 12px;padding:12px 14px}
+  .es-root .es-rating__form,.es-root .es-rating__done{display:contents}
+  .es-root .es-rating__done>p{flex-basis:100%}
+  .es-root .es-rating fieldset{flex-basis:100%;flex-wrap:nowrap;justify-content:space-between}
+  .es-root .es-rating__star{inline-size:28px;block-size:28px}
+  .es-root .es-rating__form .es-rating__note{order:3}
+  .es-root .es-rating__trailing{margin-inline-start:auto}
+}
+@media (forced-colors:active){
+  .es-root .es-rating{border-color:CanvasText}
+  .es-root .es-rating__star[data-filled]{color:Highlight}
+}

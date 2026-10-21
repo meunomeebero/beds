@@ -14,6 +14,8 @@ type StatusOption = { id: string; label: string; disabled?: boolean };
 /** Presentation only. The caller owns scoring, dates, status transitions and artifacts. */
 export type ApplicationCardProps = {
   purpose?: 'default' | 'kanban';
+  /** Board drag grip (a `KanbanDragHandle`), at the end of the top row. */
+  dragHandle?: ReactNode;
   title: string;
   company: string;
   companyImage?: string;
@@ -56,13 +58,13 @@ function Score({ score }: { score: ApplicationScore }) {
   </div>;
 }
 
-export function ApplicationCard({ purpose = 'default', title, company, companyImage, status, statusOptions, onStatusChange, date, age, source, location, salary, keywords = [], tag, note, score, documents = [], selection, feedback, primaryAction, jobHref, detailsLabel = 'Ver detalhes', onOpen }: ApplicationCardProps) {
+export function ApplicationCard({ dragHandle, purpose = 'default', title, company, companyImage, status, statusOptions, onStatusChange, date, age, source, location, salary, keywords = [], tag, note, score, documents = [], selection, feedback, primaryAction, jobHref, detailsLabel = 'Ver detalhes', onOpen }: ApplicationCardProps) {
   const id = useId();
   const [failedImage, setFailedImage] = useState<string | null>(null);
   const [statusOpen, setStatusOpen] = useState(false);
   const initials = company.trim().split(/\s+/).slice(0, 2).map(word => word[0]).join('').toLocaleUpperCase();
   const safeHref = jobHref && /^https?:\/\//i.test(jobHref) ? jobHref : undefined;
-  const identity = <div className="recipe-application-identity"><span className="recipe-application-company">{company}</span><h3 id={id}><button type="button" onClick={onOpen}>{title}</button></h3></div>;
+  const identity = <div className="recipe-application-identity"><span className="recipe-application-company">{company}</span><h3 id={id}><button type="button" onClick={onOpen} data-kanban-grab="">{title}</button></h3></div>;
   const moveOptions = (statusOptions ?? []).filter(option => option.id !== status.id).map(option => ({ ...option, label: `Mover para ${option.label}` }));
   let statusContent: ReactNode = <Badge label={status.label} tone={status.tone} purpose="status" />;
   if (statusOptions && onStatusChange) {
@@ -80,6 +82,7 @@ export function ApplicationCard({ purpose = 'default', title, company, companyIm
         <span className="recipe-application-company-mark">{companyImage && failedImage !== companyImage ? <img src={companyImage} alt="" loading="lazy" onError={() => setFailedImage(companyImage)} /> : initials || '—'}</span>
       </div>
       {purpose === 'kanban' ? identity : statusControl}
+      {dragHandle && <span className="recipe-application-drag">{dragHandle}</span>}
     </div>
     {purpose === 'default' && identity}
     {(location || salary) && <ul className="recipe-application-details">{location && <li><Icon name="Globe" purpose="small" />{location}</li>}{salary && <li><Icon name="Coins" purpose="small" />{salary}</li>}</ul>}

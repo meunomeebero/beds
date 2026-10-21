@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { AppShell } from './recipes';
 import {
-  AddSectionTile, Button, ContentHeader, DesignSystemProvider, EditFooter, EditModeBar, EditableSection, Inline, PageHeader, PromptCard,
+  AddSectionTile, Button, Chip, ContentHeader, LinkButton, DesignSystemProvider, EditFooter, EditModeBar, EditableSection, Inline, PageHeader, PromptCard,
   SidebarHeader, Stack, StepList, SuccessMark, Text, TextAreaField, TextLink, ThemeToggle, VersionCompare, type StepItem, type Theme,
 } from 'beds';
 
@@ -36,6 +36,7 @@ export default function EditingPage() {
   const [answer, setAnswer] = useState('');
   const [prompt, setPrompt] = useState(true);
   const [kept, setKept] = useState<'new' | 'old'>('new');
+  const [chosen, setChosen] = useState<string[]>(['Orçamento', 'Gestão de equipes']);
 
   const items: StepItem[] = QUESTIONS.map(item => ({ id: item.id, label: item.label, state: answered.includes(item.id) ? 'done' : item.id === current ? 'current' : 'pending' }));
   const currentQuestion = QUESTIONS.find(item => item.id === current && !answered.includes(item.id));
@@ -120,6 +121,13 @@ export default function EditingPage() {
       >
         <Text tone="secondary">Formulário da formação (exemplo).</Text>
       </EditableSection>
+
+      <Stack gap="tight">
+        <LinkButton purpose="quiet" dot label={`${QUESTIONS.length - answered.length} itens faltando`} onClick={() => setCurrent(nextAfter(answered))} />
+        <Text variant="label">Competências encontradas no arquivo</Text>
+        <Inline gap="tight">{['Orçamento', 'Gestão de equipes', 'AutoCAD', 'Licitações'].map(skill => <Chip key={skill} label={skill} pressed={chosen.includes(skill)} onPressedChange={on => setChosen(current => on ? [...current, skill] : current.filter(item => item !== skill))} />)}</Inline>
+        <Text variant="caption" tone="secondary"><span role="status">{`${chosen.length} de 4 entram no perfil.`}</span></Text>
+      </Stack>
 
       <AddSectionTile title="Competências" hint="Liste o que você faz bem, uma por vez." actionLabel="Adicionar" disabled={!editing} onClick={() => setOpenSection('skills')} />
 

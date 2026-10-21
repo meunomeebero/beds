@@ -30,19 +30,45 @@ export default function KanbanPage() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [statuses, setStatuses] = useState<Record<string, string>>(() => Object.fromEntries(jobs.map(job => [job.id, job.status])));
+  /** Host-owned card order per stage (the reference app keeps it in local storage; this preview keeps it in memory). */
+  const [order, setOrder] = useState<Record<string, string[]>>({});
+  const ranked = (stage: string) => jobs.filter(job => statuses[job.id] === stage).sort((a, b) => {
+    const ids = order[stage] ?? [];
+    const rank = (id: string) => ids.includes(id) ? ids.indexOf(id) : ids.length;
+    return rank(a.id) - rank(b.id);
+  });
   const [announcement, setAnnouncement] = useState('');
   const [burst, setBurst] = useState(0);
   const [detail, setDetail] = useState<{ id: string; section?: string } | null>(null);
   const selected = jobs.find(job => job.id === detail?.id);
   const long = params.get('preview') === 'long';
   const titleFor = (job: typeof jobs[number]) => long && job.id === 'norte' ? 'Especialista em pesquisa, acessibilidade e sistemas de design para plataformas internacionais' : job.title;
-  const columns: ApplicationBoardColumn[] = stages.map(stage => ({ ...stage, items: params.get('preview') === 'empty' ? [] : jobs.filter(job => statuses[job.id] === stage.id).map(job => ({
+  const columns: ApplicationBoardColumn[] = stages.map(stage => ({ ...stage, items: params.get('preview') === 'empty' ? [] : ranked(stage.id).map(job => ({
     id: job.id, title: titleFor(job), company: job.company, location: job.location, score: job.score,
     moveTo: job.status === 'preparing' || params.get('preview') === 'readonly' ? undefined : ['saved', 'ready', 'sent', 'won', 'closed'],
     note: job.note ? { text: job.note, onOpen: () => setDetail({ id: job.id, section: 'Sua anotação' }) } : undefined,
     documents: job.documents ? ['Currículo', 'Carta'].map(label => ({ id: label, label, onOpen: () => setDetail({ id: job.id, section: label }) })) : undefined,
     onOpen: () => setDetail({ id: job.id }),
   })) }));
+
+  function move(id: string, status: string) {
+    if (params.get('preview') === 'move-error') { setAnnouncement('Não foi possível mover a vaga. Ela continua na etapa anterior. Tente novamente.'); return; }
+    const from = statuses[id]!;
+    const company = jobs.find(job => job.id === id)?.company;
+    setStatuses(current => ({ ...current, [id]: status }));
+    setAnnouncement(`${jobs.find(job => job.id === id)?.title} movida para ${stages.find(stage => stage.id === status)?.label}. Alteração apenas nesta prévia.`);
+    // A confirmed move retires the previous undo; celebrate only a real win, never on load or undo.
+    dismissToast('board-move-undo');
+    if (celebrated.has(status) && !(status === 'sent' && from === 'won')) setBurst(Date.now());
+    if (outcomes.has(status)) toast({
+      id: 'board-move-undo', tone: status === 'won' ? 'success' : 'neutral',
+      message: status === 'won' ? `${company}: vaga conquistada. Pode comemorar!` : `${company}: a candidatura não avançou.`,
+      action: { label: 'Desfazer', onClick: () => {
+        if (params.get('preview') === 'stale-undo') { toast({ message: 'Essa candidatura mudou enquanto isso. Confira a etapa atual e tente de novo.', tone: 'warning' }); return; }
+        setStatuses(current => ({ ...current, [id]: from }));
+      } },
+    });
+  }
 
   return <DesignSystemProvider theme={theme} onThemeChange={setTheme} brandColor={"#ffa133"}>
     <AppShell contentWidth="full" collapsed={collapsed} onCollapsedChange={setCollapsed} mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen} navigationLabel="Navegação" closeNavigationLabel="Fechar navegação"
@@ -52,25 +78,16 @@ export default function KanbanPage() {
         <PageHeader title="Candidaturas" description="Cada oportunidade, no seu próximo passo." />
         <Stack>
           <ResultsStatus>{`${columns.reduce((total, column) => total + column.items.length, 0)} vagas · Dados de demonstração`}</ResultsStatus>
-          <ApplicationBoard label="Vagas por status" description="Com o quadro em foco, as setas mudam de coluna. O menu de cada card muda a etapa." columns={columns} announcement={announcement} onMove={(id, status) => {
-            if (params.get('preview') === 'move-error') { setAnnouncement('Não foi possível mover a vaga. Ela continua na etapa anterior. Tente novamente.'); return; }
-            const from = statuses[id]!;
-            const company = jobs.find(job => job.id === id)?.company;
-            setStatuses(current => ({ ...current, [id]: status }));
-            setAnnouncement(`${jobs.find(job => job.id === id)?.title} movida para ${stages.find(stage => stage.id === status)?.label}. Alteração apenas nesta prévia.`);
-            // A confirmed move retires the previous undo; celebrate only a real win, never on load or undo.
-            dismissToast('board-move-undo');
-            if (celebrated.has(status) && !(status === 'sent' && from === 'won')) setBurst(Date.now());
-            if (outcomes.has(status)) toast({
-              id: 'board-move-undo', tone: status === 'won' ? 'success' : 'neutral',
-              message: status === 'won' ? `${company}: vaga conquistada. Pode comemorar!` : `${company}: a candidatura não avançou.`,
-              action: { label: 'Desfazer', onClick: () => {
-                if (params.get('preview') === 'stale-undo') { toast({ message: 'Essa candidatura mudou enquanto isso. Confira a etapa atual e tente de novo.', tone: 'warning' }); return; }
-                setStatuses(current => ({ ...current, [id]: from }));
-              } },
-            });
-          }} />
-          <Text variant="body-small" tone="secondary">Use o menu de opções do card para mudar de etapa. Entrar em seleção e conquistar a vaga comemoram; não avançar é calmo e dá para desfazer.</Text>
+          <ApplicationBoard label="Vagas por status" description="Com o quadro em foco, as setas mudam de coluna. Arraste um card pela alça, ou use o menu do card para mudar a etapa." columns={columns} announcement={announcement}
+            onDrop={params.get('preview') === 'readonly' ? undefined : ({ cardId, from, to, index }) => {
+              const ids = ranked(to).map(job => job.id).filter(id => id !== cardId);
+              ids.splice(index, 0, cardId);
+              setOrder(current => ({ ...current, [to]: ids }));
+              if (from !== to) move(cardId, to);
+            }}
+            onMove={(id, status) => move(id, status)} />
+
+          <Text variant="body-small" tone="secondary">Arraste pela alça (ou pegue com espaço e mova com as setas) ou use o menu de opções do card para mudar de etapa. Entrar em seleção e conquistar a vaga comemoram; não avançar é calmo e dá para desfazer.</Text>
           {params.get('preview') === 'move-error' && <Text tone="secondary">{announcement}</Text>}
         </Stack>
       </Stack>

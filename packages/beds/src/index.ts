@@ -53,6 +53,9 @@ export { ScoreMeter, ScoreComparison, type ScoreMeterProps, type ScoreMeterEntra
 export { ConfettiBurst, type ConfettiBurstProps } from './celebration';
 export { ChipChecklist, BinaryQuestionList, type ChipChecklistProps, type ChipChecklistOption, type BinaryQuestionListProps, type BinaryQuestion, type ChoiceStatus } from './choice-chips';
 export { ChangeSummary, SelectionNote, NextStepCard, type ChangeSummaryProps, type ChangeSummaryGroup, type SummaryLink, type SelectionNoteProps, type SelectionRow, type NextStepCardProps } from './summary';
-export { KanbanBoard, KanbanColumn, type KanbanBoardProps, type KanbanColumnProps } from './board';
-export { CouponField, InlineSuggestion, ConsentNotice, InstructionSteps, type CouponFieldState, type CouponFieldPhase, type CouponFieldLabels, type InlineSuggestionAction, type InstructionStep } from './commerce';
+export { KanbanBoard, KanbanColumn, KanbanCard, KanbanDragHandle, type KanbanBoardProps, type KanbanColumnProps, type KanbanCardProps, type KanbanDragHandleProps, type KanbanDrag, type KanbanDragMessages, type KanbanMove } from './board';
+export { CouponField, InlineSuggestion, ConsentNotice, InstructionSteps, StruckPrice, type StruckPriceProps, type CouponFieldState, type CouponFieldPhase, type CouponFieldLabels, type InlineSuggestionAction, type InstructionStep } from './commerce';
 export { EditModeBar, EditableSection, EditFooter, AddSectionTile, StepList, VersionCompare, PromptCard, SuccessMark, type EditModeBarProps, type EditableSectionProps, type EditFooterProps, type AddSectionTileProps, type StepListProps, type StepItem, type StepState, type VersionCompareProps, type VersionCompareRow, type PromptCardProps, type SuccessMarkProps } from './editing';
+export { EditorPane, VersionNote, PendingLine, BulletFields, ChipInput, EntryList, type EditorPaneProps, type VersionNoteProps, type PendingLineProps, type BulletFieldsProps, type ChipInputProps, type EntryListProps, type EntryListLabels } from './section-editor';
+export { DocumentWorkspace, DocumentToolbar, DocumentSheet, RevisionList, type DocumentWorkspaceProps, type DocumentPane, type DocumentToolbarProps, type DocumentSheetProps, type RevisionListProps, type RevisionEntry } from './document';
+export { RatingStrip, type RatingStripProps } from './rating';

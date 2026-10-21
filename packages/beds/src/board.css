@@ -16,3 +16,22 @@
 .es-root .es-kanban-empty{margin:0;padding:12px 4px;color:var(--es-secondary);font:400 13px/20px var(--es-font)}
 @media(max-width:767px){.es-root .es-kanban-columns{grid-auto-columns:minmax(min(320px,calc(100vw - 72px)),320px)}}
 @media(forced-colors:active){.es-root :is(.es-kanban,.es-kanban-header h2):focus-visible{outline-color:Highlight}}
+
+/* Drag and drop (0.3.0-rc.4, the reference app's board): the source card leaves the flow and an empty slot of its height
+   marks the drop point; the overlay lifts with one shadow. Snap and edge fades pause while a card is in the air. */
+.es-root .es-kanban[data-drag-active]{scroll-snap-type:none;mask-image:none}
+.es-root .es-kanban-card{min-width:0}
+.es-root .es-kanban-card[data-draggable]{cursor:grab;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.es-root .es-kanban-card[data-draggable] [data-kanban-grab]{cursor:grab}
+.es-root .es-kanban-card[data-dragging]{position:absolute;width:100%;visibility:hidden;pointer-events:none}
+.es-root .es-kanban-card[data-landing]{visibility:hidden;pointer-events:none}
+.es-root .es-kanban-slot{flex:none;box-sizing:border-box;width:100%;pointer-events:none}
+.es-root .es-kanban-handle{display:inline-flex;flex:none;align-items:center;justify-content:center;width:32px;height:32px;padding:0;border:0;border-radius:var(--es-radius-full);background:transparent;color:var(--es-secondary);cursor:grab;touch-action:none}
+.es-root .es-kanban-handle svg{width:16px;height:16px}
+.es-root .es-kanban-handle:active{cursor:grabbing}
+.es-root .es-kanban-handle:focus-visible{outline:2px solid var(--es-focus);outline-offset:2px}
+.es-root .es-kanban-handle:disabled{cursor:wait;opacity:.5}
+.es-root .es-kanban-overlay{pointer-events:none;border-radius:var(--es-radius-card);box-shadow:var(--es-drag-shadow);cursor:grabbing}
+@media(hover:hover) and (pointer:fine){.es-root .es-kanban-handle:hover{background:var(--es-hover);color:var(--es-text)}}
+@media(max-width:767px){.es-root .es-kanban-handle{width:44px;height:44px;margin-block:-6px}}
+@media(forced-colors:active){.es-root .es-kanban-handle:focus-visible{outline-color:Highlight}}

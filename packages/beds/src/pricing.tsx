@@ -2,6 +2,7 @@ import { useId, useLayoutEffect, useRef, useState } from 'react';
 import { Button } from './controls';
 import { AnimatedNumber, Icon } from './foundation';
 import { CardMedia } from './card-media';
+import { StruckPrice } from './commerce';
 import './pricing.css';
 
 export type PricingCardProps = {
@@ -14,6 +15,10 @@ export type PricingCardProps = {
     description?: string;
     /** Optional authoritative amount. Animation requires this value and its formatter; label is never parsed. */
     amount?: { value: number; format: (value: number) => string };
+    /** The list price, struck before `label` once a discount applies (0.3.0-rc.4). */
+    listLabel?: string;
+    /** Spoken instead of the struck figure, e.g. "Preço de tabela R$ 59,00". */
+    listAccessibleLabel?: string;
   };
   featuresLabel: string;
   features: readonly { id: string; text: string }[];
@@ -60,7 +65,7 @@ export function PricingCard({ title, description, image, price, featuresLabel, f
     <CardMedia key={image.src} purpose="pricing" src={image.src} alt={image.alt} fallbackLabel={image.fallbackLabel} />
     <div className="es-pricing-content">
       <div className="es-pricing-copy">
-        <div className="es-pricing-heading"><Heading id={`${id}-title`}>{title}</Heading><span className="es-pricing-price"><PricingAmount label={price.label} amount={price.amount} /></span></div>
+        <div className="es-pricing-heading"><Heading id={`${id}-title`}>{title}</Heading><span className="es-pricing-price">{price.listLabel && <StruckPrice label={price.listLabel} accessibleLabel={price.listAccessibleLabel} />}<PricingAmount label={price.label} amount={price.amount} /></span></div>
         {price.description && <p className="es-pricing-billing" id={`${id}-billing`}>{price.description}</p>}
         <p className="es-pricing-description" id={`${id}-description`}>{description}</p>
       </div>

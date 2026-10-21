@@ -1,0 +1,24 @@
+/* Lab-only: frame height and the fictional document's typography (the app renders its own file). */
+.lab-doc-frame{display:flex;flex-direction:column;margin-block-start:-16px;height:calc(100dvh - 72px);min-height:560px}
+@media(max-width:767px){.lab-doc-frame{height:calc(100dvh - 132px)}}
+.lab-doc{display:grid;gap:14px;font-family:Georgia,'Times New Roman',serif;font-size:13px;line-height:1.5}
+.lab-doc h2{margin:0;text-align:center;font-size:24px;font-weight:600;line-height:1.2}
+.lab-doc-contacts{margin:-8px 0 0;text-align:center;font-size:11px;white-space:pre-wrap}
+.lab-doc-block{display:grid;gap:6px}
+.lab-doc-block h3{margin:0;padding-block-end:3px;border-block-end:1px solid currentColor;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.lab-doc p,.lab-doc ul{margin:0}
+.lab-doc ul{padding-inline-start:16px}
+.lab-doc-entry{display:grid;gap:2px}
+.lab-doc-row{display:flex;justify-content:space-between;gap:12px}
+/* Closed-card previews: what the document shows, in the pane's type. */
+.lab-doc-read{display:grid;gap:2px;min-width:0}
+.lab-doc-read b{color:var(--es-heading);font:500 15px/22px var(--es-font);overflow-wrap:anywhere}
+.lab-doc-read span{color:var(--es-secondary);font:400 13px/20px var(--es-font);overflow-wrap:anywhere}
+.lab-doc-clamp{display:-webkit-box;overflow:hidden;margin:0;color:var(--es-text);font:400 14px/22px var(--es-font);-webkit-box-orient:vertical;-webkit-line-clamp:3}
+.lab-doc-rows{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.lab-doc-rows li{display:grid;min-width:0}
+.lab-doc-rows b{overflow:hidden;color:var(--es-heading);font:500 14px/20px var(--es-font);text-overflow:ellipsis;white-space:nowrap}
+.lab-doc-rows span{overflow:hidden;color:var(--es-secondary);font:400 13px/20px var(--es-font);text-overflow:ellipsis;white-space:nowrap}
+.lab-doc-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
+.lab-doc-fields{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;min-width:0}
+@container es-editor-pane (min-width:520px){.lab-doc-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.lab-doc-fields>:first-child{grid-column:1/-1}}

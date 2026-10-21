@@ -202,3 +202,19 @@ export function InstructionSteps({ steps, note }: { steps: InstructionStep[]; no
     {note && <Text variant="caption" tone="secondary">{note}</Text>}
   </div>;
 }
+
+export type StruckPriceProps = {
+  /** The list price before a discount, e.g. "R$ 59,00". */
+  label: string;
+  /** Spoken instead of the struck figure, e.g. "Preço de tabela R$ 59,00". Omit when another line already states the discount. */
+  accessibleLabel?: string;
+};
+
+/** The list price struck through before the price that applies; it fades in once when a discount arrives. Inherits the size of its line. */
+export function StruckPrice({ label, accessibleLabel }: StruckPriceProps) {
+  const reduce = useReducedMotionPreference();
+  return <>
+    <motion.s className="es-struck-price" aria-hidden="true" initial={reduce ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: .2, ease: [.23, 1, .32, 1] }}>{label}</motion.s>
+    {accessibleLabel && <span className="es-sr-only">{accessibleLabel}</span>}
+  </>;
+}

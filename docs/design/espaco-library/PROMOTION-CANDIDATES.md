@@ -30,19 +30,13 @@ product needs them yet and the owner rejects partial beUI ports (port fully or n
 | Command palette | Keyboard palette (⌘K) | The reference app | command-palette block | `CommandPalette` is an older adaptation the owner rejected |
 | Centered upload | Large centered dropzone, 64px tile, queue rows with status glyphs | The reference app's document upload | `file-upload` | `FileUploadField` keeps its compact and document anatomy |
 
-**Reference-app pieces deferred from 0.3.0-rc.3 (parity audit, 2026-10-21).**
-
-| Candidate | Function | Uses so far | beUI source | Open questions |
-|---|---|---|---|---|
-| Drag and drop on the board | Handle, drop slot, overlay, keyboard drag between `KanbanColumn`s | The reference app's stage board | none | Adds `@dnd-kit/core`; today moves go through the card menu |
-| Pressed chip | Neutral `aria-pressed` toggle chip in a review list | The reference app's import review | none | A `Chip` pressed state vs a separate control |
-| Dotted quiet link | `LinkButton` with a leading brand dot for "N items missing" | The reference app's profile | none | A `LinkButton` mark slot |
-| Struck list price | Old price struck before the total | The reference app's pricing | none | Belongs on `PricingCard` |
+**Reference-app pieces deferred from 0.3.0-rc.3** were all promoted in 0.3.0-rc.4 (drag and drop, pressed chip, dotted quiet link, struck list price). See Promoted.
 
 ## Promoted
 
 | Component | Promoted | Note |
 |---|---|---|
+| Document editor, rating strip and board drag (14 components) plus `Chip` pressed, `LinkButton purpose="quiet" dot`, `StruckPrice` / `PricingCard price.listLabel` | 0.3.0-rc.4 | Same owner rule; closes the rc.3 deferrals. See [RC4 patterns](RC4-PATTERNS.md) |
 | Result, board, editing and commerce patterns (22 components) | 0.3.0-rc.3 | Owner rule (2026-10-18): the reference app's current design is the truth and BEDS follows it, so a sibling app can look the same. See [RC3 patterns](RC3-PATTERNS.md) |
 | `LinkButton`, `TextLink purpose="nav"` | 0.2.0-rc.6 | From a sibling app header "Como funciona" and footer link lists, where a ghost button's hover fill clashed with the pill CTA. Owner explicit request; second product is the reference app's redesign (sidebar/footer links) |
 | `Dialog` quiet entry | 0.2.0-rc.5 | Not a promotion: the beUI center-morph was removed after owner review; recorded here so agents do not re-add a morph around Dialog |

@@ -10,6 +10,29 @@ Landing, benefits, footer, onboarding, checkout, processing and results are now
 app-owned recipes; their names and types are no longer imports from `beds`.
 `brands` was removed; identity and presets are caller-owned.
 
+## Parity patterns (0.3.0-rc.4) — 14
+
+Contract: [Document editor, rating and board drag](RC4-PATTERNS.md). Lab: `?view=document-editor`, `?view=kanban` (drag), `?view=editing` (pressed chip, quiet link), `?view=commerce` (struck price).
+
+| Component | Job |
+|---|---|
+| `DocumentWorkspace` | Document stage + resizable side pane + footer strip; one tab pill below a 960px frame |
+| `DocumentToolbar` | The stage's top bar: version status, actions, notes |
+| `DocumentSheet` | One paper sheet on the stage (light in both themes) |
+| `RevisionList` | Version history, newest first, with state dots and one open action |
+| `EditorPane` | The side pane: heading, fit line, version status, section cards at pane density |
+| `VersionNote` | Which version is on screen, as a dotted line with one action |
+| `PendingLine` | One live line with a pulsing dot for work that replaces a block |
+| `BulletFields` | One field per bullet, each with a quiet ×, plus a ghost add |
+| `ChipInput` | Chips with a quiet × and a field with Adicionar; refuses repeats |
+| `EntryList` | Flat rows that open their fields; the open row carries ↑ ↓ and remove |
+| `RatingStrip` | Star radios + submit, receipt with a low-score follow-up, one trailing feedback action; two rows on phones |
+| `KanbanCard` | One draggable card slot on a `KanbanBoard` with `drag` |
+| `KanbanDragHandle` | The grip inside a card (32px, 44px on phones), the keyboard pick-up |
+| `StruckPrice` | A struck list price before the price that applies |
+
+Changed: `KanbanBoard` `drag` and `KanbanColumn` `id`; `EditableSection` `index` (staggered entrance); `EditFooter` `layout="stacked"` + `children`; `Chip` `pressed` + `onPressedChange`; `LinkButton`/`TextLink` `purpose="quiet"` and `LinkButton` `dot`; `PricingCard` `price.listLabel`; `Icon` gains `ArrowDown`.
+
 ## Parity patterns (0.3.0-rc.3) — 22
 
 Contract: [Result, board, editing and commerce patterns](RC3-PATTERNS.md). Lab: `?view=result-patterns`, `?view=kanban`, `?view=editing`, `?view=commerce`.

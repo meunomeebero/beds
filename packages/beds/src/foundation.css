@@ -41,6 +41,15 @@
 .es-root .es-text-link[data-purpose=nav]:dir(rtl)>.es-text-link-label{background-position:100% 100%}
 .es-root .es-text-link[data-purpose=nav]:disabled>.es-text-link-label{background-image:none}
 @media (forced-colors:active){.es-root .es-text-link[data-purpose=nav]>.es-text-link-label[data-active]{text-decoration:underline}}
+/* Quiet status link (0.3.0-rc.4): secondary 13/20, a soft underline that turns to the text color on hover; optional brand dot. */
+.es-root .es-text-link[data-purpose=quiet]{color:var(--es-secondary);font:500 13px/20px var(--es-font);text-decoration-thickness:from-font;text-underline-offset:4px}
+.es-root .es-text-link[data-purpose=quiet]:hover{color:var(--es-heading);text-decoration-color:currentColor}
+.es-root .es-link-button[data-dot]{display:inline-flex;align-items:center;gap:8px;min-block-size:28px;text-decoration:none}
+.es-root .es-link-button[data-dot]>.es-text-link-label{text-decoration:underline;text-decoration-color:var(--es-border);text-decoration-thickness:from-font;text-underline-offset:4px}
+.es-root .es-link-button[data-dot]:hover>.es-text-link-label{text-decoration-color:currentColor}
+.es-root .es-link-dot{flex:none;inline-size:6px;block-size:6px;border-radius:50%;background:var(--es-brand)}
+.es-root .es-link-button:disabled[data-purpose=quiet]{opacity:.5}
+@media (forced-colors:active){.es-root .es-link-dot{background:CanvasText}}
 .es-root .es-brand-mark{display:block;width:18px;height:18px;flex:none;object-fit:contain}
 .es-root .es-theme-toggle{display:inline-flex;inline-size:fit-content;max-inline-size:100%;flex-wrap:wrap;align-items:center;gap:2px;padding:2px;border-radius:var(--es-radius-full);background:var(--es-subtle)}
 .es-root .es-theme-toggle button{border:0;background:var(--es-transparent);border-radius:var(--es-radius-full);min-block-size:32px;min-inline-size:32px;max-inline-size:100%;padding:6px 10px;font-size:12px;line-height:1.4;font-weight:500;color:var(--es-secondary);overflow-wrap:anywhere;touch-action:manipulation}

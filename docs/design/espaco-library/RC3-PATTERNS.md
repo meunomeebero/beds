@@ -54,7 +54,7 @@ Lab views (synthetic data):
   - Anatomy: a bordered, transparent 20px panel with 16px padding. The heading is 16/20 with a 24px count pill. Cards sit 8px apart.
   - Empty state: an empty line in 13/20 secondary text.
   - `headingId` lets the host send focus back to the heading after a card leaves.
-- **What the host owns**: moves, the drag mechanism (BEDS ships no drag-and-drop), celebrations and undo.
+- **What the host owns**: moves, celebrations and undo. Since 0.3.0-rc.4 BEDS ships the drag gesture (`KanbanBoard drag`, see [RC4 patterns](RC4-PATTERNS.md#board-drag-and-drop)); applying a move stays the host's.
 - **The rule**: celebrate only confirmed real wins, never on load or on undo. Keep a closed or negative outcome calm. Offer one undo toast at a time with a fixed id, and call `dismissToast` on the next confirmed move. Answer a stale undo with a warning toast.
 
 ## Editing — one mode, in place

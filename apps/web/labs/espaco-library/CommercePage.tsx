@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { AppShell } from './recipes';
+import './commerce-lab.css';
 import {
   CodeSnippet, ConsentNotice, ContentHeader, CouponField, DesignSystemProvider, Inline, InlineSuggestion, InstructionSteps,
-  PageHeader, ResponsiveGrid, SettingsGroup, SidebarHeader, Stack, Surface, Switch, Text, TextLink, ThemeToggle, Button,
+  PageHeader, ResponsiveGrid, SettingsGroup, SidebarHeader, Stack, Surface, Switch, Text, TextLink, ThemeToggle, Button, StruckPrice,
   type CouponFieldLabels, type CouponFieldState, type Theme,
 } from 'beds';
 
@@ -71,6 +72,14 @@ export default function CommercePage() {
           <Surface role="panel"><CouponDemo initial={{ phase: 'applied', code: 'BEMVINDO' }} note="Não soma com outras ofertas." /></Surface>
           <Surface role="panel"><CouponDemo initial={{ phase: 'kept', code: 'BEMVINDO' }} /></Surface>
         </ResponsiveGrid>
+      </Stack>
+
+      <Stack gap="tight">
+        <Text variant="label">Preço de tabela riscado</Text>
+        <Surface role="panel">
+          <p className="lab-total-row"><span>Total</span><strong><StruckPrice label="R$ 59,00" accessibleLabel="Preço de tabela R$ 59,00." />R$ 29,50</strong></p>
+        </Surface>
+        <Text variant="caption" tone="secondary">Aparece só depois que o servidor aceita o cupom; a linha do cupom diz o desconto.</Text>
       </Stack>
 
       <Stack gap="tight">

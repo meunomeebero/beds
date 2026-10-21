@@ -32,3 +32,6 @@
 .es-root .es-instruction-steps>ol:last-child{margin-block-end:0}
 .es-root .es-instruction-steps li{min-inline-size:0;padding-inline-start:4px}
 .es-root .es-instruction-steps li::marker{color:var(--es-secondary);font-weight:600}
+
+/* Struck list price (0.3.0-rc.4): quiet, one hairline through it, sized by its line. */
+.es-root .es-struck-price{margin-inline-end:.625em;color:var(--es-secondary);font-weight:450;letter-spacing:-.01em;text-decoration:line-through;text-decoration-thickness:1px;font-variant-numeric:tabular-nums}

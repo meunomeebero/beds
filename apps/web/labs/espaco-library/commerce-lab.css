@@ -1,0 +1,2 @@
+.lab-total-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0;color:var(--es-heading);font:500 16px/24px var(--es-font);font-variant-numeric:tabular-nums}
+.lab-total-row strong{font-weight:600}

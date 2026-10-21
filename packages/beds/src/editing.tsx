@@ -14,6 +14,8 @@ import './editing.css';
 
 const BODY_EASE: Transition = { duration: .26, ease: EASE_OUT };
 const FADE: Transition = { duration: .12 };
+/** The card entrance curve of the reference app's editors. */
+const CARD_EASE = [.23, 1, .32, 1] as const;
 const INTERACTIVE = 'a,button,input,textarea,select,label,[role=button],[contenteditable=true]';
 
 /** Height 0 → auto while it mounts/unmounts; clips only while easing so focus rings stay visible at rest. */
@@ -93,10 +95,12 @@ export type EditableSectionProps = {
   children?: ReactNode;
   /** Sticky decision footer while open (usually an `EditFooter`). */
   footer?: ReactNode;
+  /** Position in a list of cards: they rise in one after another on mount (28ms apart, the first 8). Omit for no entrance. */
+  index?: number;
 };
 
 /** In-place section card of the edit mode: closed it reads; anywhere on it opens it; open it holds its form. */
-export function EditableSection({ title, count, hint, open, onOpen, editLabel, disabled = false, preview, children, footer }: EditableSectionProps) {
+export function EditableSection({ title, count, hint, open, onOpen, editLabel, disabled = false, preview, children, footer, index }: EditableSectionProps) {
   const reduce = useReducedMotionPreference();
   const hintId = useId();
   const openable = !open && !disabled;
@@ -109,7 +113,12 @@ export function EditableSection({ title, count, hint, open, onOpen, editLabel, d
     <span>{title}</span>
     {count && <span className="es-editable__count">{count}</span>}
   </span>;
-  return <section className="es-editable" data-active={open || undefined} data-disabled={disabled || undefined} onClick={openFromCard}>
+  const entrance = index === undefined ? {} : {
+    initial: reduce ? false as const : { opacity: 0, y: 6 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: .32, ease: CARD_EASE, delay: Math.min(index, 8) * .028 },
+  };
+  return <motion.section {...entrance} className="es-editable transition-[border-color] duration-200 motion-reduce:transition-none" data-active={open || undefined} data-disabled={disabled || undefined} onClick={openFromCard}>
     {open
       ? <div className="es-editable__heading">
           <h2 className="es-editable__title" aria-describedby={hint ? hintId : undefined}>{name}</h2>
@@ -118,7 +127,7 @@ export function EditableSection({ title, count, hint, open, onOpen, editLabel, d
       : <h2 className="es-editable__title">
           <button type="button" className="es-editable__open" aria-label={`${editLabel} ${title}`} aria-expanded={false} disabled={disabled} onClick={onOpen}>
             {name}
-            <span className="es-editable__cue" aria-hidden="true">{editLabel}</span>
+            <span className="es-editable__cue transition-opacity duration-150 motion-reduce:transition-none" aria-hidden="true">{editLabel}</span>
           </button>
         </h2>}
     <EasedBody show={!open && Boolean(preview)} className="es-editable__body">{preview}</EasedBody>
@@ -133,7 +142,7 @@ export function EditableSection({ title, count, hint, open, onOpen, editLabel, d
         transition={reduce ? FADE : { duration: .24, ease: EASE_OUT }}
       >{footer}</motion.div>}
     </AnimatePresence>
-  </section>;
+  </motion.section>;
 }
 
 export type EditFooterProps = {
@@ -142,13 +151,23 @@ export type EditFooterProps = {
   tone?: 'neutral' | 'error';
   /** The decision buttons, e.g. Cancelar + Salvar alterações. */
   actions: ReactNode;
+  /** `inline` (default): note beside the actions · `stacked`: rows of content, then the note, then the actions at the end (a side-pane card). */
+  layout?: 'inline' | 'stacked';
+  /** Stacked only: content above the note, e.g. a save error `Notice` or a "also save to…" `Checkbox`. */
+  children?: ReactNode;
 };
 
 /** Note + decision actions; the actions stack (primary on top) when the footer is narrow. */
-export function EditFooter({ note, tone = 'neutral', actions }: EditFooterProps) {
+export function EditFooter({ note, tone = 'neutral', actions, layout = 'inline', children }: EditFooterProps) {
+  const noteLine = note && <p className="es-edit-footer__note" data-tone={tone === 'error' ? 'error' : undefined} role={tone === 'error' ? 'alert' : undefined}>{note}</p>;
+  if (layout === 'stacked') return <div className="es-edit-footer-stack">
+    {children}
+    {noteLine}
+    <div className="es-edit-footer-stack__actions">{actions}</div>
+  </div>;
   return <div className="es-edit-footer-frame">
     <div className="es-edit-footer">
-      {note && <p className="es-edit-footer__note" data-tone={tone === 'error' ? 'error' : undefined} role={tone === 'error' ? 'alert' : undefined}>{note}</p>}
+      {noteLine}
       <div className="es-edit-footer__actions">{actions}</div>
     </div>
   </div>;
@@ -168,7 +187,7 @@ export function AddSectionTile({ title, hint, actionLabel, onClick, disabled = f
   const reduce = useReducedMotionPreference();
   return <motion.button
     type="button"
-    className="es-add-tile"
+    className="es-add-tile transition-colors duration-150 motion-reduce:transition-none"
     aria-label={`${title}: ${actionLabel}`}
     disabled={disabled}
     onClick={onClick}

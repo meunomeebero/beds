@@ -34,6 +34,7 @@ import ExpandingButtonPage from './ExpandingButtonPage';
 import ResultPatternsPage from './ResultPatternsPage';
 import EditingPage from './EditingPage';
 import CommercePage from './CommercePage';
+import DocumentEditorPage from './DocumentEditorPage';
 const params = new URLSearchParams(location.search);
 const pages: Record<string, React.ComponentType> = {
   checkout: CheckoutPage,
@@ -43,6 +44,7 @@ const pages: Record<string, React.ComponentType> = {
   'result-patterns': ResultPatternsPage,
   editing: EditingPage,
   commerce: CommercePage,
+  'document-editor': DocumentEditorPage,
   'analysis-result': () => <ResultsPage mode="analysis" />,
   'optimization-result': () => <ResultsPage mode="optimization" />,
   'analysis-loading': ProcessingPage,

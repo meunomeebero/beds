@@ -1,0 +1,71 @@
+/* 0.3.0-rc.4 */
+/* Document workspace (document.tsx): a square stage where the document rests as a sheet, a side pane, a footer strip.
+   Hierarchy comes from type and hairlines; the only raised object is the sheet. Layout reads the frame's width. */
+
+.es-root .es-doc-workspace{container:es-doc / inline-size;display:flex;flex-direction:column;flex:1;min-width:0;min-height:0;height:100%}
+.es-root .es-doc-workspace__tabs{display:none}
+.es-root .es-doc-workspace__panes{--es-doc-side:42%;display:grid;grid-template-columns:minmax(0,1fr) 24px minmax(320px,var(--es-doc-side));flex:1;min-height:0}
+.es-root .es-doc-workspace__panes[data-single]{grid-template-columns:minmax(0,1fr)}
+.es-root .es-doc-side{min-width:0;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+.es-root .es-doc-workspace__footer{flex-shrink:0;padding-block-start:12px}
+
+/* The resize handle lives in the gap and shows only while it is in use. */
+.es-root .es-doc-workspace__separator{position:relative;display:grid;place-items:center;cursor:col-resize;touch-action:none;outline:none}
+.es-root .es-doc-workspace__separator::after{content:"";inline-size:3px;block-size:40px;border-radius:3px;background:var(--es-version-dot);opacity:0}
+@media (hover:hover){.es-root .es-doc-workspace__separator:hover::after{opacity:1}}
+.es-root .es-doc-workspace__separator:active::after,.es-root .es-doc-workspace__separator:focus-visible::after{opacity:1;background:var(--es-focus)}
+
+/* Stage: straight edges frame the document without clipping its corners. */
+.es-root .es-doc-stage{position:relative;display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden;isolation:isolate;border:1px solid var(--es-border);border-block-start:0;border-radius:0;background:var(--es-doc-stage)}
+.es-root .es-doc-stage__scroller{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--es-border-strong) transparent;container:es-doc-stage / inline-size}
+.es-root .es-doc-stage__scroller:focus-visible{outline:2px solid var(--es-focus);outline-offset:-2px}
+
+/* Toolbar at the top of the stage, outside its scroll region. */
+.es-root .es-doc-toolbar{display:flex;flex-wrap:wrap;flex-shrink:0;align-items:center;justify-content:space-between;gap:8px 16px;min-height:56px;padding:10px 16px;border-block-end:1px solid var(--es-border);background:var(--es-bg)}
+.es-root .es-doc-toolbar__actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:8px;min-width:0}
+.es-root .es-doc-toolbar__notes{flex-basis:100%;display:grid;gap:2px;min-width:0;color:var(--es-secondary);font:400 12px/18px var(--es-font)}
+.es-root .es-doc-toolbar__notes p{margin:0}
+
+/* The sheet: light paper in both themes, one soft elevation. */
+.es-root .es-doc-sheet{box-sizing:border-box;inline-size:min(100% - 48px,720px);margin:24px auto;padding:clamp(28px,6cqw,64px);border-radius:0;background:var(--es-paper);box-shadow:var(--es-sheet-shadow);color:var(--es-paper-ink);font:400 15px/1.75 var(--es-font);overflow-wrap:anywhere}
+.es-root .es-doc-sheet+.es-doc-sheet{margin-block-start:0}
+
+/* Version history. */
+.es-root .es-revisions{margin:0;padding:0;list-style:none}
+.es-root .es-revision{display:grid;justify-items:start;gap:6px;padding-block:16px;border-block-end:1px solid var(--es-border)}
+.es-root .es-revision:first-child{padding-block-start:0}
+.es-root .es-revision:last-child{border-block-end:0}
+.es-root .es-revision__head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.es-root .es-revision__head h3{margin:0;color:var(--es-heading);font:500 14px/20px var(--es-font)}
+.es-root .es-revision__state{display:inline-flex;align-items:center;gap:6px;color:var(--es-secondary);font:400 12px/16px var(--es-font)}
+.es-root .es-revision__state::before{content:"";flex-shrink:0;inline-size:6px;block-size:6px;border-radius:50%;background:var(--es-version-dot)}
+.es-root .es-revision[data-state=review] .es-revision__state::before{background:var(--es-brand-ink)}
+.es-root .es-revision[data-state=current] .es-revision__state::before{background:var(--es-success)}
+.es-root .es-revision__meta,.es-root .es-revision__request,.es-root .es-revision__current{margin:0;color:var(--es-secondary);font:400 12px/18px var(--es-font)}
+.es-root .es-revision__request{display:-webkit-box;overflow:hidden;overflow-wrap:anywhere;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2}
+.es-root .es-revision ul{margin:0;padding-inline-start:18px;color:var(--es-text);font:400 13px/20px var(--es-font)}
+.es-root .es-revision__current{color:var(--es-heading);font-weight:500}
+
+/* Below a 960px frame the document would get under ~560px beside the pane: one pane at a time, behind a tab pill. */
+@container es-doc (max-width:960px){
+  .es-root .es-doc-workspace__panes{display:flex}
+  .es-root .es-doc-workspace__separator{display:none}
+  .es-root .es-doc-workspace__panes[data-single]{margin-block-start:12px}
+  .es-root .es-doc-side,.es-root .es-doc-stage{inline-size:100%}
+  .es-root .es-doc-workspace__panes[data-pane=side] .es-doc-stage,.es-root .es-doc-workspace__panes[data-pane=document] .es-doc-side{display:none}
+  .es-root .es-doc-workspace__tabs{display:block;flex-shrink:0;max-inline-size:420px;margin-block:12px}
+  .es-root .es-doc-workspace__tabs .es-segmented-control{inline-size:100%}
+  .es-root .es-doc-workspace__tabs .es-segmented-choice{flex:1}
+  .es-root .es-doc-workspace__tabs .es-pill-option{inline-size:100%}
+}
+@container es-doc (max-width:720px){
+  .es-root .es-doc-workspace__tabs{max-inline-size:none}
+  .es-root .es-doc-toolbar{padding-inline:12px}
+}
+@container es-doc-stage (max-width:560px){
+  .es-root .es-doc-sheet{inline-size:min(100% - 24px,720px);margin-block:16px}
+}
+
+@media (forced-colors:active){
+  .es-root .es-revision__state::before{background:CanvasText}
+}

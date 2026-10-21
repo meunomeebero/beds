@@ -53,6 +53,14 @@
  /* Celebration confetti: the brand family plus heading and success inks. */
  --es-confetti-1:var(--es-brand);--es-confetti-2:var(--es-brand-ink);--es-confetti-3:color-mix(in oklab,var(--es-brand) 55%,#ffd166);
  --es-confetti-4:var(--es-heading);--es-confetti-5:var(--es-success);--es-confetti-6:color-mix(in oklab,var(--es-brand) 40%,#ff7ab6);
+ /* Board drag (0.3.0-rc.4): the lifted card's one shadow. */
+ --es-drag-shadow:0 12px 32px #0003;
+ /* Version and status dots (0.3.0-rc.4): an older version or a neutral state. */
+ --es-version-dot:color-mix(in oklab,var(--es-secondary) 65%,transparent);
+ /* Document stage and sheet (0.3.0-rc.4): a lightly tinted stage; light paper in both themes so the page matches its file. */
+ --es-doc-stage:color-mix(in oklab,var(--es-subtle) 38%,var(--es-bg));
+ --es-paper:#fff;--es-paper-ink:#1b1b1b;
+ --es-sheet-shadow:0 0 0 1px #0000000f,0 1px 2px #0000000d,0 8px 20px -6px #0000001a,0 22px 48px -18px #00000029;
 }
 .es-root[data-theme='light'] {
  color-scheme:light;
@@ -96,6 +104,8 @@
  --es-glass:#ffffff02;--es-glass-border:#ffffff13;--es-shadow-dialog:0 1px 1px #0000001f,0 12px 32px #00000024;
  --es-selected:var(--sidebar-accent);--es-composer-surface:#191919;--es-overlay:#080808a8;
  --es-composer-context:#222222;--es-composer-border:#ffffff04;--es-composer-focus:#ffffff17;--es-control:var(--secondary);--es-heading:#d4d4d4;--es-brand-ink:var(--es-brand);--es-input-text:#d0d0d0;--es-badge:#414141;--es-on-badge:#e5e5e5;--es-send:#dedede;--es-on-send:#292929;
+ --es-doc-stage:var(--es-subtle);--es-paper:#f3f3f2;
+ --es-sheet-shadow:0 0 0 1px #ffffff0d,0 2px 4px #0000004d,0 12px 28px -8px #00000080,0 30px 60px -20px #00000099;
 }
 /* Text-entry controls (fields, text areas, selects, OTP slots, dropzone) draw the soft structural border by default.
    Provider opt-in `fieldBorder="strong"` restores the 3:1 functional outline. Checkbox/radio/switch always keep --es-control-border. */

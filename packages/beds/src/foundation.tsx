@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { animate, motion, useInView } from 'motion/react';
 import { Inbox } from 'lucide-react';
-import { Home, Activity, BarChart3, Plug, Folder, MessageSquare, Plus, Search, PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, Check, X, Settings2, CircleHelp, Sun, Moon, LogOut, MoreHorizontal, ArrowUp, ArrowRight, ArrowUpRight, Paperclip, Command, FileText, CheckCircle2, AlertCircle, Info, Loader2, User, Sparkles, Globe, Bell, Copy, CreditCard, House, MessageCircle, ChartColumn, UserRound, Briefcase, Coins, ScanText, Bookmark, CalendarDays, ChevronsUpDown, Play, Pause, ArrowLeft, ShieldCheck, Image, Table2, BadgePercent, Link2 } from 'lucide-react';
+import { Home, Activity, BarChart3, Plug, Folder, MessageSquare, Plus, Search, PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, Check, X, Settings2, CircleHelp, Sun, Moon, LogOut, MoreHorizontal, ArrowUp, ArrowDown, ArrowRight, ArrowUpRight, Paperclip, Command, FileText, CheckCircle2, AlertCircle, Info, Loader2, User, Sparkles, Globe, Bell, Copy, CreditCard, House, MessageCircle, ChartColumn, UserRound, Briefcase, Coins, ScanText, Bookmark, CalendarDays, ChevronsUpDown, Play, Pause, ArrowLeft, ShieldCheck, Image, Table2, BadgePercent, Link2 } from 'lucide-react';
 import { useReducedMotionPreference } from './lib/hooks/use-reduced-motion';
 import { suppressThemeTransitions } from './lib/suppress-theme-transitions';
 
-const icons = { Home, Activity, BarChart3, Plug, Folder, MessageSquare, Plus, Search, PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, Check, X, Settings2, CircleHelp, Sun, Moon, LogOut, MoreHorizontal, ArrowUp, ArrowRight, ArrowUpRight, Paperclip, Command, FileText, CheckCircle2, AlertCircle, Info, Loader2, User, Sparkles, Globe, Bell, Copy, CreditCard, House, MessageCircle, ChartColumn, UserRound, Briefcase, Coins, ScanText, Bookmark, CalendarDays, ChevronsUpDown, Play, Pause, ArrowLeft, ShieldCheck, Inbox, Image, Table2, BadgePercent, Link2 };
+const icons = { Home, Activity, BarChart3, Plug, Folder, MessageSquare, Plus, Search, PanelLeftClose, PanelLeftOpen, ChevronDown, ChevronRight, Check, X, Settings2, CircleHelp, Sun, Moon, LogOut, MoreHorizontal, ArrowUp, ArrowDown, ArrowRight, ArrowUpRight, Paperclip, Command, FileText, CheckCircle2, AlertCircle, Info, Loader2, User, Sparkles, Globe, Bell, Copy, CreditCard, House, MessageCircle, ChartColumn, UserRound, Briefcase, Coins, ScanText, Bookmark, CalendarDays, ChevronsUpDown, Play, Pause, ArrowLeft, ShieldCheck, Inbox, Image, Table2, BadgePercent, Link2 };
 export type IconName = keyof typeof icons;
 export type Theme = 'light' | 'dark';
 type SystemContext = { theme: Theme; brandColor: string; onThemeChange?: (theme: Theme) => void };
@@ -140,7 +140,8 @@ export function Avatar({ name, src, purpose = 'account' }: { name: string; src?:
 }
 
 /** Text-level link with the shared hover/focus contract. External links open a new context safely. */
-export type TextLinkPurpose = 'inline' | 'nav';
+/** `inline`: prose link · `nav`: no underline at rest, drawn on hover/focus · `quiet`: a secondary 13px status link with a soft underline (0.3.0-rc.4). */
+export type TextLinkPurpose = 'inline' | 'nav' | 'quiet';
 
 /**
  * Text-level native link. `inline` (default) stays underlined inside prose so it
@@ -165,9 +166,11 @@ function useDrawnUnderline(purpose: TextLinkPurpose) {
   return { handlers, label };
 }
 
+const QUIET_FADE = ' transition-colors duration-150 motion-reduce:transition-none';
+
 export function TextLink({ href, children, external = false, ariaLabel, purpose = 'inline' }: { href: string; children: ReactNode; external?: boolean; ariaLabel?: string; purpose?: TextLinkPurpose }) {
   const { handlers, label } = useDrawnUnderline(purpose);
-  return <a className="es-text-link" data-purpose={purpose} href={href} aria-label={ariaLabel} {...handlers} {...external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}>
+  return <a className={`es-text-link${purpose === 'quiet' ? QUIET_FADE : ''}`} data-purpose={purpose} href={href} aria-label={ariaLabel} {...handlers} {...external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}>
     {label(children)}{external && <Icon name="ArrowUpRight" purpose="small" />}
   </a>;
 }
@@ -178,10 +181,14 @@ export function TextLink({ href, children, external = false, ariaLabel, purpose 
  * the page's one primary CTA. Same `purpose` contract and focus ring as TextLink.
  * Navigation to a URL must use TextLink.
  */
-export function LinkButton({ label, onClick, purpose = 'inline', disabled = false }: { label: string; onClick: () => void; purpose?: TextLinkPurpose; disabled?: boolean }) {
+export function LinkButton({ label, onClick, purpose = 'inline', disabled = false, dot = false }: {
+  label: string; onClick: () => void; purpose?: TextLinkPurpose; disabled?: boolean;
+  /** A 6px brand dot before the label: something waits for the person (e.g. "3 itens faltando"). Pair it with `purpose="quiet"`. */
+  dot?: boolean;
+}) {
   const underline = useDrawnUnderline(disabled ? 'inline' : purpose);
-  return <button type="button" className="es-text-link es-link-button" data-purpose={purpose} onClick={onClick} disabled={disabled} {...underline.handlers}>
-    {underline.label(label)}
+  return <button type="button" className={`es-text-link es-link-button${purpose === 'quiet' ? QUIET_FADE : ''}`} data-purpose={purpose} data-dot={dot || undefined} onClick={onClick} disabled={disabled} {...underline.handlers}>
+    {dot && <span className="es-link-dot" aria-hidden="true" />}{underline.label(label)}
   </button>;
 }
 
