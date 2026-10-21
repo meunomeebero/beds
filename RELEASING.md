@@ -15,7 +15,37 @@ Read next: [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.
 
 Rollback: select the previous known release URL/integrity, reinstall and rerun app gates. Do not mutate the old release.
 
-## Published candidate — 0.3.0-rc.2 (reference-app parity pass)
+## Published candidate — 0.3.0-rc.3 (reference-app patterns, round 2)
+
+Tag `v0.3.0-rc.3`, GitHub prerelease asset `beds-0.3.0-rc.3.tgz` (SHA-256 and
+source commit in the release notes). Additive over rc.2: the reference app's patterns
+shipped since rc.2 (60 web commits) plus two approved, unshipped result changes,
+upstreamed as generic components so a sibling app can look the same. Audit table:
+`docs/PARITY-RC3.md`; contract: [RC3 patterns](docs/design/espaco-library/RC3-PATTERNS.md);
+migration: [Adopting](docs/design/espaco-library/ADOPTING.md). Not published to the npm registry.
+
+**Added (22 components):** `ScoreComparison`, `ScoreMeter`, `ConfettiBurst`,
+`NextStepCard`, `ChangeSummary`, `SelectionNote`, `ChipChecklist`, `BinaryQuestionList`,
+`KanbanBoard`, `KanbanColumn`, `EditModeBar`, `EditableSection`, `EditFooter`,
+`AddSectionTile`, `StepList`, `VersionCompare`, `PromptCard`, `SuccessMark`,
+`CouponField`, `InlineSuggestion`, `ConsentNotice`, `InstructionSteps`; `CodeSnippet`
+`variant="pill"` and `hideLabel`; 20 tokens (meter, quiet/brand tints, emphasis border,
+choice chips, prompt tile, row/tile hover, strike, applied tint, confetti). Foundations:
+"Truthful states and celebration". Lab: `?view=result-patterns`, `?view=editing`,
+`?view=commerce`; `?view=kanban` is now six stages on `KanbanBoard` with celebration,
+calm outcome, undo and stale-undo toasts and a drawer "Mover para".
+
+**Changed:** nothing in existing defaults. The lab `ApplicationBoard` recipe renders on
+`KanbanBoard` (fixed 360/320px columns that scroll sideways on phones instead of stacking).
+
+**Not carried:** drag and drop, pressed chip, dotted quiet link, struck list price, and the
+rc.2 deferred list ([Promotion candidates](docs/design/espaco-library/PROMOTION-CANDIDATES.md)).
+Sound, once-per-item celebration memory and undo windows stay host-owned.
+
+**Consumer migration:** none required from rc.2. From 0.2.x follow
+[Adopting](docs/design/espaco-library/ADOPTING.md).
+
+## Previous candidate — 0.3.0-rc.2 (reference-app parity pass)
 
 Tag `v0.3.0-rc.2`, GitHub prerelease asset `beds-0.3.0-rc.2.tgz` (SHA-256 and
 source commit in the release notes). Built on 0.3.0-rc.1 after a component-by-component

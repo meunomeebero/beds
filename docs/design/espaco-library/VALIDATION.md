@@ -1,12 +1,32 @@
 # Espaço library — validation record
 
 Canonical repository: `meunomeebero/beds`. Current published candidate:
-`beds@0.3.0-rc.2` (2026-10-19); every later section is historical (the 0.1.7
+`beds@0.3.0-rc.3` (2026-10-21); every later section is historical (the 0.1.7
 candidates and their [F0–F4 migration closeout](F0-F4-MIGRATION-TRACKING.md)).
 Publication identity/hash belong to an immutable GitHub prerelease; this record
 describes source validation, not deployment or release acceptance.
 
-## 0.3.0-rc.2 — 2026-10-19 (published candidate)
+## 0.3.0-rc.3 — 2026-10-21 (published candidate)
+
+Scope: reference-app patterns round 2 — 22 additive components (score board and meter,
+confetti, next-step card, change and selection summaries, chip checklist, yes/no
+questions, stage board, single edit mode parts, step list, version compare, prompt card,
+success mark, coupon field, inline suggestion, consent notice, setup steps), the
+`CodeSnippet` pill variant and 20 tokens. No existing default changed. Hash and source
+commit live in the GitHub prerelease notes.
+
+| Gate | Result |
+|---|---|
+| `npm run verify` | Pass: build, package + lab typecheck, library contract (137 components, 242 tokens, 0 violations), docs (130 files, 0 violations), 39 example consumer roots (0 violations), 88 guard + 26 recipe/routing tests, artifact parity and fresh-consumer smoke |
+| Lab Playwright, targeted (Chromium desktop 1440 + mobile 390) | kanban (rewritten for six stages, celebration and undo), new rc3-patterns, application-card, catalog, checkout, mcp-page, chat-brand: 55 passed, 2 failed. The 2 failures are `chat-brand` "composer suggestion, newline, IME and submit" on mobile, which fail identically on the untouched `v0.3.0-rc.2` tree (pre-existing; composer not touched). No full-suite run |
+| Rendered check | Lab views result-patterns, kanban, editing and commerce at 1440 and 390 in light and dark, side by side with the reference app's result, board and pricing screens (mocked data) |
+| Product-agnostic grep | No reference-product names in package source, contracts, lab pages or copy |
+
+Limits: Chromium only; no WebKit/Firefox, physical-device or screen-reader pass; no
+independent design review; hover colour fades on the editing parts are instant (CSS
+motion is restricted to allowlisted stylesheets); no aesthetic approval implied.
+
+## 0.3.0-rc.2 — 2026-10-19 (previous candidate)
 
 Scope: reference-app parity pass over rc.1 — elastic modal motion by default
 (`motionPreset: 'elastic' | 'quiet'`), no ring around the dialog surface on shell
