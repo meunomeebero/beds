@@ -15,7 +15,37 @@ Read next: [Artifact validation](docs/design/espaco-library/ARTIFACT-VALIDATION.
 
 Rollback: select the previous known release URL/integrity, reinstall and rerun app gates. Do not mutate the old release.
 
-## Published candidate — 0.3.0-rc.3 (reference-app patterns, round 2)
+## Published candidate — 0.3.0-rc.4 (document editor, rating strip, board drag)
+
+Tag `v0.3.0-rc.4`, GitHub prerelease asset `beds-0.3.0-rc.4.tgz` (SHA-256 and
+source commit in the release notes). Additive over rc.3: the reference app's per-section
+document editor, its new feedback strip and document workspace (release R89), plus the
+five rc.3 deferrals. Audit table: `docs/PARITY-RC4.md`; contract:
+[RC4 patterns](docs/design/espaco-library/RC4-PATTERNS.md); migration:
+[Adopting](docs/design/espaco-library/ADOPTING.md). Not published to the npm registry.
+
+**Added (14 components):** `DocumentWorkspace`, `DocumentToolbar`, `DocumentSheet`,
+`RevisionList`, `EditorPane`, `VersionNote`, `PendingLine`, `BulletFields`, `ChipInput`,
+`EntryList`, `RatingStrip`, `KanbanCard`, `KanbanDragHandle`, `StruckPrice`. New props:
+`KanbanBoard drag`, `KanbanColumn id`, `EditableSection index`, `EditFooter layout` +
+`children`, `Chip pressed` + `onPressedChange`, `LinkButton dot`, `purpose="quiet"` on
+`LinkButton`/`TextLink`, `PricingCard price.listLabel`; `Icon` `ArrowDown`. 6 tokens
+(`--es-drag-shadow`, `--es-version-dot`, `--es-doc-stage`, `--es-paper`,
+`--es-paper-ink`, `--es-sheet-shadow`). Runtime dependency `@dnd-kit/core` (MIT). Lab:
+`?view=document-editor`; `?view=kanban` drags (pointer, touch hold, keyboard).
+
+**Changed:** quiet hover fades on section cards (border 200ms, cue 150ms) and the add tile
+(150ms), where rc.3 was instant; cards inside an `EditorPane` take the pane density.
+
+**Not carried:** closed-card preview anatomy (lab CSS) and the rc.2 deferred list
+([Promotion candidates](docs/design/espaco-library/PROMOTION-CANDIDATES.md)). Card order,
+allowed moves, saving, revisions, the PDF viewer, rating storage and the feedback form stay
+host-owned.
+
+**Consumer migration:** none required from rc.3. Apps with their own board drag remove it
+before passing `drag`.
+
+## Previous candidate — 0.3.0-rc.3 (reference-app patterns, round 2)
 
 Tag `v0.3.0-rc.3`, GitHub prerelease asset `beds-0.3.0-rc.3.tgz` (SHA-256 and
 source commit in the release notes). Additive over rc.2: the reference app's patterns

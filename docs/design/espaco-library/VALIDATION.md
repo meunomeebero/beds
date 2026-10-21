@@ -1,12 +1,31 @@
 # Espaço library — validation record
 
 Canonical repository: `meunomeebero/beds`. Current published candidate:
-`beds@0.3.0-rc.3` (2026-10-21); every later section is historical (the 0.1.7
+`beds@0.3.0-rc.4` (2026-10-21); every later section is historical (the 0.1.7
 candidates and their [F0–F4 migration closeout](F0-F4-MIGRATION-TRACKING.md)).
 Publication identity/hash belong to an immutable GitHub prerelease; this record
 describes source validation, not deployment or release acceptance.
 
-## 0.3.0-rc.3 — 2026-10-21 (published candidate)
+## 0.3.0-rc.4 — 2026-10-21 (published candidate)
+
+Scope: the reference app's per-section document editor, feedback strip and document
+workspace, plus the rc.3 deferrals (board drag and drop, pressed chip, quiet dotted link,
+struck list price, quiet hover fades). 14 additive components, 6 tokens, one runtime
+dependency (`@dnd-kit/core`). No existing default changed except the hover fades. Hash and
+source commit live in the GitHub prerelease notes.
+
+| Gate | Result |
+|---|---|
+| `npm run verify` | Pass: build, package + lab typecheck, library contract (151 components, 249 tokens, 0 violations), docs (132 files, 0 violations), 40 example consumer roots (0 violations), 88 guard + 26 recipe tests, package artifact v0.3.0-rc.4 (0 violations, consumer smoke passed) |
+| Lab Playwright, targeted (Chromium desktop 1440 + mobile 390) | new rc4-patterns (section editor, rating, pointer + keyboard board drag, deferrals), kanban, rc3-patterns: 23 passed; pricing, catalog, controls, hydration, reduced motion, interface quality, surface polish, text link: 94 passed |
+| Rendered check | Side by side with the reference app (mock data) for the editor, the feedback strip and the board drag at 1440 and 390 in light and dark (18 pairs, kept outside the repository) |
+| Product-agnostic grep | No reference-product names in package source, contracts, lab pages or copy |
+
+Limits: Chromium only; no WebKit/Firefox, physical-device touch drag or screen-reader
+pass (touch drag is the 250ms-hold sensor, measured only with a mouse); no independent
+design review; no aesthetic approval implied.
+
+## 0.3.0-rc.3 — 2026-10-21 (previous candidate)
 
 Scope: reference-app patterns round 2 — 22 additive components (score board and meter,
 confetti, next-step card, change and selection summaries, chip checklist, yes/no
